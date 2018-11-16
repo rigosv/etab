@@ -29,8 +29,6 @@ return [
     Snc\RedisBundle\SncRedisBundle::class => ['all' => true],
     OldSound\RabbitMqBundle\OldSoundRabbitMqBundle::class => ['all' => true],
     FOS\JsRoutingBundle\FOSJsRoutingBundle::class => ['all' => true],
-    MINSAL\Bundle\GridFormBundle\GridFormBundle::class => ['all' => true],
-    MINSAL\Bundle\CalidadBundle\CalidadBundle::class => ['all' => true],
-    MINSAL\Bundle\CostosBundle\CostosBundle::class => ['all' => true],
     Nelmio\ApiDocBundle\NelmioApiDocBundle::class => ['all' => true],
+    Onurb\Bundle\ExcelBundle\OnurbExcelBundle::class => ['all' => true]
 ];
