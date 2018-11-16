@@ -1,0 +1,48 @@
+<div class="content tab-pane " id="calidad_datos">
+    <div class="col-md-6">
+        <div class="panel panel-default panel-info">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a>
+                        {{"_primer_nivel_"|trans}}
+                    </a>
+                </h4>
+            </div>
+            <div class="panel-body">
+                <div class="list-group" >
+                    {% for e in bundleCalidad.estandares.pna %}
+                        <A  class='calidad_datos_item list-group-item' data-id="{{ e.id_formulario }}" >
+                            {{ e.nombre }}
+                        </A>
+                    {% endfor %}                    
+                    <A  class='calidad_datos_item list-group-item' data-id="general_pna">
+                        Resultados generales
+                    </A>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-default panel-primary">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a>
+                        {{"_hospitales_"|trans}}
+                    </a>
+                </h4>
+            </div>
+            <div class="panel-body">
+                <div class="list-group" >
+                    {% for e in bundleCalidad.estandares.hosp %}
+                        <A  class='calidad_datos_item list-group-item' data-id="{{ e.id_formulario }}">
+                            {{ e.nombre }}
+                        </A>
+                    {% endfor %}                    
+                    <A  class='calidad_datos_item list-group-item' data-id="general_hosp">
+                        Resultados generales
+                    </A>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

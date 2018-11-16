@@ -1,0 +1,68 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    
+    <parameters>
+        <parameter key="graficos_por_fila">3</parameter>
+        <parameter key="ancho_area_grafico">370</parameter>
+        <parameter key="alto_area_grafico">410</parameter>
+        <parameter key="titulo_sala_tamanio_fuente">12</parameter>
+        <parameter key="ocultar_menu_principal">0</parameter>
+        <parameter key="logo">1</parameter>
+        <parameter key="directorio">''</parameter>
+        <parameter key="indicador_cache_consulta">600</parameter>
+    </parameters>
+    <!--
+    <parameters>
+        <parameter key="indicadores.example.class">MINSAL\IndicadoresBundle\Example</parameter>
+    </parameters>
+
+    <services>
+        <service id="indicadores.example" class="%indicadores.example.class%">
+            <argument type="service" id="service_id" />
+            <argument>plain_value</argument>
+            <argument>%parameter_name%</argument>
+        </service>
+    </services>
+    -->
+    <services>
+
+        <service id="app.indicadores.menu_listener" class="App\EventListener\MenuBuilderListener">
+            <argument type="service" id="security.token_storage" />
+            <tag name="kernel.event_listener" event="sonata.admin.event.configure.menu.sidebar" method="addMenuItems" />
+        </service>
+
+        <service id="indicadores.request_listener" class="App\EventListener\RequestListener">
+            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" />
+            <argument type="service" id="service_container" />
+        </service>
+        
+        <service id="indicadores.cargar_origen_datos_servicio" class="App\Consumer\CargarOrigenDatoConsumer">
+            <argument type="service" id="service_container" />            
+        </service>
+        <service id="indicadores.guardar_registro_origen_dato" class="App\Consumer\GuardarRegistroOrigenDatoConsumer">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="almacenamiento_datos" />
+        </service>
+        <service id="almacenamiento_datos" class="App\AlmacenamientoDatos\AlmacenamientoProxy" public="true">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="parameter_bag" />
+        </service>
+        <service id="sonata.admin.orm.filter.type.string" class="App\Filter\StringFilter">
+            <tag name="sonata.admin.filter.type" alias="doctrine_orm_string" />
+        </service>
+        <service id="my_listener" class="App\EventListener\LocaleListener">
+            <argument>%locale%</argument>
+            <tag name="kernel.event_subscriber" />
+        </service>
+        <service id="sonata.admin.menu_builder" class="App\Menu\MenuBuilder" public="true">
+            <argument type="service" id="sonata.admin.pool"/>
+            <argument type="service" id="knp_menu.factory"/>
+            <argument type="service" id="knp_menu.menu_provider"/>
+            <argument type="service" id="event_dispatcher"/>
+        </service>
+        
+    </services>
+</container>

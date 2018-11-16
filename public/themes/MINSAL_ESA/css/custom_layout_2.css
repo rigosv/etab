@@ -1,0 +1,28 @@
+.main-header {    
+    position: relative !important;    
+}
+.main-header img{
+    border: 0 none;
+    display: block;
+    height: auto;
+    margin: auto;
+    max-width: 100%;
+    max-height: none;
+    vertical-align: middle;
+}
+.main-header .logo{
+    float: none !important;
+    width: 100%;
+    overflow: visible !important;
+}
+
+.login-box .input-group{
+    width: 100%;
+}
+.navbar-left li{
+    border-bottom: 3px solid red;
+    border-top: 2px solid red;
+}
+.navbar-left li:hover{
+    background-color: lightcoral;
+}

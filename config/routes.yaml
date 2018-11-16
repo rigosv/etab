@@ -1,0 +1,13 @@
+_inicio:
+    path:  /
+    defaults: { _controller: SonataAdminBundle:Core:dashboard }
+
+indicadores_rest:
+    type:     rest
+    resource: App\RESTController\IndicadorRESTController
+    prefix: /indicadores/api/
+
+indicadores_rest_public:
+    type:     rest
+    resource: App\RESTController\ApiRESTController
+    prefix: /

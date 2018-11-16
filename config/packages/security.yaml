@@ -1,0 +1,87 @@
+acl:
+    connection: default
+        
+security:        
+    role_hierarchy:
+        ROLE_ADMIN:       [ROLE_USER, ROLE_SONATA_ADMIN, ROLE_USER_TABLERO, ROLE_USER_PIVOT_TABLE, ROLE_USER_CAPTURA_DATOS, ROLE_USER_COSTEO, ROLE_USER_TABLERO_CALIDAD, ROLE_USER_MATRIZ_SEGUIMIENTO, ROLE_USER_LOG_ACTIVIDAD, ROLE_USER_PLAN_MEJORA_CALIDAD]
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]        
+        SONATA:
+            #- ROLE_SONATA_PAGE_ADMIN_PAGE_EDIT  # if you are using acl then this line must be commented
+    
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers:
+        chain_provider:
+             chain: 
+                 providers: [fos_userbundle]
+        fos_userbundle:
+            id: fos_user.user_provider.username
+
+    encoders:
+        FOS\UserBundle\Model\UserInterface: sha512
+        
+    
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+            
+        # -> custom firewall for the admin area of the URL
+        admin:
+            context:            user
+            pattern:            /admin(.*)
+            form_login:
+                provider: fos_userbundle
+                login_path:     /admin/login
+                use_forward:    false
+                check_path:     /admin/login_check
+                default_target_path: /admin/login
+                use_referer:    true   
+            logout:
+                path:           /admin/logout
+                target:         /admin/login
+
+            anonymous:    true
+        # -> end custom configuration
+
+        # default login area for standard users
+        main:
+            context:            user
+            pattern:            .*
+            form_login:
+                provider: fos_userbundle
+                login_path:     /admin/login
+                use_forward:    false
+                check_path:     /admin/login_check
+                failure_path:   null
+                default_target_path: /admin/dashboard
+                use_referer:    true
+            logout:             true
+            anonymous:          true
+
+    access_control:
+        # URL of FOSUserBundle which need to be available to anonymous users
+        - { path: ^/_wdt, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/_profiler, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/rest-service, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api, role: IS_AUTHENTICATED_ANONYMOUSLY }
+
+        # -> custom access control for the admin area of the URL
+        - { path: ^/admin/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/logout$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/login-check$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        # -> end
+
+        - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/ae, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/externo/autenticar, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        
+
+        # Secured part of the site
+        # This config requires being logged for the whole site and having the admin role for the admin part.
+        # Change these rules to adapt them to your needs
+        #Especifico para la aplicación
+        - { path: ^/admin, role: [ROLE_USER, ROLE_ADMIN, ROLE_SONATA_ADMIN] }
+        - { path: ^/admin/dashboard, role: [ROLE_USER, ROLE_ADMIN, ROLE_SONATA_ADMIN] }
+        - { path: ^/.*, role: ROLE_USER }        

@@ -1,0 +1,3 @@
+controllers:
+    resource: '@GridFormBundle/Controller/'
+    type: annotation

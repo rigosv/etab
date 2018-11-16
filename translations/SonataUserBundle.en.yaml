@@ -1,0 +1,29 @@
+'title_user_resetting': 'Resetting password'
+'title_user_resetting_reset': 'Resetting password'
+u: Undefined
+f: Female
+m: Male
+_usuario_: User
+_seguridad_: Security
+_indicadores_y_salas_: Indicators and Rooms
+_perfil_: Profile
+_estatus_: Status
+_indicadores_: Indicators
+_salas_situacionales_: 'Situation Rooms'
+_general_: General
+message_close: Close
+ROLE_ADMIN: Administrador
+ROLE_USER: Normal user
+ROLE_SONATA_ADMIN: Administrador (SONATA)
+ROLE_USER_TABLERO: Indicators dashboard
+ROLE_USER_PIVOT_TABLE: Pivot table
+ROLE_USER_CAPTURA_DATOS: Data capture
+ROLE_USER_COSTEO: Costs
+ROLE_USER_TABLERO_CALIDAD: Dashboard (Quality)
+ROLE_USER_MATRIZ_SEGUIMIENTO: Monitoring matrix
+ROLE_USER_LOG_ACTIVIDAD: Activity log
+ROLE_USER_PLAN_MEJORA_CALIDAD: 	Improvement plan (Quality)
+ROLE_SUPER_ADMIN: Super admin
+ROLE_ALLOWED_TO_SWITCH: Allowed to switch
+SONATA: SONATA
+_salas_: Salas

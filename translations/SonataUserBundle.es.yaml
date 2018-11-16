@@ -1,0 +1,33 @@
+'title_user_resetting': 'Restauración de clave'
+'title_user_resetting_reset': 'Restauración de clave'
+u: No ingresado
+f: Femenino
+m: Masculino
+_usuario_: Usuario
+_seguridad_: Seguridad
+_indicadores_y_salas_: Indicadores y Salas
+_perfil_: Perfil
+_estatus_: Estatus
+_indicadores_: Indicadores
+_salas_situacionales_: Salas situacionales
+_general_: General
+message_close: Cerrar
+ROLE_ADMIN: Administrador
+ROLE_USER: Usuario normal
+ROLE_SONATA_ADMIN: Administrador (SONATA)
+ROLE_USER_TABLERO: Tablero de indicadores
+ROLE_USER_PIVOT_TABLE: Tabla pivote
+ROLE_USER_CAPTURA_DATOS: Captura de datos
+ROLE_USER_COSTEO: Costeo
+ROLE_USER_TABLERO_CALIDAD: Tablero (Calidad)
+ROLE_USER_MATRIZ_SEGUIMIENTO: Matriz de seguimiento
+ROLE_USER_LOG_ACTIVIDAD: Registro de actividad
+ROLE_USER_PLAN_MEJORA_CALIDAD: 	Plan de mejora (Calidad)
+ROLE_SUPER_ADMIN: Súper admin
+ROLE_ALLOWED_TO_SWITCH: Permitir cambiar usuario
+SONATA: SONATA
+_salas_: Salas
+_establecimiento_principal_: Establecimiento
+_ayuda_establecimiento_principal_: ''
+
+ 

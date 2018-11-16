@@ -1,0 +1,30 @@
+sonata_admin:
+    title: 'eTab'
+    title_logo: '/themes/%app.theme%/images/logo_title.png'
+    dashboard:
+        blocks:
+            - { type: sonata.admin.block.admin_list, position: left }
+            
+    options:        
+        confirm_exit:   false # disable confirmation when quitting with unsaved changes
+        form_type: 'horizontal'
+
+    # set to true to persist filter settings per admin module in the user's session
+    persist_filters: false
+    
+    templates:
+        layout:  'standard_layout.html.twig'
+        edit:    'CRUD/edit.html.twig'
+        knp_menu_template: "themes/%app.theme%/custom_menu.html.twig"
+
+    show_mosaic_button:   false
+
+    security:
+        handler: sonata.admin.security.handler.role
+
+        role_admin: ROLE_ADMIN
+        role_super_admin: ROLE_SUPER_ADMIN
+sonata_block:
+    blocks:
+        sonata.admin.block.admin_list:
+            contexts: [admin]

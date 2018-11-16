@@ -1,0 +1,59 @@
+{% extends 'themes/'~app_theme|default('defult')~'/standard_layout.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ app.request.schemeAndHttpHost ~ asset('css/core_layout.css') }}" type="text/css" media="all" />
+{% endblock %}
+{% block javascripts %}
+    {{parent()}}
+    <script type="text/javascript" src="{{ app.request.schemeAndHttpHost ~ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script type="text/javascript" src="{{ app.request.schemeAndHttpHost ~ asset('js/notify.min.js') }}"></script>
+    <script type="text/javascript" src="{{ app.request.schemeAndHttpHost ~ asset('js/menu.js') }}"></script>
+    <script type="text/javascript" src="{{ app.request.schemeAndHttpHost ~ asset('js/no_cerrar_select_multiple.js') }}"></script>
+    <script type="text/javascript" src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+
+    {% include (['messages_js.html.twig']|join) %}
+{% endblock %}
+
+{% block sonata_top_nav_menu_add_block %}{% endblock %}
+{% block sonata_sidebar_search %}{% endblock %}
+
+{% block sonata_top_nav_menu %}
+    {#
+    {% if app.user %}
+        {{ knp_menu_render('sonata_admin_sidebar', {template: admin_pool.getTemplate('knp_menu_template')}) }}
+    {% endif %}
+    <div class="navbar-custom-menu">        
+        <ul class="nav navbar-nav">
+            {% if app.user != '' and app.user.username == 'externo' %}
+                <li ><a href='{{url('sonata_user_admin_security_logout')}}'>{{'_salir_'|trans}}</a></li>
+            {% else %}
+                <li class="dropdown user-menu">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        {% if app.user != '' %}
+                            {% include admin_pool.getTemplate('user_block') %}                                            
+                            <li><A class="btn btn-flat" href='{{url('fos_user_change_password')}}'>
+                                   <span class="glyphicon glyphicon-repeat"></span>{{"_cambiar_clave_"|trans}}</A>
+                            </li>
+                            <li class="divider"></li>
+                        {% endif %}                
+                    {% for locale, lenguaje in {'es_SV':'Español', 'en_US':'English'} %}
+                        {% if locale == app.request.locale %}
+                            <li class='active'><A href='#'>{{lenguaje}}</a></li>
+                        {% else %}
+                            <li ><a href='{{url('change_locale',{_locale:locale})}}'>{{lenguaje}}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    </ul>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+    #}
+    {{ parent() }}
+    <div id="div_cargando" class='affix'>
+        <img id="cargador" src="{{ app.request.schemeAndHttpHost ~ asset('images/ajax-loader.gif') }}"/>
+    </div>    
+{% endblock %}

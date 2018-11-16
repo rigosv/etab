@@ -1,0 +1,8 @@
+
+{%if object.reporte != null %}
+    <A href="{{url('tablero_sala', {sala: object.reporte.id, _sonata_admin: 'sonata.admin.ficha', indicador: object.id})}}">
+        <button class="btn btn-success btn-xs " type="button" >
+            {{'_mostrar_reporte_'|trans}}
+        </button>
+    </A>
+{% endif %}

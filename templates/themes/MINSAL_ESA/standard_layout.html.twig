@@ -1,0 +1,51 @@
+{% extends '@SonataAdmin/standard_layout.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+
+    <link rel="stylesheet" href="{{ app.request.schemeAndHttpHost ~ asset('/themes/MINSAL_ESA/css/login.css') }}" type="text/css" media="all" />
+    <link rel="stylesheet" href="{{ app.request.schemeAndHttpHost ~ asset('/themes/MINSAL_ESA/css/custom_layout.css') }}" type="text/css" media="all" />
+
+{% endblock %}
+
+{% block sonata_nav %}
+    <nav class="navbar navbar-static-top menu-principal" role="navigation">
+        <div class="navbar-left">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+                <i class="fa fa-bars"></i>
+            </button>
+            <div class="navbar-collapse pull-left collapse in" id="navbar-collapse">
+                {{ knp_menu_render('sonata_admin_sidebar', {template: get_global_template('knp_menu_template')}) }}
+            </div>
+        </div>
+
+        {% block sonata_top_nav_menu %}
+            {% if app.user  %}
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        {% block sonata_top_nav_menu_user_block %}
+                            <li class="dropdown user-menu">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                    <i class="fa fa-user fa-fw" aria-hidden="true"></i> <i class="fa fa-caret-down" aria-hidden="true"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-user">
+                                    {% include get_global_template('user_block') %}
+                                </ul>
+                            </li>
+                        {% endblock %}
+                    </ul>
+                </div>
+            {% endif %}
+        {% endblock %}
+    </nav>
+{% endblock sonata_nav %}
+
+{% block sonata_left_side %}
+{% endblock %}
+
+{% block sonata_page_content %}
+    {{  parent() }}
+    <div class="page-footer">
+        <img class="dtic-footer" src="{{ asset("themes/MINSAL_ESA/images/dtic.png") }}" alt="dtic"/>
+        Direcci&oacute;n de Tecnolog&iacute;as de Informaci&oacute;n y Comunicaciones - Ministerio de Salud
+    </div>
+{% endblock %}

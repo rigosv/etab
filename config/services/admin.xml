@@ -1,0 +1,232 @@
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services/services-1.0.xsd">    
+    <parameters>
+        <parameter key="admin_max_per_page_number">10</parameter>
+    </parameters>
+    <services>
+        <service id="sonata.admin.agencia" class="App\Admin\AgenciaAdmin">
+            <tag name="sonata.admin" 
+                 manager_type="orm" 
+                 group="catalogos" 
+                 label="_agencia_"
+            />
+            <argument />
+            <argument>App\Entity\Agencia</argument>
+            <argument>SonataAdminBundle:CRUD</argument>
+            <call method="setMaxPerPage"><argument>%admin_max_per_page_number%</argument></call>
+        </service>
+        
+        <service id="sonata.admin.imagen" class="App\Admin\ImagenAdmin">
+            <tag name="sonata.admin" 
+                 manager_type="orm" 
+                 group="catalogos" 
+                 label="_imagen_"
+            />
+            <argument />
+            <argument>App\Entity\Imagen</argument>
+            <argument>SonataAdminBundle:CRUD</argument>
+            <call method="setMaxPerPage"><argument>%admin_max_per_page_number%</argument></call>
+        </service>
+        
+        <service id="sonata.admin.responsable_dato" class="App\Admin\ResponsableDatoAdmin">
+            <tag name="sonata.admin" 
+                 manager_type="orm" 
+                 group="catalogos" 
+                 label="responsable_datos"
+            />
+            <argument />
+            <argument>App\Entity\ResponsableDato</argument>
+            <argument>SonataAdminBundle:CRUD</argument>
+            <call method="setMaxPerPage"><argument>%admin_max_per_page_number%</argument></call>
+
+        </service>
+        
+        <service id="sonata.admin.fuente_dato" class="App\Admin\FuenteDatoAdmin">
+            <tag name="sonata.admin" 
+                 manager_type="orm" 
+                 group="catalogos" 
+                 label="fuente_datos"
+            />
+            <argument />
+            <argument>App\Entity\FuenteDato</argument>
+            <argument>SonataAdminBundle:CRUD</argument>
+            <call method="setMaxPerPage"><argument>%admin_max_per_page_number%</argument></call>
+
+        </service>
+        
+        <service id="sonata.admin.responsable_indicador" class="App\Admin\ResponsableIndicadorAdmin">
+            <tag name="sonata.admin" 
+                 manager_type="orm" 
+                 group="catalogos" 
+                 label="responsable_indicador"
+            />
+            <argument />
+            <argument>App\Entity\ResponsableIndicador</argument>
+            <argument>SonataAdminBundle:CRUD</argument>
+            <call method="setMaxPerPage"><argument>%admin_max_per_page_number%</argument></call>
+
+        </service>
+
+        <service id="sonata.admin.clasificacion_tecnica" class="App\Admin\ClasificacionTecnicaAdmin">
+            <tag name="sonata.admin" 
+                 manager_type="orm" 
+                 group="catalogos" 
+                 label="clasificacion_tecnica"
+            />
+            <argument />
+            <argument>App\Entity\ClasificacionTecnica</argument>
+            <argument>SonataAdminBundle:CRUD</argument>
+            <call method="setMaxPerPage"><argument>%admin_max_per_page_number%</argument></call>
+
+        </service>
+
+        <service id="sonata.admin.clasificacion_uso" class="App\Admin\ClasificacionUsoAdmin">
+            <tag name="sonata.admin" 
+                 manager_type="orm" 
+                 group="catalogos" 
+                 label="clasificacion_uso"
+            />
+            <argument />
+            <argument>App\Entity\ClasificacionUso</argument>
+            <argument>SonataAdminBundle:CRUD</argument>
+            <call method="setMaxPerPage"><argument>%admin_max_per_page_number%</argument></call>
+
+        </service>
+        <service id="sonata.admin.significado_campo" class="App\Admin\SignificadoCampoAdmin">
+            <tag name="sonata.admin" 
+                 manager_type="orm" 
+                 group="catalogos" 
+                 label="significado_campo"
+            />
+            <argument />
+            <argument>App\Entity\SignificadoCampo</argument>
+            <argument>App\Controller\SignificadoCampoAdminController</argument>
+            <call method="setMaxPerPage"><argument>%admin_max_per_page_number%</argument></call>
+
+        </service> 
+        <service id="sonata.admin.colores_alertas" class="App\Admin\AlertaAdmin">
+            <tag name="sonata.admin" 
+                 manager_type="orm" 
+                 group="catalogos" 
+                 label="_colores_alertas_"
+            />
+            <argument />
+            <argument>App\Entity\Alerta</argument>
+            <argument>SonataAdminBundle:CRUD</argument>
+            <call method="setMaxPerPage"><argument>%admin_max_per_page_number%</argument></call>
+
+        </service>       
+        <service id="sonata.admin.conexion" class="App\Admin\ConexionAdmin">
+            <tag name="sonata.admin" 
+                 manager_type="orm" 
+                 group="origen_datos" 
+                 label="conexion_bd"
+            />
+            <argument />
+            <argument>App\Entity\Conexion</argument>
+            <argument>SonataAdminBundle:CRUD</argument>
+            <call method="setMaxPerPage"><argument>%admin_max_per_page_number%</argument></call>
+
+        </service>
+        <service id="sonata.admin.origen_dato" class="App\Admin\OrigenDatosAdmin">
+            <tag name="sonata.admin"
+                 manager_type="orm" 
+                 group="origen_datos" 
+                 label="origen_dato"
+            />    
+            <argument />            
+            <argument>App\Entity\OrigenDatos</argument>
+            <argument>App\Controller\OrigenDatosAdminController</argument>
+            <call method="setMaxPerPage"><argument>%admin_max_per_page_number%</argument></call>
+
+        </service>
+        <service id="sonata.admin.diccionario" class="App\Admin\DiccionarioAdmin">
+            <tag name="sonata.admin"
+                 manager_type="orm" 
+                 group="origen_datos" 
+                 label="javascript.diccionario_transformacion"
+            />    
+            <argument />            
+            <argument>App\Entity\Diccionario</argument>
+            <argument>SonataAdminBundle:CRUD</argument>            
+            <call method="setMaxPerPage"><argument>%admin_max_per_page_number%</argument></call>
+
+        </service>
+        <service id="sonata.admin.regla_transformacion" class="App\Admin\ReglaTransformacionAdmin">
+            <tag name="sonata.admin"
+                 manager_type="orm" 
+                 group="origen_datos" 
+                 label="_regla_transformacion_"
+            />    
+            <argument />            
+            <argument>App\Entity\ReglaTransformacion</argument>
+            <argument>SonataAdminBundle:CRUD</argument>
+            <call method="setMaxPerPage"><argument>%admin_max_per_page_number%</argument></call>
+
+        </service>
+        <service id="sonata.admin.campo_calculado" class="App\Admin\CampoAdmin">
+            <tag name="sonata.admin"
+                 manager_type="orm" 
+                 group="origen_datos" 
+                 label="_campo_calculado_"
+            />    
+            <argument />            
+            <argument>App\Entity\Campo</argument>
+            <argument>SonataAdminBundle:CRUD</argument>
+            <call method="setMaxPerPage"><argument>10</argument></call>
+
+        </service>
+        
+        <service id="sonata.admin.variable" class="App\Admin\VariableDatoAdmin">
+            <tag name="sonata.admin"
+                 manager_type="orm" 
+                 group="indicadores" 
+                 label="variables"
+            />
+            <argument />
+            <argument>App\Entity\VariableDato</argument>
+            <argument>SonataAdminBundle:CRUD</argument>
+            <call method="setMaxPerPage"><argument>%admin_max_per_page_number%</argument></call>
+
+        </service>
+
+        <service id="sonata.admin.ficha" class="App\Admin\FichaTecnicaAdmin">
+            <tag name="sonata.admin"
+                 manager_type="orm" 
+                 group="indicadores" 
+                 label="ficha_tecnica"
+            />
+            <argument />
+            <argument>App\Entity\FichaTecnica</argument>
+            <argument>App\Controller\FichaTecnicaAdminController</argument>
+            <call method="setMaxPerPage"><argument>%admin_max_per_page_number%</argument></call>
+
+        </service>
+        <service id="sonata.admin.indicador_alertas" class="App\Admin\IndicadorAlertasAdmin">
+            <tag name="sonata.admin"
+                 manager_type="orm" 
+                 group="indicadores" 
+                 label="indicador_alertas"
+            />
+            <argument />
+            <argument>App\Entity\IndicadorAlertas</argument>
+            <argument>SonataAdminBundle:CRUD</argument>
+            <call method="setMaxPerPage"><argument>%admin_max_per_page_number%</argument></call>
+
+        </service>     
+        <service id="sonata.admin.sala_acciones" class="App\Admin\SalaAccionesAdmin">
+            <tag name="sonata.admin"
+                 manager_type="orm" 
+                 group="indicadores" 
+                 label="_sala_acciones_"
+            />
+            <argument />
+            <argument>App\Entity\SalaAcciones</argument>
+            <argument>App\Controller\SalaAccionesAdminController</argument>
+            <call method="setMaxPerPage"><argument>%admin_max_per_page_number%</argument></call>
+
+        </service>        
+        
+    </services>
+</container>

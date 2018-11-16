@@ -1,0 +1,70 @@
+nelmio_api_doc:
+    documentation:
+        info:
+            title: eTab
+            description: Datos del eTab
+            version: 1.0.0
+        definitions:
+            DatosIndicador:
+                description: "Datos del indicador"
+                type: object
+                properties:
+                    indicador_id:
+                        type: integer
+                        example: 42
+                    nombre:
+                        type: string
+                        example: "Porcentaje de muertes"
+                    formula:
+                        type: string
+                        example: "{CANTIDAD_MUERTES}/{TOTAL_PACIENTES} * 100"
+                    filas:
+                        type: array
+                        description: "Arreglo de filas de datos del indicador, sus elementos dependerá de las dimensiones disponibles en cada indicador"
+            FichaTecnica:
+                description: "Datos de la ficha técnica"
+                type: object
+                properties:
+                    id_ficha:
+                        type: integer
+                        example: 42
+                    nombre:
+                        type: string
+                        example: "Porcentaje de muertes"
+                    interpretacion:
+                        type: string
+                        example: ""
+                    concepto:
+                        type: string
+                        example: ""
+                    unidad_medida:
+                        type: string
+                        example: "%"
+                    formula:
+                        type: string
+                        example: "{CANTIDAD_MUERTES}/{TOTAL_PACIENTES} * 100"
+                    Observacion:
+                        type: string
+                        example: ""
+                    campos:
+                        type: string
+                        example: "anio, id_region, trimestre, id_municipio, id_establecimiento, id_mes"
+                        description: Los campos en que se puede desagregar la ficha
+                    clasificacion_tecnica:
+                        type: array
+                        example: ["Atención", "Resultado"]
+                        description: "Las categorías a las que pertenece el indicador"
+                    meta:
+                        type: string
+                        example: "10"
+                        description: "La meta definida para el indicador"
+                    variables:
+                        type: array
+                        example: ["CANTIDAD_MUERTES", "TOTAL_PACIENTES"]
+                    alertas:
+                        type: array
+                        description: "Rangos de alertas y el color asignado"
+                        example: [{"limite_inferior":92,"limite_superior":100,"color":"Verde"},{"limite_inferior":80,"limite_superior":91.9,"color":"Amarillo"}]
+    areas: # to filter documented areas
+        path_patterns:
+            - ^/api(?!/doc$) # Accepts routes under /api except /api/doc

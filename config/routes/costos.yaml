@@ -1,0 +1,3 @@
+controller_costos:
+    resource: '@CostosBundle/Controller/CostosController.php'
+    type: annotation

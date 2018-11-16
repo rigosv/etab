@@ -1,0 +1,431 @@
+_tablero_: Dashboard
+_clave_: Password
+establecimiento: 'Establishment'
+contacto: 'Contact'
+correo_electronico: 'Email'
+telefono: 'Phone Number'
+cargo: 'Title'
+nombre_establecimiento: "Establisment's name"
+descripcion: 'Description'
+codigo: 'Code'
+uso_catalogo: "Will describe catalog's fields"
+no_catalogo_y_describir_catalogo: "If used to describe a catalog, it can't be associated to one"
+formula: 'Formula'
+ayuda_ingreso_formula: 'To create/name variables use its initials inside brackets e.g.: {NAI} / {PTDA} * 100 '
+vars_sel_diff_vars_formula: 'Variables used in a formula must match those that were already selected'
+sintaxis_invalida: 'Formula has errors'
+sintaxis_invalida_variables_entre_llaves: 'Formula has errors, variables should for inside curly brackets({ }) '
+catalogo: 'Associated Catalog'
+comentario: 'Comment'
+formato_xxxx-xxxx: 'Format XXXX-XXXX'
+elija_catalogo: 'A catalog must be selected'
+marque_uso_en_catalogo: 'A catalog was specified, this option must be selected'
+categoria_indicador: "Indicator's Category"
+categoria: 'Category'
+alertas: 'Alerts'
+indicador: 'Indicator'
+limite_inferior: 'Value'
+limite_superior: 'Upper Limit'
+color: 'Color'
+indicador_alertas: "Indicator's alerts"
+elija_al_menos_una_variable: 'At least one variable must be selected'
+campos_indicador: Dimensions for this indicator
+nombre_archivo_mapa: Map's image file name
+cerrar_sesion: 'Logout'
+favoritos: 'Favourites'
+
+
+
+'clasificacion_tecnica' : 'Technical Classification'
+'Clasificacion Tecnica List': 'Technical Classification - Listing'
+'Clasificacion Tecnica Delete': "Technical Classification - Delete"
+
+significado_campo: Meaning of fields
+nombre_campo: Name of field
+significado: Meaning
+
+'Origen Datos List': 'Data Sources - Listing'
+'Origen Datos Delete': 'Data Sources - Delete'
+'Origen Datos Create': 'Data Sources - Create'
+'Origen Datos Edit': 'Data Sources - Edit'
+
+'User List': 'User List'
+'User Delete': 'User Delete'
+'User Edit': 'User Edit'
+'usuario_indicadores': 'Indicators user'
+'nombre_usuario': User
+
+'responsable_datos': 'Data Manager'
+'Responsable Dato List': 'Data Manager - Listing'
+'Responsable Dato Delete': 'Data Manager - Delete'
+'Responsable Dato Create': 'Data Manager - Create'
+'Responsable Dato Edit': 'Data Manager - Edit'
+
+'fuente_datos' : 'Data Source'
+'Fuente Dato List': 'Data Source  - Listing'
+'Fuente Dato Delete': 'Data Source  - Delete'
+'Fuente Dato Create': 'Data Source  - Create'
+'Fuente Dato Edit': 'Data Source  - Edit'
+
+'responsable_indicador': 'Indicator Manager'
+'Responsable Indicador List': 'Indicator Manager- Listing'
+'Responsable Indicador Delete': 'Indicator Manager- Delete'
+'Responsable Indicador Create': 'Indicator Manager - Create'
+'Responsable Indicador Edit': 'Indicator Manager - Edit'
+
+'clasificacion_privacidad': 'Privacy Classification'
+'Clasificacion Privacidad List': 'Privacy Classification - Listing'
+'Clasificacion Privacidad Delete': 'Privacy Classification - Delete'
+'Clasificacion Privacidad Create': 'Privacy Classification - Create'
+'Clasificacion Privacidad Edit': 'Privacy Classification - Edit'
+
+'clasificacion_nivel': 'Secondary Level Classification'
+'Clasificacion Nivel List': 'Secondary Level Classification - Listing'
+'Clasificacion Nivel Delete': 'Secondary Level Classification - Delete'
+'Clasificacion Nivel Create': 'Secondary Level Classification - Create'
+'Clasificacion Nivel Edit': 'Secondary Level Classification - Edit'
+
+'clasificacion_uso': 'Usage Classification'
+'Clasificacion Uso List': 'Usage Classification - Listing'
+'Clasificacion Uso Delete': 'Usage Classification - Delete'
+'Clasificacion Uso Create': 'Usage Classification - Create'
+'Clasificacion Uso Edit': 'Usage Classification - Edit'
+
+'sentencia':  SQL statement
+
+'Variable Dato List': 'Data variable - Listing'
+'Variable Dato Delete': 'Data variable - Delete'
+'Variable Dato Create': 'Data variable - Create'
+'Variable Dato Edit': 'Data variable - Edit'
+
+'Significado Campo List': 'Field meaning - Listing'
+'Significado Campo Delete': 'Field meaning - Delete'
+'Significado Campo Create': 'Field meaning - Create'
+'Significado Campo Edit': 'Field meaning - Edit'
+
+'Conexion List': 'Connection - Listing'
+'Conexion Delete': 'Connection - Delete'
+'Conexion Create': 'Connection - Create'
+'Conexion Edit': 'Connection - Edit'
+
+'Ficha Tecnica List': 'Technical profile - Listing'
+'Ficha Tecnica Delete': 'Technical profile - Delete'
+'Ficha Tecnica Create': 'Technical profile - Create'
+'Ficha Tecnica Edit': 'Technical profile - Edit'
+
+'Indicador Alertas List': 'Indicator Warnings - Listing'
+'Indicador Alertas Delete': 'Indicator Warnings - Delete'
+'Indicador Alertas Create': 'Indicator Warnings - Create'
+'Indicador Alertas Edit': 'Indicator Warnings - Edit'
+'es_acumulado': 'It is a cumulative indicator'
+
+conexion_bd : 'Database connection'
+nombre_conexion : 'Connection name'
+nombre_base_datos: 'Database name'
+motor: 'Database server'
+puerto: 'Port'
+ip: 'IP address'
+usuario: 'User'
+Clave: 'Password'
+instancia: 'Instance'
+_repetir_clave_: 'Re type password'
+claves_no_coinciden: 'Passwords do not match'
+probar_conexion: 'Test Connection'
+conexion_error: 'Connection Error'
+conexion_success: 'Connection successful'
+nombre_consulta: 'Query name'
+sentencia_sql: 'SQL statement'
+conexiones: 'Connections'
+probar_sentencia: 'Test SQL statement'
+sentencia_error: 'SQL statement has errors'
+sentencia_success: 'SQL test was successful'
+nombre_variable: 'Variable name'
+nombre: 'Name'
+iniciales: 'Initials'
+confiabilidad: 'Reliability (%)'
+solo_select: "SQL Statement can only contain  a 'SELECT' keyword, it can not contain UPDATE, DELETE, INSERT or CREATE"
+formulas_indicadores: 'Indicator Formulas'
+variables: 'Variables'
+
+nombre_indicador: 'Indicator Name'
+tema: 'Topic'
+concepto: 'Concept'
+objetivo: 'Objective'
+uso: 'Usage'
+definicion_operativa: 'Working Definition'
+ficha_tecnica: 'Technical Profile'
+unidad_medida: 'Measurment/Units'
+periodicidad: 'Periodicity'
+estandar_nacional: 'National Standard'
+presentacion: 'Presentation'
+btn_create_and_config_data_source: 'Create and set up data source'
+action_merge: 'Merge'
+action_load_data: 'Load Data'
+archivo_asociado: 'Related file'
+subir_nuevo_archivo: 'Upload new file'
+origen_datos_archivo: 'From file: Spreadsheet or  CSV text file.'
+origen_datos_sql: 'From Database'
+tipo_campo_cambiado_a: 'Field type changed to '
+significado_campo_cambiado_a: "Field's meaning changed to"
+flash_batch_load_data_success: 'A process to load data has been started using the specified sources'
+mensaje_fusionar: ' Choose the fields that would be included in the merged data source (Only fields of the same type and meaning can be merged)'
+origen_fusionado: 'Merged source'
+datos_origen_fusionado: 'Merged source data'
+
+sonata_user: 'Users and Groups'
+catalogos: 'Catalogs'
+origen_datos: 'Data Sources'
+indicadores: 'Indicators'
+origen_no_configurado: ' Data source is not valid, all fields must be set, edit data source to complete missing fields'
+origen_dato: 'Data source'
+error: 'Error'
+es_catalogo: 'Is Catalog'
+datos_generales: 'Basic Info'
+indicador_tablero: 'Dashboard'
+users: Users
+groups: Groups
+
+fusion:
+  no_catalogos: 'Merging a catalogs is not allowed, instead you could create a spreadsheet with your data and load it to the catalog'
+  no_fusionados: ' Using merged data sources to create new merges'
+  selecione_2_o_mas_elementos: 'Select 2 or more elements'
+  es_fusionado: 'Is Merged'
+  origen_fusionado_creado: 'Merged data source successfully created'
+  fusiona_siguientes_origenes: 'Merges the following sources: '
+
+javascript:
+  elija_tipo_dato: 'Choose data type'
+  elija_significado_dato: 'Choose data meaning'
+  configure_campos: 'Field configuration : only a portion of the data is shown'
+  nombre_campo: 'Field name'
+  tipo: 'Type'
+  significado: 'Meaning'
+  datos_muestra: 'Test data'
+  dimension: 'Dimension'
+  tipo_grafico: 'Chart type'
+  ascendente: 'Ascending'
+  descendente: 'Descending'
+  ordenar_x: 'Sort by X axis'
+  ordenar_y: 'Sort by Y axis'
+  filtro_posicion: 'Sort by position'
+  desde: 'From'
+  hasta: 'To'
+  filtrar: 'Filter'
+  quitar_filtro: 'Remove Filters'
+  opciones_grafico: 'Graph options'
+  dimension_opciones: 'Dimension options'
+  cambiar_dimension: 'Dimension options'
+  ordenar: 'Sorting'
+  filtrar_por_elemento: 'Filter by element'
+  alertas_indicador: 'Indicator warnings'
+  color: 'Color'
+  limite_inf: 'Lower limit'
+  limite_sup: 'Upper limit'
+  rango_no_especificado: 'Range not specified'
+  no_mapa: 'Seelcted variable does not have  a map associated, the file was not found or not defined coordinates'
+  max_escala_y: 'Y Max.'
+  max_indicador: 'Maximum indicator value'
+  max_rango_alertas: 'Maximum warning value'
+  ocultar_listado_indicadores: 'Hide indicator listing'
+  mostrar_listado_indicadores: 'Show indicator listing'
+  agregar_favorito: 'Add to favourites'
+  quitar_favoritos: 'Remove from favourites'
+  ver_ficha_tecnica: 'Show technical profile'
+  tabla_datos: 'Data table'
+  indicador: 'Indicator'
+  descargar_grafico: 'Download Chart'
+  opciones: 'Options'
+  ver_sql: 'View SQL'
+  diccionario_transformacion: 'Transformation Dictionary'
+  elija_diccionario: 'Choose a dictionary'
+  quitar_indicador: 'Remove indicator'
+  columnas: 'Columns'
+  pastel: 'Cake'
+  mapa: 'Map'
+  lineas: 'Lines'
+  guardar_imagen: 'Right click on the image, then choose "Save Image As ..."'
+  _nada_encontrado_ : 'Nothing found - sorry'
+  _mostrando_n_de_n_: 'Showing _START_ to _END_ of _TOTAL_ records'
+  _mostrando_0_ : 'Showing 0 to 0 of 0 records'
+  _filtrados_de_ : '(filtered from _MAX_ total records)'
+  no_mas_niveles: 'No more levels to descend'
+  no_graficos_asignados: 'No assigned graph types allowed to field meanings'
+  recargar_origen: 'Reload data source information'
+  ultima_lectura: 'Last reading date'
+  ultima_lectura_exp: 'Format: dd/mm/yyyy. Take the most recent date that was the last reading of each data source associated with the indicator.'
+  _compartir_sala_: 'Share room'
+  _nombre_sala_: "Room's name"
+  _no_sala_: 'No active room'
+  _no_areas_grafico_: No areas available to graph
+  _cambiar_vista_: Switch View Graph/Table
+  _error_acciones_vacia_: You must enter an action
+
+validacion:
+  requerido: This field is required
+  sentencia_o_archivo_no_ambas: 'Only one of the two options can be entered: an SQL statement or a file'
+  sentencia_o_archivo: 'One of the two options must be entered: an SQL statement or a file'
+  sentencia_sql_origen_requeridos: 'An SQL statement and connection must be specified'
+  debe_elegir_una_opcion: 'An option must be chosen'
+  elija_al_menos_un_campo: 'At least one field must be selected'
+tablero:
+  barras: Bars
+  pastel: Pie
+  lineas: Line
+  columnas: Columns
+  tipo_grafico_principal: Main chart type
+  tipo_grafico_secundario: Second chart type
+
+_no_clasificados_ : 'Not rated'
+_interpretacion_ : 'Interpretation'
+_nivel_de_usuario_ : 'User Level'
+_observacion_ : 'Observation'
+
+_colores_alertas_ : 'Warnings - Colors'
+'Alerta List': 'Colors - List'
+'Alerta Delete': 'Colors - Delete'
+'Alerta Create': 'Colors - Create'
+'Alerta Edit': 'Colors - Edit'
+_ayuda_codigo_color_: 'It can be any HTML color code. Eg blue or #0000FF'
+_clasificacion_indicadores_: 'Classification'
+_tipo_no_corresponde_con_datos_: 'The selected type is not suitable for the field'
+_sala_: 'Room'
+_salas_: 'Rooms'
+_agregar_area_grafico_: 'Add graphic area'
+_guardar_sala_: 'Save room'
+_sala_situacional_: 'Situation Room'
+_nombre_sala_: Room name
+_cerrar_: Close
+_guardar_cambios_: 'Save Changes'
+_quitar_indicador_: 'Remove indicator'
+_datos_geograficos_: 'Geodata'
+_escala_ : 'Scale'
+_origen_x_: 'X Origin'
+_origen_y_: 'Y Origin'
+_diccionario_aplicado_: 'transformation dictionary applied '
+_regla_: Rule
+_regla_transformacion_: 'Transformation rule'
+_transformacion_: 'Transformation'
+_cubos_: 'OLAP cubes'
+_datos_generales_: 'General data'
+_dimensiones_:  'Dimensions'
+_debe_guardar_para_ver_dimensiones_: 'You must save to watch dimensions of the indicator'
+_por_: 'by'
+_ocultar/mostrar_menu_principal_: 'Show/Hide Main menu'
+_campo_calculado_: 'Calculated Field'
+_campos_utilizables_en_campos_calculados_: 'Usable fields in the formula '
+_variable_no_campo_: 'You have used a variable that doesnt belong to the fields in the data source'
+_exportar_: 'Export'
+_tipos_graficos_: Graph types allowed
+change_password.flash.success: 'Password has been successfully changed'
+_cambiar_clave_: Change password
+_ver_ficha_: See technical profile
+_ultima_actualizacion_: Last updated
+_no_conexion_configurada_: There is no connection configured
+_salas_situacionales_: 'Situation Rooms'
+_indicadores_y_salas_: Indicators and Rooms
+_roles_: Roles
+_seguridad_: Security
+_graficos_: Graphs
+_acciones_: Actions
+_social_: Social
+_comentarios_: Comments
+_enviar_: Send
+_guardar_como_: Save as
+_alerta_limite_inferior_: 'Lower limit'
+_regresar_menu_principal_: Return to main menu
+_agencia_: Agency
+_usuario_no_agencia_: The current user is not assigned to an Agency
+_titulo_:  Title
+_descripcion_: Description
+_archivo_: File
+_imagen_: Image
+_mostrar_cinta_: Show carousel
+_sala_acciones_: Situation Room Accions
+_fecha_: Date
+_usuario_: User
+_observaciones_: Observations
+_responsables_: Responsibles
+_tabla_pivote_: Pivot table
+
+title_user_authentication: Authentication
+security.login.username: User
+security.login.password: Password
+_exportar_tabla_datos_: Export data table
+_exportar_grafico_: Export graph
+_reporte_sala_: Room Report
+_reporte_: Report
+_mostrar_reporte_: Show Report
+_buscar_indicador_: Search indicator
+_agregar_accion_: Add Action
+_origen_datos_: Data Source
+_general_: General
+_clasificacion_: Classification
+_meta_: Goal
+_buscar_sala_: Find Room
+_recargar_: Reload
+_campo_lectura_incremental_ : Incremental reading field
+_debe_guardar_para_ver_campos_: You must save to see the available fields
+_debe_ser_tipo_fecha_: You must choose a type date or year field
+_carga_incremental_: Incremental load
+_ventana_limite_inferior_: Lower limit
+_ventana_limite_superior_: Upper limit
+_ayuda_ventana_limite_inferior_: Number of days before the last date reading from where the data is read (number of years if the field to load incremental is year)
+_ayuda_ventana_limite_superior_: "Number of days before of the actual date until the reading of data is performed ('Number of years' if the increasing load rate is setup for years instead)"
+_error_conexion_: Communication error. Could not save the data, check your network connection if the problem persists, notify the system administrator
+_error_conexion_2_: Communication error. Check your network connection if the problem persists, notify the system administrator
+_error_anterior_: It happened an error saving the last edited cell, modify it and try to save it
+_elija_un_formulario_:  Choose a form
+_operadores_permitidos_: 'Use "value" to refer to the cell value to validate. Allowed operators: and, or, relational and arithmetic operators'
+_error_validation_: 'Error validating data, the entered value must pass the condition: '
+_estatus_: Status
+_user_: User
+_perfil_: Profile
+_establecimiento_principal_ : Main establishment
+_ayuda_establecimiento_principal_: Establishment on which enters data into data entry forms
+_listado_salas_: List of rooms
+_no_sala_seleccionada_: First choose a room
+_ayuda_listado_salas_: The rooms that you have created will be displayed or that another user has shared with you
+_buscar_: Search
+_accesos_: Access
+_guardar_estado_: Save state
+_cargar_estado_: Load state
+_no_grafico_: No chart available
+title_user_edit_password: Change your password
+_menu_principal_: Main menu
+_acceso_externo_: External access
+_acceso_externo_title_: External access to room
+_duracion_: Duration
+_crear_: Create
+_dias_: Days
+_mayor_cero_: Enter a value greater than zero
+_token_no_valido_: Token invalid or has expired
+_salir_: Exit
+_clave_no_valida_: Invalid password
+_no_sala_cargada_: No selected room
+_exportar_sala_: Export room
+_fecha_generacion_: Date generation
+_exportar_graficos_: Export graphs
+_exportar_fichas_tecnicas_: Export technical profile
+_url_acceso_ext_ayuda_: Use the following url for external access
+_exportar_tablas_datos_: Export data tables
+_matriz_seguimiento_: Monitoring matrix
+_reportes_: Reports
+_desde_: From
+_hasta_: To
+_cargar_reporte_: Load report
+_ruta_: Path
+Action: Action
+_proceso_: Process
+_catalogos_: Catalogs
+_uso_costeo_: Used for cost module
+_acumulable_: It is cumulative
+_acumulable_help_: This meaning will be used for cumulative dimensions in an indicator
+_telefono_help_: Format XXXX-XXXX
+Diccionario List: Diccionario List
+Diccionario Create: Diccionario Create
+Regla Transformacion List: Transformation rule List
+Regla Transformacion Create: Transformation rule Create
+Campo List: 'Field List'
+Campo Create: 'Field Create'
+_configuracion_: Setup
+Id: Id

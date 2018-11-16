@@ -1,0 +1,17 @@
+sonata_user:
+    security_acl: true
+    manager_type: orm # can be orm or mongodb
+    class:
+        user: App\Entity\User
+        group: App\Entity\Group
+        
+    admin:                  # Admin Classes
+        user:
+            class:          App\Admin\UserAdmin
+            controller:     SonataAdminBundle:CRUD
+            translation:    SonataUserBundle
+
+        group:
+            class:          App\Admin\GroupAdmin
+            controller:     SonataAdminBundle:CRUD
+            translation:    SonataUserBundle

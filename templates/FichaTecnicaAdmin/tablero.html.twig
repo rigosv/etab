@@ -1,0 +1,92 @@
+{# Modificado para que agregar el botón para ir al listado #}
+{% extends 'standard_layout.html.twig' %}
+{% block stylesheets %}    
+    {% if id_sala == 0 %}
+        {{ parent() }}
+    {% else %}
+        
+        {% if admin_pool is defined %}
+            {% for stylesheet in admin_pool.getOption('stylesheets', []) %}
+                {% if 'bootstrap.min.css' in stylesheet %}
+                    <link rel="stylesheet" type="text/css"  href="{{ app.request.schemeAndHttpHost ~ asset(stylesheet) }}"  />
+                {% endif%}                
+            {% endfor %}
+            <link rel="stylesheet" href="{{ app.request.schemeAndHttpHost ~ asset('css/custom_layout.css') }}" type="text/css" media="all" />
+        {% endif %}
+    {% endif %}
+    
+    <link rel="stylesheet" href="{{ app.request.schemeAndHttpHost ~ asset('css/FichaTecnicaAdmin/tablero.css') }}" type="text/css" media="all" />
+    <!--EDITADO PARA NUEVOS TIPOS DE GRAFICOS (CSS)-->
+    <link rel="stylesheet" href="{{ app.request.schemeAndHttpHost ~ asset('css/FichaTecnicaAdmin/gauge.css') }}" type="text/css" media="all" />
+    {% if id_sala == 0%}
+        <link rel="stylesheet" href="{{ app.request.schemeAndHttpHost ~ asset('js/DataTables/media/css/jquery.dataTables.css') }}" type="text/css" media="all" />
+        <link rel="stylesheet" href="{{ app.request.schemeAndHttpHost ~ asset('js/DataTables/media/css/TableTools.css') }}" type="text/css" media="all" />
+        <link rel="stylesheet" href="{{ app.request.schemeAndHttpHost ~ asset('js/ryrych-rcarousel/widget/css/rcarousel.css') }}" type="text/css" media="all" />
+        <link rel="stylesheet" href="{{ app.request.schemeAndHttpHost ~ asset('js/ryrych-rcarousel/examples/rlightbox/css/lightbox.css') }}" type="text/css" media="all" />
+        <link rel="stylesheet" href="{{ app.request.schemeAndHttpHost ~ asset('css/FichaTecnicaAdmin/carrusel.css') }}" type="text/css" media="all" />
+        <link rel="stylesheet" href="{{ app.request.schemeAndHttpHost ~ asset('js/chosen/chosen.min.css') }}" type="text/css" media="all" />
+        
+    {% endif %}
+
+{% endblock %}
+
+{% block javascripts %}
+    {% if id_sala == 0%}
+        {{ parent() }}
+    {% else %}
+        {% if admin_pool is defined %}
+            {% for javascript in admin_pool.getOption('javascripts', []) %}
+                {% if 'jquery.min.js' in javascript  or 'bootstrap.min.js' in javascript %}
+                    <script src="{{ app.request.schemeAndHttpHost ~ asset(javascript) }}" type="text/javascript"></script>
+                {% endif%}
+            {% endfor %}
+        {% endif %}
+        <script type="text/javascript" src="{{ app.request.schemeAndHttpHost ~ asset('bundles/fosjsrouting/js/router.js') }}"></script>    
+        <script type="text/javascript" src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+        {% include (['IndicadoresBundle::messages_js.html.twig']|join) %}
+    {% endif %}
+    <script src="{{ app.request.schemeAndHttpHost ~ asset('js/d3.v3.min.js') }}" type="text/javascript"></script>
+    <script src="{{ app.request.schemeAndHttpHost ~ asset('js/d3pie.js') }}" type="text/javascript"></script>
+    <script src="{{ app.request.schemeAndHttpHost ~ asset('js/topojson.v1.min.js') }}" type="text/javascript"></script>
+    <script src="{{ app.request.schemeAndHttpHost ~ asset('js/affix.min.js') }}" type="text/javascript"></script>
+
+    <script src="{{ app.request.schemeAndHttpHost ~ asset('js/FichaTecnicaAdmin/tablero.js') }}" type="text/javascript"></script>
+    <script src="{{ app.request.schemeAndHttpHost ~ asset('js/FichaTecnicaAdmin/comun.js') }}" type="text/javascript"></script>
+    <script src="{{ app.request.schemeAndHttpHost ~ asset('js/FichaTecnicaAdmin/grafico_pastel.js') }}" type="text/javascript"></script>
+    <script src="{{ app.request.schemeAndHttpHost ~ asset('js/FichaTecnicaAdmin/grafico_columnas.js') }}" type="text/javascript"></script>
+    <script src="{{ app.request.schemeAndHttpHost ~ asset('js/FichaTecnicaAdmin/grafico_lineas.js') }}" type="text/javascript"></script>
+    <script src="{{ app.request.schemeAndHttpHost ~ asset('js/FichaTecnicaAdmin/grafico_mapa.js') }}" type="text/javascript"></script>
+    
+    {% if id_sala == 0%}
+        <script src="{{ app.request.schemeAndHttpHost ~ asset('js/bridge_draggable_touch.js') }}" type="text/javascript"></script>
+        <script src="{{ app.request.schemeAndHttpHost ~ asset('js/jquery.ui.touch-punch.js') }}" type="text/javascript"></script>
+        <script src="{{ app.request.schemeAndHttpHost ~ asset('js/rasterizeHTML.allinone.js') }}" type="text/javascript"></script>
+        <script src="{{ app.request.schemeAndHttpHost ~ asset('js/DataTables/jquery.dataTables.min.js') }}" type="text/javascript"></script>
+        <script src="{{ app.request.schemeAndHttpHost ~ asset('js/DataTables/DataTables-es.js') }}" type="text/javascript"></script>
+        <script src="{{ app.request.schemeAndHttpHost ~ asset('js/DataTables/TableTools.min.js') }}" type="text/javascript"></script>
+        <script src="{{ app.request.schemeAndHttpHost ~ asset('js/ryrych-rcarousel/widget/lib/jquery.ui.rcarousel.min.js') }}" type="text/javascript"></script>
+        <script src="{{ app.request.schemeAndHttpHost ~ asset('js/ryrych-rcarousel/examples/rlightbox/lib/jquery.ui.rlightbox.min.js') }}" type="text/javascript"></script>
+        <script src="{{ app.request.schemeAndHttpHost ~ asset('js/FichaTecnicaAdmin/carrusel.js') }}" type="text/javascript"></script>
+        <script src="{{ app.request.schemeAndHttpHost ~ asset('js/jquery.searchFilter.js') }}" type="text/javascript"></script>
+        <script src="{{ app.request.schemeAndHttpHost ~ asset('js/FichaTecnicaAdmin/fullscreen.js') }}" type="text/javascript"></script>
+        <script src="{{ app.request.schemeAndHttpHost ~ asset('js/chosen/chosen.jquery.min.js') }}" type="text/javascript"></script>
+    {% endif %}
+    
+    <script src="{{ app.request.schemeAndHttpHost ~ asset('js/FichaTecnicaAdmin/grafico_gauge.js') }}" type="text/javascript"></script>
+    <script src="{{ app.request.schemeAndHttpHost ~ asset('js/FichaTecnicaAdmin/grafico_termometro.js') }}" type="text/javascript"></script>
+    <script src="{{ app.request.schemeAndHttpHost ~ asset('js/FichaTecnicaAdmin/iopctrl.js') }}" type="text/javascript"></script>
+    
+{% endblock %}
+
+{% block content %}
+    <div id="div_carga" class='affix'>
+        <img id="cargador" src="{{ app.request.schemeAndHttpHost ~ asset('images/ajax-loader.gif') }}"/>
+    </div>
+    {% if id_sala == 0 %}
+        {% include 'FichaTecnicaAdmin/tablero_normal.html.twig' %}
+    {% else %}    
+        {% include 'FichaTecnicaAdmin/tablero_sala.html.twig' %}
+    {% endif%}
+{% endblock %}
+{% block sonata_header %}{% if id_sala == 0 %}{{ parent() }}{% else %}{% endif %}{% endblock %}
+{% block sonata_left_side %}{% if id_sala == 0 %}{{ parent() }}{% else %}{% endif %}{% endblock %}

@@ -1,0 +1,7 @@
+{% extends 'CRUD/edit.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/ConexionAdmin/campo_edit.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/jquery.at.caret.min.js') }}" type="text/javascript"></script>
+{% endblock %}

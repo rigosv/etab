@@ -1,0 +1,445 @@
+_tablero_: Tablero
+_clave_: Clave
+_repetir_clave_: Repetir clave
+action_load_data: Cargar Datos
+_area_atencion_: Área atención
+_tipo_area_atencion_: Tipo área atención
+oestablecimiento: 'Establecimiento'
+contacto: 'Contacto'
+correo_electronico: 'Correo Electrónico'
+telefono: 'Número telefónico'
+cargo: 'Cargo'
+nombre_establecimiento: 'Nombre del establecimento'
+descripcion: 'Descripción'
+codigo: 'Código'
+uso_catalogo: 'Describirá campos de catálogos'
+no_catalogo_y_describir_catalogo: 'Si se utilizará para describir catálogos no puede tener uno asociado'
+formula: 'Fórmula'
+Formula: 'Fórmula'
+ayuda_ingreso_formula: 'Para utilizar variables escriba las iniciales de la variable entre llaves. Ej.: {NAI} / {PTDA} * 100 '
+vars_sel_diff_vars_formula: 'Las variables utilizadas en la fórmula deben coincidir con las variables seleccionadas'
+sintaxis_invalida: 'La fórmula contiene errores de sintaxis'
+sintaxis_invalida_variables_entre_llaves: 'La fórmula contiene errores de sintaxis, las variables deben ir entre llaves({ }) '
+catalogo: 'Catálogo asociado'
+formato_xxxx-xxxx: 'Formato XXXX-XXXX'
+elija_catalogo: 'Debe seleccionar un catálogo'
+marque_uso_en_catalogo: 'Ha especificado el nombre de un catálogo, debe marcar esta opción'
+categoria_indicador: 'Categoría de Indicadores'
+categoria: 'Categoría'
+alertas: 'Alertas'
+indicador: 'Indicador'
+limite_inferior: 'Valor'
+limite_superior: 'Límite superior'
+color: 'Color'
+indicador_alertas: 'Alertas de indicador'
+comentario: 'Comentario'
+elija_al_menos_una_variable: 'Debe elegir al menos una variable'
+campos_indicador: Dimensiones del indicador
+nombre_archivo_mapa: Nombre del archivo del mapa
+cerrar_sesion: 'Cerrar Sesión'
+favoritos: 'Favoritos'
+
+'clasificacion_tecnica' : 'Clasificación Técnica'
+'Clasificacion Tecnica List': 'Clasificación Técnica - Listado'
+'Clasificacion Tecnica Delete': 'Clasificación Técnica - Borrar'
+
+significado_campo: Significado de campos
+nombre_campo: Nombre del campo
+significado: Significado
+
+'Origen Datos List': 'Origen de datos - Listado'
+'Origen Datos Delete': 'Origen de datos - Borrar'
+'Origen Datos Create': 'Origen de datos- Crear'
+'Origen Datos Edit': 'Origen de datos - Editar'
+
+'User List': 'Usuarios'
+'User Delete': 'Borrar usuario'
+'User Edit': 'Editar usuario'
+'usuario_indicadores': 'Usuarios de indicadores'
+'nombre_usuario': Usuario
+
+'responsable_datos': 'Responsable Datos'
+'Responsable Dato List': 'Responsable de Dato - Listado'
+'Responsable Dato Delete': 'Responsable de Dato - Borrar'
+'Responsable Dato Create': 'Responsable de Dato - Crear'
+'Responsable Dato Edit': 'Responsable de Dato - Editar'
+
+'fuente_datos' : 'Fuente Datos'
+'Fuente Dato List': 'Fuente de Dato - Listado'
+'Fuente Dato Delete': 'Fuente de Dato - Borrar'
+'Fuente Dato Create': 'Fuente de Dato - Crear'
+'Fuente Dato Edit': 'Fuente de Dato - Editar'
+
+'responsable_indicador': 'Responsable Indicador'
+'Responsable Indicador List': 'Responsable de Indicador - Listado'
+'Responsable Indicador Delete': 'Responsable de Indicador - Borrar'
+'Responsable Indicador Create': 'Responsable de Indicador - Crear'
+'Responsable Indicador Edit': 'Responsable de Indicador - Editar'
+
+'clasificacion_privacidad': 'Clasificación de privacidad'
+'Clasificacion Privacidad List': 'Clasificación de Privacidad - Listado'
+'Clasificacion Privacidad Delete': 'Clasificación de Privacidad - Borrar'
+'Clasificacion Privacidad Create': 'Clasificación de Privacidad - Crear'
+'Clasificacion Privacidad Edit': 'Clasificación de Privacidad - Editar'
+
+'clasificacion_nivel': 'Clasificación Según Nivel'
+'Clasificacion Nivel List': 'Clasificación Según Nivel - Listado'
+'Clasificacion Nivel Delete': 'Clasificación Según Nivel - Borrar'
+'Clasificacion Nivel Create': 'Clasificación Según Nivel - Crear'
+'Clasificacion Nivel Edit': 'Clasificación Según Nivel - Editar'
+
+'clasificacion_uso': 'Clasificación Según Uso'
+'Clasificacion Uso List': 'Clasificación Según Uso - Listado'
+'Clasificacion Uso Delete': 'Clasificación Según Uso - Borrar'
+'Clasificacion Uso Create': 'Clasificación Según Uso - Crear'
+'Clasificacion Uso Edit': 'Clasificación Según Uso - Editar'
+
+'sentencia': Sentencia SQL
+
+'Variable Dato List': 'Variable de Dato - Listado'
+'Variable Dato Delete': 'Variable de Dato - Borrar'
+'Variable Dato Create': 'Variable de Dato - Crear'
+'Variable Dato Edit': 'Variable de Dato - Editar'
+
+'Significado Campo List': 'Significado Campo - Listado'
+'Significado Campo Delete': 'Significado Campo - Borrar'
+'Significado Campo Create': 'Significado Campo - Crear'
+'Significado Campo Edit': 'Significado Campo - Editar'
+
+'Conexion List': 'Conexión - Listado'
+'Conexion Delete': 'Conexión - Borrar'
+'Conexion Create': 'Conexión - Crear'
+'Conexion Edit': 'Conexión - Editar'
+
+'Ficha Tecnica List': 'Ficha Técnica - Listado'
+'Ficha Tecnica Delete': 'Ficha Técnica - Borrar'
+'Ficha Tecnica Create': 'Ficha Técnica - Crear'
+'Ficha Tecnica Edit': 'Ficha Técnica - Editar'
+
+'Indicador Alertas List': 'Alertas Indicador - Listado'
+'Indicador Alertas Delete': 'Alertas Indicador - Borrar'
+'Indicador Alertas Create': 'Alertas Indicador - Crear'
+'Indicador Alertas Edit': 'Alertas Indicador - Editar'
+'es_acumulado': 'Es un indicador acumulado'
+
+conexion_bd : 'Conexión a Base de Datos'
+nombre_conexion : 'Nombre de la conexión'
+nombre_base_datos: 'Nombre de la base de datos'
+motor: 'Motor de base de datos'
+puerto: 'Puerto'
+ip: 'Dirección IP'
+usuario: 'Usuario'
+Clave: 'Clave'
+instancia: 'Instancia'
+claves_no_coinciden: 'Las claves ingresadas no son iguales'
+probar_conexion: 'Probar Conexión'
+conexion_error: 'Error en la conexión'
+conexion_success: 'Conexión exitosa'
+nombre_consulta: 'Nombre de consulta'
+sentencia_sql: 'Sentencia SQL'
+conexiones: 'Conexiones'
+probar_sentencia: 'Probar Sentencia SQL'
+sentencia_error: 'La sentencia SQL contiene errores'
+sentencia_success: 'Prueba de sentencia SQL exitosa'
+nombre_variable: 'Nombre de la variable'
+nombre: 'Nombre'
+iniciales: 'Iniciales'
+confiabilidad: 'Confiabilidad (%)'
+solo_select: 'La consulta solo puede contener sentencias SELECT, no puede contener sentencias UPDATE, DELETE, INSERT o CREATE'
+formulas_indicadores: 'Fórmulas de indicadores'
+variables: 'Variables'
+
+nombre_indicador: 'Nombre del Indicador'
+tema: 'Tema'
+concepto: 'Concepto'
+objetivo: 'Objetivo'
+uso: 'Uso'
+definicion_operativa: 'Definición Operativa'
+ficha_tecnica: 'Ficha Técnica'
+unidad_medida: 'Unidad de medida'
+periodicidad: 'Periodicidad'
+estandar_nacional: 'Estándar Nacional'
+presentacion: 'Presentación'
+btn_create_and_config_data_source: 'Crear y configurar origen de datos'
+action_merge: 'Fusionar'
+archivo_asociado: 'Archivo asociado'
+subir_nuevo_archivo: 'Subir nuevo archivo'
+origen_datos_archivo: 'Desde archivo: Hoja de cálculo o archivo de texto (CSV)'
+origen_datos_sql: 'Desde base de datos'
+tipo_campo_cambiado_a: 'Tipo de campo cambiado a'
+significado_campo_cambiado_a: 'Significado de campo cambiado a'
+flash_batch_load_data_success: 'Se ha iniciado el proceso de carga de datos para los orígenes especificados'
+mensaje_fusionar: 'Elija los campos que serán parte del origen fusionado (Solo se pueden fusionar campos de igual tipo y significado)'
+origen_fusionado: 'Origen fusionado'
+datos_origen_fusionado: 'Datos del origen fusionado'
+
+sonata_user: 'Usuarios y grupos'
+catalogos: 'Catálogos'
+origen_datos: 'Orígenes de datos'
+indicadores: 'Indicadores'
+origen_no_configurado: 'Origen de datos no válido, debe configurar todos sus campos, edite el origen de datos para realizar la configuración.'
+origen_dato: 'Origen de datos'
+error: 'Error'
+es_catalogo: 'Es Catálogo'
+datos_generales: 'Datos Generales'
+indicador_tablero: 'Tablero'
+users: Usuarios
+groups: Grupos
+
+fusion:
+  no_catalogos: 'No se permite fusionar catálogos, alternativamente puede crear una hoja de cálculo con los datos requeridos y cargarlos al catálogo'
+  no_fusionados: 'No se permite utilizar orígenes fusionados en otras fusiones'
+  selecione_2_o_mas_elementos: 'Seleccione 2 o más elementos'
+  es_fusionado: 'Es fusionado'
+  origen_fusionado_creado: 'Origen fusionado creado correctamente'
+  fusiona_siguientes_origenes: 'Fusiona los siguientes orígenes: '
+
+javascript:
+  elija_tipo_dato: 'Elija el tipo de dato'
+  elija_significado_dato: 'Elija el significado del dato'
+  configure_campos: 'Configure los campos: se muestra solo una parte de los datos'
+  nombre_campo: 'Nombre del campo'
+  tipo: 'Tipo'
+  significado: 'Significado'
+  datos_muestra: 'Datos de muestra'
+  dimension: 'Dimensión'
+  tipo_grafico: 'Tipo de gráfico'
+  ascendente: 'Ascendente'
+  descendente: 'Descendente'
+  ordenar_x: 'Ordenar por eje X'
+  ordenar_y: 'Ordenar por eje Y'
+  filtro_posicion: 'Filtrar por posición'
+  desde: 'Desde'
+  hasta: 'Hasta'
+  filtrar: 'Filtrar'
+  quitar_filtro: 'Quitar Filtros'
+  opciones_grafico: 'Opciones del gráfico'
+  dimension_opciones: 'Opciones de dimensión'
+  cambiar_dimension: 'Cambiar dimensión'
+  ordenar: 'Orden'
+  filtrar_por_elemento: 'Filtro por elemento'
+  alertas_indicador: 'Alertas Indicador'
+  color: 'Color'
+  limite_inf: 'Límite inferior'
+  limite_sup: 'Límite superior'
+  comentario: 'Comentario'
+  rango_no_especificado: Rango no especificado
+  no_mapa: 'La variable seleccionada no tiene un mapa asociado, no se encontró el archivo o sus coordenadas no han sido definidas'
+  max_escala_y: 'Max. Eje Y'
+  max_indicador: 'Máximo valor del indicador'
+  max_rango_alertas: 'Máximo valor de alertas'
+  ocultar_listado_indicadores: 'Ocultar listado de indicadores'
+  mostrar_listado_indicadores: 'Mostrar listado de indicadores'
+  agregar_favorito: 'Marcar como favorito'
+  quitar_favoritos: 'Quitar de favoritos'
+  ver_ficha_tecnica: 'Ver ficha Técnica'
+  tabla_datos: 'Tabla de datos'
+  indicador: 'Indicador'
+  descargar_grafico: 'Descargar Gráfico'
+  opciones: 'Opciones'
+  ver_sql: 'Ver SQL'
+  diccionario_transformacion: 'Diccionario de transformación'
+  elija_diccionario: 'Elija un diccionario'
+  quitar_indicador: 'Quitar indicador'
+  columnas: 'Columnas'
+  pastel: 'Pastel'
+  mapa: 'Mapa'
+  lineas: 'Lineas'
+  guardar_imagen: 'De clic derecho sobre la imagen, luego elija "Guardar imagen como..."'
+  _nada_encontrado_ : 'No se encontraron resultados'
+  _mostrando_n_de_n_: 'Mostrando desde _START_ hasta _END_ de _TOTAL_ registros'
+  _mostrando_0_ : 'Mostrando 0 registros'
+  _filtrados_de_ : '(filtrados de _MAX_ registros)'
+  no_mas_niveles: 'No hay más niveles para descender'
+  no_graficos_asignados: 'No ha asignado los tipos de gráficos permitidos a los significados de campo'
+  recargar_origen: 'Recargar información de origen de datos'
+  ultima_lectura: 'Fecha de última lectura'
+  ultima_lectura_exp: 'Formato: dd/mm/aaaa. Se toma la fecha más reciente en que se realizó la última lectura de cada origen de datos asociado al indicador.'
+  _compartir_sala_: 'Compartir sala'
+  _nombre_sala_: 'Nombre de la sala'
+  _no_sala_: 'No hay sala activa'
+  _no_areas_grafico_: No hay áreas disponibles para gráficar
+  _cambiar_vista_: Cambiar Vista Gráfico/Tabla
+  _error_acciones_vacia_: Debe ingresar alguna acción
+
+validacion:
+  requerido: Este dato es requerido
+  sentencia_o_archivo_no_ambas: 'Solo puede ingresar una de las dos opciones: Una sentencia SQL o un archivo. No ambas'
+  sentencia_o_archivo: 'Debe ingresar una de las dos opciones: Una sentencia SQL o un archivo'
+  sentencia_sql_origen_requeridos: 'Debe especificar la sentencia SQL y la conexión'
+  debe_elegir_una_opcion: 'Debe elegir una opción'
+  elija_al_menos_un_campo: 'Debe haber al menos un campo seleccionado'
+tablero:
+  barras: Barras
+  pastel: Pastel
+  lineas: Líneas
+  columnas: Columnas
+  tipo_grafico_principal: Tipo de gráfico principal
+  tipo_grafico_secundario: Tipo de gráfico secundario
+
+
+_no_clasificados_ : 'Sin clasificacion'
+_interpretacion_ : 'Interpretación'
+_nivel_de_usuario_ : 'Nivel de usuario'
+_observacion_ : 'Observación'
+
+_colores_alertas_ : 'Colores - Alertas'
+'Alerta List': 'Colores - Listado'
+'Alerta Delete': 'Colores - Borrar'
+'Alerta Create': 'Colores - Crear'
+'Alerta Edit': 'Colores - Editar'
+_ayuda_codigo_color_: 'Puede ser cualquier código de color HTML. Ej.: para azul puede usar blue o #0000FF'
+_clasificacion_indicadores_: 'Clasificación'
+_tipo_no_corresponde_con_datos_: 'El tipo seleccionado no es adecuado para el campo'
+_sala_: 'Sala'
+_salas_: 'Salas'
+_agregar_area_grafico_: 'Agregar área gráfico'
+_guardar_sala_: 'Guardar Sala'
+_sala_situacional_: 'Sala situacional'
+_nombre_sala_: 'Nombre de sala'
+_cerrar_: 'Cerrar'
+_guardar_cambios_: 'Guardar cambios'
+_quitar_indicador_: 'Quitar indicador'
+_datos_geograficos_: 'Datos geográficos'
+_escala_ : 'Escala'
+_origen_x_: 'Origen X'
+_origen_y_: 'Origen Y'
+_diccionario_aplicado_: 'diccionario de transformación aplicado'
+_regla_: Regla
+_regla_transformacion_: 'Regla de transformación'
+_transformacion_: 'Transformación'
+_cubos_: 'Cubos OLAP'
+_datos_generales_: 'Datos generales'
+_dimensiones_:  'Dimensiones'
+_debe_guardar_para_ver_dimensiones_: 'Debe guardar para ver las dimensiones del indicador'
+_por_: 'por'
+_ocultar/mostrar_menu_principal_: 'Mostrar/Ocultar Menú principal'
+_campo_calculado_: 'Campo calculado'
+_campos_utilizables_en_campos_calculados_: 'Campos utilizables en la fórmula'
+_variable_no_campo_: 'Ha utilizado una variable que no es parte de los campos del origen de datos'
+_exportar_: 'Exportar'
+_tipos_graficos_: Tipos de gráficos permitidos
+change_password.flash.success: 'Contraseña ha sido cambiada con éxito'
+_cambiar_clave_: Cambiar clave de acceso
+_ver_ficha_: Ver Ficha Técnica
+_ultima_actualizacion_: Última actualización
+_no_conexion_configurada_: No existe una conexión configurada
+_salas_situacionales_: Salas situacionales
+_indicadores_y_salas_: Indicadores y Salas
+_roles_: Roles
+_perfil_: Perfil
+_seguridad_: Seguridad
+_graficos_: Gráficos
+_acciones_: Acciones
+_social_: Social
+_comentarios_: Comentarios
+_enviar_: Enviar
+_guardar_como_: Guardar como
+_alerta_limite_inferior_: 'Límite inferior'
+_regresar_menu_principal_: Regresar al menú principal
+_agencia_: Agencia
+_usuario_no_agencia_: El usuario actual no tiene asignada una Agencia
+_titulo_:  Título
+_descripcion_: Descripción
+_archivo_: Archivo
+_imagen_: Imagen
+_mostrar_cinta_: Mostrar Cinta
+_sala_acciones_: Acciones de sala situacional
+_fecha_: Fecha
+_usuario_: Usuario
+_observaciones_: Observaciones
+_responsables_: Responsables
+_tabla_pivote_: Tabla dinámica
+
+title_user_authentication: Autenticación
+security.login.username: Usuario
+security.login.password: Clave
+_exportar_tabla_datos_: Exportar Tabla de datos
+_exportar_grafico_: Exportar gráfico
+_reporte_sala_: Reporte de sala
+_reporte_: Reporte
+_mostrar_reporte_: Mostrar Reporte
+_buscar_indicador_: Buscar indicador
+_agregar_accion_: Agregar acción
+_origen_datos_: Origen de los datos
+_clasificacion_: Clasificación
+_general_: General
+_meta_: Meta
+_buscar_sala_: Buscar sala
+_recargar_: Recargar
+_campo_lectura_incremental_ : Campo para lectura incremental
+_debe_guardar_para_ver_campos_: Debe guardar para ver los campos disponibles
+_debe_ser_tipo_fecha_: Debe elegir un campo de tipo fecha o año
+_carga_incremental_: Carga incremental
+_ventana_limite_inferior_: Ventana límite inferior
+_ventana_limite_superior_: Ventana límite superior
+_ayuda_ventana_limite_inferior_: Número de días antes de la última fecha de lectura a partir de donde se leerán los datos (número de años si el campo para carga incremental es año)
+_ayuda_ventana_limite_superior_: Número de días antes de la fecha actual hasta donde se realizará la lectura de datos (número de años si el campo para carga incremental es año)
+_error_conexion_: Error de comunicación. No se pudo guardar el dato, verifique su conexión a la red, si el problema persiste notificarlo al administrador del sistema
+_error_conexion_2_: Error de comunicación. Verifique su conexión a la red, si el problema persiste notificarlo al administrador del sistema
+_error_anterior_: Sucedió un error al guardar la última celda editada, modifíquela y vuelva a intentar guardarla
+_elija_un_formulario_:  Elija un formulario
+_error_validation_: 'Error al validar dato, el valor ingresado debe pasar la condición: '
+'Bad credentials.': Datos no válidos
+_estatus_: Estatus
+_user_: Usuario
+_establecimiento_principal_ : Establecimiento principal
+_ayuda_establecimiento_principal_: Establecimiento sobre el cual ingresa datos en formularios de captura
+_listado_salas_: Listado salas
+_no_sala_seleccionada_: No ha elegido sala
+_ayuda_listado_salas_: Se mostrarán las salas que usted ha creado o que otro usuario ha compartido con usted
+_buscar_: Buscar
+_accesos_: Accesos
+_guardar_estado_: Guardar estado
+_cargar_estado_: Cargar estado
+_evaluacion_calidad_: Evaluación de calidad
+_datos_calidad_: Datos de evaluación de calidad
+_no_grafico_: No hay ningún gráfico disponible
+title_user_edit_password: Cambio de contraseña
+_menu_principal_: Menú principal
+_acceso_externo_: Acceso externo
+_acceso_externo_title_: Crear acceso externo a sala
+_duracion_: Duración
+_crear_: Crear
+_dias_: Días
+_mayor_cero_: Ingrese un valor mayor que cero
+_token_no_valido_: Token no válido o ya expiró
+_salir_: Salir
+_clave_no_valida_: Clave no válida
+_no_sala_cargada_: No ha cargado ninguna sala
+_exportar_sala_: Exportar sala
+_fecha_generacion_: Fecha de generación
+_exportar_graficos_: Exportar graficos
+_exportar_fichas_tecnicas_: Exportar Fichas técnicas
+_url_acceso_ext_ayuda_: Utilice la siguiente ruta para el acceso externo
+_exportar_tablas_datos_: Exportar tablas de datos
+_matriz_seguimiento_: Matriz seguimiento
+_reportes_: Reportes
+_desde_: Desde
+_hasta_: Hasta
+_cargar_reporte_: Cargar Reporte
+_bitacora_actividad_: Bitácora de actividad
+_cargar_bitacora_: Cargar bitácora
+_ruta_: Ruta
+Action: Acción
+_proceso_: Proceso
+_catalogos_: Catálogos
+_analisis_descriptivo_: Análisis descriptivo
+_desviacion_estandar_: Desviación estándar
+_maximo_: Máximo
+_minimo_: Mínimo
+_tercer_cuartil_: Tercer cuartil
+_segundo_cuartil_mediana_: Segundo cuartil (mediana)
+_primer_cuartil_: Primer cuartil
+_crear_pivote_: Crear pivote
+_uso_costeo_: Utilizado para módulo de costos
+_acumulable_: Es acumulable
+_acumulable_help_: Este significado se utilizará para dimensiones acumulables en un indicador
+_establecimiento_: Establecimiento
+_telefono_help_: Formato XXXX-XXXX
+Diccionario List: 'Diccionario :: Listado'
+Diccionario Create: 'Diccionario :: Crear'
+Regla Transformacion List: 'Regla de transformación :: Listado'
+Regla Transformacion Create: 'Regla de transformación :: Crear'
+_configuracion_: Configuración
+Id: Id
