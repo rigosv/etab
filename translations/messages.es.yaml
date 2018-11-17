@@ -443,3 +443,4 @@ Regla Transformacion List: 'Regla de transformación :: Listado'
 Regla Transformacion Create: 'Regla de transformación :: Crear'
 _configuracion_: Configuración
 Id: Id
+_suba_archivo_tipo_hoja_calculo_csv_: Formato de archivo no válido, se aceptan hojas de cálculo y archivo csv

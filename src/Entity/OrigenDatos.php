@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * App\Entity\OrigenDatos
@@ -60,6 +61,15 @@ class OrigenDatos
      * @ORM\Column(name="archivo_nombre", type="string", length=100, nullable=true)
      */
     protected $archivoNombre;
+
+
+    /**
+     * @Assert\File(*
+     *     mimeTypes = {"application/vnd.oasis.opendocument.spreadsheet", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+     *                      "application/vnd.ms-excel", "application/xml", "text/csv"},
+     *     mimeTypesMessage = "_suba_archivo_tipo_hoja_calculo_csv_"
+     * )
+     */
     public $file;
 
     /**
@@ -218,14 +228,14 @@ class OrigenDatos
     protected function getUploadRootDir()
     {
         // the absolute directory path where uploaded documents should be saved
-        return __DIR__ . '/../../../../web/' . $this->getUploadDir();
+        return __DIR__ . '/../../../public/' . $this->getUploadDir();
         //return $basepath . $this->getUploadDir();
     }
 
     protected function getUploadDir()
     {
         // get rid of the __DIR__ so it doesn't screw when displaying uploaded doc/image in the view.
-        return 'uploads/origen_datos';
+        return 'uploads';
     }
 
     public function upload($basepath)
@@ -883,5 +893,25 @@ class OrigenDatos
     public function getMensajeErrorCarga()
     {
         return $this->mensajeErrorCarga;
+    }
+
+    /**
+     * Sets file.
+     *
+     * @param UploadedFile $file
+     */
+    public function setFile(UploadedFile $file = null)
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * Get file.
+     *
+     * @return UploadedFile
+     */
+    public function getFile()
+    {
+        return $this->file;
     }
 }

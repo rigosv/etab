@@ -163,11 +163,7 @@ class OrigenDatosAdmin extends Admin
     public function validate(ErrorElement $errorElement, $object)
     {
         if ($object->getEsFusionado() == false) {
-            if ($object->file == '' and $object->getArchivoNombre() == '' and $object->getSentenciaSql() == '') {
-                $errorElement->with('sentenciaSql')
-                        ->addViolation(('validacion.sentencia_o_archivo'))
-                        ->end();
-            }
+
             if ($object->file != '' and $object->getSentenciaSql() != '') {
                 $errorElement->with('sentenciaSql')
                         ->addViolation(('validacion.sentencia_o_archivo_no_ambas'))
@@ -180,23 +176,6 @@ class OrigenDatosAdmin extends Admin
                         ->end();
             }
         }
-        // Revisar la validación, no me reconoce los archivos con los tipos que debería
-        /*
-         * 'application/octet-stream',
-          'text/comma-separated-values',
-          'application/zip',
-          'text/x-c++'
-         */
-        /* $errorElement
-          ->with('file')
-          ->assertFile(array(
-          'mimeTypes' => array("application/vnd.ms-excel",
-          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-          'text/csv','application/vnd.oasis.opendocument.spreadsheet',
-          'application/vnd.ms-office'
-          )))
-          ->end()
-          ; */
 
         return true;
     }
@@ -279,8 +258,45 @@ class OrigenDatosAdmin extends Admin
 
     public function saveFile($origenDato)
     {
-        $basepath = $this->getRequest()->getBasePath();
-        $origenDato->upload($basepath);
+
+        $archivo = $origenDato->getFile();
+
+        if ($archivo != null ) {
+            $phpspreadsheet = $this->getConfigurationPool()->getContainer()->get('phpspreadsheet');
+
+            $tipo = 'Xlsx';
+            if ($archivo->getMimeType() == 'application/vnd.ms-excel') {
+                $tipo = 'Xls';
+            } elseif ($archivo->getMimeType() == 'application/vnd.oasis.opendocument.spreadsheet') {
+                $tipo = 'Ods';
+            } elseif ($archivo->getMimeType() == 'application/xml') {
+                $tipo = 'Xml';
+            } elseif ($archivo->getMimeType() == 'text/csv') {
+                $tipo = 'Csv';
+            }
+
+
+            $reader = $phpspreadsheet->createReader($tipo);
+            $reader->setReadDataOnly(true);
+
+            $datos = $reader->load($archivo->getPathName())->getSheet(0)->toArray();
+
+            $nombre_campos = array_values(array_shift($datos));
+
+            $fix_datos = array();
+            foreach ($datos as $k => $fila) {
+                // determinar que datos tienen todos sus campos nulos
+                $todosNULL = true;
+                foreach ($fila as $indice => $campo) {
+                    $fix_datos[$k][$nombre_campos[$indice]] = trim($campo);
+                    if (!empty($fix_datos[$k][$nombre_campos[$indice]]))
+                        $todosNULL = false;
+                }
+                if ($todosNULL)
+                    unset($fix_datos[$k]);
+            }
+
+        }
     }
 
     protected function configureRoutes(RouteCollection $collection)

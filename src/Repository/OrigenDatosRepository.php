@@ -7,7 +7,6 @@ use Doctrine\ORM\EntityRepository;
 
 use App\Entity\Conexion;
 use App\Entity\OrigenDatos;
-use App\AlmacenamientoDatos\LectorExcelCsv;
 
 
 class OrigenDatosRepository extends EntityRepository
@@ -118,7 +117,7 @@ class OrigenDatosRepository extends EntityRepository
                 return false;
             }
         } else {
-            $reader = new LectorExcelCsv();
+            /*$reader = $phpspreadsheet->createReader('Xlsx');
             try {
                 $reader->loadFile($ruta_archivo);
                 $datos_aux = $reader->getSheet()->toArray($nullValue = null, $calculateFormulas = true, $formatData = false, $returnCellRef = false);
@@ -150,7 +149,7 @@ class OrigenDatosRepository extends EntityRepository
             } catch (\Exception $e) {
                 return false;
             }
-            $datos = $fix_datos;
+            $datos = $fix_datos;*/
         }
 
         return $datos;
