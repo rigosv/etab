@@ -25,6 +25,7 @@ class OrigenDatosAdmin extends Admin
     {
         $esFusionado = $this->getSubject()->getEsFusionado();
         $origenActual = $this->getSubject();
+        $existeCostosBundle =  array_key_exists('CostosBundle', $this->getConfigurationPool()->getContainer()->getParameter('kernel.bundles') );
 
         $formMapper
                 ->tab(('datos_generales'))
@@ -44,16 +45,11 @@ class OrigenDatosAdmin extends Admin
                     ->end()
                 ->end()
         ;
-        if ($esFusionado == false)
+        if ($esFusionado == false) {
             $formMapper
                     ->tab(('datos_generales'), array('collapsed' => false))
                         ->with('', array('class' => 'col-md-12'))
                             ->add('esCatalogo', null, array('label' => ('es_catalogo')))
-                            ->add('areaCosteo', ChoiceType::class, array('label' => ('_area_costeo_'),
-                                'choices' => array('rrhh'=>('_rrhh_'),
-                                    'ga_af'=>('_ga_af_')),
-                                'required' => false
-                                ))
                         ->end()
                     ->end()
                     ->tab(('_origen_datos_'), array('collapsed' => true))
@@ -65,13 +61,26 @@ class OrigenDatosAdmin extends Admin
                             ))
                         ->end()
                         ->with(('origen_datos_archivo'))
-                            ->add('archivoNombre', null, array('label' => ('archivo_asociado'), 'required' => false, 
+                            ->add('archivoNombre', null, array('label' => ('archivo_asociado'), 'required' => false,
                                     'attr' => ['readonly' => true]))
                             ->add('file', FileType::class, array('label' => ('subir_nuevo_archivo'), 'required' => false))
                         ->end()
                     ->end()
             ;
-        
+
+            if ($existeCostosBundle){
+                $formMapper->tab(('datos_generales'), array('collapsed' => false))
+                    ->with('', array('class' => 'col-md-12'))
+                        ->add('areaCosteo', ChoiceType::class, array('label' => ('_area_costeo_'),
+                            'choices' => array('rrhh'=>('_rrhh_'),
+                                'ga_af'=>('_ga_af_')),
+                            'required' => false
+                        ))
+                    ->end()
+                ->end()
+                ;
+            }
+        }
         if ( $this->isCurrentRoute('create') ) {
             $formMapper
                     ->setHelps(array(
@@ -220,7 +229,7 @@ class OrigenDatosAdmin extends Admin
                 return 'CRUD/origen_dato-edit.html.twig';
                 break;
             default:
-                return parent::getTemplate($name);
+                return parent::getTemplateRegistry()->getTemplate($name);
                 break;
         }
     }
