@@ -48,6 +48,22 @@ class MenuBuilderListener
         
         $menu = $event->getMenu();
 
+        //Construir menú de varios niveles
+        foreach ($menu->getChildren() as $item){
+            // Uso el punto en el nombre del grupo para separar en dos partes,
+            // representan los niveles de anidamiento
+            $nName = explode('.', $item->getLabel());
+
+            if ( count($nName) == 2){
+                // La segunda parte será la nueva etiqueta
+                $item->setLabel($nName[1]);
+                //Quitar el menú de la raíz
+                $menu->removeChild($item);
+                // Se ingresará el item en el grupo dado por la primera parte
+                $menu[$nName[0]]->addChild($item);
+            }
+        }
+
 
         if ( $usuario->hasRole('ROLE_SUPER_ADMIN') or $usuario->hasRole('ROLE_USER_TABLERO') ) {
 
