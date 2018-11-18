@@ -21,7 +21,7 @@ class GuardarRegistroOrigenDatoConsumer implements ConsumerInterface {
     public function execute(AMQPMessage $mensaje) {
         $msg = json_decode($mensaje->body, true);
         echo '  Msj: '. $msg['id_origen_dato']. '/'.  (array_key_exists('numMsj', $msg) ? $msg['numMsj'] : '--') . '  ';
-        
+
         $origenDato = $this->em->find(OrigenDatos::class, $msg['id_origen_dato']);
 
         //Verificar si tiene código de costeo
@@ -31,7 +31,7 @@ class GuardarRegistroOrigenDatoConsumer implements ConsumerInterface {
         $cnx = $this->em->getConnection();
 
         $idConexion = ( array_key_exists('id_conexion', $msg) ) ? $msg['id_conexion'] : 'null' ;
-        
+
         if ($msg['method'] == 'BEGIN') {
             // Iniciar borrando los datos que pudieran existir en la tabla auxiliar
             if ( ($areaCosteo['area_costeo'] != '') ){
@@ -52,7 +52,8 @@ class GuardarRegistroOrigenDatoConsumer implements ConsumerInterface {
             echo '(inicio: '.microtime(true);
 
             try {
-                $this->almacenamiento->insertarEnAuxiliar($tabla.'_tmp', $msg['datos']);
+
+                $this->almacenamiento->insertarEnAuxiliar($msg['id_origen_dato'], $msg['id_conexion'], $msg['datos']);
 
             } catch (\Exception $e) {
                 $error = ' Conexion : ' .$idConexion . ' Error: ' . $e->getMessage() ;
@@ -65,7 +66,7 @@ class GuardarRegistroOrigenDatoConsumer implements ConsumerInterface {
             echo ' - fin: '.microtime(true) . ') ****';
             return true;
         } elseif ($msg['method'] == 'ERROR_LECTURA') {
-            $this->almacenamiento->borrarTablaAuxiliar($tabla. '_tmp');
+            $this->almacenamiento->borrarTablaAuxiliar($msg['id_origen_dato']);
         } elseif ($msg['method'] == 'DELETE') {
             //verificar si la tabla existe
             $this->almacenamiento->inicializarTabla('origenes.fila_origen_dato_' . $msg['id_origen_dato']);
@@ -107,7 +108,7 @@ class GuardarRegistroOrigenDatoConsumer implements ConsumerInterface {
             $diffInSeconds = $fin->getTimestamp() - $inicio->getTimestamp();
 
             $origenDato->setTiempoSegundosUltimaCarga($diffInSeconds);
-            $origenDato->setCargaFinalizada(true);            
+            $origenDato->setCargaFinalizada(true);
             //$this->em->getConnection()->exec($sql);
 
             //Poner la fecha de última lectura para todas las fichas que tienen este origen de datos

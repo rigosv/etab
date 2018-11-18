@@ -10,6 +10,18 @@ interface OrigenDatosInterface
 {
 
     /**
+     * Dar el formato correcpondiente  a los datos que se enviarán para su almacenamiento
+     *
+     * @param $idOrigenDatos
+     * @param $campos_sig Significado de campos utilizados
+     * @param $datos
+     * @param $ultimaLectura
+     * @param $idConexion
+     * @return mixed
+     */
+    public function prepararDatosEnvio($idOrigenDatos, $campos_sig, $datos, $ultimaLectura, $idConexion);
+
+    /**
      * Verifica si existe la tabla auxiliar, borra los datos en caso afirmativo o la crea
      *
      * @param $idOrigenDatos
@@ -23,14 +35,14 @@ interface OrigenDatosInterface
      * @param $tabla
      * @param $datos
      */
-    public function insertarEnAuxiliar($tabla, $datos);
+    public function insertarEnAuxiliar($idOrigenDatos, $idConexion, $datos);
 
     /**
      * Borra, si existe, la tabla auxiliar
      *
      * @param $tabla
      */
-    public function borrarTablaAuxiliar($tabla) ;
+    public function borrarTablaAuxiliar($idOrigenDatos) ;
 
 
     /**

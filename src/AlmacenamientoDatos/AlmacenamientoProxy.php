@@ -11,6 +11,8 @@ use App\AlmacenamientoDatos\OrigenDatosInterface;
 use App\AlmacenamientoDatos\DashboardInterface;
 use App\AlmacenamientoDatos\Driver\PostgreSQLDashboard;
 use App\AlmacenamientoDatos\Driver\PostgreSQLOrigenDatos;
+use App\AlmacenamientoDatos\Driver\CouchbaseOrigenDatos;
+
 
 
 
@@ -28,7 +30,8 @@ class AlmacenamientoProxy implements DashboardInterface, OrigenDatosInterface
 
         //Por defecto es PostgresSQL
         if ($params->get('app.datos.tipo_almacenamiento') == 'couchbase'){
-            //$this->wrapped =
+            //$this->dashboardWrapped = new CouchbaseDashboard($em);
+            $this->origenDatosWrapped = new CouchbaseOrigenDatos($params);
         } else {
             $this->dashboardWrapped = new PostgreSQLDashboard($em);
             $this->origenDatosWrapped = new PostgreSQLOrigenDatos($em);
@@ -37,12 +40,16 @@ class AlmacenamientoProxy implements DashboardInterface, OrigenDatosInterface
 
     // **** MÉTODOS PARA LOS ORÍGENES DE DATOS
 
+    public function prepararDatosEnvio($idOrigenDatos, $campos_sig, $datos, $ultimaLectura, $idConexion){
+        return $this->origenDatosWrapped->prepararDatosEnvio($idOrigenDatos, $campos_sig, $datos, $ultimaLectura, $idConexion);
+    }
+
     public function inicializarTablaAuxliar($idOrigenDatos){
         $this->origenDatosWrapped->inicializarTablaAuxliar($idOrigenDatos);
     }
 
-    public function insertarEnAuxiliar($tabla, $datos){
-        $this->origenDatosWrapped->insertarEnAuxiliar($tabla, $datos);
+    public function insertarEnAuxiliar($idOrigenDatos, $idConexion, $datos){
+        $this->origenDatosWrapped->insertarEnAuxiliar($idOrigenDatos, $idConexion, $datos);
     }
 
 
@@ -90,8 +97,5 @@ class AlmacenamientoProxy implements DashboardInterface, OrigenDatosInterface
     public function totalRegistrosIndicador(FichaTecnica $fichaTec){
         $this->dashboardWrapped->totalRegistrosIndicador($fichaTec);
     }
-
-
-
 
 }

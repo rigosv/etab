@@ -4,8 +4,9 @@ namespace App\AlmacenamientoDatos\Driver;
 
 use Doctrine\ORM\EntityManager;
 
-use App\AlmacenamientoDatos\AbstractDriver;
 use App\Entity\OrigenDatos;
+use App\AlmacenamientoDatos\OrigenDatosInterface;
+use App\Service\Util;
 
 class PostgreSQLOrigenDatos implements OrigenDatosInterface
 {
@@ -22,6 +23,25 @@ class PostgreSQLOrigenDatos implements OrigenDatosInterface
         $this->pdo = $cnx->getWrappedConnection();
     }
 
+    public function prepararDatosEnvio($idOrigenDatos, $campos_sig, $datos, $ultimaLectura, $idConexion){
+        $util = new Util();
+        //Cambiar el nombre de las llaves, en lugar de usar el nombre del campo
+        // se usará el nombre del significado
+        $datos_a_enviar = array();
+
+        foreach ($datos as $fila) {
+            $nueva_fila = array();
+            foreach ($fila as $k => $v) {
+                $v_ = preg_replace("/[\r\n|\n|\r]+/", " ", $v);
+                $nueva_fila[$campos_sig[$util->slug($k)]] = trim(mb_check_encoding($v_, 'UTF-8') ? $v_ : mb_convert_encoding($v_, 'UTF-8'));
+            }
+            $filaJson = json_encode($nueva_fila, JSON_UNESCAPED_UNICODE);
+            $datos_a_enviar[] = "$idOrigenDatos\t". str_replace('"', '\"' , $filaJson )."\t$ultimaLectura\t$idConexion";
+        }
+
+        return $datos_a_enviar;
+    }
+
     public function inicializarTablaAuxliar($idOrigenDatos) {
         $sql = ' DROP TABLE IF EXISTS '.$this->tabla.$idOrigenDatos.'_tmp;
                 SELECT * INTO '.$this->tabla.$idOrigenDatos."_tmp FROM fila_origen_dato_v2 LIMIT 0;                
@@ -29,12 +49,12 @@ class PostgreSQLOrigenDatos implements OrigenDatosInterface
         $this->cnx->exec($sql);
     }
 
-    public function insertarEnAuxiliar($tabla, $datos) {
-        $this->pdo->pgsqlCopyFromArray($tabla, $datos);
+    public function insertarEnAuxiliar($idOrigenDatos, $idConexion, $datos) {
+        $this->pdo->pgsqlCopyFromArray($this->tabla.$idOrigenDatos.'_tmp', $datos);
     }
 
-    public function borrarTablaAuxiliar($tabla) {
-        $sql = ' DROP TABLE IF EXISTS '.$tabla.'_tmp ';
+    public function borrarTablaAuxiliar($idOrigenDatos) {
+        $sql = ' DROP TABLE IF EXISTS '.$this->tabla.$idOrigenDatos.'_tmp ';
         $this->cnx->exec($sql);
     }
 

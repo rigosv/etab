@@ -3,3 +3,6 @@ parameters:
     locale: 'es'
     app.theme : 'MINSAL_ESA'
     app.datos.tipo_almacenamiento: 'PostgreSQL'
+    couchbase_url: '%env(resolve:COUCHBASE_URL)%'
+    couchbase_user: '%env(resolve:COUCHBASE_USER)%'
+    couchbase_password: '%env(resolve:COUCHBASE_PASSWORD)%'
