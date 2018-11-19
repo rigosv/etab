@@ -14,13 +14,15 @@ class PostgreSQLOrigenDatos implements OrigenDatosInterface
     private $cnx;
     private $pdo;
     private $tabla = 'origenes.fila_origen_dato_';
+    private $emDatos;
 
-
-    public function __construct(EntityManager $em)
+    public function __construct(EntityManager $em, EntityManager $emDatos)
     {
         $this->em = $em;
-        $cnx = $em->getConnection('etab-datos');
-        $this->pdo = $cnx->getWrappedConnection();
+        $this->cnx = $emDatos->getConnection();
+        $this->emDatos = $emDatos;
+        $this->pdo = $this->cnx->getWrappedConnection();
+
     }
 
     public function prepararDatosEnvio($idOrigenDatos, $campos_sig, $datos, $ultimaLectura, $idConexion){
@@ -43,9 +45,13 @@ class PostgreSQLOrigenDatos implements OrigenDatosInterface
     }
 
     public function inicializarTablaAuxliar($idOrigenDatos) {
-        $sql = ' DROP TABLE IF EXISTS '.$this->tabla.$idOrigenDatos.'_tmp;
-                SELECT * INTO '.$this->tabla.$idOrigenDatos."_tmp FROM fila_origen_dato_v2 LIMIT 0;                
-               ";
+        $sql = ' CREATE TABLE IF NOT EXISTS  '. $this->tabla.$idOrigenDatos.'_tmp (
+                    id_origen_dato integer,
+                    datos jsonb,
+                    ultima_lectura timestamp,
+                    id_conexion integer
+                )' ;
+
         $this->cnx->exec($sql);
     }
 
@@ -62,7 +68,7 @@ class PostgreSQLOrigenDatos implements OrigenDatosInterface
 
         try {
             $this->cnx->query("select * from $nombreTabla LIMIT 1");
-        } catch (\Doctrine\DBAL\DBALException $e) {
+        } catch (\Exception $e) {
             //Crear la tabla
             $this->cnx->exec("select * INTO $nombreTabla from $nombreTabla"."_tmp LIMIT 0 ");
         }
@@ -84,7 +90,7 @@ class PostgreSQLOrigenDatos implements OrigenDatosInterface
             $this->pdo->pgsqlCopyFromArray($this->tabla.$idOrigenDatos, $nuevosDatos);
         }
 
-        $this->borrarTablaAuxiliar($this->tabla.$idOrigenDatos);
+        $this->borrarTablaAuxiliar($idOrigenDatos);
     }
 
     public function guardarDatosIncremental($idConexion, $idOrigenDatos, $campoControlIncremento, $limiteInf, $limiteSup){

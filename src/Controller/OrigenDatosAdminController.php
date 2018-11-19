@@ -2,13 +2,13 @@
 
 namespace App\Controller;
 
+use App\Message\SmsCargarOrigenDatos;
 use Sonata\AdminBundle\Controller\CRUDController as Controller;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 use App\Entity\OrigenDatos;
-use App\AlmacenamientoDatos\AlmacenamientoProxy;
 
 
 
@@ -126,8 +126,12 @@ class OrigenDatosAdminController extends Controller
         return true;
     }
 
-    public function batchActionLoadData($idx = null, Request $request, AlmacenamientoProxy $almacenamiento)
+    public function batchActionLoadData($idx = null, Request $request)
     {
+        $almacenamiento = $this->get('almacenamiento_datos');
+
+        $bus = $this->get('message_bus');
+
         //Mardar a la cola de carga de datos cada origen seleccionado
         $parameterBag = $request->request;
         $em = $this->getDoctrine()->getManager();
@@ -218,8 +222,12 @@ class OrigenDatosAdminController extends Controller
                     return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
                 }
             } else
-                $this->get('old_sound_rabbit_mq.cargar_origen_datos_producer')
-                        ->publish(serialize($msg));
+                //$this->get('old_sound_rabbit_mq.cargar_origen_datos_producer')
+                        //->publish(serialize($msg));
+
+                $bus->dispatch(new SmsCargarOrigenDatos($origen));
+
+            exit;
         }
         $this->addFlash('sonata_flash_success', $this->get('translator')->trans('flash_batch_load_data_success'));
 

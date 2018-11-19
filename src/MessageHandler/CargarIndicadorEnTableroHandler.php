@@ -1,0 +1,41 @@
+<?php
+
+namespace App\MessageHandler;
+
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
+
+use App\AlmacenamientoDatos\AlmacenamientoProxy;
+use App\Entity\FichaTecnica;
+use App\Message\SmsCargarIndicadorEnTablero;
+
+
+
+
+class CargarIndicadorEnTableroHandler implements MessageHandlerInterface
+{
+
+    private $em;
+    private $almacenamiento;
+
+    public function __construct(EntityManagerInterface $em, AlmacenamientoProxy $almacenamiento)
+    {
+        $this->em = $em;
+        $this->almacenamiento = $almacenamiento;
+    }
+
+    public function __invoke(SmsCargarIndicadorEnTablero $message )
+    {
+        $idIndicador = $message->getIdIndicador();
+
+        $fichaTec = $this->em->find(FichaTecnica::class, $idIndicador);
+
+        if ($fichaTec != nul ) {
+
+            $this->almacenamiento->crearCamposIndicador($fichaTec);
+            if (!$fichaTec->getEsAcumulado()) {
+                $this->almacenamiento->crearIndicador($fichaTec);
+            }
+        }
+    }
+}

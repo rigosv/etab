@@ -47,8 +47,14 @@
             <argument type="service" id="almacenamiento_datos" />
         </service>
         <service id="almacenamiento_datos" class="App\AlmacenamientoDatos\AlmacenamientoProxy" public="true">
-            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="service_container" />
             <argument type="service" id="parameter_bag" />
+        </service>
+        <service id="App\MessageHandler\CargarOrigenDatosHandler">
+            <tag name="messenger.message_handler" />
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="message_bus" />
+            <argument type="service" id="almacenamiento_datos" />
         </service>
         <service id="sonata.admin.orm.filter.type.string" class="App\Filter\StringFilter">
             <tag name="sonata.admin.filter.type" alias="doctrine_orm_string" />

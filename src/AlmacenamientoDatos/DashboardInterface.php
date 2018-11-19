@@ -45,4 +45,10 @@ interface DashboardInterface
      */
 
     public function totalRegistrosIndicador(FichaTecnica $fichaTec);
+
+    /**
+     * @param FichaTecnica $fichaTec
+     * @return mixed
+     */
+    public function crearCamposIndicador (FichaTecnica $fichaTec);
 }

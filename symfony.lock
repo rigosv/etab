@@ -80,6 +80,51 @@
     "egulias/email-validator": {
         "version": "2.1.4"
     },
+    "enqueue/amqp-tools": {
+        "version": "0.8.40"
+    },
+    "enqueue/async-event-dispatcher": {
+        "version": "0.7",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "0.7",
+            "ref": "9e937ccb79e08b978f91fb816d4e6d645813113a"
+        }
+    },
+    "enqueue/enqueue": {
+        "version": "0.8.40"
+    },
+    "enqueue/enqueue-bundle": {
+        "version": "0.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "0.4",
+            "ref": "daaea0035c3abd612f71f0288d5c20197c3c34ad"
+        }
+    },
+    "enqueue/messenger-adapter": {
+        "version": "0.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "0.1",
+            "ref": "9a7119f609b576a30dbf03e4fe44212388e96ea1"
+        }
+    },
+    "enqueue/null": {
+        "version": "0.8.40"
+    },
+    "enqueue/redis": {
+        "version": "0.7",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "0.7",
+            "ref": "2f8314cdcb8f459135aadbcb1e6545ccfdd899d9"
+        }
+    },
     "exsyst/swagger": {
         "version": "v0.4.1"
     },
@@ -134,15 +179,6 @@
     "markbaker/complex": {
         "version": "1.4.6"
     },
-    "minsal/calidad-bundle": {
-        "version": "1.0-dev"
-    },
-    "minsal/costos-bundle": {
-        "version": "1.0-dev"
-    },
-    "minsal/grid-form-bundle": {
-        "version": "1.0-dev"
-    },
     "monolog/monolog": {
         "version": "1.23.0"
     },
@@ -166,18 +202,6 @@
     },
     "paragonie/random_compat": {
         "version": "v2.0.17"
-    },
-    "php-amqplib/php-amqplib": {
-        "version": "v2.7.2"
-    },
-    "php-amqplib/rabbitmq-bundle": {
-        "version": "1.12",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "master",
-            "version": "1.12",
-            "ref": "ce3ca2e4577270c4f518539aa6b9e878998fcfef"
-        }
     },
     "phpdocumentor/reflection-common": {
         "version": "1.0.1"
@@ -208,6 +232,15 @@
     },
     "psr/simple-cache": {
         "version": "1.0.1"
+    },
+    "queue-interop/amqp-interop": {
+        "version": "0.7.5"
+    },
+    "queue-interop/queue-interop": {
+        "version": "0.6.2"
+    },
+    "ramsey/uuid": {
+        "version": "3.8.0"
     },
     "sensio/framework-extra-bundle": {
         "version": "5.2",
@@ -378,6 +411,15 @@
             "branch": "master",
             "version": "1.0",
             "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
+        }
+    },
+    "symfony/messenger": {
+        "version": "4.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.1",
+            "ref": "f11dfa18618a8a5dd853ea3a302db2e0557e031c"
         }
     },
     "symfony/monolog-bridge": {

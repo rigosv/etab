@@ -2,7 +2,7 @@
 
 namespace App\AlmacenamientoDatos;
 
-use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 use App\Entity\FichaTecnica;
@@ -22,20 +22,23 @@ class AlmacenamientoProxy implements DashboardInterface, OrigenDatosInterface
     private $em;
     private $dashboardWrapped;
     private $origenDatosWrapped;
+    private $emDatos;
 
-    public function __construct(EntityManagerInterface $em, ParameterBagInterface $params)
+    public function __construct(ContainerInterface $container, ParameterBagInterface $params)
     {
-        $this->em = $em;
+        $this->em = $container->get('doctrine.orm.entity_manager');
+        $this->emDatos = $container->get('doctrine.orm.etab_datos_entity_manager');
         $this->params = $params;
 
         //Por defecto es PostgresSQL
-        if ($params->get('app.datos.tipo_almacenamiento') == 'couchbase'){
-            //$this->dashboardWrapped = new CouchbaseDashboard($em);
-            $this->origenDatosWrapped = new CouchbaseOrigenDatos($params);
+        if ($this->params->get('app.datos.tipo_almacenamiento') == 'couchbase'){
+            //$this->dashboardWrapped = new CouchbaseDashboard($this->em);
+            $this->origenDatosWrapped = new CouchbaseOrigenDatos($this->params);
         } else {
-            $this->dashboardWrapped = new PostgreSQLDashboard($em);
-            $this->origenDatosWrapped = new PostgreSQLOrigenDatos($em);
+            $this->dashboardWrapped = new PostgreSQLDashboard($this->em, $this->emDatos);
+            $this->origenDatosWrapped = new PostgreSQLOrigenDatos($this->em, $this->emDatos);
         }
+
     }
 
     // **** MÉTODOS PARA LOS ORÍGENES DE DATOS
@@ -98,4 +101,7 @@ class AlmacenamientoProxy implements DashboardInterface, OrigenDatosInterface
         $this->dashboardWrapped->totalRegistrosIndicador($fichaTec);
     }
 
+    public function crearCamposIndicador (FichaTecnica $fichaTec){
+        $this->dashboardWrapped->crearCamposIndicador($fichaTec);
+    }
 }

@@ -13,7 +13,7 @@ class PostgreSQLDashboard implements DashboardInterface
     private $fichaRepository;
 
 
-    public function __construct(EntityManager $em)
+    public function __construct(EntityManager $em, EntityManager $emDatos)
     {
         $this->em = $em;
         $this->fichaRepository = $em->getRepository(FichaTecnica::class);
@@ -36,5 +36,9 @@ class PostgreSQLDashboard implements DashboardInterface
 
     public function totalRegistrosIndicador(FichaTecnica $fichaTec){
         return $this->fichaRepository->totalRegistrosIndicador($fichaTec);
+    }
+
+    public function crearCamposIndicador (FichaTecnica $fichaTec) {
+        $this->fichaRepository->crearCamposIndicador($fichaTec);
     }
 }
