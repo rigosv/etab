@@ -31,7 +31,7 @@ class UserEstructuraRelationListener
         }
 
         $metadata->mapManyToOne(array(
-            'targetEntity'  => MINSAL\Bundle\CostosBundle\Entity\Estructura::class,
+            'targetEntity'  => \MINSAL\Bundle\CostosBundle\Entity\Estructura::class,
             'fieldName'     => 'establecimientoPrincipal',
             'joinColumns' => array(
                 array(

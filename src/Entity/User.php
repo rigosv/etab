@@ -64,6 +64,8 @@ class User extends BaseUser
      * @ORM\OrderBy({"codigo" = "ASC"})
      **/
     private $agencia;
+
+    private $establecimientoPrincipal;
     
     
 

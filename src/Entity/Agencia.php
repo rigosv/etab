@@ -48,6 +48,8 @@ class Agencia
      **/
     protected $indicadores;
 
+    private $formularios;
+
     
 
     public function __toString()

@@ -31,7 +31,7 @@ class AgenciaFormularioRelationListener
         }
 
         $metadata->mapManyToMany(array(
-            'targetEntity'  => MINSAL\Bundle\GridFormBundle\Entity\Formulario::class,
+            'targetEntity'  => \MINSAL\Bundle\GridFormBundle\Entity\Formulario::class,
             'fieldName'     => 'formularios',
             'cascade'       => array('persist'),
             'joinTable'     => array(
