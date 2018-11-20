@@ -55,6 +55,8 @@ class UserAdmin extends BaseAdmin {
         $acciones = explode('/', $this->getRequest()->server->get("REQUEST_URI"));
         $accion = array_pop($acciones);
         $pass_requerido = ($accion == 'create') ? true : false;
+        $existeCostosBundle =  array_key_exists('CostosBundle', $this->getConfigurationPool()->getContainer()->getParameter('kernel.bundles') );
+
 
         $formMapper
                 ->tab('_usuario_')
@@ -149,11 +151,17 @@ class UserAdmin extends BaseAdmin {
                 ;
             }
         }
-        $formMapper
-                ->setHelps(array(
-                    'establecimientoPrincipal' => '_ayuda_establecimiento_principal_'
-                ))
-        ;
+
+        if ($existeCostosBundle){
+
+            $formMapper
+                ->tab('_usuario_')
+                    ->with('General')
+                        ->add('establecimientoPrincipal', null, array('label' => '_establecimiento_principal_', 'help' => '_ayuda_establecimiento_principal_'))
+                    ->end()
+                ->end();
+        }
+
     }
 
     public function getTemplate($name) {

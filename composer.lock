@@ -1297,7 +1297,7 @@
         },
         {
             "name": "enqueue/amqp-tools",
-            "version": "0.8.40",
+            "version": "0.8.41",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-enqueue/amqp-tools.git",
@@ -1348,7 +1348,7 @@
         },
         {
             "name": "enqueue/async-event-dispatcher",
-            "version": "0.8.40",
+            "version": "0.8.41",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-enqueue/async-event-dispatcher.git",
@@ -1408,16 +1408,16 @@
         },
         {
             "name": "enqueue/enqueue",
-            "version": "0.8.40",
+            "version": "0.8.41",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-enqueue/enqueue.git",
-                "reference": "7d36b820727a42a79c54a593a9d3e9f6ffeecdf6"
+                "reference": "ba33593f712db7d128a9f160be89870062986b58"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-enqueue/enqueue/zipball/7d36b820727a42a79c54a593a9d3e9f6ffeecdf6",
-                "reference": "7d36b820727a42a79c54a593a9d3e9f6ffeecdf6",
+                "url": "https://api.github.com/repos/php-enqueue/enqueue/zipball/ba33593f712db7d128a9f160be89870062986b58",
+                "reference": "ba33593f712db7d128a9f160be89870062986b58",
                 "shasum": ""
             },
             "require": {
@@ -1491,20 +1491,20 @@
                 "queue",
                 "rabbitmq"
             ],
-            "time": "2018-09-18T13:30:59+00:00"
+            "time": "2018-11-12T11:25:29+00:00"
         },
         {
             "name": "enqueue/enqueue-bundle",
-            "version": "0.8.40",
+            "version": "0.8.41",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-enqueue/enqueue-bundle.git",
-                "reference": "ada287130a27805998196063488ca8107d16cef7"
+                "reference": "5410d31e397170f756cababb46b0ffa3907df471"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-enqueue/enqueue-bundle/zipball/ada287130a27805998196063488ca8107d16cef7",
-                "reference": "ada287130a27805998196063488ca8107d16cef7",
+                "url": "https://api.github.com/repos/php-enqueue/enqueue-bundle/zipball/5410d31e397170f756cababb46b0ffa3907df471",
+                "reference": "5410d31e397170f756cababb46b0ffa3907df471",
                 "shasum": ""
             },
             "require": {
@@ -1559,7 +1559,7 @@
                 "queue",
                 "rabbitmq"
             ],
-            "time": "2018-08-08T15:15:17+00:00"
+            "time": "2018-11-05T14:27:26+00:00"
         },
         {
             "name": "enqueue/messenger-adapter",
@@ -1621,7 +1621,7 @@
         },
         {
             "name": "enqueue/null",
-            "version": "0.8.40",
+            "version": "0.8.41",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-enqueue/null.git",
@@ -1674,7 +1674,7 @@
         },
         {
             "name": "enqueue/redis",
-            "version": "0.8.40",
+            "version": "0.8.41",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-enqueue/redis.git",
@@ -3993,22 +3993,23 @@
         },
         {
             "name": "sonata-project/core-bundle",
-            "version": "3.11.2",
+            "version": "3.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataCoreBundle.git",
-                "reference": "16a89c9dd5f99a3308b992bc5dcc14e16cbdf797"
+                "reference": "4a4edf9c957e2a2dbe077d225d7af1693f3ea353"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataCoreBundle/zipball/16a89c9dd5f99a3308b992bc5dcc14e16cbdf797",
-                "reference": "16a89c9dd5f99a3308b992bc5dcc14e16cbdf797",
+                "url": "https://api.github.com/repos/sonata-project/SonataCoreBundle/zipball/4a4edf9c957e2a2dbe077d225d7af1693f3ea353",
+                "reference": "4a4edf9c957e2a2dbe077d225d7af1693f3ea353",
                 "shasum": ""
             },
             "require": {
                 "cocur/slugify": "^1.4 || ^2.0 || ^3.0",
                 "php": "^5.6 || ^7.0",
                 "sonata-project/datagrid-bundle": "^2.0",
+                "sonata-project/doctrine-extensions": "^1.1",
                 "symfony/config": "^2.8 || ^3.2 || ^4.0",
                 "symfony/dependency-injection": "^2.8 || ^3.2 || ^4.0",
                 "symfony/event-dispatcher": "^2.8 || ^3.2 || ^4.0",
@@ -4066,7 +4067,7 @@
             "keywords": [
                 "sonata"
             ],
-            "time": "2018-07-18T22:10:58+00:00"
+            "time": "2018-11-19T19:01:36+00:00"
         },
         {
             "name": "sonata-project/datagrid-bundle",

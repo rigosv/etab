@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\GroupInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 
+
 /**
  * @ORM\Entity
  * @ORM\Table(name="fos_user_user")
@@ -63,12 +64,6 @@ class User extends BaseUser
      * @ORM\OrderBy({"codigo" = "ASC"})
      **/
     private $agencia;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="\MINSAL\Bundle\CostosBundle\Entity\Estructura")
-     * @ORM\JoinColumn(name="establecimientoprincipal_id", referencedColumnName="id")
-     **/
-    private $establecimientoPrincipal;
     
     
 
@@ -291,7 +286,7 @@ class User extends BaseUser
      * @param \MINSAL\Bundle\CostosBundle\Entity\Estructura $establecimientoPrincipal
      * @return User
      */
-    public function setEstablecimientoPrincipal(\MINSAL\Bundle\CostosBundle\Entity\Estructura $establecimientoPrincipal = null)
+    public function setEstablecimientoPrincipal( $establecimientoPrincipal = null)
     {
         $this->establecimientoPrincipal = $establecimientoPrincipal;
 

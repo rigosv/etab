@@ -20,7 +20,8 @@ class AgenciaAdmin extends Admin
 
     protected function configureFormFields(FormMapper $formMapper)
     {
-        
+        $existeGridFormBundle =  array_key_exists('GridFormBundle', $this->getConfigurationPool()->getContainer()->getParameter('kernel.bundles') );
+
         $formMapper
             ->tab(('_general_'))
                 ->with('', array('class' => 'col-md-6'))
@@ -42,21 +43,27 @@ class AgenciaAdmin extends Admin
                                 )
                         )                    
                 ->end()
-                ->with((''), array('class' => 'col-md-6'))
-                    ->add('formularios', EntityType::class,
+            ->end()
+        ;
+
+        if ( $existeGridFormBundle ) {
+            $formMapper
+                ->tab(('_accesos_'))
+                    ->with((''), array('class' => 'col-md-6'))
+                        ->add('formularios', EntityType::class,
                             array(
-                                'label' => ('_formularios_'), 
+                                'label' => ('_formularios_'),
                                 'expanded' => false,
                                 'class' => Formulario::class,
                                 'query_builder' => function ($repository) {
                                     return $repository->createQueryBuilder('f')
-                                            ->orderBy('f.posicion, f.nombre');
-                                    }
-                                )
+                                        ->orderBy('f.posicion, f.nombre');
+                                }
+                            )
                         )
-                ->end()
-            ->end()
-        ;
+                    ->end()
+                ->end();
+        }
         
         
     }

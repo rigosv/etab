@@ -36,16 +36,7 @@ class Agencia
      * @ORM\Column(name="nombre", type="string", length=200, nullable=false)
      */
     private $nombre;
-    
-    /**
-     * @ORM\ManyToMany(targetEntity="MINSAL\Bundle\GridFormBundle\Entity\Formulario")
-     * @ORM\JoinTable(name="indicador_formulario",
-     *      joinColumns={@ORM\JoinColumn(name="id_agencia", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="id_formulario", referencedColumnName="id")}
-     *      )
-     * @ORM\OrderBy({"nombre" = "ASC"})
-     **/
-    protected $formularios;
+
     
     /**
      * @ORM\ManyToMany(targetEntity="FichaTecnica", inversedBy="agenciasAcceso")
@@ -167,7 +158,7 @@ class Agencia
      * @param \MINSAL\Bundle\GridFormBundle\Entity\Formulario $formularios
      * @return Agencia
      */
-    public function addFormulario(\MINSAL\Bundle\GridFormBundle\Entity\Formulario $formularios)
+    public function addFormulario( $formularios)
     {
         $this->formularios[] = $formularios;
 
@@ -179,7 +170,7 @@ class Agencia
      *
      * @param \MINSAL\Bundle\GridFormBundle\Entity\Formulario $formularios
      */
-    public function removeFormulario(\MINSAL\Bundle\GridFormBundle\Entity\Formulario $formularios)
+    public function removeFormulario( $formularios)
     {
         $this->formularios->removeElement($formularios);
     }
