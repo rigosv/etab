@@ -1,3 +1,2 @@
-#controllers:
-#    resource: '@GridFormBundle/Controller/'
-#    type: annotation
+#grid_form_routes:
+#    resource: "@GridFormBundle/Resources/config/routes.yaml"

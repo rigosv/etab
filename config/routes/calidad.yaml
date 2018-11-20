@@ -1,11 +1,2 @@
-#calidad_rest:
-#    type:     rest
-#    resource: '@CalidadBundle/Controller/TableroCalidadRESTController.php'
-
-#controller_tablero:
-#    resource: '@CalidadBundle/Controller/TableroCalidadController.php'
-#    type: annotation
-
-#controller_plan_mejora:
-#    resource: '@CalidadBundle/Controller/PlanMejoraController.php'
-#    type: annotation
+#calidad_routes:
+#    resource: "@CalidadBundle/Resources/config/routes.yaml"

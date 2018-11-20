@@ -1,3 +1,2 @@
-#controller_costos:
-#    resource: '@CostosBundle/Controller/CostosController.php'
-#    type: annotation
+#costos_routes:
+#    resource: "@CostosBundle/Resources/config/routes.yaml"
