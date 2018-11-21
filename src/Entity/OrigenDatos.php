@@ -775,29 +775,6 @@ class OrigenDatos
         return $this->ventanaLimiteSuperior;
     }
 
-    /**
-     * Set totalRegUltimaLect
-     *
-     * @param integer $totalRegUltimaLect
-     *
-     * @return OrigenDatos
-     */
-    public function setTotalRegUltimaLect($totalRegUltimaLect)
-    {
-        $this->totalRegUltimaLect = $totalRegUltimaLect;
-
-        return $this;
-    }
-
-    /**
-     * Get totalRegUltimaLect
-     *
-     * @return integer
-     */
-    public function getTotalRegUltimaLect()
-    {
-        return $this->totalRegUltimaLect;
-    }
 
     /**
      * Set tiempoSegundosUltimaCarga
