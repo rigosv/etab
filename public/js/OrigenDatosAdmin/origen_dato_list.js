@@ -4,10 +4,13 @@ $(document).ready(function(){
         $.get($(this).data('url'), function (resp) {
             $.notify({
                 message: resp
-            }, {animate:{
+            }, {
+                animate:{
                     enter: "animated fadeInUp",
                     exit: "animated fadeOutDown"
-                }});
+                },
+                type: 'success'
+            });
         })
     })
 });
