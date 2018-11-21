@@ -9,9 +9,10 @@ file that was distributed with this source code.
 
 #}
 
-{% if admin.hasRoute('load_data') %}
-    <a href="{{ admin.generateObjectUrl('load_data', object) }}" class="btn view_link" title="{{ 'action_load_data'|trans }}">
-        <i class="icon-download-alt"></i>
-        {{ admin.trans('action_load_data')}}
-    </a>
-{% endif %}
+<A href='#' class="btn btn-primary btn-load"
+        data-url = "{{ path('origen_dato_cargar', {'id': object.id}) }}"
+        title="{{ 'action_load_data'|trans }}">
+    <i class="glyphicon glyphicon-upload"></i>
+    {{ admin.trans('action_load_data')}}
+</A>
+

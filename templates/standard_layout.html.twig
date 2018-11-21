@@ -2,6 +2,7 @@
 {% block stylesheets %}
     {{ parent() }}
     <link rel="stylesheet" href="{{ app.request.schemeAndHttpHost ~ asset('css/core_layout.css') }}" type="text/css" media="all" />
+    <link rel="stylesheet" href="{{ app.request.schemeAndHttpHost ~ asset('css/animate.css') }}" type="text/css" media="all" />
 {% endblock %}
 {% block javascripts %}
     {{parent()}}

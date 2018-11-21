@@ -94,7 +94,7 @@ class OrigenDatosAdminController extends Controller
             $campos_ord[$sig_tipo]['value'] = json_encode($campos_ord[$sig_tipo]['value']);
         }
 
-        return $this->render('OrigenDatosAdmin/merge_selection.html.twig', array('origen_dato' => $origenDato,
+        return $this->renderView('OrigenDatosAdmin/merge_selection.html.twig', array('origen_dato' => $origenDato,
                     'campos' => $campos_ord,
                     'es_pivote' => $esPivote
         ));

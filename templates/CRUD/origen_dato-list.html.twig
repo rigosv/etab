@@ -1,0 +1,6 @@
+{% extends '@SonataAdmin/CRUD/base_list.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/OrigenDatosAdmin/origen_dato_list.js') }}" type="text/javascript"></script>
+{% endblock %}

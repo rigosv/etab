@@ -207,6 +207,9 @@ class OrigenDatosAdmin extends Admin
             case 'edit':
                 return 'CRUD/origen_dato-edit.html.twig';
                 break;
+            case 'list':
+                return 'CRUD/origen_dato-list.html.twig';
+                break;
             default:
                 return parent::getTemplateRegistry()->getTemplate($name);
                 break;
@@ -302,7 +305,6 @@ class OrigenDatosAdmin extends Admin
     protected function configureRoutes(RouteCollection $collection)
     {
         $collection->add('merge_save', 'merge/save');
-        $collection->add('load_data');
     }
 
 }

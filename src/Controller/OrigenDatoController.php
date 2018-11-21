@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\OrigenDatos;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,6 +17,7 @@ use App\Entity\TipoCampo;
 use App\Entity\Diccionario;
 use App\Service\Util;
 use Symfony\Component\Translation\TranslatorInterface;
+use App\Message\SmsCargarOrigenDatos;
 
 class OrigenDatoController extends AbstractController
 {
@@ -437,6 +439,25 @@ class OrigenDatoController extends AbstractController
         }
         
         return $resultado;
+    }
+
+    /**
+     * @Route("/origen_dato/cargar/{id}", name="origen_dato_cargar", options={"expose"=true})
+     */
+    public function cargarOrigen(OrigenDatos $origen, TranslatorInterface $translator, MessageBusInterface $bus) {
+        $em = $this->getDoctrine()->getManager();
+
+        $configurado = $em->getRepository(OrigenDatos::class)->estaConfigurado($origen);
+
+        $mensaje = $translator->trans('_se_ha_iniciado_la_carga_del_origen_');
+        if  ($configurado) {
+            $bus->dispatch(new SmsCargarOrigenDatos($origen->getId()));
+        } else {
+            $mensaje = $origen->getNombre() . ': ' . $translator->trans('origen_no_configurado');
+        }
+
+        return new Response($mensaje);
+
     }
 
 }
