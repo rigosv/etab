@@ -449,7 +449,7 @@ class OrigenDatoController extends AbstractController
 
         $configurado = $em->getRepository(OrigenDatos::class)->estaConfigurado($origen);
 
-        $mensaje = $translator->trans('_se_ha_iniciado_la_carga_del_origen_');
+        $mensaje = $translator->trans('_se_ha_iniciado_la_carga_del_origen_') . '<B> ' . $origen->getNombre() . '</B>';
         if  ($configurado) {
             $bus->dispatch(new SmsCargarOrigenDatos($origen->getId()));
         } else {
