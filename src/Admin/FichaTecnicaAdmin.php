@@ -324,7 +324,7 @@ class FichaTecnicaAdmin extends Admin
     public function crearCamposIndicador(FichaTecnica $fichaTecnica)
     {
         $em = $this->getConfigurationPool()->getContainer()->get('doctrine')->getManager();
-        $em->getRepository('IndicadoresBundle:FichaTecnica')->crearCamposIndicador($fichaTecnica);
+        $em->getRepository('App\Entity\FichaTecnica')->crearCamposIndicador($fichaTecnica);
         
     }
 

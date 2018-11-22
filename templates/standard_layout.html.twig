@@ -13,6 +13,13 @@
     <script type="text/javascript" src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
 
     {% include (['messages_js.html.twig']|join) %}
+
+    <script>      
+        function cerrar_div_carga(){
+            $("#div_cargando").attr("style","display: none");
+        }
+    </script>
+      
 {% endblock %}
 
 {% block sonata_top_nav_menu_add_block %}{% endblock %}
@@ -55,6 +62,16 @@
     #}
     {{ parent() }}
     <div id="div_cargando" class='affix'>
-        <img id="cargador" src="{{ app.request.schemeAndHttpHost ~ asset('images/ajax-loader.gif') }}"/>
-    </div>    
+        <img id="cargador" src="{{ app.request.schemeAndHttpHost ~ asset('images/ajax-loader.gif') }}" style="left: 48%;position: absolute;top: 45%;"/>
+        <span class="btn btn-default glyphicon glyphicon-remove" style="
+                        position: absolute;
+                        top: 14px;
+                        right: 10px;
+                        font-size: 16pt;
+                        z-index: 99999999;
+                    " onclick="cerrar_div_carga()"></span>
+    </div>  
+
+     
+
 {% endblock %}

@@ -64,11 +64,15 @@ class UserAdmin extends BaseAdmin {
                     ->with('General', array('class' => 'col-md-6'))->end()
                 ->end()
                 ->tab('_seguridad_')
-                    ->with('_estatus_', array('class' => 'col-md-4'))->end()
-                    ->with('Groups', array('class' => 'col-md-4'))->end()
-                    ->with('Roles', array('class' => 'col-md-12'))->end()
+                    ->with('Groups', array('class' => 'col-md-6'))->end()
+                    ->with('Roles', array('class' => 'col-md-6'))->end()
                 ->end()
-        ;
+                ->tab('_indicadores_y_salas_')
+                    ->with('_indicadores_', array('class' => 'col-md-6'))->end()
+                    ->with('_salas_situacionales_', array('class' => 'col-md-6'))->end()
+                ->end();
+            
+        
 
         $now = new \DateTime();
 
@@ -80,7 +84,8 @@ class UserAdmin extends BaseAdmin {
                         ->add('plainPassword', TextType::class, array(
                             'required' => (!$this->getSubject() || is_null($this->getSubject()->getId()))
                         ))
-                        ->add('establecimientoPrincipal', null, array('label' => '_establecimiento_principal_'))
+                        ->add('establecimientoPrincipal', TextType::class, array('label' => '_establecimiento_principal_'))
+                        ->add('enabled', null, array('required' => false))
                     ->end()
                     ->with('_perfil_')
                         ->add('dateOfBirth', DateType::class, array(
@@ -110,9 +115,7 @@ class UserAdmin extends BaseAdmin {
         if ($this->getSubject() && !$this->getSubject()->hasRole('ROLE_SUPER_ADMIN')) {
             $formMapper
                     ->tab('_seguridad_')
-                        ->with('_estatus_')
-                            ->add('enabled', null, array('required' => false))
-                        ->end()
+                        
                         ->with('Groups')
                             ->add('groups', ModelType::class, array(
                                 'required' => false,
@@ -136,17 +139,25 @@ class UserAdmin extends BaseAdmin {
             if ($accion[0] == 'edit') {
                 $formMapper
                     ->tab('_indicadores_y_salas_')
-                        ->add('indicadores', null, array('label' => '_indicadores_', 'expanded' => true))
-                        ->add('gruposIndicadores', null, array('label' => '_salas_situacionales_',
-                            'expanded' => true,
-                            'mapped' => false))
-                        ->add('salas', EntityType::class, array(
+                        ->with('_indicadores_')
+                            ->add('indicadores', null, array('label' => '_indicadores_', 'expanded' => true))
+                        ->end()
+                        ->with('_indicadores_')
+                            ->add('gruposIndicadores', null, array('label' => '_salas_situacionales_',
+                                'expanded' => true,
+                                'mapped' => false))
+                        ->end()
+                        ->with('_salas_situacionales_')
+                            ->add('salas', EntityType::class, array(
                             'class' => GrupoIndicadores::class,
                             'label' => '_salas_situacionales_',
                             'expanded' => true,
                             'multiple' => true,
                             'mapped' => false
                             ))
+                        ->end()
+                        
+                        
                     ->end()
                 ;
             }

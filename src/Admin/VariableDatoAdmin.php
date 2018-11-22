@@ -62,7 +62,7 @@ class VariableDatoAdmin extends Admin
 
     public function validate(ErrorElement $errorElement, $object)
     {
-        $campos_no_configurados = $this->getModelManager()->findBy('IndicadoresBundle:Campo',
+        $campos_no_configurados = $this->getModelManager()->findBy('App\Entity\Campo',
                 array('origenDato' => $object->getOrigenDatos(),
                     'significado' => null));
 
