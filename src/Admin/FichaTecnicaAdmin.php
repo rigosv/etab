@@ -324,7 +324,7 @@ class FichaTecnicaAdmin extends Admin
     public function crearCamposIndicador(FichaTecnica $fichaTecnica)
     {
         $em = $this->getConfigurationPool()->getContainer()->get('doctrine')->getManager();
-        $em->getRepository('IndicadoresBundle:FichaTecnica')->crearCamposIndicador($fichaTecnica);
+        $em->getRepository('App\Entity\FichaTecnica')->crearCamposIndicador($fichaTecnica);
         
     }
 
@@ -348,7 +348,7 @@ class FichaTecnicaAdmin extends Admin
                 return 'FichaTecnicaAdmin/show.html.twig';
                 break;
             default:
-                return parent::getTemplateRegistry($name);
+                return parent::getTemplateRegistry()->getTemplate($name);
                 break;
         }
     }

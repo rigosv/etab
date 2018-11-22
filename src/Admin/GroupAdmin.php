@@ -36,12 +36,15 @@ class GroupAdmin extends BaseAdmin
         if ($this->getSubject() and !$this->getSubject()->hasRole('ROLE_SUPER_ADMIN') and $this->isCurrentRoute('edit') ) {
             
             $formMapper
-                    ->tab('_indicadores_')
+                ->tab('_indicadores_')
+                    ->with('_indicadores_')
                         ->add('indicadores', null, array('label' => '_indicadores_', 'expanded' => true))
                     ->end()
                 ->end()
                 ->tab('_salas_')
-                    ->add('salas', null, array('label' => '_salas_situacionales_', 'expanded' => true))
+                    ->with('_salas_')
+                        ->add('salas', null, array('label' => '_salas_situacionales_', 'expanded' => true))
+                    ->end()
                 ->end()
             ;
             

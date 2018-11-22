@@ -1,3 +1,5 @@
 twig:
   globals:
     app_theme: '%app.theme%'
+    cium_disponible: '%cium.disponible%'
+    cium_url: '%cium.url%'

@@ -1,5 +1,5 @@
 sonata_admin:
-    title: 'eTab'
+    title: 'eTAB'
     title_logo: '/themes/%app.theme%/images/logo_title.png'
     dashboard:
         blocks:
@@ -25,6 +25,7 @@ sonata_admin:
         role_admin: ROLE_ADMIN
         role_super_admin: ROLE_SUPER_ADMIN
 sonata_block:
+    default_contexts: [cms]
     blocks:
         sonata.admin.block.admin_list:
-            contexts: [admin]
+            contexts:   [admin]

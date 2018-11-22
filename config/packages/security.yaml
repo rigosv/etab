@@ -34,7 +34,7 @@ security:
                 login_path:     /admin/login
                 use_forward:    false
                 check_path:     /admin/login_check
-                default_target_path: /admin/login
+                default_target_path: '%app.admindefault%'
                 use_referer:    true   
             logout:
                 path:           /admin/logout
@@ -53,7 +53,7 @@ security:
                 use_forward:    false
                 check_path:     /admin/login_check
                 failure_path:   null
-                default_target_path: /admin/dashboard
+                default_target_path: '%app.maindefault%'
                 use_referer:    true
             logout:             true
             anonymous:          true
