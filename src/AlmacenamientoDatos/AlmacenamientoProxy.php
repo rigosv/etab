@@ -88,7 +88,7 @@ class AlmacenamientoProxy implements DashboardInterface, OrigenDatosInterface
 
 
     public function calcularIndicador($fichaTec, $dimension, $filtros, $verSql){
-        $this->dashboardWrapped->calcularIndicador($fichaTec, $dimension, $filtros, $verSql);
+        return $this->dashboardWrapped->calcularIndicador($fichaTec, $dimension, $filtros, $verSql);
     }
 
 
