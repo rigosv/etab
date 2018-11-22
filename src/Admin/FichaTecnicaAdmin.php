@@ -348,7 +348,7 @@ class FichaTecnicaAdmin extends Admin
                 return 'FichaTecnicaAdmin/show.html.twig';
                 break;
             default:
-                return parent::getTemplateRegistry($name);
+                return parent::getTemplateRegistry()->getTemplate($name);
                 break;
         }
     }
