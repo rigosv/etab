@@ -47,8 +47,8 @@ class AlmacenamientoProxy implements DashboardInterface, OrigenDatosInterface
         return $this->origenDatosWrapped->prepararDatosEnvio($idOrigenDatos, $campos_sig, $datos, $ultimaLectura, $idConexion);
     }
 
-    public function inicializarTablaAuxliar($idOrigenDatos){
-        $this->origenDatosWrapped->inicializarTablaAuxliar($idOrigenDatos);
+    public function inicializarTablaAuxliar($idOrigenDatos, $idConexion ){
+        $this->origenDatosWrapped->inicializarTablaAuxliar($idOrigenDatos, $idConexion);
     }
 
     public function insertarEnAuxiliar($idOrigenDatos, $idConexion, $datos){
@@ -56,13 +56,13 @@ class AlmacenamientoProxy implements DashboardInterface, OrigenDatosInterface
     }
 
 
-    public function borrarTablaAuxiliar($tabla) {
-        $this->origenDatosWrapped->borrarTablaAuxiliar($tabla);
+    public function borrarTablaAuxiliar($idOrigenDatos, $idConexion ) {
+        $this->origenDatosWrapped->borrarTablaAuxiliar($idOrigenDatos, $idConexion);
     }
 
 
-    public function inicializarTabla($nombreTabla){
-        $this->origenDatosWrapped->inicializarTabla($nombreTabla);
+    public function inicializarTabla($idOrigenDatos, $idConexion){
+        $this->origenDatosWrapped->inicializarTabla($idOrigenDatos, $idConexion);
     }
 
 
@@ -93,12 +93,12 @@ class AlmacenamientoProxy implements DashboardInterface, OrigenDatosInterface
 
 
     public function getAnalisisDescriptivo($sql){
-        $this->dashboardWrapped->getAnalisisDescriptivo($sql);
+       return  $this->dashboardWrapped->getAnalisisDescriptivo($sql);
     }
 
 
     public function totalRegistrosIndicador(FichaTecnica $fichaTec){
-        $this->dashboardWrapped->totalRegistrosIndicador($fichaTec);
+        return $this->dashboardWrapped->totalRegistrosIndicador($fichaTec);
     }
 
     public function crearCamposIndicador (FichaTecnica $fichaTec){

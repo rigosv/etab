@@ -49,7 +49,7 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
         );
 
         //$this->container->get('old_sound_rabbit_mq.guardar_registro_producer')
-            //->publish(json_encode($msg_guardar));
+        //->publish(json_encode($msg_guardar));
         $this->bus->dispatch(new SmsGuardarOrigenDatos($msg_guardar));
     }
 
@@ -60,7 +60,7 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
             'numMsj' => $this->numMsj++
         );
         //$this->container->get('old_sound_rabbit_mq.guardar_registro_producer')
-            //->publish(json_encode($msg_init));
+        //->publish(json_encode($msg_init));
         $this->bus->dispatch(new SmsGuardarOrigenDatos($msg_init));
     }
 
@@ -104,6 +104,7 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
         $fecha = new \DateTime("now");
         $ahora = $fecha->format('Y-m-d H:i:s');
 
+        // Es lectura desde bases de datos
         if ($origenDato->getSentenciaSql() != '') {
             // Recuperar el nombre y significado de los campos del origen de datos
             $campos_sig = array();
@@ -145,134 +146,134 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
                 $orden = " ORDER BY $campoLecturaIncremental ";
             }
 
+            $origenDato->setErrorCarga(false);
+            $origenDato->setMensajeErrorCarga('');
+            $this->em->flush();
 
-
-        }
-
-        $origenDato->setErrorCarga(false);
-        $origenDato->setMensajeErrorCarga('');
-        $this->em->flush();
-
-        $tic = new \DateTime();
-        echo '
+            $tic = new \DateTime();
+            echo '
 ============================== INICIO CARGA de origen de datos: '. $origenDato .'
 Empezando en: '. $tic->format('H:i:s.v');
 
-        try {
-            //Leeré los datos en grupos de 10,000
-            $tamanio = 10000;
+            try {
+                //Leeré los datos en grupos de 10,000
+                $tamanio = 10;
 
 
-            $sql = $origenDato->getSentenciaSql();
+                $sql = $origenDato->getSentenciaSql();
 
-            foreach ($origenDato->getConexiones() as $cnx) {
-                $leidos = $tamanio + 1;
-                $i = 0;
+                foreach ($origenDato->getConexiones() as $cnx) {
+                    $leidos = $tamanio + 1;
+                    $i = 0;
 
-                echo '
+                    echo '
     
     ******************* Conexión :'.$cnx ;
 
-                $lect = 1;
-                $datos = true;
-                $this->enviarMsjInicio($idOrigenDatos);
+                    $lect = 1;
+                    $datos = true;
+                    $this->enviarMsjInicio($idOrigenDatos);
 
-                while ($leidos >= $tamanio and $datos != false) {
-                    $errorEnLectura = false;
-                    if ($cnx->getIdMotor()->getCodigo() == 'oci8') {
-                        $sql_aux = ($esLecturaIncremental) ?
-                            "SELECT * FROM ( $sql )  sqlOriginal 
+                    while ($leidos >= $tamanio and $datos != false) {
+                        $errorEnLectura = false;
+                        if ($cnx->getIdMotor()->getCodigo() == 'oci8') {
+                            $sql_aux = ($esLecturaIncremental) ?
+                                "SELECT * FROM ( $sql )  sqlOriginal 
                                     WHERE  1 = 1
                                         $condicion_carga_incremental
                                         AND ROWNUM >= " . $i * $tamanio . ' AND ROWNUM < ' . ($tamanio * ($i + 1)) .
-                            $orden :
-                            'SELECT * FROM (' . $sql . ')  sqlOriginal ' .
-                            'WHERE ROWNUM >= ' . $i * $tamanio . ' AND ROWNUM < ' . ($tamanio * ($i + 1));
-                    } elseif ($cnx->getIdMotor()->getCodigo() == 'pdo_dblib') {
-                        $sql_aux = ( $esLecturaIncremental) ?
-                            "SELECT * FROM ( $sql )  sqlOriginal 
+                                $orden :
+                                'SELECT * FROM (' . $sql . ')  sqlOriginal ' .
+                                'WHERE ROWNUM >= ' . $i * $tamanio . ' AND ROWNUM < ' . ($tamanio * ($i + 1));
+                        } elseif ($cnx->getIdMotor()->getCodigo() == 'pdo_dblib') {
+                            $sql_aux = ( $esLecturaIncremental) ?
+                                "SELECT * FROM ( $sql )  sqlOriginal 
                                     WHERE 1 = 1
                                     $condicion_carga_incremental
                                     $orden " : $sql;
-                    } else {
-                        $sql_aux = ($esLecturaIncremental) ?
-                            "SELECT * FROM ( $sql) sqlOriginal 
+                        } else {
+                            $sql_aux = ($esLecturaIncremental) ?
+                                "SELECT * FROM ( $sql) sqlOriginal 
                                         WHERE 1 = 1
                                         $condicion_carga_incremental
                                         $orden
                                         LIMIT " . $tamanio . ' OFFSET ' . $i * $tamanio :
-                            $sql . ' LIMIT ' . $tamanio . ' OFFSET ' . $i * $tamanio;
-                        ;
-                    }
+                                $sql . ' LIMIT ' . $tamanio . ' OFFSET ' . $i * $tamanio;
+                            ;
+                        }
 
-                    $ti = new \DateTime();
-                    echo '
+                        $ti = new \DateTime();
+                        echo '
         
         -------------------> Lectura de datos '. $lect . '
             ## INICIO: '. $ti->format('H:i:s.v');
 
-                    $datos = $this->em->getRepository(OrigenDatos::class)->getDatos($sql_aux, $cnx);
+                        $datos = $this->em->getRepository(OrigenDatos::class)->getDatos($sql_aux, $cnx);
 
-                    $tf = new \DateTime();
-                    $d = $tf->diff($ti) ;
-                    $dm = abs ( $tf->format('v') - $ti->format('v') );
+                        $tf = new \DateTime();
+                        $d = $tf->diff($ti) ;
+                        $dm = abs ( $tf->format('v') - $ti->format('v') );
 
-                    echo '  ## FIN: '. $tf->format('H:i:s.v') . '  ## DURACION: '. $d->i . ':' . $d->s. '.'. $dm;
+                        echo '  ## FIN: '. $tf->format('H:i:s.v') . '  ## DURACION: '. $d->i . ':' . $d->s. '.'. $dm;
 
-                    if ($datos === false){
-                        $leidos = 1;
-                        $errorEnLectura = true;
-                        echo '  ## SIN REGISTROS  ---> Origen: '.$idOrigenDatos.'
-                
-                ' ;
-                    } else {
-                        $this->enviarDatos($idOrigenDatos, $datos, $campos_sig, $ahora, $cnx->getId());
-                        if ($cnx->getIdMotor()->getCodigo() == 'pdo_dblib')
+                        if ($datos === false){
                             $leidos = 1;
-                        else
-                            $leidos = count($datos);
-                        $i++;
-                        echo ' ## Cantidad de registros :' . $leidos.'
+                            $errorEnLectura = true;
+                            echo '  ## SIN REGISTROS  ---> Origen: '.$idOrigenDatos.'
                 
                 ' ;
+                        } else {
+                            $this->enviarDatos($idOrigenDatos, $datos, $campos_sig, $ahora, $cnx->getId());
+                            if ($cnx->getIdMotor()->getCodigo() == 'pdo_dblib')
+                                $leidos = 1;
+                            else
+                                $leidos = count($datos);
+                            $i++;
+                            echo ' ## Cantidad de registros :' . $leidos.'
+                
+                ' ;
+                        }
+                        $lect++;
+
                     }
-                    $lect++;
 
+                    if ( $errorEnLectura ){
+                        $msg_ = array('id_origen_dato' => $idOrigenDatos,
+                            'method' => 'ERROR_LECTURA',
+                            'id_conexion' =>$cnx->getId(),
+                            'numMsj' => $this->numMsj++,
+                            'r' => microtime(true),
+                        );
+
+                        //$this->container->get('old_sound_rabbit_mq.guardar_registro_producer')
+                        //   ->publish(json_encode($msg_));
+                        $this->bus->dispatch(new SmsGuardarOrigenDatos($msg_));
+
+                        $origenDato->setErrorCarga(true);
+                        $origenDato->setMensajeErrorCarga(' Conexion: ' . $cnx->getId() . ' Error: ' . $datos);
+                        $this->em->flush();
+                    }
+                    else{
+                        $this->enviarMsjFinal($idOrigenDatos, $ahora, $cnx->getId());
+                    }
                 }
 
-                if ( $errorEnLectura ){
-                    $msg_ = array('id_origen_dato' => $idOrigenDatos,
-                        'method' => 'ERROR_LECTURA',
-                        'id_conexion' =>$cnx->getId(),
-                        'numMsj' => $this->numMsj++,
-                        'r' => microtime(true),
-                    );
-
-                    //$this->container->get('old_sound_rabbit_mq.guardar_registro_producer')
-                    //   ->publish(json_encode($msg_));
-                    $this->bus->dispatch(new SmsGuardarOrigenDatos($msg_));
-
-                    $origenDato->setErrorCarga(true);
-                    $origenDato->setMensajeErrorCarga(' Conexion: ' . $cnx->getId() . ' Error: ' . $datos);
-                    $this->em->flush();
-                }
-                else{
-                    $this->enviarMsjFinal($idOrigenDatos, $ahora, $cnx->getId());
-                }
-            }
-
-            $tfc = new \DateTime();
-            echo '
+                $tfc = new \DateTime();
+                echo '
 ============================= FIN DE CARGA de origen de datos: '. $origenDato . ' <BR> Finalizada en : '. $tfc->format('H:i:s.v');
 
-            $d = $tfc->diff($tic) ;
-            $dm = abs ( $tfc->format('v') - $tic->format('v') );
-            echo '<BR/>DURACION: '. $d->i . ':' . $d->s . '.' . $dm;
-            $origenDato->setUltimaActualizacion($fecha);
-            $this->em->flush();
-        } catch (\Exception $e) {
-            echo 'CODC 1' . $e->getMessage();
+                $d = $tfc->diff($tic) ;
+                $dm = abs ( $tfc->format('v') - $tic->format('v') );
+                echo '<BR/>DURACION: '. $d->i . ':' . $d->s . '.' . $dm;
+                $origenDato->setUltimaActualizacion($fecha);
+                $this->em->flush();
+            } catch (\Exception $e) {
+                echo 'CODC 1' . $e->getMessage();
+            }
+
         }
+
+
     }
 
 }

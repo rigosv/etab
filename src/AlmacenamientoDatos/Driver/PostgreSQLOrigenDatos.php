@@ -44,7 +44,7 @@ class PostgreSQLOrigenDatos implements OrigenDatosInterface
         return $datos_a_enviar;
     }
 
-    public function inicializarTablaAuxliar($idOrigenDatos) {
+    public function inicializarTablaAuxliar($idOrigenDatos, $idConexion) {
         $sql = ' CREATE TABLE IF NOT EXISTS  '. $this->tabla.$idOrigenDatos.'_tmp (
                     id_origen_dato integer,
                     datos jsonb,
@@ -59,12 +59,14 @@ class PostgreSQLOrigenDatos implements OrigenDatosInterface
         $this->pdo->pgsqlCopyFromArray($this->tabla.$idOrigenDatos.'_tmp', $datos);
     }
 
-    public function borrarTablaAuxiliar($idOrigenDatos) {
+    public function borrarTablaAuxiliar($idOrigenDatos, $idConexion) {
         $sql = ' DROP TABLE IF EXISTS '.$this->tabla.$idOrigenDatos.'_tmp ';
         $this->cnx->exec($sql);
     }
 
-    public function inicializarTabla($nombreTabla) {
+    public function inicializarTabla($idOrigenDatos, $idConexion) {
+
+        $nombreTabla = $this->tabla.$idOrigenDatos;
 
         try {
             $this->cnx->query("select * from $nombreTabla LIMIT 1");

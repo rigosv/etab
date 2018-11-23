@@ -2,7 +2,6 @@
 
 namespace App\AlmacenamientoDatos\Driver;
 
-use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 use App\Entity\OrigenDatos;
@@ -12,8 +11,8 @@ use App\Service\Util;
 class CouchbaseOrigenDatos implements OrigenDatosInterface
 {
     private $bucket;
-    private $doc = 'origenes.fila_origen_dato_';
-    private $bucketName = 'etab_datos';
+    private $doc = 'origen_';
+    private $bucketName = 'etab_origenes';
 
     public function __construct( ParameterBagInterface $params)
     {
@@ -50,47 +49,47 @@ class CouchbaseOrigenDatos implements OrigenDatosInterface
         return $datos_a_enviar;
     }
 
-    public function inicializarTablaAuxliar($idOrigenDatos) {
-
-        try {
-            $this->bucket->remove($this->doc . $idOrigenDatos . '_tmp');
-        } catch (\Exception $e){}
+    public function inicializarTablaAuxliar($idOrigenDatos, $idConexion) {
+        $this->borrarTablaAuxiliar($idOrigenDatos, $idConexion);
     }
 
     public function insertarEnAuxiliar($idOrigenDatos, $idConexion, $datos) {
-        $docName = $this->doc . $idOrigenDatos . '_tmp';
+        $docName = $this->doc . $idOrigenDatos .'_cnx_'.$idConexion. '_tmp';
 
-        try{
-            // Insertar, si ya existe el documento dará una excepción y se pasará a actualizar
-            $filas = ['id_origen_dato' => $idOrigenDatos, 'conexiones' => ['id_conexion' => $idConexion, 'datos' => $datos]];
+        if ( !$this->existeDocumento($docName) ) {
+            // Crear el documento
+            $filas = ['id_origen_datos'=>(integer)$idOrigenDatos, 'datos'  => $datos];
             $this->bucket->insert($docName, $filas);
-        } catch (\Exception $e){
+        } else {
             //ya existe, actualizarlo
             $datosJson = trim(trim(json_encode($datos),'[') ,']');
-            $stm = 'UPDATE `'.$this->bucketName.'` USE KEYS "'.$docName.'" SET conexiones.datos = ARRAY_PUT(IFNULL(conexiones.datos, []), '.$datosJson.')';
-            
+            $stm = 'UPDATE `'.$this->bucketName.'` USE KEYS "'.$docName.'" SET datos = ARRAY_PUT(IFNULL(datos, []), '.$datosJson.')' ;
+
             $query = \Couchbase\N1qlQuery::fromString($stm);
-            //$query->namedParams(['docName' , $docName, 'datos' => $datosJson]);
             $this->bucket->query($query);
         }
 
-
-
-
     }
 
-    public function borrarTablaAuxiliar($idOrigenDatos) {
-        $this->inicializarTablaAuxliar($idOrigenDatos);
+    public function borrarTablaAuxiliar($idOrigenDatos, $idConexion) {
+        $this->borrarDocumento($this->doc . $idOrigenDatos.'_cnx_'.$idConexion . '_tmp');
     }
 
-    public function inicializarTabla($nombreTabla) {
-
-
+    public function inicializarTabla($idOrigenDatos, $idConexion) {
+        //No es necesaria está función con couchbase
     }
+
 
     public function guardarDatos($idConexion, $idOrigenDatos) {
 
+        $docName = $this->doc . $idOrigenDatos . '_cnx_'.$idConexion;
+        $docAux = $docName. '_tmp';
 
+        $r = $this->bucket->get($docAux);
+        $this->bucket->upsert($docName, $r->value);
+
+        //Borrar la tabla temporal
+        $this->borrarDocumento($docAux);
     }
 
     public function guardarDatosIncremental($idConexion, $idOrigenDatos, $campoControlIncremento, $limiteInf, $limiteSup){
@@ -101,5 +100,21 @@ class CouchbaseOrigenDatos implements OrigenDatosInterface
     public function cargarCatalogo(OrigenDatos $origenDato)
     {
 
+    }
+
+    private function existeDocumento($docName){
+        $existe = true;
+        try {
+            $this->bucket->get( $docName );
+        } catch (\Exception $e){
+            $existe = false;
+        }
+        return $existe;
+    }
+
+    private function borrarDocumento($docName) {
+        try {
+            $this->bucket->remove($docName);
+        }catch (\Exception $e){}
     }
 }

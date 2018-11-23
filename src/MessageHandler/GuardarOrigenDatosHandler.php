@@ -44,14 +44,14 @@ class GuardarOrigenDatosHandler implements MessageHandlerInterface
 
             $tabla = 'origenes.fila_origen_dato_' . $this->msg['id_origen_dato'];
 
-            $this->idConexion = (array_key_exists('id_conexion', $this->msg)) ? $this->msg['id_conexion'] : 0;
+            $this->msg['id_conexion'] = (array_key_exists('id_conexion', $this->msg)) ? $this->msg['id_conexion'] : 0;
 
             if ($this->msg['method'] == 'BEGIN') {
                 $this->mensajeBegin();
             } elseif ($this->msg['method'] == 'PUT') {
                 $this->mensajePut();
             } elseif ($this->msg['method'] == 'ERROR_LECTURA') {
-                $this->almacenamiento->borrarTablaAuxiliar($this->msg['id_origen_dato']);
+                $this->almacenamiento->borrarTablaAuxiliar($this->msg['id_origen_dato'], $this->msg['id_conexion']);
             } elseif ($this->msg['method'] == 'DELETE') {
                 $this->mensajeDelete();
             }
@@ -94,7 +94,7 @@ class GuardarOrigenDatosHandler implements MessageHandlerInterface
                    ";
             $cnx->exec($sql);
         } else {
-            $this->almacenamiento->inicializarTablaAuxliar($this->msg['id_origen_dato']);
+            $this->almacenamiento->inicializarTablaAuxliar($this->msg['id_origen_dato'], $this->msg['id_conexion']);
         }
 
         $this->origenDato->setCargaFinalizada(false);
@@ -107,7 +107,7 @@ class GuardarOrigenDatosHandler implements MessageHandlerInterface
         $cnx = $this->em->getConnection();
 
         //verificar si la tabla existe
-        $this->almacenamiento->inicializarTabla('origenes.fila_origen_dato_' . $this->msg['id_origen_dato']);
+        $this->almacenamiento->inicializarTabla($this->msg['id_origen_dato'], $this->msg['id_conexion']);
 
         if ($areaCosteo['area_costeo'] == 'rrhh') {
             //Solo agregar los datos nuevos
@@ -133,10 +133,10 @@ class GuardarOrigenDatosHandler implements MessageHandlerInterface
         } else {
 
             if ( $this->origenDato->getCampoLecturaIncremental() != null ) {
-                $this->almacenamiento->guardarDatosIncremental($this->idConexion, $this->msg['id_origen_dato'], $this->msg['campo_lectura_incremental'], $this->msg['lim_inf'], $this->msg['lim_sup']);
+                $this->almacenamiento->guardarDatosIncremental($this->msg['id_conexion'], $this->msg['id_origen_dato'], $this->msg['campo_lectura_incremental'], $this->msg['lim_inf'], $this->msg['lim_sup']);
             } else {
                 //Pasar todos los datos de la tabla auxiliar a la tabla destino final
-                $this->almacenamiento->guardarDatos($this->idConexion, $this->msg['id_origen_dato']);
+                $this->almacenamiento->guardarDatos($this->msg['id_conexion'], $this->msg['id_origen_dato']);
 
             }
         }
