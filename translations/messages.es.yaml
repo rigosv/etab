@@ -445,3 +445,4 @@ _configuracion_: Configuración
 Id: Id
 _suba_archivo_tipo_hoja_calculo_csv_: Formato de archivo no válido, se aceptan hojas de cálculo y archivo csv
 _se_ha_iniciado_la_carga_del_origen_: Se ha iniciado la carga del origen de datos
+btn_create_and_configure: Guardar y configurar

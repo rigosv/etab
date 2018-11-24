@@ -164,7 +164,7 @@ class OrigenDatosAdmin extends Admin
     {
         if ($object->getEsFusionado() == false) {
 
-            if ($object->file != '' and $object->getSentenciaSql() != '') {
+            if ($object->getFile() != '' and $object->getSentenciaSql() != '') {
                 $errorElement->with('sentenciaSql')
                         ->addViolation(('validacion.sentencia_o_archivo_no_ambas'))
                         ->end();
@@ -218,7 +218,7 @@ class OrigenDatosAdmin extends Admin
 
     public function prePersist($origenDato)
     {
-        $this->saveFile($origenDato);
+        $this->saveFile($origenDato, 'create');
         $this->setNombreCatalogo($origenDato);
 
         $this->guardarDrescripcion($origenDato);
@@ -228,7 +228,7 @@ class OrigenDatosAdmin extends Admin
 
     public function preUpdate($origenDato)
     {
-        $this->saveFile($origenDato);
+        $this->saveFile($origenDato, 'update');
         $this->guardarDrescripcion($origenDato);
         $this->setNombreCatalogo($origenDato);
     }
@@ -259,47 +259,24 @@ class OrigenDatosAdmin extends Admin
         }
     }
 
-    public function saveFile($origenDato)
+    public function saveFile($origenDato, $accion)
     {
+        /*$archivo = $origenDato->getFile();
 
-        $archivo = $origenDato->getFile();
+        if ( $archivo != null ){
+            $tipoArchivo = $archivo->getMimeType();
+            $nombreArchivo = md5(uniqid()) . '.'.$archivo->guessExtension();
+            $dir = $this->getConfigurationPool()->getContainer()->getParameter('upload_directory');
+            $archivo->move(
+                $dir,
+                $nombreArchivo
+            );
 
-        if ($archivo != null ) {
-            $phpspreadsheet = $this->getConfigurationPool()->getContainer()->get('phpspreadsheet');
+            $origenDato->setFile($nombreArchivo);
+            $origenDato->setAbsolutePath($dir.$nombreArchivo);
+            $origenDato->setFileMimeType( $tipoArchivo );
 
-            $tipo = 'Xlsx';
-            if ($archivo->getMimeType() == 'application/vnd.ms-excel') {
-                $tipo = 'Xls';
-            } elseif ($archivo->getMimeType() == 'application/vnd.oasis.opendocument.spreadsheet') {
-                $tipo = 'Ods';
-            } elseif ($archivo->getMimeType() == 'application/xml') {
-                $tipo = 'Xml';
-            } elseif ($archivo->getMimeType() == 'text/csv') {
-                $tipo = 'Csv';
-            }
-
-
-            $reader = $phpspreadsheet->createReader($tipo);
-            $reader->setReadDataOnly(true);
-
-            $datos = $reader->load($archivo->getPathName())->getSheet(0)->toArray();
-
-            $nombre_campos = array_values(array_shift($datos));
-
-            $fix_datos = array();
-            foreach ($datos as $k => $fila) {
-                // determinar que datos tienen todos sus campos nulos
-                $todosNULL = true;
-                foreach ($fila as $indice => $campo) {
-                    $fix_datos[$k][$nombre_campos[$indice]] = trim($campo);
-                    if (!empty($fix_datos[$k][$nombre_campos[$indice]]))
-                        $todosNULL = false;
-                }
-                if ($todosNULL)
-                    unset($fix_datos[$k]);
-            }
-
-        }
+        }*/
     }
 
     protected function configureRoutes(RouteCollection $collection)

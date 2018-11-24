@@ -3,23 +3,26 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\OrigenDatos;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\DBAL as DBAL;
-use App\MINSAL\IndicadoresBundle\Excel\Excel as Excel;
+use Symfony\Component\Translation\TranslatorInterface;
+
+use App\Entity\OrigenDatos;
 use App\Entity\Campo;
-use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Conexion;
 use App\Entity\MotorBd;
 use App\Entity\TipoCampo;
 use App\Entity\Diccionario;
 use App\Service\Util;
-use Symfony\Component\Translation\TranslatorInterface;
 use App\Message\SmsCargarOrigenDatos;
 
-class OrigenDatoController extends AbstractController
+
+
+class OrigenDatoController extends Controller
 {
     private $driver;
 
@@ -186,17 +189,17 @@ class OrigenDatoController extends AbstractController
         $resultado['es_catalogo'] = ($origenDato->getEsCatalogo()) ? true : false;
 
         $sql = "SELECT tp
-                    FROM MINSALIndicadoresBundle:TipoCampo tp
+                    FROM App\Entity\TipoCampo tp
                     ORDER BY tp.descripcion";
         $resultado['tipos_datos'] = $em->createQuery($sql)->getArrayResult();
 
         $sql = "SELECT dic
-                    FROM MINSALIndicadoresBundle:Diccionario dic
+                    FROM App\Entity\Diccionario dic
                     ORDER BY dic.descripcion";
         $resultado['diccionarios'] = $em->createQuery($sql)->getArrayResult();
 
         $sql = "SELECT sv
-                    FROM MINSALIndicadoresBundle:SignificadoCampo sv
+                    FROM App\Entity\SignificadoCampo sv
                     WHERE sv.usoEnCatalogo = :uso_en_catalogo
                     ORDER BY sv.descripcion";
         $resultado['significados'] = $em->createQuery($sql)
@@ -232,11 +235,27 @@ class OrigenDatoController extends AbstractController
 
                 }
             } else {
+                $phpspreadsheet = $this->get('phpspreadsheet');
                 $resultado['tipo_origen'] = 'archivo';
-                $reader = new Excel();
+                $tipoArc = $origenDato->getFile()->getMimeType();
+                $tipo = 'Xlsx';
+                if ($tipoArc == 'application/vnd.ms-excel') {
+                    $tipo = 'Xls';
+                } elseif ($tipoArc == 'application/vnd.oasis.opendocument.spreadsheet') {
+                    $tipo = 'Ods';
+                } elseif ($tipoArc == 'application/xml') {
+                    $tipo = 'Xml';
+                } elseif ($tipoArc == 'text/csv' or $tipoArc == 'text/plain') {
+                    $tipo = 'Csv';
+                }
+
+                $reader = $phpspreadsheet->createReader($tipo);
+                $reader->setReadDataOnly(true);
+
                 try {
-                    $reader->loadFile($origenDato->getAbsolutePath());
-                    $datos = $reader->getSheet()->toArray($nullValue = null, $calculateFormulas = true, $formatData = false, $returnCellRef = false);
+                    $hoja = $reader->load( $origenDato->getFile()->getRealPath() )->getSheet(0);
+
+                    $datos = $hoja->toArray($nullValue = null, $calculateFormulas = true, $formatData = false, $returnCellRef = false);
                     $resultado['nombre_campos'] = array_values(array_shift($datos));
 
                     // Buscar por columnas que tengan null en el título
@@ -247,8 +266,9 @@ class OrigenDatoController extends AbstractController
                             $resultado['datos'][] = $fila;
                     else {
                         $resultado['nombre_campos'] = array_slice($resultado['nombre_campos'], 0, $primer_null, true);
-                        foreach ($datos as $fila)
+                        foreach ($datos as $fila) {
                             $resultado['datos'][] = array_slice($fila, 0, $primer_null, true);
+                        }
                     }
                     $resultado['estado'] = 'ok';
 

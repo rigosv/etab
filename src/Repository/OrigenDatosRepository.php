@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityRepository;
 
 use App\Entity\Conexion;
 use App\Entity\OrigenDatos;
+use Onurb\Bundle\ExcelBundle\Factory\ExcelFactory;
 
 
 class OrigenDatosRepository extends EntityRepository
@@ -77,7 +78,7 @@ class OrigenDatosRepository extends EntityRepository
             return 1;
     }
 
-    public function getDatos($sql, $conexion, $ruta_archivo = null)
+    public function getDatos($sql, $conexion, $ruta_archivo = null, $tipoArchivo = null, $phpspreadsheet)
     {
         $datos = array();        
         //$nombre_campos = array();
@@ -117,10 +118,21 @@ class OrigenDatosRepository extends EntityRepository
                 return false;
             }
         } else {
-            /*$reader = $phpspreadsheet->createReader('Xlsx');
+
+            $tipo = 'Xlsx';
+            if ($tipoArchivo == 'application/vnd.ms-excel') {
+                $tipo = 'Xls';
+            } elseif ($tipoArchivo == 'application/vnd.oasis.opendocument.spreadsheet') {
+                $tipo = 'Ods';
+            } elseif ($tipoArchivo == 'application/xml') {
+                $tipo = 'Xml';
+            } elseif ($tipoArchivo == 'text/csv' or $tipoArchivo == 'text/plain') {
+                $tipo = 'Csv';
+            }
+            $reader = $phpspreadsheet->createReader($tipo);
             try {
-                $reader->loadFile($ruta_archivo);
-                $datos_aux = $reader->getSheet()->toArray($nullValue = null, $calculateFormulas = true, $formatData = false, $returnCellRef = false);
+                $hoja = $reader->load( $ruta_archivo )->getSheet(0);
+                $datos_aux = $hoja->toArray($nullValue = null, $calculateFormulas = true, $formatData = false, $returnCellRef = false);
                 $nombre_campos = array_values(array_shift($datos_aux));
 
                 // Buscar por columnas que tengan null en el título
@@ -149,7 +161,7 @@ class OrigenDatosRepository extends EntityRepository
             } catch (\Exception $e) {
                 return false;
             }
-            $datos = $fix_datos;*/
+            $datos = $fix_datos;
         }
 
         return $datos;

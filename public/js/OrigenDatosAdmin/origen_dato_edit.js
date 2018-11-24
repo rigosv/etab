@@ -56,10 +56,6 @@ $(document).ready(function() {
     }
     //************************** CÓDIGO PARA MOSTRAR EL RESULTADO PARA CONFIGURACIÓN DE CAMPOS
 
-    //Quitar los otros botones, solo debe estar agregar y editar
-    $('input[name$="btn_create_and_create"]').remove();
-    $('input[name$="btn_create_and_list"]').remove();
-
     function cargarDatos(recargar_origen) {
         $('#datos').html('');
         $('#datos').addClass("table table-condensed table-hover");

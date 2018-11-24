@@ -14,19 +14,6 @@
         <parameter key="directorio">''</parameter>
         <parameter key="indicador_cache_consulta">600</parameter>
     </parameters>
-    <!--
-    <parameters>
-        <parameter key="indicadores.example.class">MINSAL\IndicadoresBundle\Example</parameter>
-    </parameters>
-
-    <services>
-        <service id="indicadores.example" class="%indicadores.example.class%">
-            <argument type="service" id="service_id" />
-            <argument>plain_value</argument>
-            <argument>%parameter_name%</argument>
-        </service>
-    </services>
-    -->
     <services>
 
         <service id="app.indicadores.menu_listener" class="App\EventListener\MenuBuilderListener">
@@ -38,7 +25,7 @@
             <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" />
             <argument type="service" id="service_container" />
         </service>
-        
+        <!--
         <service id="indicadores.cargar_origen_datos_servicio" class="App\Consumer\CargarOrigenDatoConsumer">
             <argument type="service" id="service_container" />            
         </service>
@@ -46,6 +33,7 @@
             <argument type="service" id="doctrine.orm.entity_manager" />
             <argument type="service" id="almacenamiento_datos" />
         </service>
+        -->
         <service id="almacenamiento_datos" class="App\AlmacenamientoDatos\AlmacenamientoProxy" public="true">
             <argument type="service" id="service_container" />
             <argument type="service" id="parameter_bag" />
@@ -78,6 +66,7 @@
             <tag name="doctrine.event_listener" event="loadClassMetadata" />
             <argument type="service" id="service_container" />
         </service>
+
         
     </services>
 </container>

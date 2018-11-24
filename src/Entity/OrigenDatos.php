@@ -4,13 +4,16 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+
 
 /**
  * App\Entity\OrigenDatos
  *
  * @ORM\Table(name="origen_datos")
  * @ORM\Entity(repositoryClass="App\Repository\OrigenDatosRepository")
+ * @Vich\Uploadable
  */
 class OrigenDatos
 {
@@ -58,19 +61,19 @@ class OrigenDatos
     /**
      * @var string $archivoNombre
      *
-     * @ORM\Column(name="archivo_nombre", type="string", length=100, nullable=true)
+     * @ORM\Column(name="archivo_nombre", type="string", length=255, nullable=true)
      */
     protected $archivoNombre;
 
 
     /**
-     * @Assert\File(*
-     *     mimeTypes = {"application/vnd.oasis.opendocument.spreadsheet", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-     *                      "application/vnd.ms-excel", "application/xml", "text/csv"},
-     *     mimeTypesMessage = "_suba_archivo_tipo_hoja_calculo_csv_"
-     * )
+     * NOTE: This is not a mapped field of entity metadata, just a simple property.
+     *
+     * @Vich\UploadableField(mapping="origene_datos_file", fileNameProperty="archivoNombre")
+     *
+     * @var File
      */
-    public $file;
+    private $file;
 
     /**
      * @var string $esFusionado
@@ -213,52 +216,6 @@ class OrigenDatos
         $this->esCatalogo = false;
         $this->ventanaLimiteInferior = 0;
         $this->ventanaLimiteSuperior = 0;
-    }
-
-    public function getAbsolutePath()
-    {
-        return null === $this->archivoNombre ? null : $this->getUploadRootDir() . '/' . $this->archivoNombre;
-    }
-
-    public function getWebPath()
-    {
-        return null === $this->archivoNombre ? null : $this->getUploadDir() . '/' . $this->archivoNombre;
-    }
-
-    protected function getUploadRootDir()
-    {
-        // the absolute directory path where uploaded documents should be saved
-        return __DIR__ . '/../../../public/' . $this->getUploadDir();
-        //return $basepath . $this->getUploadDir();
-    }
-
-    protected function getUploadDir()
-    {
-        // get rid of the __DIR__ so it doesn't screw when displaying uploaded doc/image in the view.
-        return 'uploads';
-    }
-
-    public function upload($basepath)
-    {
-        // the file property can be empty if the field is not required
-        if (null === $this->file) {
-            return;
-        }
-
-        if (null === $basepath) {
-            return;
-        }
-
-        // we use the original file name here but you should
-        // sanitize it at least to avoid any security issues
-        // move takes the target directory and then the target filename to move to
-        $this->file->move($this->getUploadRootDir($basepath), $this->file->getClientOriginalName());
-
-        // set the path property to the filename where you'ved saved the file
-        $this->setArchivoNombre($this->file->getClientOriginalName());
-
-        // clean up the file property as you won't need it anymore
-        $this->file = null;
     }
 
     /**
@@ -872,23 +829,30 @@ class OrigenDatos
         return $this->mensajeErrorCarga;
     }
 
-    /**
-     * Sets file.
-     *
-     * @param UploadedFile $file
-     */
-    public function setFile(UploadedFile $file = null)
-    {
-        $this->file = $file;
-    }
 
     /**
-     * Get file.
+     * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
+     * of 'UploadedFile' is injected into this setter to trigger the  update. If this
+     * bundle's configuration parameter 'inject_on_load' is set to 'true' this setter
+     * must be able to accept an instance of 'File' as the bundle will inject one here
+     * during Doctrine hydration.
      *
-     * @return UploadedFile
+     * @param File|UploadedFile $file
      */
-    public function getFile()
+    public function setFile(?File $file = null)
+    {
+        $this->file = $file;
+
+        if (null !== $file) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->ultimaActualizacion = new \DateTimeImmutable();
+        }
+    }
+
+    public function getFile(): ?File
     {
         return $this->file;
     }
+
 }

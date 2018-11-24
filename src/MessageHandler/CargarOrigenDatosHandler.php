@@ -11,6 +11,7 @@ use App\AlmacenamientoDatos\AlmacenamientoProxy;
 use App\Message\SmsCargarOrigenDatos;
 use App\Entity\OrigenDatos;
 use App\Message\SmsGuardarOrigenDatos;
+use Onurb\Bundle\ExcelBundle\Factory\ExcelFactory;
 
 class CargarOrigenDatosHandler implements MessageHandlerInterface
 {
@@ -104,14 +105,16 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
         $fecha = new \DateTime("now");
         $ahora = $fecha->format('Y-m-d H:i:s');
 
+        // Recuperar el nombre y significado de los campos del origen de datos
+        $campos_sig = array();
+        $campos = $origenDato->getCampos();
+        foreach ($campos as $campo) {
+            $campos_sig[$campo->getNombre()] = $campo->getSignificado()->getCodigo();
+        }
+
         // Es lectura desde bases de datos
         if ($origenDato->getSentenciaSql() != '') {
-            // Recuperar el nombre y significado de los campos del origen de datos
-            $campos_sig = array();
-            $campos = $origenDato->getCampos();
-            foreach ($campos as $campo) {
-                $campos_sig[$campo->getNombre()] = $campo->getSignificado()->getCodigo();
-            }
+
 
             //Verificar si el origen de datos tiene un campo para lectura incremental
             $campoLecturaIncremental = $origenDato->getCampoLecturaIncremental();
@@ -271,6 +274,14 @@ Empezando en: '. $tic->format('H:i:s.v');
                 echo 'CODC 1' . $e->getMessage();
             }
 
+        } else {
+
+            $datos = $this->em->getRepository(OrigenDatos::class)->getDatos(null, null, $origenDato->getFile()->getRealPath(), $origenDato->getFile()->getMimeType(), $this->phpspreadsheet);
+            $this->enviarMsjInicio($idOrigenDatos);
+
+            $this->enviarDatos($idOrigenDatos, $datos, $campos_sig, $ahora, 0);
+
+            $this->enviarMsjFinal($idOrigenDatos, $ahora, 0);
         }
 
 
