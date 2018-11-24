@@ -25,14 +25,16 @@ class OrigenDatosAdmin extends Admin
     {
         $esFusionado = $this->getSubject()->getEsFusionado();
         $origenActual = $this->getSubject();
+        $idOrigen = ( $origenActual->getId() == null) ? 0 : $origenActual->getId();
         $existeCostosBundle =  array_key_exists('CostosBundle', $this->getConfigurationPool()->getContainer()->getParameter('kernel.bundles') );
-
         $formMapper
                 ->tab(('datos_generales'))
                     ->with('', array('class' => 'col-md-12'))->end()
                 ->end()
-                ->tab(('_origen_datos_'))
-                    ->with(('origen_datos_sql'), array('class' => 'col-md-8'))->end()
+                ->tab(('_origen_datos_sql_'))
+                    ->with((''), array('class' => 'col-md-8'))->end()
+                ->end()
+                ->tab('_origen_datos_archivo_')
                     ->with(('origen_datos_archivo'), array('class' => 'col-md-4'))->end()
                 ->end()
         ;
@@ -40,7 +42,7 @@ class OrigenDatosAdmin extends Admin
         $formMapper            
                 ->tab(('datos_generales'), array('collapsed' => false))
                     ->with('', array('class' => 'col-md-12'))
-                        ->add('nombre', null, array('label' => ('nombre')))
+                        ->add('nombre', null, array('label' => ('nombre'), 'attr' => ['data-idorigen' => $idOrigen] ))
                         ->add('descripcion', null, array('label' => ('descripcion'), 'required' => false))                        
                     ->end()
                 ->end()
@@ -52,15 +54,17 @@ class OrigenDatosAdmin extends Admin
                             ->add('esCatalogo', null, array('label' => ('es_catalogo')))
                         ->end()
                     ->end()
-                    ->tab(('_origen_datos_'), array('collapsed' => true))
-                        ->with(('origen_datos_sql'))
+                    ->tab(('_origen_datos_sql_'), array('collapsed' => true))
+                        ->with((''), array('class' => 'col-md-12'))
                             ->add('conexiones', null, array('label' => ('nombre_conexion'), 'required' => false, 'expanded' => false))
                             ->add('sentenciaSql', null, array('label' => ('sentencia_sql'),
                                 'required' => false,
                                 'attr' => array('rows' => 7, 'cols' => 50)
                             ))
                         ->end()
-                        ->with(('origen_datos_archivo'))
+                    ->end()
+                    ->tab('_origen_datos_archivo_')
+                        ->with(('origen_datos_archivo'), array('class' => 'col-md-12'))
                             ->add('archivoNombre', null, array('label' => ('archivo_asociado'), 'required' => false,
                                     'attr' => ['readonly' => true]))
                             ->add('file', FileType::class, array('label' => ('subir_nuevo_archivo'), 'required' => false))
@@ -261,22 +265,7 @@ class OrigenDatosAdmin extends Admin
 
     public function saveFile($origenDato, $accion)
     {
-        /*$archivo = $origenDato->getFile();
 
-        if ( $archivo != null ){
-            $tipoArchivo = $archivo->getMimeType();
-            $nombreArchivo = md5(uniqid()) . '.'.$archivo->guessExtension();
-            $dir = $this->getConfigurationPool()->getContainer()->getParameter('upload_directory');
-            $archivo->move(
-                $dir,
-                $nombreArchivo
-            );
-
-            $origenDato->setFile($nombreArchivo);
-            $origenDato->setAbsolutePath($dir.$nombreArchivo);
-            $origenDato->setFileMimeType( $tipoArchivo );
-
-        }*/
     }
 
     protected function configureRoutes(RouteCollection $collection)

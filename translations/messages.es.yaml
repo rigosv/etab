@@ -164,7 +164,7 @@ btn_create_and_config_data_source: 'Crear y configurar origen de datos'
 action_merge: 'Fusionar'
 archivo_asociado: 'Archivo asociado'
 subir_nuevo_archivo: 'Subir nuevo archivo'
-origen_datos_archivo: 'Desde archivo: Hoja de cálculo o archivo de texto (CSV)'
+origen_datos_archivo: 'Hoja de cálculo o archivo de texto (CSV)'
 origen_datos_sql: 'Desde base de datos'
 tipo_campo_cambiado_a: 'Tipo de campo cambiado a'
 significado_campo_cambiado_a: 'Significado de campo cambiado a'
@@ -446,3 +446,8 @@ Id: Id
 _suba_archivo_tipo_hoja_calculo_csv_: Formato de archivo no válido, se aceptan hojas de cálculo y archivo csv
 _se_ha_iniciado_la_carga_del_origen_: Se ha iniciado la carga del origen de datos
 btn_create_and_configure: Guardar y configurar
+_solo_un_archivo_: Solo puedo subir un archivo
+_agregar_archivo_: Agregar archivo
+_origen_datos_archivo_: Desde archivo
+_origen_datos_sql_: Desde base de datos
+_tipo_archivo_invalido_: Tipo de archivo no válido

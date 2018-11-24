@@ -2,14 +2,16 @@
 
 {% block javascripts %}
     {{ parent() }}
-<script src="{{ asset('js/OrigenDatosAdmin/origen_dato_edit.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/OrigenDatosAdmin/origen_dato_edit.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/pekeUpload/pekeUpload.min.js') }}" type="text/javascript"></script>
+
 {% endblock %}
 
 {% block form %}
     {{ parent() }}
     {% if object.getEsFusionado() == false %}
-        <button type='button' name="btn_probar_sentencia" id='btn_probar_sentencia' class='btn'>
-            <i class='icon-ok-circle'></i>
+        <button type='button' name="btn_probar_sentencia" id='btn_probar_sentencia' class='btn btn-primary'>
+            <span class="glyphicon glyphicon-check" aria-hidden="true"></span>
             {{admin.trans('probar_sentencia')}}
         </button>
     {% endif %}

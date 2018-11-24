@@ -1,5 +1,23 @@
 $(document).ready(function() {
 
+    $("input[type=file]").pekeUpload({
+        btnText: trans.agregar_archivo,
+        bootstrap: true,
+        url: Routing.generate('guardar_archivo'),
+        showPercent: true,
+        limit: 1,
+        notAjax: false,
+        delfiletext: '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>',
+        limitError: trans.solo_un_archivo,
+        allowedExtensions: 'ods|xls|xlsx|csv',
+        invalidExtError: trans.tipo_archivo_invalido,
+        data: {'idOrigen': $('input[id$="_nombre"]').data('idorigen')},
+        onFileSuccess: (file, data) =>{
+            $('input[id$="_archivoNombre"]').val(file.name);
+        }
+    });
+
+
     //****************** PARTE PARA PROBAR LA SENTENCIA SQL
     // id que se está usando para los nombres de los formularios (es aleatorio)
     if ($('input[id$="_nombre"]').length) {
@@ -8,7 +26,8 @@ $(document).ready(function() {
         // La barra con los botones de acción
         // Agregaré el de probar sentencia     
         $('#sonata-ba-field-container-' + $id + '_sentenciaSql').append($('#btn_probar_sentencia'));
-        $('div .form-actions').after('<div ><table border=1 align=center id="datos" ></table></div>')
+        $('div .form-actions').after('<div ><table border=1 align=center id="datos" ></table></div>');
+
         $('#btn_probar_sentencia').after("<span id='resultado_probar_consulta'></span>");
 
         $('#btn_probar_sentencia').click(function() {

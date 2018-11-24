@@ -6,12 +6,13 @@ namespace App\MessageHandler;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 use App\AlmacenamientoDatos\AlmacenamientoProxy;
 use App\Message\SmsCargarOrigenDatos;
 use App\Entity\OrigenDatos;
 use App\Message\SmsGuardarOrigenDatos;
-use Onurb\Bundle\ExcelBundle\Factory\ExcelFactory;
+
 
 class CargarOrigenDatosHandler implements MessageHandlerInterface
 {
@@ -20,12 +21,14 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
     private $bus;
     private $numMsj = 0;
     private $almacenamiento;
+    private $params;
 
-    public function __construct(EntityManagerInterface $em, MessageBusInterface $bus, AlmacenamientoProxy $almacenamiento)
+    public function __construct(EntityManagerInterface $em, MessageBusInterface $bus, AlmacenamientoProxy $almacenamiento, ParameterBagInterface $params)
     {
         $this->em = $em;
         $this->bus = $bus;
         $this->almacenamiento = $almacenamiento;
+        $this->params = $params;
     }
 
     public function __invoke( SmsCargarOrigenDatos $message ) {
@@ -276,7 +279,8 @@ Empezando en: '. $tic->format('H:i:s.v');
 
         } else {
 
-            $datos = $this->em->getRepository(OrigenDatos::class)->getDatos(null, null, $origenDato->getFile()->getRealPath(), $origenDato->getFile()->getMimeType(), $this->phpspreadsheet);
+            $datos = $this->em->getRepository(OrigenDatos::class)
+                        ->getDatos(null, null, $this->params->get('app.upload_directory'), $origenDato->getArchivoNombre(), $this->phpspreadsheet);
             $this->enviarMsjInicio($idOrigenDatos);
 
             $this->enviarDatos($idOrigenDatos, $datos, $campos_sig, $ahora, 0);

@@ -4,6 +4,9 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -237,23 +240,17 @@ class OrigenDatoController extends Controller
             } else {
                 $phpspreadsheet = $this->get('phpspreadsheet');
                 $resultado['tipo_origen'] = 'archivo';
-                $tipoArc = $origenDato->getFile()->getMimeType();
-                $tipo = 'Xlsx';
-                if ($tipoArc == 'application/vnd.ms-excel') {
-                    $tipo = 'Xls';
-                } elseif ($tipoArc == 'application/vnd.oasis.opendocument.spreadsheet') {
-                    $tipo = 'Ods';
-                } elseif ($tipoArc == 'application/xml') {
-                    $tipo = 'Xml';
-                } elseif ($tipoArc == 'text/csv' or $tipoArc == 'text/plain') {
-                    $tipo = 'Csv';
-                }
+
+                $extension = explode( '.', $origenDato->getArchivoNombre());
+                $ext = array_pop($extension);
+
+                $tipo = ucwords($ext);
 
                 $reader = $phpspreadsheet->createReader($tipo);
                 $reader->setReadDataOnly(true);
 
                 try {
-                    $hoja = $reader->load( $origenDato->getFile()->getRealPath() )->getSheet(0);
+                    $hoja = $reader->load( $this->getParameter('app.upload_directory').'/'.$origenDato->getArchivoNombre() )->getSheet(0);
 
                     $datos = $hoja->toArray($nullValue = null, $calculateFormulas = true, $formatData = false, $returnCellRef = false);
                     $resultado['nombre_campos'] = array_values(array_shift($datos));
@@ -478,6 +475,47 @@ class OrigenDatoController extends Controller
 
         return new Response($mensaje);
 
+    }
+
+    /**
+     * @Route("/origen_datos/guardar/archivo", name="guardar_archivo", options={"expose"=true})
+     */
+    public function guardarArchivo(Request $request){
+
+        $em = $this->getDoctrine()->getManager();
+        $dir = $this->getParameter('app.upload_directory');
+
+        $files = $request->files->all();
+        $fileA = array_shift($files);
+        $file = array_shift($fileA);
+        $originalName = $file->getClientOriginalName();
+        $idOrigen = $request->get('idOrigen');
+
+        if ( $idOrigen != null ){
+            $origen = $em->find(OrigenDatos::class, $idOrigen);
+            $archivoAnt = $origen->getArchivoNombre();
+        }
+
+
+        try {
+            //Si existía un archivo para ese origen de datos borrarlo
+            if ( $archivoAnt != '' ) {
+                $fileAnt = new Filesystem();
+                $fileAnt->remove($dir.'/'.$archivoAnt);
+            }
+
+            $file->move(
+                $dir,
+                $originalName
+            );
+
+            $origen->setArchivoNombre($originalName);
+            $em->persist($origen);
+            $em->flush();
+        } catch (FileException $e) {
+            return new JsonResponse(['success'=>0, 'error' => $e->getMessage()]);
+        }
+        return new JsonResponse(['success'=>1]);
     }
 
 }

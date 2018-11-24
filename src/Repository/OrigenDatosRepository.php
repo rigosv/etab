@@ -78,7 +78,7 @@ class OrigenDatosRepository extends EntityRepository
             return 1;
     }
 
-    public function getDatos($sql, $conexion, $ruta_archivo = null, $tipoArchivo = null, $phpspreadsheet)
+    public function getDatos($sql, $conexion, $ruta_archivo = null, $nombreArchivo = null, $phpspreadsheet)
     {
         $datos = array();        
         //$nombre_campos = array();
@@ -119,19 +119,14 @@ class OrigenDatosRepository extends EntityRepository
             }
         } else {
 
-            $tipo = 'Xlsx';
-            if ($tipoArchivo == 'application/vnd.ms-excel') {
-                $tipo = 'Xls';
-            } elseif ($tipoArchivo == 'application/vnd.oasis.opendocument.spreadsheet') {
-                $tipo = 'Ods';
-            } elseif ($tipoArchivo == 'application/xml') {
-                $tipo = 'Xml';
-            } elseif ($tipoArchivo == 'text/csv' or $tipoArchivo == 'text/plain') {
-                $tipo = 'Csv';
-            }
+            $extension = explode( '.', $nombreArchivo);
+            $ext = array_pop($extension);
+
+            $tipo = ucwords($ext);
+
             $reader = $phpspreadsheet->createReader($tipo);
             try {
-                $hoja = $reader->load( $ruta_archivo )->getSheet(0);
+                $hoja = $reader->load( $ruta_archivo.'/'.$nombreArchivo )->getSheet(0);
                 $datos_aux = $hoja->toArray($nullValue = null, $calculateFormulas = true, $formatData = false, $returnCellRef = false);
                 $nombre_campos = array_values(array_shift($datos_aux));
 
