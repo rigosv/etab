@@ -92,7 +92,7 @@ class PostgreSQLOrigenDatos implements OrigenDatosInterface
             $this->pdo->pgsqlCopyFromArray($this->tabla.$idOrigenDatos, $nuevosDatos);
         }
 
-        $this->borrarTablaAuxiliar($idOrigenDatos);
+        $this->borrarTablaAuxiliar($idOrigenDatos, $idOrigenDatos);
     }
 
     public function guardarDatosIncremental($idConexion, $idOrigenDatos, $campoControlIncremento, $limiteInf, $limiteSup){

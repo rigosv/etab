@@ -137,7 +137,6 @@ class GuardarOrigenDatosHandler implements MessageHandlerInterface
             } else {
                 //Pasar todos los datos de la tabla auxiliar a la tabla destino final
                 $this->almacenamiento->guardarDatos($this->msg['id_conexion'], $this->msg['id_origen_dato']);
-
             }
         }
 

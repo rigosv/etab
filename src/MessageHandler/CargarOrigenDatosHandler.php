@@ -163,7 +163,7 @@ Empezando en: '. $tic->format('H:i:s.v');
 
             try {
                 //Leeré los datos en grupos de 10,000
-                $tamanio = 10;
+                $tamanio = 10000;
 
 
                 $sql = $origenDato->getSentenciaSql();

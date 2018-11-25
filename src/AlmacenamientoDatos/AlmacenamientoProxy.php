@@ -12,6 +12,7 @@ use App\AlmacenamientoDatos\DashboardInterface;
 use App\AlmacenamientoDatos\Driver\PostgreSQLDashboard;
 use App\AlmacenamientoDatos\Driver\PostgreSQLOrigenDatos;
 use App\AlmacenamientoDatos\Driver\CouchbaseOrigenDatos;
+use App\AlmacenamientoDatos\Driver\CouchbaseDashboard;
 
 
 
@@ -32,7 +33,7 @@ class AlmacenamientoProxy implements DashboardInterface, OrigenDatosInterface
 
         //Por defecto es PostgresSQL
         if ($this->params->get('app.datos.tipo_almacenamiento') == 'couchbase'){
-            //$this->dashboardWrapped = new CouchbaseDashboard($this->em);
+            $this->dashboardWrapped = new CouchbaseDashboard($this->em, $this->params);
             $this->origenDatosWrapped = new CouchbaseOrigenDatos($this->params);
         } else {
             $this->dashboardWrapped = new PostgreSQLDashboard($this->em, $this->emDatos);
