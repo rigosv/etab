@@ -78,7 +78,7 @@ class OrigenDatosRepository extends EntityRepository
             return 1;
     }
 
-    public function getDatos($sql, $conexion, $ruta_archivo = null, $nombreArchivo = null, $phpspreadsheet)
+    public function getDatos($sql, $conexion, $ruta_archivo = null, $nombreArchivo = null, $phpspreadsheet = null)
     {
         $datos = array();        
         //$nombre_campos = array();
