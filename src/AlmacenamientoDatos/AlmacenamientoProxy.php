@@ -102,7 +102,4 @@ class AlmacenamientoProxy implements DashboardInterface, OrigenDatosInterface
         return $this->dashboardWrapped->totalRegistrosIndicador($fichaTec);
     }
 
-    public function crearCamposIndicador (FichaTecnica $fichaTec){
-        $this->dashboardWrapped->crearCamposIndicador($fichaTec);
-    }
 }

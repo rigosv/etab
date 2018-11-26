@@ -27,12 +27,13 @@ class CargarIndicadorEnTableroHandler implements MessageHandlerInterface
     public function __invoke(SmsCargarIndicadorEnTablero $message )
     {
         $idIndicador = $message->getIdIndicador();
+        $repository = $this->em->getRepository(FichaTecnica::class);
 
         $fichaTec = $this->em->find(FichaTecnica::class, $idIndicador);
 
         if ($fichaTec != nul ) {
 
-            $this->almacenamiento->crearCamposIndicador($fichaTec);
+            $repository->crearCamposIndicador($fichaTec);
             if (!$fichaTec->getEsAcumulado()) {
                 $this->almacenamiento->crearIndicador($fichaTec);
             }

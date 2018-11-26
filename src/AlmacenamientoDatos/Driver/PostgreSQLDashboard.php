@@ -37,8 +37,4 @@ class PostgreSQLDashboard implements DashboardInterface
     public function totalRegistrosIndicador(FichaTecnica $fichaTec){
         return $this->fichaRepository->totalRegistrosIndicador($fichaTec);
     }
-
-    public function crearCamposIndicador (FichaTecnica $fichaTec) {
-        $this->fichaRepository->crearCamposIndicador($fichaTec);
-    }
 }
