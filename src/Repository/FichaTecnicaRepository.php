@@ -52,7 +52,7 @@ class FichaTecnicaRepository extends ServiceEntityRepository {
 
         if ($fichaTecnica->getUpdatedAt() != '' and $fichaTecnica->getUltimaLectura() != '' and $existe == true) {
             if ($fichaTecnica->getUltimaLectura() < $fichaTecnica->getUpdatedAt()){
-                //return true;
+                return true;
             }
         }
 
