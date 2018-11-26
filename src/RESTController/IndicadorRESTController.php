@@ -42,8 +42,8 @@ class IndicadorRESTController extends Controller {
             if ($respj != null){
                 $dat = json_decode($respj);
                 if ( count($dat->datos) > 0){
-                    //$response->setContent($respj);
-                    //return $response;
+                    $response->setContent($respj);
+                    return $response;
                 }
             }
         }
@@ -148,8 +148,8 @@ class IndicadorRESTController extends Controller {
             $respj = $redis->get('indicador_'.$fichaTec->getId().'_parte_'.$porcion);
             if ($respj != null){
                 $resp = '{"datos": '. $respj.', "total_partes": "'. $redis->get('indicador_'.$fichaTec->getId().'_tamanio_') . '"}';
-                //$response->setContent($resp);
-                //return $response;
+                $response->setContent($resp);
+                return $response;
             }
         } 
         
