@@ -145,46 +145,21 @@ class CouchbaseDashboard implements DashboardInterface
         $nombre_indicador = $fichaTecnica->getId();
         $doc_indicador = $this->docIndicador . $nombre_indicador;
 
-        //Verificar si es un catálogo
-        $rel_catalogo = '';
-        $otros_campos = '';
-        $grupo_extra = '';
-        $dimension_ = $dimension;
-        $significado = $this->em->getRepository(SignificadoCampo::class)
-            ->findOneBy(array('codigo' => $dimension));
-        $catalogo = $significado->getCatalogo();
-        if ($catalogo != '') {
-            $rel_catalogo = " JOIN  $catalogo  B ON (A.$dimension::text = B.id::text) ";
-            $dimension_ = 'A.'.$dimension.', B.descripcion';
-            $otros_campos = ' B.id AS id_category, ';
-            $grupo_extra = ', B.id ';
-        }
-
         $filtros = '';
         if ($filtros != null) {
             foreach ($filtros as $campo => $valor) {
-                //Si el filtro es un catálogo, buscar su id correspondiente
-                $significado = $this->em->getRepository(SignificadoCampo::class)
-                    ->findOneBy(array('codigo' => $campo));
-                $catalogo = $significado->getCatalogo();
-                $sql_ctl = '';
-                if ($catalogo != '') {
-                    $sql_ctl = "SELECT id FROM $catalogo WHERE descripcion ='$valor'";
-                    $reg = $this->cnxDatos->executeQuery($sql_ctl)->fetch();
-                    $valor = $reg['id'];
-                }
                 $filtros .= " AND v." . $campo . " = '$valor' ";
             }
         }
 
-        $sql = "SELECT v.$dimension_ AS category, $otros_campos $variables_query, ROUND(($formula),2) AS measure
-            FROM `".$this->bucketNameIndicador."` A USE KEYS '$doc_indicador' UNNEST A v" . $rel_catalogo;
+        $sql = "SELECT v.$dimension AS category,  $variables_query, ROUND(($formula),2) AS measure
+            FROM `".$this->bucketNameIndicador."` A USE KEYS '$doc_indicador' UNNEST A v";
         $sql .= ' WHERE 1=1 ' . $evitar_div_0 . ' ' . $filtros;
 
         $sql .= "
-            GROUP BY v.". $dimension_." $grupo_extra";
-        $sql .=  "HAVING (($formula)) > 0 ";
-        $sql .= "ORDER BY v.$dimension_";
+            GROUP BY v.". $dimension;
+        $sql .=  " HAVING (($formula)) > 0 ";
+        $sql .= " ORDER BY v.$dimension";
 
         try {
             if ($verSql == true)

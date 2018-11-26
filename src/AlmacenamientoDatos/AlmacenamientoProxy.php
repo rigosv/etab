@@ -13,6 +13,7 @@ use App\AlmacenamientoDatos\Driver\PostgreSQLDashboard;
 use App\AlmacenamientoDatos\Driver\PostgreSQLOrigenDatos;
 use App\AlmacenamientoDatos\Driver\CouchbaseOrigenDatos;
 use App\AlmacenamientoDatos\Driver\CouchbaseDashboard;
+use App\Entity\SignificadoCampo;
 
 
 
@@ -89,7 +90,57 @@ class AlmacenamientoProxy implements DashboardInterface, OrigenDatosInterface
 
 
     public function calcularIndicador($fichaTec, $dimension, $filtros, $verSql){
-        return $this->dashboardWrapped->calcularIndicador($fichaTec, $dimension, $filtros, $verSql);
+
+        //Verificar si en los filtros vienen datos que son catálogos
+        if ($filtros != null) {
+            $newFiltros = [];
+            foreach ($filtros as $campo => $valor) {
+                //Si el filtro es un catálogo, buscar su id correspondiente
+                $significado = $this->em->getRepository(SignificadoCampo::class)
+                    ->findOneBy(array('codigo' => $campo));
+                $catalogo = $significado->getCatalogo();
+
+                if ($catalogo != '') {
+                    $sql_ctl = "SELECT id FROM $catalogo WHERE descripcion ='$valor'";
+                    $reg = $this->em->getConnection()->executeQuery($sql_ctl)->fetch();
+                    $valor = $reg['id'];
+                }
+                $newFiltros[$campo] = $valor;
+            }
+            $filtros = $newFiltros;
+        }
+
+        $datos = $this->dashboardWrapped->calcularIndicador($fichaTec, $dimension, $filtros, $verSql);
+
+        //Verificar si la dimensión es un catálogo
+        $significado = $this->em->getRepository(SignificadoCampo::class)
+                                ->findOneBy(['codigo' => $dimension]);
+        $catalogo = $significado->getCatalogo();
+        if ($catalogo != '') {
+            //Las coincidencias a buscar
+            $buscar = [];
+            foreach ($datos as $d ){ $buscar[] = $d['category']; }
+            $sql_ctl = "SELECT id, descripcion FROM $catalogo WHERE id IN (".implode(',', $buscar).")";
+            try {
+                $datCatalogo = $this->em->getConnection()->executeQuery($sql_ctl)->fetchAll();
+                $datosSust = [];
+                foreach ($datCatalogo as $dc ){ $datosSust[$dc['id']] = $dc['descripcion'] ;}
+
+                //Hacer la sustitución, en lugar de mandar los ids de los catálogos, mandar la descripción
+                $newDatos = [];
+                foreach ($datos as $d ){
+                    if ( array_key_exists($d['category'], $datosSust) ) {
+                        $d['category'] = $datosSust[$d['category']];
+                    }
+                    $newDatos[] = $d;
+                }
+                $datos = $newDatos;
+            } catch ( \Exception $e ) {
+
+            }
+        }
+
+        return $datos;
     }
 
 

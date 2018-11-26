@@ -370,34 +370,12 @@ class FichaTecnicaRepository extends ServiceEntityRepository {
         $nombre_indicador = $fichaTecnica->getId();
         $tabla_indicador = 'temporales.tmp_ind_' . $nombre_indicador;
 
-        //Verificar si es un catálogo
-        $rel_catalogo = '';
-        $otros_campos = '';
-        $grupo_extra = '';
-        $dimension_ = $dimension;
         $significado = $this->getEntityManager()->getRepository(SignificadoCampo::class)
-                ->findOneBy(array('codigo' => $dimension));
-        $catalogo = $significado->getCatalogo();
-        if ($catalogo != '') {
-            $rel_catalogo = " INNER JOIN  $catalogo  B ON (A.$dimension::text = B.id::text) ";
-            $dimension_ = 'A.'.$dimension.', B.descripcion';
-            $otros_campos = ' B.id AS id_category, ';
-            $grupo_extra = ', B.id ';
-        }
-        
+                        ->findOneBy(array('codigo' => $dimension));
+
         $filtros = '';
         if ($filtro_registros != null) {
             foreach ($filtro_registros as $campo => $valor) {
-                //Si el filtro es un catálogo, buscar su id correspondiente
-                $significado = $this->getEntityManager()->getRepository(SignificadoCampo::class)
-                        ->findOneBy(array('codigo' => $campo));
-                $catalogo = $significado->getCatalogo();
-                $sql_ctl = '';
-                if ($catalogo != '') {
-                    $sql_ctl = "SELECT id FROM $catalogo WHERE descripcion ='$valor'";
-                    $reg = $this->cnxDatos->executeQuery($sql_ctl)->fetch();
-                    $valor = $reg['id'];
-                }
                 $filtros .= " AND A." . $campo . " = '$valor' ";
             }
         }
@@ -419,18 +397,17 @@ class FichaTecnicaRepository extends ServiceEntityRepository {
                             "(SELECT SUM(AA.$var_d) FROM $tabla_indicador AA WHERE AA.$dimension::numeric <= A.$dimension::numeric $filtros_)"), 
                     $variables_query
                     );
-            
-            $dimension_ = ($catalogo != '') ? $dimension_ = 'A.'.$dimension.'::numeric, B.descripcion' : $dimension.'::numeric';
+
         }
         
-        $sql = "SELECT $dimension_ AS category, $otros_campos $variables_query, round(($formula)::numeric,2) AS measure
-            FROM $tabla_indicador A" . $rel_catalogo;
+        $sql = "SELECT $dimension AS category, $variables_query, round(($formula)::numeric,2) AS measure
+            FROM $tabla_indicador A" ;
         $sql .= ' WHERE 1=1 ' . $evitar_div_0 . ' ' . $filtros;
         
         $sql .= "
-            GROUP BY ".str_replace('::numeric', '', $dimension_)." $grupo_extra";
-        $sql .=  "HAVING (($formula)::numeric) > 0 ";
-        $sql .= "ORDER BY $dimension_";
+            GROUP BY " . $dimension ;
+        $sql .=  " HAVING (($formula)::numeric) > 0 ";
+        $sql .= " ORDER BY $dimension";
 
         try {
             if ($ver_sql == true)
