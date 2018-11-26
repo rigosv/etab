@@ -2,14 +2,25 @@
 
 namespace App\Repository;
 
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Symfony\Bridge\Doctrine\RegistryInterface;
+
 use App\Entity\User;
-use Doctrine\ORM\EntityRepository;
 use App\Entity\FichaTecnica;
 use App\Entity\SignificadoCampo;
 use App\Entity\ClasificacionUso;
 use App\Entity\ClasificacionTecnica;
 
-class FichaTecnicaRepository extends EntityRepository {
+class FichaTecnicaRepository extends ServiceEntityRepository {
+
+    private $cnxDatos;
+
+    public function __construct(RegistryInterface $registry)
+    {
+        $this->cnxDatos = $registry->getManager('etab_datos')->getConnection();
+
+        parent::__construct($registry, FichaTecnica::class);
+    }
 
     private function existeTablaIndicador( FichaTecnica $fichaTecnica ){
         $em = $this->getEntityManager();
@@ -18,7 +29,7 @@ class FichaTecnicaRepository extends EntityRepository {
         $existe = true;
         $nombre_indicador = $fichaTecnica->getId();
         try {
-            $cons = $em->getConnection('etab-datos')->query("select * from temporales.tmp_ind_$nombre_indicador LIMIT 1");
+            $cons = $this->cnxDatos->query("select * from temporales.tmp_ind_$nombre_indicador LIMIT 1");
             //Si no tiene datos hacer que se reconstruya
             if ( count($cons->fetchAll()) == 0){
                 $existe = false;
@@ -41,7 +52,7 @@ class FichaTecnicaRepository extends EntityRepository {
 
         if ($fichaTecnica->getUpdatedAt() != '' and $fichaTecnica->getUltimaLectura() != '' and $existe == true) {
             if ($fichaTecnica->getUltimaLectura() < $fichaTecnica->getUpdatedAt()){
-                return true;
+                //return true;
             }
         }
 
@@ -63,7 +74,7 @@ class FichaTecnicaRepository extends EntityRepository {
                 $tablas_piv = array();
                 foreach ($origen->getFusiones() as $or) {
                     $or_id = $or->getId();
-                    $sql .= " CREATE TEMP TABLE IF NOT EXISTS od_$or_id ( ";
+                    $sql .= " CREATE TABLE IF NOT EXISTS od_$or_id ( ";
                     foreach ($or->getCampos() as $campo) {
                         $tipo = $campo->getTipoCampo()->getCodigo();
                         $sig = $campo->getSignificado()->getCodigo();
@@ -174,14 +185,14 @@ class FichaTecnicaRepository extends EntityRepository {
             
             if ($oper == 'SUM'){
                 $sql .= "SELECT  $campos, $oper(calculo::numeric) AS  $tabla $campos_calculados
-                            INTO  TEMP $tabla" . "_var
+                            INTO  $tabla" . "_var
                             FROM $tabla
                             WHERE  (calculo::numeric) > 0
                             GROUP BY $campos $campos_calculados_nombre                
                                 ;";
             } else {
                 $sql .= "SELECT  $campos, $oper(calculo::numeric) AS  $tabla $campos_calculados
-                INTO  TEMP $tabla" . "_var
+                INTO  $tabla" . "_var
                 FROM $tabla
                 GROUP BY $campos $campos_calculados_nombre
                     HAVING  $oper(calculo::numeric) > 0
@@ -203,7 +214,7 @@ class FichaTecnicaRepository extends EntityRepository {
 
         try {
             $sql .= $this->crearTablaIndicador($fichaTecnica, $tablas_variables);
-            $em->getConnection('etab-datos')->exec($sql);
+            $this->cnxDatos->exec($sql);
             $fichaTecnica->setUpdatedAt($ahora);
             $em->persist($fichaTecnica);
             $em->flush();
@@ -250,7 +261,7 @@ class FichaTecnicaRepository extends EntityRepository {
                 ";
 
         try {
-            $fila = $this->getEntityManager()->getConnection('etab-datos')->executeQuery($sql)->fetch();
+            $fila = $this->cnxDatos->executeQuery($sql)->fetch();
             return $fila['total'];
         } catch (\Exception $e) {
             return $e->getMessage();
@@ -313,7 +324,7 @@ class FichaTecnicaRepository extends EntityRepository {
                 ";
         
         try {
-            return $this->getEntityManager()->getConnection('etab-datos')->executeQuery($sql)->fetchAll();
+            return $this->cnxDatos->executeQuery($sql)->fetchAll();
         } catch (\PDOException $e) {
             return $e->getMessage();
         } catch (\Doctrine\DBAL\DBALException $e) {
@@ -384,7 +395,7 @@ class FichaTecnicaRepository extends EntityRepository {
                 $sql_ctl = '';
                 if ($catalogo != '') {
                     $sql_ctl = "SELECT id FROM $catalogo WHERE descripcion ='$valor'";
-                    $reg = $this->getEntityManager()->getConnection('etab-datos')->executeQuery($sql_ctl)->fetch();
+                    $reg = $this->cnxDatos->executeQuery($sql_ctl)->fetch();
                     $valor = $reg['id'];
                 }
                 $filtros .= " AND A." . $campo . " = '$valor' ";
@@ -425,11 +436,9 @@ class FichaTecnicaRepository extends EntityRepository {
             if ($ver_sql == true)
                 return $sql;
             else {
-                return $this->getEntityManager()->getConnection('etab-datos')->executeQuery($sql)->fetchAll();
+                return $this->cnxDatos->executeQuery($sql)->fetchAll();
             }
         } catch (\PDOException $e) {
-            return $e->getMessage();
-        } catch (\Doctrine\DBAL\DBALException $e) {
             return $e->getMessage();
         }
     }
@@ -573,7 +582,7 @@ class FichaTecnicaRepository extends EntityRepository {
                             WHERE measure is not null
                     ) AA ";
         
-        $resp = $em->getConnection('etab-datos')->executeQuery($sql)->fetchAll();
+        $resp = $this->cnxDatos->executeQuery($sql)->fetchAll();
         
         return $resp;
     }
