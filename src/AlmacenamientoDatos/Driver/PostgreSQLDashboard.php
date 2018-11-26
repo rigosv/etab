@@ -20,7 +20,7 @@ class PostgreSQLDashboard implements DashboardInterface
     }
 
 
-    public function crearIndicador(FichaTecnica $fichaTec, $dimension, $filtros) {
+    public function crearIndicador(FichaTecnica $fichaTec, $dimension=null, $filtros=null) {
 
         $this->fichaRepository->crearIndicador($fichaTec, $dimension, $filtros);
     }
@@ -36,5 +36,9 @@ class PostgreSQLDashboard implements DashboardInterface
 
     public function totalRegistrosIndicador(FichaTecnica $fichaTec){
         return $this->fichaRepository->totalRegistrosIndicador($fichaTec);
+    }
+
+    public function getDatosIndicador(FichaTecnica $fichaTecnica, $offset = 0 , $limit = 100000000) {
+        return $this->fichaRepository->getDatosIndicador($fichaTecnica, $offset, $limit);
     }
 }

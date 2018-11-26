@@ -280,21 +280,10 @@ class FichaTecnicaRepository extends ServiceEntityRepository {
         $campos = array();
         $campos_grp = array();
         $campos_indicador = explode(',', str_replace(' ', '', $fichaTecnica->getCamposIndicador()));
-        $rel_catalogos = '';
-        $catalogo_x = 66; //código ascci de B
+
         foreach ($campos_indicador as $c) {
-            $significado = $this->getEntityManager()->getRepository(SignificadoCampo::class)
-                    ->findOneBy(array('codigo' => $c));
-            $catalogo = $significado->getCatalogo();
-            if ($catalogo != '') {
-                $letra_catalogo = chr($catalogo_x++);
-                $rel_catalogos .= " INNER JOIN  $catalogo $letra_catalogo  ON (A.$c::text = $letra_catalogo.id::text) ";
-                $campos[] = $letra_catalogo . '.descripcion AS ' . str_replace('id_', '', $c);
-                $campos_grp[] = $letra_catalogo . '.descripcion';
-            } else {
-                $campos[] = 'A.'.$c;
-                $campos_grp[] = 'A.'.$c;
-            }
+            $campos[] = 'A.'.$c;
+            $campos_grp[] = 'A.'.$c;
         }
 
         //Recuperar las variables
@@ -317,8 +306,7 @@ class FichaTecnicaRepository extends ServiceEntityRepository {
         $variables = implode(', ', $variables);
         $campos_grp = implode(', ', $campos_grp);
         $sql = "SELECT $campos, $variables
-            FROM $tabla_indicador A 
-                $rel_catalogos
+            FROM $tabla_indicador A                 
             GROUP BY $campos_grp
             OFFSET $offset LIMIT $limit
                 ";

@@ -14,7 +14,7 @@ interface DashboardInterface
      * @param $dimension
      * @param $filtros
      */
-    public function crearIndicador(FichaTecnica $fichaTec, $dimension, $filtros);
+    public function crearIndicador(FichaTecnica $fichaTec, $dimension =null, $filtros=null);
 
 
     /**
@@ -45,6 +45,13 @@ interface DashboardInterface
      */
 
     public function totalRegistrosIndicador(FichaTecnica $fichaTec);
+
+
+    /**
+     * Devuelve los datos del indicador sin procesar la fórmula
+     * esto será utilizado en la tabla dinámica
+     */
+    public function getDatosIndicador(FichaTecnica $fichaTecnica, $offset = 0 , $limit = 100000000);
 
 
 }

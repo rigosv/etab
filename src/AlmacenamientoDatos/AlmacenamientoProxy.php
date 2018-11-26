@@ -84,7 +84,7 @@ class AlmacenamientoProxy implements DashboardInterface, OrigenDatosInterface
 
     // ********* MÉTODOS DEL TABLERO
 
-    public function crearIndicador(FichaTecnica $fichaTec, $dimension, $filtros) {
+    public function crearIndicador(FichaTecnica $fichaTec, $dimension = null, $filtros = null) {
         $this->dashboardWrapped->crearIndicador($fichaTec, $dimension, $filtros);
     }
 
@@ -151,6 +151,42 @@ class AlmacenamientoProxy implements DashboardInterface, OrigenDatosInterface
 
     public function totalRegistrosIndicador(FichaTecnica $fichaTec){
         return $this->dashboardWrapped->totalRegistrosIndicador($fichaTec);
+    }
+
+    public function getDatosIndicador(FichaTecnica $fichaTecnica, $offset = 0 , $limit = 100000000) {
+        $datos = $this->dashboardWrapped->getDatosIndicador($fichaTecnica, $offset, $limit);
+
+        $campos_indicador = explode(',', str_replace(' ', '', $fichaTecnica->getCamposIndicador()));
+        $datosSust = [];
+        foreach ($campos_indicador as $c) {
+            $significado = $this->em->getRepository(SignificadoCampo::class)
+                ->findOneBy(array('codigo' => $c));
+
+            $catalogo = $significado->getCatalogo();
+            if ($catalogo != '') {
+                $sql_ctl = "SELECT id, descripcion FROM $catalogo ";
+                try {
+                    $datCatalogo = $this->em->getConnection()->executeQuery($sql_ctl)->fetchAll();
+                    foreach ($datCatalogo as $dc) {
+                        $datosSust[$c][$dc['id']] = $dc['descripcion'];
+                    }
+                } catch (\Exception $e){}
+            }
+        }
+
+        //Sustituir los datos de los catálogos
+        if ( count( $datosSust ) > 0 ) {
+            $datosNew = [];
+            foreach ( $datos as $fila ) {
+                foreach( $datosSust as $campo => $valor ){
+                    $fila[ $campo ] = $datosSust[$campo][$fila[$campo]];
+                }
+                $datosNew[] = $fila;
+            }
+            $datos = $datosNew;
+        }
+
+        return $datos;
     }
 
 }
