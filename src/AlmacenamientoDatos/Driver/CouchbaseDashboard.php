@@ -179,15 +179,17 @@ class CouchbaseDashboard implements DashboardInterface
     }
 
     public function totalRegistrosIndicador(FichaTecnica $fichaTec){
-        //return $this->fichaRepository->totalRegistrosIndicador($fichaTec);
+        $datos = $this->getDatosIndicador($fichaTec);
+
+        return count($datos);
     }
 
-    public function getDatosIndicador(FichaTecnica $fichaTecnica, $offset = 0 , $limit = 100000000) {
+    public function getDatosIndicador(FichaTecnica $fichaTecnica, $offset = 0 , $limit = 100000000000000) {
         $stm = 'SELECT _v.* 
                     FROM `'. $this->bucketNameIndicador . '` A 
                         USE KEYS "'. $this->docIndicador.$fichaTecnica->getId() . '" UNNEST A _v
                         OFFSET ' .$offset
-                        . ' LIMIT ' . $limit;
+            . ' LIMIT ' . $limit;
         $query = \Couchbase\N1qlQuery::fromString($stm);
         $result = $this->bucket->query($query);
         return $result->rows;
