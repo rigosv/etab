@@ -34,8 +34,8 @@ class OrigenDatosRepository extends EntityRepository
                     elseif ($significado == 'descripcion')
                         $tiene_descripcion = true;
                 } else
-                if ($significado == 'calculo')
-                    $tiene_campo_calculo = true;
+                    if ($significado == 'calculo')
+                        $tiene_campo_calculo = true;
             } else
                 $tiene_null = true;
         }
@@ -64,8 +64,8 @@ class OrigenDatosRepository extends EntityRepository
             $conexion = $origenDato->getConexion();
 
             $conn = $this->getEntityManager()
-                    ->getRepository(Conexion::class)
-                    ->getConexionGenerica($conexion);
+                ->getRepository(Conexion::class)
+                ->getConexionGenerica($conexion);
             if ($conexion->getIdMotor()->getCodigo() == 'pdo_dblib') {
                 $query = mssql_query($origenDato->getSentenciaSql(), $conn);
                 $total = mssql_num_rows($query);
@@ -80,18 +80,18 @@ class OrigenDatosRepository extends EntityRepository
 
     public function getDatos($sql, $conexion, $ruta_archivo = null, $nombreArchivo = null, $phpspreadsheet = null)
     {
-        $datos = array();        
+        $datos = array();
         //$nombre_campos = array();
-        if ($ruta_archivo == null) {
+        if ($ruta_archivo == null or $nombreArchivo == null) {
             //$conexion = $origenDato->getConexion();
-            
+
             try {
                 $conn = $this->getEntityManager()
                     ->getRepository(Conexion::class)
                     ->getConexionGenerica($conexion);
 
                 if ($conn === false ) return false;
-                
+
                 if ($conexion->getIdMotor()->getCodigo() == 'pdo_dblib') {
                     $query = mssql_query($sql, $conn);
                     if (mssql_num_rows($query) > 0) {
@@ -103,7 +103,7 @@ class OrigenDatosRepository extends EntityRepository
                     $datos = $conn->executeQuery($sql)->fetchAll();
 
                 }
-                
+
                 //Cerrar la conexión
                 $conn = null;
 
@@ -160,6 +160,24 @@ class OrigenDatosRepository extends EntityRepository
         }
 
         return $datos;
+    }
+
+    public function cargarCatalogo(OrigenDatos $origenDato, $ruta = null, $nombre = null, $phpexcel = null)
+    {
+        $em = $this->getEntityManager();
+        $origenDatosRepository =  $em->getRepository(OrigenDatos::class);
+
+        $datos = array();
+        if (count($origenDato->getConexiones()) > 0) {
+            foreach ($origenDato->getConexiones() as $cnx) {
+                $datos_cnx = $origenDatosRepository->getDatos($origenDato->getSentenciaSql(), $cnx);
+                $datos = array_merge($datos, $datos_cnx);
+            }
+        } else {
+            $datos = $origenDatosRepository->getDatos(null, null, $ruta, $nombre, $phpexcel);
+        }
+
+        return $origenDatosRepository->crearTablaCatalogo($origenDato, $datos);
     }
 
     public function crearTablaCatalogo(OrigenDatos $origenDato, array $datos)
@@ -246,13 +264,13 @@ class OrigenDatosRepository extends EntityRepository
 
         return $result;
     }
-    
+
     public function getUltimaActualizacion(OrigenDatos $origenDato){
         $id = $origenDato->getId();
         if ($origenDato->getEsFusionado()){
             $sql = 'SELECT MAX(ultima_lectura) as ultima_lectura
                         FROM origenes.origen_dato_'.$id.
-                        ' WHERE id_origen_dato
+                ' WHERE id_origen_dato
                             IN
                             (SELECT id_origen_dato_fusionado FROM origen_datos_fusiones WHERE id_origen_dato = :id_origen_dato)';
         }

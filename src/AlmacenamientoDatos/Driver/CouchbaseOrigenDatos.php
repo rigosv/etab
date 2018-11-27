@@ -97,10 +97,6 @@ class CouchbaseOrigenDatos implements OrigenDatosInterface
 
     }
 
-    public function cargarCatalogo(OrigenDatos $origenDato)
-    {
-
-    }
 
     private function existeDocumento($docName){
         $existe = true;

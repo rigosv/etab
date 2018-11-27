@@ -77,10 +77,6 @@ class AlmacenamientoProxy implements DashboardInterface, OrigenDatosInterface
         $this->origenDatosWrapped->guardarDatosIncremental($idConexion, $idOrigenDatos, $campoControlIncremento, $limiteInf, $limiteSup);
     }
 
-    public function cargarCatalogo(OrigenDatos $origenDato){
-        $this->origenDatosWrapped->cargarCatalogo($origenDato);
-    }
-
 
     // ********* MÉTODOS DEL TABLERO
 
@@ -114,7 +110,7 @@ class AlmacenamientoProxy implements DashboardInterface, OrigenDatosInterface
 
         //Verificar si la dimensión es un catálogo
         $significado = $this->em->getRepository(SignificadoCampo::class)
-                                ->findOneBy(['codigo' => $dimension]);
+            ->findOneBy(['codigo' => $dimension]);
         $catalogo = $significado->getCatalogo();
         if ($catalogo != '') {
             //Las coincidencias a buscar
@@ -145,7 +141,7 @@ class AlmacenamientoProxy implements DashboardInterface, OrigenDatosInterface
 
 
     public function getAnalisisDescriptivo($sql){
-       return  $this->dashboardWrapped->getAnalisisDescriptivo($sql);
+        return  $this->dashboardWrapped->getAnalisisDescriptivo($sql);
     }
 
 

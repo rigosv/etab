@@ -74,12 +74,5 @@ interface OrigenDatosInterface
      */
     public function guardarDatosIncremental($idConexion, $idOrigenDatos, $campoControlIncremento, $limiteInf, $limiteSup);
 
-    /**
-     * Recupera los datos de un origen de datos y los guarda en una tabla catálogo
-     *
-     * @param OrigenDatos $origenDato
-     * @return mixed
-     */
-    public  function cargarCatalogo(OrigenDatos $origenDato);
 
 }

@@ -116,20 +116,4 @@ class PostgreSQLOrigenDatos implements OrigenDatosInterface
         $this->cnx->exec($sql);
     }
 
-    public function cargarCatalogo(OrigenDatos $origenDato)
-    {
-        $origenDatosRepository =  $this->em->getRepository(OrigenDatos::class);
-
-        $datos = array();
-        if (count($origenDato->getConexiones()) > 0) {
-            foreach ($origenDato->getConexiones() as $cnx) {
-                $datos_cnx = $origenDatosRepository->getDatos($origenDato->getSentenciaSql(), $cnx);
-                $datos = array_merge($datos, $datos_cnx);
-            }
-        } else {
-            $datos = $origenDatosRepository->getDatos(null, null, $origenDato->getAbsolutePath());
-        }
-
-        return $origenDatosRepository->crearTablaCatalogo($origenDato, $datos);
-    }
 }
