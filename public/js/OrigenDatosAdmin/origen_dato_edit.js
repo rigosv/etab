@@ -101,10 +101,10 @@ $(document).ready(function() {
                 });
 
                 // Construir las opciones de diccionarios
-                var diccionarios = '<OPTION value=-1>' + trans.elija_diccionario + '</OPTION>';
+                /*var diccionarios = '<OPTION value=-1>' + trans.elija_diccionario + '</OPTION>';
                 $.each(resp.diccionarios, function(indice, fila) {
                     diccionarios = diccionarios + "<OPTION data-diccionario_codigo='" + fila.codigo + "' VALUE='" + fila.id + "'>" + fila.descripcion + "</OPTION>";
-                });
+                });*/
 
                 // Los encabezados de la fila
                 $('#datos').append("<CAPTION>" + trans.configure_campos +
@@ -114,7 +114,7 @@ $(document).ready(function() {
                         "<TH>" + trans.nombre_campo + "</TH>" +
                         //"<TH>" + trans.tipo + "</TH>" +
                         "<TH>" + trans.significado + "</TH>" +
-                        "<TH>" + trans.diccionario_transformacion + "</TH>" +
+                        //"<TH>" + trans.diccionario_transformacion + "</TH>" +
                         "<TH>" + trans.datos_muestra + "</TH>" +
                         "</TR></THEAD>" +
                         "<TBODY id='datos_body'></TBODY>");
@@ -128,7 +128,7 @@ $(document).ready(function() {
                             "<SELECT class='significado' data-significado_codigo='" + resp.campos[valor]['significado_codigo'] + "' id='significado_variable__" + id + "' title='" + trans.elija_significado_dato + "' >" + significado_datos + "</SELECT>" +
                             "</TD>" +
                             "<TD>" +
-                            "<SELECT class='diccionario' id='diccionario__" + id + "' >" + diccionarios + "</SELECT>" +
+                            //"<SELECT class='diccionario' id='diccionario__" + id + "' >" + diccionarios + "</SELECT>" +
                             "</TD>" +
                             "<TD id='datos_ejemplo_campo__" + id + "'>" +
                             resp.datos[valor] +
@@ -188,9 +188,9 @@ $(document).ready(function() {
                     guardar_cambio($(this));
                 });
                 
-                $('SELECT.diccionario').change(function() {
+                $/*('SELECT.diccionario').change(function() {
                     guardar_cambio($(this));
-                });
+                });*/
 
                 $objs = $('SELECT.significado');
                 $objs[parseInt($objs.length / 2)].focus();
