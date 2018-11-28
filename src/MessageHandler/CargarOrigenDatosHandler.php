@@ -4,6 +4,7 @@ namespace App\MessageHandler;
 
 
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -22,13 +23,15 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
     private $numMsj = 0;
     private $almacenamiento;
     private $params;
+    private $logger;
 
-    public function __construct(EntityManagerInterface $em, MessageBusInterface $bus, AlmacenamientoProxy $almacenamiento, ParameterBagInterface $params)
+    public function __construct(EntityManagerInterface $em, MessageBusInterface $bus, AlmacenamientoProxy $almacenamiento, ParameterBagInterface $params, LoggerInterface $logger)
     {
         $this->em = $em;
         $this->bus = $bus;
         $this->almacenamiento = $almacenamiento;
         $this->params = $params;
+        $this->logger = $logger;
     }
 
     public function __invoke( SmsCargarOrigenDatos $message ) {
@@ -87,14 +90,6 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
             );
 
             $this->bus->dispatch(new SmsGuardarOrigenDatos($msg_guardar));
-            //$msg = json_encode($msg_guardar);
-
-            /*try {
-                $this->container->get('old_sound_rabbit_mq.guardar_registro_producer')
-                    ->publish($msg);
-            } catch (\Exception $e) {
-                echo $e->getMessage();
-            }*/
 
 
         }
@@ -157,9 +152,7 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
             $this->em->flush();
 
             $tic = new \DateTime();
-            echo '
-============================== INICIO CARGA de origen de datos: '. $origenDato .'
-Empezando en: '. $tic->format('H:i:s.v');
+            $this->logger->info('============================== INICIO CARGA de origen de datos: '. $origenDato );
 
             try {
                 //Leeré los datos en grupos de 10,000
@@ -172,9 +165,7 @@ Empezando en: '. $tic->format('H:i:s.v');
                     $leidos = $tamanio + 1;
                     $i = 0;
 
-                    echo '
-    
-    ******************* Conexión :'.$cnx ;
+                    $this->logger->info('******************* Conexión :'.$cnx );
 
                     $lect = 1;
                     $datos = true;
@@ -209,10 +200,7 @@ Empezando en: '. $tic->format('H:i:s.v');
                         }
 
                         $ti = new \DateTime();
-                        echo '
-        
-        -------------------> Lectura de datos '. $lect . '
-            ## INICIO: '. $ti->format('H:i:s.v');
+                        $this->logger->info('-------------------> Lectura de datos '. $lect . '## INICIO: '. $ti->format('H:i:s.v') );
 
                         $datos = $this->em->getRepository(OrigenDatos::class)->getDatos($sql_aux, $cnx);
 
@@ -220,14 +208,12 @@ Empezando en: '. $tic->format('H:i:s.v');
                         $d = $tf->diff($ti) ;
                         $dm = abs ( $tf->format('v') - $ti->format('v') );
 
-                        echo '  ## FIN: '. $tf->format('H:i:s.v') . '  ## DURACION: '. $d->i . ':' . $d->s. '.'. $dm;
+                        $this->logger->info(' ## FIN: '. $tf->format('H:i:s.v') . '  ## DURACION: '. $d->i . ':' . $d->s. '.'. $dm);
 
                         if ($datos === false){
                             $leidos = 1;
                             $errorEnLectura = true;
-                            echo '  ## SIN REGISTROS  ---> Origen: '.$idOrigenDatos.'
-                
-                ' ;
+                            $this->logger->warning('## SIN REGISTROS  ---> Origen: '.$idOrigenDatos);
                         } else {
                             $this->enviarDatos($idOrigenDatos, $datos, $campos_sig, $ahora, $cnx->getId());
                             if ($cnx->getIdMotor()->getCodigo() == 'pdo_dblib')
@@ -235,9 +221,7 @@ Empezando en: '. $tic->format('H:i:s.v');
                             else
                                 $leidos = count($datos);
                             $i++;
-                            echo ' ## Cantidad de registros :' . $leidos.'
-                
-                ' ;
+                            $this->logger->info(' ## Cantidad de registros :' . $leidos) ;
                         }
                         $lect++;
 
@@ -265,22 +249,22 @@ Empezando en: '. $tic->format('H:i:s.v');
                 }
 
                 $tfc = new \DateTime();
-                echo '
-============================= FIN DE CARGA de origen de datos: '. $origenDato . ' <BR> Finalizada en : '. $tfc->format('H:i:s.v');
+                $this->logger->info('============================= FIN DE CARGA de origen de datos: '. $origenDato . ' <BR> Finalizada en : '. $tfc->format('H:i:s.v'));
 
                 $d = $tfc->diff($tic) ;
                 $dm = abs ( $tfc->format('v') - $tic->format('v') );
-                echo '<BR/>DURACION: '. $d->i . ':' . $d->s . '.' . $dm;
+                $this->logger->info('DURACION: '. $d->i . ':' . $d->s . '.' . $dm );
                 $origenDato->setUltimaActualizacion($fecha);
                 $this->em->flush();
             } catch (\Exception $e) {
                 echo 'CODC 1' . $e->getMessage();
+                $this->logger->error($e->getFile() . '( '.$e->getLine().') '.$e->getMessage());
             }
 
         } else {
 
             $datos = $this->em->getRepository(OrigenDatos::class)
-                        ->getDatos(null, null, $this->params->get('app.upload_directory'), $origenDato->getArchivoNombre(), $this->phpspreadsheet);
+                ->getDatos(null, null, $this->params->get('app.upload_directory'), $origenDato->getArchivoNombre(), $this->phpspreadsheet);
             $this->enviarMsjInicio($idOrigenDatos);
 
             $this->enviarDatos($idOrigenDatos, $datos, $campos_sig, $ahora, 0);

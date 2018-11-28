@@ -3,6 +3,7 @@
 namespace App\MessageHandler;
 
 
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -20,13 +21,14 @@ class GuardarOrigenDatosHandler implements MessageHandlerInterface
     private $origenDato;
     private $msg;
     private $idConexion;
+    private $logger;
 
-    public function __construct(EntityManagerInterface $em, MessageBusInterface $bus, AlmacenamientoProxy $almacenamiento)
+    public function __construct(EntityManagerInterface $em, MessageBusInterface $bus, AlmacenamientoProxy $almacenamiento, LoggerInterface $logger)
     {
         $this->em = $em;
         $this->bus = $bus;
         $this->almacenamiento =  $almacenamiento;
-
+        $this->logger = $logger;
     }
 
     public function __invoke(SmsGuardarOrigenDatos $message)
@@ -34,7 +36,7 @@ class GuardarOrigenDatosHandler implements MessageHandlerInterface
         //dump($message);
 
         $this->msg = $message->getDatos();
-        echo ' GUARDANDO DATOS <br/> Msj: ' . $this->msg['id_origen_dato'] . '/' . (array_key_exists('numMsj', $this->msg) ? $this->msg['numMsj'] : '--') . '  ';
+        $this->logger->info(' GUARDANDO DATOS <br/> Msj: ' . $this->msg['id_origen_dato'] . '/' . (array_key_exists('numMsj', $this->msg) ? $this->msg['numMsj'] : '--') );
 
         $this->origenDato = $this->em->find(OrigenDatos::class, $this->msg['id_origen_dato']);
 
@@ -57,7 +59,7 @@ class GuardarOrigenDatosHandler implements MessageHandlerInterface
             }
         }
 
-        echo '<br/>FIN GUARDAR<br/>';
+        $this->logger->info('FIN GUARDAR');
     }
 
     private function mensajePut(){
@@ -69,7 +71,7 @@ class GuardarOrigenDatosHandler implements MessageHandlerInterface
 
         } catch (\Exception $e) {
             $error = ' Conexion : ' . $this->idConexion . ' Error: ' . $e->getMessage();
-            echo $error;
+            $this->logger->error($e->getFile(). '('.$e->getLine().') ' .$error);
             $this->origenDato->setErrorCarga(true);
             $this->origenDato->setMensajeErrorCarga($error);
             $this->em->flush();
@@ -78,7 +80,7 @@ class GuardarOrigenDatosHandler implements MessageHandlerInterface
 
         $tf = microtime(true);
         $d = $tf - $ti;
-        echo '--> DURACIÓN(s): ' . number_format($d/1000000, 10) ;
+        $this->logger->info('--> DURACIÓN(s): ' . number_format($d/1000000, 10)) ;
 
     }
 
@@ -162,17 +164,14 @@ class GuardarOrigenDatosHandler implements MessageHandlerInterface
 
         $this->em->flush();
 
-        echo '
-                Carga finalizada de origen ' . $this->msg['id_origen_dato'] . ' Para la conexión ' . $this->idConexion . '  
-    
-                ';
+        $this->logger->info('Carga finalizada de origen ' . $this->msg['id_origen_dato'] . ' Para la conexión ' . $this->idConexion );
 
         //Recalcular la tabla del indicador
         //Recuperar las variables en las que está presente el origen de datos
         $origenDatos = $this->em->find(OrigenDatos::class, $this->msg['id_origen_dato']);
         foreach ($origenDatos->getVariables() as $var) {
             foreach ($var->getIndicadores() as $ind) {
-                //$this->bus->dispatch(new SmsCargarIndicadorEnTablero($ind->getId()));
+                //$this->bus->dispatch( new SmsCargarIndicadorEnTablero( $ind->getId() ) );
             }
         }
     }
