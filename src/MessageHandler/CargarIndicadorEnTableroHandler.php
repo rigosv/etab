@@ -31,7 +31,7 @@ class CargarIndicadorEnTableroHandler implements MessageHandlerInterface
 
         $fichaTec = $this->em->find(FichaTecnica::class, $idIndicador);
 
-        if ($fichaTec != nul ) {
+        if ($fichaTec != null ) {
 
             $repository->crearCamposIndicador($fichaTec);
             if (!$fichaTec->getEsAcumulado()) {
