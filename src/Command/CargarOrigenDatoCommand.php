@@ -22,9 +22,10 @@ class CargarOrigenDatoCommand extends ContainerAwareCommand
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output, MessageBusInterface $bus)
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         $em = $this->getContainer()->get('doctrine')->getManager();
+        $bus = $this->getContainer()->get('message_bus');
 
         //Recuperar todos las fichas técnicas de indicadores
         $indicadores = $em->getRepository(FichaTecnica::class)->findAll();
@@ -68,59 +69,7 @@ class CargarOrigenDatoCommand extends ContainerAwareCommand
                     // Solo los orígenes desde base de datos se cargarán periodicamente
                     // los que sean de archivos solo a demanda
                     if ($origenDato->getSentenciaSql() != '') {
-                        // Recuperar el nombre y significado de los campos del origen de datos
-                        $campos_sig = array();
-                        $campos = $origenDato->getCampos();
-                        foreach ($campos as $campo) {
-                            $campos_sig[$campo->getNombre()] = $campo->getSignificado()->getCodigo();
-                        }
 
-                        //Verificar si el origen de datos tiene un campo para lectura incremental
-                        $campoLecturaIncremental = $origenDato->getCampoLecturaIncremental();
-                        $condicion_carga_incremental = "";
-                        $ultimaLecturaIncremental = null;
-                        $esLecturaIncremental = ($campoLecturaIncremental == null) ? false: true;
-                        $orden = " ";
-                        $lim_inf= '';
-                        $lim_sup =  '';
-                        if ($esLecturaIncremental){
-                            //tomar la fecha de la última actualización del origen
-                            $campoLecturaIncremental = $campoLecturaIncremental->getSignificado()->getCodigo();
-
-                            //Calcular los límites
-                            $ventana_inf = ($origenDato->getVentanaLimiteInferior() == null) ? 0 : $origenDato->getVentanaLimiteInferior();
-                            $ventana_sup = ($origenDato->getVentanaLimiteSuperior() == null) ? 0 : $origenDato->getVentanaLimiteSuperior();
-
-                            if ($campoLecturaIncremental == 'fecha'){
-                                $fechaIni = $fecha;
-                                $fechaFin = $fecha;
-
-                                $lim_inf = $fechaIni->sub(new \DateInterval('P'.$ventana_inf.'D'))->format('Y-m-d H:i:s');
-                                $lim_sup = $fechaFin->sub(new \DateInterval('P'.$ventana_sup.'D'))->format('Y-m-d H:i:s');
-                            } else {
-                                // Se está utilizando el campo año para la carga incremental
-                                $lim_inf = $fecha->format('Y') - $ventana_inf ;
-                                $lim_sup = $fecha->format('Y') - $ventana_sup;
-                            }
-                            $condicion_carga_incremental = " AND $campoLecturaIncremental >= '$lim_inf'
-                                                                 AND $campoLecturaIncremental <= '$lim_sup' ";
-
-                            $orden = " ORDER BY $campoLecturaIncremental ";
-                        }
-                        $msg = array('id_origen_dato' => $origenDato->getId(),
-                            'sql' => $origenDato->getSentenciaSql(),
-                            'campos_significados' => $campos_sig,
-                            'lim_inf' => $lim_inf,
-                            'lim_sup' => $lim_sup,
-                            'condicion_carga_incremental' => $condicion_carga_incremental,
-                            'orden' => $orden,
-                            'esLecturaIncremental' => $esLecturaIncremental,
-                            'campoLecturaIncremental' => $campoLecturaIncremental,
-                            'r' => microtime(true)
-
-                        );
-
-                        $em->flush();
                         $carga_directa = $origenDato->getEsCatalogo();
                         // No mandar a la cola de carga los que son catálogos, Se cargarán directamente
                         if ($carga_directa){
