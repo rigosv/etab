@@ -3,13 +3,13 @@ $(document).ready(function(){
 
         $.get($(this).data('url'), function (resp) {
             $.notify({
-                message: resp
+                message: resp.mensaje
             }, {
                 animate:{
                     enter: "animated fadeInUp",
                     exit: "animated fadeOutDown"
                 },
-                type: 'success'
+                type: resp.estado
             });
         })
     })

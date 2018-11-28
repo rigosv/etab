@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -44,7 +43,7 @@ class OrigenDatoController extends Controller
             $mensaje = '<span style="color: red">' . $translator->trans('conexion_error') . ': ' . $e->getMessage() . '</span>';
         } catch (DBAL\Exception\ConnectionException  $e) {
             $mensaje = '<span style="color: red">' . $translator->trans('conexion_error') . ': ' . $e->getMessage() . '</span>';
-        } 
+        }
 
         return new Response($mensaje);
     }
@@ -82,7 +81,7 @@ class OrigenDatoController extends Controller
                         while ($row = $query->fetch() and $i++ < 20) {
                             $datos[] = $row;
                         }
-                        
+
                     }
                     $resultado['estado'] = 'ok';
                     $resultado['mensaje'] = '<span style="color: green">' . $translator->trans('sentencia_success') . '</span>';
@@ -206,8 +205,8 @@ class OrigenDatoController extends Controller
                     WHERE sv.usoEnCatalogo = :uso_en_catalogo
                     ORDER BY sv.descripcion";
         $resultado['significados'] = $em->createQuery($sql)
-                ->setParameter('uso_en_catalogo', $resultado['es_catalogo'] ? 'true' : 'false')
-                ->getArrayResult();
+            ->setParameter('uso_en_catalogo', $resultado['es_catalogo'] ? 'true' : 'false')
+            ->getArrayResult();
 
         //recuperar los campos ya existentes en el origen de datos
         $campos_existentes = $em->getRepository(Campo::class)->findBy(array('origenDato' => $origenDato));
@@ -224,7 +223,7 @@ class OrigenDatoController extends Controller
                 $resultado['tipo_origen'] = 'sql';
                 $sentenciaSQL = $origenDato->getSentenciaSql();
                 $conexiones = $origenDato->getConexiones();
-                
+
                 if (count($conexiones) == 0) {
                     $resultado['mensaje'] = $this->get('translator')->trans('sentencia_error') . ': ' . $this->get('translator')->trans('_no_conexion_configurada_');
                     $resultado['estado'] = 'error';
@@ -282,8 +281,8 @@ class OrigenDatoController extends Controller
             // Guardar los campos
             if ($resultado['estado'] == 'ok') {
                 $nombres_id = array();
-                $campo = array();                
-                
+                $campo = array();
+
                 foreach ($resultado['nombre_campos'] as $k => $nombre) {
                     // si existe no guardarlo
                     $nombre_campo = $util->slug($nombre);
@@ -357,7 +356,7 @@ class OrigenDatoController extends Controller
             if (strlen($req->get('datos_prueba'))) {
                 $datos_prueba = explode(', ', $req->get('datos_prueba'));
 
-                
+
                 foreach ($datos_prueba as $dato) {
                     $valido = $util->validar($dato, $tipo_campo->getCodigo());
                     if (!$valido)
@@ -411,7 +410,7 @@ class OrigenDatoController extends Controller
 
         return new Response($resp . '</UL>');
     }
-    
+
     public function getDatosMuestra($conexion, $sentenciaSQL, $request) {
         $conn = $this->getConexionGenerica('consulta_sql', $conexion, $request);
         $resultado = array();
@@ -454,7 +453,7 @@ class OrigenDatoController extends Controller
                 $resultado['mensaje'] = $this->get('translator')->trans('sentencia_error') . ' 3: ' . $e->getMessage();
             }
         }
-        
+
         return $resultado;
     }
 
@@ -466,14 +465,14 @@ class OrigenDatoController extends Controller
 
         $configurado = $em->getRepository(OrigenDatos::class)->estaConfigurado($origen);
 
-        $mensaje = $translator->trans('_se_ha_iniciado_la_carga_del_origen_') . '<B> ' . $origen->getNombre() . '</B>';
-        if  ($configurado) {
+        $resp = ['estado' => 'success', 'mensaje' => $translator->trans('_se_ha_iniciado_la_carga_del_origen_') . '<B> ' . $origen->getNombre() . '</B>' ];
+        if  ( $configurado ) {
             $bus->dispatch(new SmsCargarOrigenDatos($origen->getId()));
         } else {
-            $mensaje = $origen->getNombre() . ': ' . $translator->trans('origen_no_configurado');
+            $resp = ['estado' => 'danger', 'mensaje' => $origen->getNombre() . ': ' . $translator->trans('origen_no_configurado') ];
         }
 
-        return new Response($mensaje);
+        return new JsonResponse( $resp );
 
     }
 
