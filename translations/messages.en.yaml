@@ -429,3 +429,60 @@ Campo List: 'Field List'
 Campo Create: 'Field Create'
 _configuracion_: Setup
 Id: Id
+
+_suba_archivo_tipo_hoja_calculo_csv_: Formato de archivo no válido, se aceptan hojas de cálculo y archivo csv
+_se_ha_iniciado_la_carga_del_origen_: Se ha iniciado la carga del origen de datos
+
+Boletin: Boletin
+'Boletin List': 'Lista de Boletines'
+sala: 'Sala'
+grupo: 'Grupo'
+enviar: 'Enviar'
+creado: 'Creado'
+actualizado: 'Actualizado'
+marque_enviar: "Marque enviar para que el boletin se envie al correo de los usuarios que pertenezcan al grupo"
+
+_config_indicador_desempeno_: 'Set performance indicator'
+_indicador_desempeno_: 'performance indicator'
+_capturar_matriz_: 'Data capture'
+_config_matriz_anio_: 'Set year planning'
+_indicador_etab_: 'Indicators available in Etab'
+_indicador_rel_: 'Indicators not available in Etab'
+_anio_select_: 'Select a year'
+_consultar_: 'Check'
+_planeado_: 'Planned'
+_real_: 'Real'
+_no_existe_planeacion_: 'There is no planning in this year for this matriz'
+_crear_planeacion_: 'Create planning'
+_meta_anual_: 'Meta'
+_inidcador_: 'Indicator'
+
+_enero_: 'January'
+_febrero_: 'February'
+_marzo_: 'March'
+_abril_: 'Abril'
+_mayo_: 'May'
+_junio_: 'May'
+_julio_: 'Julio'
+_agosto_: 'August'
+_septiembre_: 'September'
+_octubre_: 'October'
+_noviembre_: 'Noviembre'
+_diciembre_: 'December'
+
+_imprimir_: 'Print'
+
+_cargado_correctamente: 'loaded correctly'
+_ningun_dato_: 'no data is Not found'
+
+_guardar_ok_: 'I was saved successfully'
+_guardar_no_ok_: 'An error occurred and could not be saved :('
+
+_matriz_verP_: Show / Hide Planning '
+_matriz_verR_: Show / Hide Real '
+_matriz_verV_: Show / Hide Percent '
+_fuente_: 'Source'
+_acumular_: 'Acumular'
+_config_matriz_: 'Set matriz'
+_matriz_: 'Matriz'
+_matriz_select_: 'Select matriz'

@@ -6,12 +6,9 @@
     width: 50px;
 }
 DIV.field-container table.table-bordered{
-    width: 60%
+    width: 100%
 }
 
 TD[class$="alertas-color"] {
     width: 200px;
-}
-.clasificaciones-tecnicas{
-    
 }

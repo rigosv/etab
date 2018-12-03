@@ -90,6 +90,36 @@ class MenuBuilderListener
             ])*/
             ;
         }
+
+        if ( $usuario->hasRole('ROLE_SUPER_ADMIN') or $usuario->hasRole('ROLE_MATRIZ_SEGUIMIENTO_ADMIN') ) {
+
+            $this->agregarSiNoExiste('matriz_seguimiento', $menu);
+
+            $menu['matriz_seguimiento']->addChild('_config_matriz_anio_', [
+                'label' => '_config_matriz_anio_',
+                'route' => 'matrizPlaneacion'
+            ]);
+        }
+
+        if ( $usuario->hasRole('ROLE_SUPER_ADMIN') or $usuario->hasRole('ROLE_MATRIZ_SEGUIMIENTO_USER')  or $usuario->hasRole('ROLE_MATRIZ_SEGUIMIENTO_ADMIN')  or $usuario->hasRole('ROLE_MATRIZ_SEGUIMIENTO_USER_CAPTURA') ) {
+
+            $this->agregarSiNoExiste('matriz_seguimiento', $menu);
+
+            $menu['matriz_seguimiento']->addChild('_capturar_matriz_', [
+                'label' => '_capturar_matriz_',
+                'route' => 'matrizReal'
+            ]);
+        }
+
+        if ( $usuario->hasRole('ROLE_SUPER_ADMIN') or $usuario->hasRole('ROLE_MATRIZ_SEGUIMIENTO_USER_REPORTE') ) {
+
+            $this->agregarSiNoExiste('matriz_seguimiento', $menu);
+
+            $menu['matriz_seguimiento']->addChild('_reporte_', [
+                'label' => '_reporte_',
+                'route' => 'matrizReporte'
+            ]);
+        }
     }
 
 

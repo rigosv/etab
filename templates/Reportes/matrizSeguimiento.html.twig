@@ -1,4 +1,4 @@
-{% extends 'IndicadoresBundle::standard_layout.html.twig' %}
+{% extends 'standard_layout.html.twig' %}
 {% block javascripts %}
     {{parent()}}
     <script type="text/javascript" src="{{ app.request.schemeAndHttpHost ~ asset('vendor/table2excel/jquery.table2excel.min.js') }}"></script>

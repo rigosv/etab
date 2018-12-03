@@ -445,3 +445,79 @@ _configuracion_: Configuración
 Id: Id
 _suba_archivo_tipo_hoja_calculo_csv_: Formato de archivo no válido, se aceptan hojas de cálculo y archivo csv
 _se_ha_iniciado_la_carga_del_origen_: Se ha iniciado la carga del origen de datos
+
+Boletin: Boletin
+'Boletin List': 'Lista de Boletines'
+sala: 'Sala'
+grupo: 'Grupo'
+enviar: 'Enviar'
+creado: 'Creado'
+actualizado: 'Actualizado'
+marque_enviar: "Marque enviar para que el boletin se envie al correo de los usuarios que pertenezcan al grupo"
+
+_config_indicador_desempeno_: 'Configurar indicador de desempeño'
+_indicador_desempeno_: 'Indicador de desempeño'
+_capturar_matriz_: 'Captura de datos'
+_config_matriz_anio_: 'Configurar planificación por año'
+_indicador_etab_: 'Indicadores disponibles en eTAB'
+_indicador_rel_: 'Indicadores no disponibles en eTAB'
+_anio_select_: 'Seleccione un año'
+_consultar_: 'Consultar'
+_planeado_: 'Planeado'
+_real_: 'Real'
+_no_existe_planeacion_: 'No existe planeación en este año, para esta matriz'
+_crear_planeacion_: 'Crear planeación'
+_meta_anual_: 'Meta'
+_inidcador_: 'Indicador'
+
+_enero_: 'Enero'
+_febrero_: 'Febrero'
+_marzo_: 'Marzo'
+_abril_: 'Abril'
+_mayo_: 'Mayo'
+_junio_: 'Junio'
+_julio_: 'Julio'
+_agosto_: 'Agosto'
+_septiembre_: 'Septiembre'
+_octubre_: 'Octubre'
+_noviembre_: 'Noviembre'
+_diciembre_: 'Diciembre'
+
+_imprimir_: 'Imprimir'
+
+_cargado_correctamente: 'Cargado correctamente'
+_ningun_dato_: 'No se encontro ningún dato'
+
+_guardar_ok_: 'Se guardo correctamente'
+_guardar_no_ok_: 'Ocurrio un error y no se pudo guardar :('
+
+_matriz_verP_: 'Mostrar/Ocultar Planeación'
+_matriz_verR_: 'Mostrar/Ocultar Real'
+_matriz_verV_: 'Mostrar/Ocultar Porcentaje'
+_fuente_: 'Fuente'
+_acumular_: 'Acumular'
+_config_matriz_: 'Configurar matriz'
+_matriz_: 'Matriz'
+_matriz_select_: 'Seleccione una matriz'
+
+
+seleccion_indicador: 'Seleccione un indicador'
+seleccion_sala: 'Seleccione una sala'
+busqueda_libre: 'Busqueda libre'
+busqueda_libre_info: 'Escriba el nombre del inidcadora buscar y depues pulse "enter"'
+seleccione_uso_y_tecnica: 'Seleccione la clasificación según uso y una clasificación técnica'
+no_hay_sin_clasificacion: 'Todos los indicadores estan clasificados'
+no_hay_favoritos: 'No se ha agregado ningun indicador a favoritos'
+_salas_propias_: 'Salas propias'
+_salas_grupos_: 'Salas por grupo'
+_de_: 'De'
+_aa_: 'A'
+
+_exportar_svg_: 'Exportar a SVG'
+_exportar_png_: 'Exportar a PNG'
+_refresh_: 'Actualizar'
+_full_screen_: 'Pantalla Completa'
+_ver_tendencia_: 'Tendencia'
+_cargando_indicador_: 'Cargando indicador, porfavor espere ...'
+_indicador_warning: 'Fallo al cargar el indicador'
+_indicador_error: 'Ocurrio algun error en el servidor'

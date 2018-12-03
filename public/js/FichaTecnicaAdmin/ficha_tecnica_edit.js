@@ -3,6 +3,17 @@ window.SONATA_CONFIG = {
     USE_SELECT2: true
 };
 $(document).ready(function() {
+
+    var uniqid = $("[class=form-horizontal]").attr("action").split('=');
+    var idcontrol = uniqid[1];
+
+    $("#" + idcontrol + "_clasificacionTecnica").attr("style", "max-height:800px; overflow:auto;");
+    $("#" + idcontrol + "_clasificacionTecnica").parent('div').removeClass('col-sm-9');
+    $("#" + idcontrol + "_clasificacionTecnica").parent('div').addClass('col-sm-12');
+
+    $("#" + idcontrol + "_alertas").find('table').attr("style", "width: 100%");
+    
+
     // id que se está usando para los nombres de los formularios
     let $campos = $('textarea[id$="_camposIndicador"]');
     
