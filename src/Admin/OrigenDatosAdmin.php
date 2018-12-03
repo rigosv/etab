@@ -25,14 +25,16 @@ class OrigenDatosAdmin extends Admin
     {
         $esFusionado = $this->getSubject()->getEsFusionado();
         $origenActual = $this->getSubject();
+        $idOrigen = ( $origenActual->getId() == null) ? 0 : $origenActual->getId();
         $existeCostosBundle =  array_key_exists('CostosBundle', $this->getConfigurationPool()->getContainer()->getParameter('kernel.bundles') );
-
         $formMapper
                 ->tab(('datos_generales'))
                     ->with('', array('class' => 'col-md-12'))->end()
                 ->end()
-                ->tab(('_origen_datos_'))
-                    ->with(('origen_datos_sql'), array('class' => 'col-md-8'))->end()
+                ->tab(('_origen_datos_sql_'))
+                    ->with((''), array('class' => 'col-md-8'))->end()
+                ->end()
+                ->tab('_origen_datos_archivo_')
                     ->with(('origen_datos_archivo'), array('class' => 'col-md-4'))->end()
                 ->end()
         ;
@@ -40,7 +42,7 @@ class OrigenDatosAdmin extends Admin
         $formMapper            
                 ->tab(('datos_generales'), array('collapsed' => false))
                     ->with('', array('class' => 'col-md-12'))
-                        ->add('nombre', null, array('label' => ('nombre')))
+                        ->add('nombre', null, array('label' => ('nombre'), 'attr' => ['data-idorigen' => $idOrigen] ))
                         ->add('descripcion', null, array('label' => ('descripcion'), 'required' => false))                        
                     ->end()
                 ->end()
@@ -52,15 +54,17 @@ class OrigenDatosAdmin extends Admin
                             ->add('esCatalogo', null, array('label' => ('es_catalogo')))
                         ->end()
                     ->end()
-                    ->tab(('_origen_datos_'), array('collapsed' => true))
-                        ->with(('origen_datos_sql'))
+                    ->tab(('_origen_datos_sql_'), array('collapsed' => true))
+                        ->with((''), array('class' => 'col-md-12'))
                             ->add('conexiones', null, array('label' => ('nombre_conexion'), 'required' => false, 'expanded' => false))
                             ->add('sentenciaSql', null, array('label' => ('sentencia_sql'),
                                 'required' => false,
                                 'attr' => array('rows' => 7, 'cols' => 50)
                             ))
                         ->end()
-                        ->with(('origen_datos_archivo'))
+                    ->end()
+                    ->tab('_origen_datos_archivo_')
+                        ->with(('origen_datos_archivo'), array('class' => 'col-md-12'))
                             ->add('archivoNombre', null, array('label' => ('archivo_asociado'), 'required' => false,
                                     'attr' => ['readonly' => true]))
                             ->add('file', FileType::class, array('label' => ('subir_nuevo_archivo'), 'required' => false))
@@ -164,7 +168,7 @@ class OrigenDatosAdmin extends Admin
     {
         if ($object->getEsFusionado() == false) {
 
-            if ($object->file != '' and $object->getSentenciaSql() != '') {
+            if ($object->getFile() != '' and $object->getSentenciaSql() != '') {
                 $errorElement->with('sentenciaSql')
                         ->addViolation(('validacion.sentencia_o_archivo_no_ambas'))
                         ->end();
@@ -218,7 +222,7 @@ class OrigenDatosAdmin extends Admin
 
     public function prePersist($origenDato)
     {
-        $this->saveFile($origenDato);
+        $this->saveFile($origenDato, 'create');
         $this->setNombreCatalogo($origenDato);
 
         $this->guardarDrescripcion($origenDato);
@@ -228,7 +232,7 @@ class OrigenDatosAdmin extends Admin
 
     public function preUpdate($origenDato)
     {
-        $this->saveFile($origenDato);
+        $this->saveFile($origenDato, 'update');
         $this->guardarDrescripcion($origenDato);
         $this->setNombreCatalogo($origenDato);
     }
@@ -259,47 +263,9 @@ class OrigenDatosAdmin extends Admin
         }
     }
 
-    public function saveFile($origenDato)
+    public function saveFile($origenDato, $accion)
     {
 
-        $archivo = $origenDato->getFile();
-
-        if ($archivo != null ) {
-            $phpspreadsheet = $this->getConfigurationPool()->getContainer()->get('phpspreadsheet');
-
-            $tipo = 'Xlsx';
-            if ($archivo->getMimeType() == 'application/vnd.ms-excel') {
-                $tipo = 'Xls';
-            } elseif ($archivo->getMimeType() == 'application/vnd.oasis.opendocument.spreadsheet') {
-                $tipo = 'Ods';
-            } elseif ($archivo->getMimeType() == 'application/xml') {
-                $tipo = 'Xml';
-            } elseif ($archivo->getMimeType() == 'text/csv') {
-                $tipo = 'Csv';
-            }
-
-
-            $reader = $phpspreadsheet->createReader($tipo);
-            $reader->setReadDataOnly(true);
-
-            $datos = $reader->load($archivo->getPathName())->getSheet(0)->toArray();
-
-            $nombre_campos = array_values(array_shift($datos));
-
-            $fix_datos = array();
-            foreach ($datos as $k => $fila) {
-                // determinar que datos tienen todos sus campos nulos
-                $todosNULL = true;
-                foreach ($fila as $indice => $campo) {
-                    $fix_datos[$k][$nombre_campos[$indice]] = trim($campo);
-                    if (!empty($fix_datos[$k][$nombre_campos[$indice]]))
-                        $todosNULL = false;
-                }
-                if ($todosNULL)
-                    unset($fix_datos[$k]);
-            }
-
-        }
     }
 
     protected function configureRoutes(RouteCollection $collection)

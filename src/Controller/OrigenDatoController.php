@@ -2,24 +2,29 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\OrigenDatos;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\DBAL as DBAL;
-use App\MINSAL\IndicadoresBundle\Excel\Excel as Excel;
+use Symfony\Component\Translation\TranslatorInterface;
+
+use App\Entity\OrigenDatos;
 use App\Entity\Campo;
-use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Conexion;
 use App\Entity\MotorBd;
 use App\Entity\TipoCampo;
 use App\Entity\Diccionario;
 use App\Service\Util;
-use Symfony\Component\Translation\TranslatorInterface;
 use App\Message\SmsCargarOrigenDatos;
 
-class OrigenDatoController extends AbstractController
+
+
+class OrigenDatoController extends Controller
 {
     private $driver;
 
@@ -38,7 +43,7 @@ class OrigenDatoController extends AbstractController
             $mensaje = '<span style="color: red">' . $translator->trans('conexion_error') . ': ' . $e->getMessage() . '</span>';
         } catch (DBAL\Exception\ConnectionException  $e) {
             $mensaje = '<span style="color: red">' . $translator->trans('conexion_error') . ': ' . $e->getMessage() . '</span>';
-        } 
+        }
 
         return new Response($mensaje);
     }
@@ -76,7 +81,7 @@ class OrigenDatoController extends AbstractController
                         while ($row = $query->fetch() and $i++ < 20) {
                             $datos[] = $row;
                         }
-                        
+
                     }
                     $resultado['estado'] = 'ok';
                     $resultado['mensaje'] = '<span style="color: green">' . $translator->trans('sentencia_success') . '</span>';
@@ -186,22 +191,22 @@ class OrigenDatoController extends AbstractController
         $resultado['es_catalogo'] = ($origenDato->getEsCatalogo()) ? true : false;
 
         $sql = "SELECT tp
-                    FROM MINSALIndicadoresBundle:TipoCampo tp
+                    FROM App\Entity\TipoCampo tp
                     ORDER BY tp.descripcion";
         $resultado['tipos_datos'] = $em->createQuery($sql)->getArrayResult();
 
         $sql = "SELECT dic
-                    FROM MINSALIndicadoresBundle:Diccionario dic
+                    FROM App\Entity\Diccionario dic
                     ORDER BY dic.descripcion";
         $resultado['diccionarios'] = $em->createQuery($sql)->getArrayResult();
 
         $sql = "SELECT sv
-                    FROM MINSALIndicadoresBundle:SignificadoCampo sv
+                    FROM App\Entity\SignificadoCampo sv
                     WHERE sv.usoEnCatalogo = :uso_en_catalogo
                     ORDER BY sv.descripcion";
         $resultado['significados'] = $em->createQuery($sql)
-                ->setParameter('uso_en_catalogo', $resultado['es_catalogo'] ? 'true' : 'false')
-                ->getArrayResult();
+            ->setParameter('uso_en_catalogo', $resultado['es_catalogo'] ? 'true' : 'false')
+            ->getArrayResult();
 
         //recuperar los campos ya existentes en el origen de datos
         $campos_existentes = $em->getRepository(Campo::class)->findBy(array('origenDato' => $origenDato));
@@ -218,7 +223,7 @@ class OrigenDatoController extends AbstractController
                 $resultado['tipo_origen'] = 'sql';
                 $sentenciaSQL = $origenDato->getSentenciaSql();
                 $conexiones = $origenDato->getConexiones();
-                
+
                 if (count($conexiones) == 0) {
                     $resultado['mensaje'] = $this->get('translator')->trans('sentencia_error') . ': ' . $this->get('translator')->trans('_no_conexion_configurada_');
                     $resultado['estado'] = 'error';
@@ -232,11 +237,21 @@ class OrigenDatoController extends AbstractController
 
                 }
             } else {
+                $phpspreadsheet = $this->get('phpspreadsheet');
                 $resultado['tipo_origen'] = 'archivo';
-                $reader = new Excel();
+
+                $extension = explode( '.', $origenDato->getArchivoNombre());
+                $ext = array_pop($extension);
+
+                $tipo = ucwords($ext);
+
+                $reader = $phpspreadsheet->createReader($tipo);
+                $reader->setReadDataOnly(true);
+
                 try {
-                    $reader->loadFile($origenDato->getAbsolutePath());
-                    $datos = $reader->getSheet()->toArray($nullValue = null, $calculateFormulas = true, $formatData = false, $returnCellRef = false);
+                    $hoja = $reader->load( $this->getParameter('app.upload_directory').'/'.$origenDato->getArchivoNombre() )->getSheet(0);
+
+                    $datos = $hoja->toArray($nullValue = null, $calculateFormulas = true, $formatData = false, $returnCellRef = false);
                     $resultado['nombre_campos'] = array_values(array_shift($datos));
 
                     // Buscar por columnas que tengan null en el título
@@ -247,8 +262,9 @@ class OrigenDatoController extends AbstractController
                             $resultado['datos'][] = $fila;
                     else {
                         $resultado['nombre_campos'] = array_slice($resultado['nombre_campos'], 0, $primer_null, true);
-                        foreach ($datos as $fila)
+                        foreach ($datos as $fila) {
                             $resultado['datos'][] = array_slice($fila, 0, $primer_null, true);
+                        }
                     }
                     $resultado['estado'] = 'ok';
 
@@ -265,8 +281,8 @@ class OrigenDatoController extends AbstractController
             // Guardar los campos
             if ($resultado['estado'] == 'ok') {
                 $nombres_id = array();
-                $campo = array();                
-                
+                $campo = array();
+
                 foreach ($resultado['nombre_campos'] as $k => $nombre) {
                     // si existe no guardarlo
                     $nombre_campo = $util->slug($nombre);
@@ -340,7 +356,7 @@ class OrigenDatoController extends AbstractController
             if (strlen($req->get('datos_prueba'))) {
                 $datos_prueba = explode(', ', $req->get('datos_prueba'));
 
-                
+
                 foreach ($datos_prueba as $dato) {
                     $valido = $util->validar($dato, $tipo_campo->getCodigo());
                     if (!$valido)
@@ -394,7 +410,7 @@ class OrigenDatoController extends AbstractController
 
         return new Response($resp . '</UL>');
     }
-    
+
     public function getDatosMuestra($conexion, $sentenciaSQL, $request) {
         $conn = $this->getConexionGenerica('consulta_sql', $conexion, $request);
         $resultado = array();
@@ -437,7 +453,7 @@ class OrigenDatoController extends AbstractController
                 $resultado['mensaje'] = $this->get('translator')->trans('sentencia_error') . ' 3: ' . $e->getMessage();
             }
         }
-        
+
         return $resultado;
     }
 
@@ -449,15 +465,56 @@ class OrigenDatoController extends AbstractController
 
         $configurado = $em->getRepository(OrigenDatos::class)->estaConfigurado($origen);
 
-        $mensaje = $translator->trans('_se_ha_iniciado_la_carga_del_origen_') . '<B> ' . $origen->getNombre() . '</B>';
-        if  ($configurado) {
+        $resp = ['estado' => 'success', 'mensaje' => $translator->trans('_se_ha_iniciado_la_carga_del_origen_') . '<B> ' . $origen->getNombre() . '</B>' ];
+        if  ( $configurado ) {
             $bus->dispatch(new SmsCargarOrigenDatos($origen->getId()));
         } else {
-            $mensaje = $origen->getNombre() . ': ' . $translator->trans('origen_no_configurado');
+            $resp = ['estado' => 'danger', 'mensaje' => $origen->getNombre() . ': ' . $translator->trans('origen_no_configurado') ];
         }
 
-        return new Response($mensaje);
+        return new JsonResponse( $resp );
 
+    }
+
+    /**
+     * @Route("/origen_datos/guardar/archivo", name="guardar_archivo", options={"expose"=true})
+     */
+    public function guardarArchivo(Request $request){
+
+        $em = $this->getDoctrine()->getManager();
+        $dir = $this->getParameter('app.upload_directory');
+
+        $files = $request->files->all();
+        $fileA = array_shift($files);
+        $file = array_shift($fileA);
+        $originalName = $file->getClientOriginalName();
+        $idOrigen = $request->get('idOrigen');
+
+        if ( $idOrigen != null ){
+            $origen = $em->find(OrigenDatos::class, $idOrigen);
+            $archivoAnt = $origen->getArchivoNombre();
+        }
+
+
+        try {
+            //Si existía un archivo para ese origen de datos borrarlo
+            if ( $archivoAnt != '' ) {
+                $fileAnt = new Filesystem();
+                $fileAnt->remove($dir.'/'.$archivoAnt);
+            }
+
+            $file->move(
+                $dir,
+                $originalName
+            );
+
+            $origen->setArchivoNombre($originalName);
+            $em->persist($origen);
+            $em->flush();
+        } catch (FileException $e) {
+            return new JsonResponse(['success'=>0, 'error' => $e->getMessage()]);
+        }
+        return new JsonResponse(['success'=>1]);
     }
 
 }

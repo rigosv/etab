@@ -2,6 +2,7 @@
 
 namespace App\RESTController;
 
+use App\AlmacenamientoDatos\AlmacenamientoProxy;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\FichaTecnica;
@@ -38,7 +39,7 @@ class ApiRESTController extends Controller {
      *
      * @SWG\Tag(name="Indicadores")
      */
-    public function getIndicadoresAction($cod_agencia) {
+    public function getIndicadoresAction($cod_agencia, AlmacenamientoProxy $almacenamiento) {
         $em = $this->getDoctrine()->getManager();
 
         $response = new Response();
@@ -51,7 +52,7 @@ class ApiRESTController extends Controller {
             //$fichaRepository = $em->getRepository(FichaTecnica::class);
             $indicadores = $agencia->getIndicadores();
 
-            $respuesta['datos'] = $this->getDatosIndicador($indicadores);
+            $respuesta['datos'] = $this->getDatosIndicador($indicadores, $almacenamiento);
         } else {
             $respuesta = array('state' => 'fail', 'message' => 'Agencia no existe');
         }
@@ -88,7 +89,7 @@ class ApiRESTController extends Controller {
      *
      * @SWG\Tag(name="Indicadores")
      */
-    public function getIndicadorAction($cod_agencia, $id) {
+    public function getIndicadorAction($cod_agencia, $id, AlmacenamientoProxy $almacenamiento ) {
         $em = $this->getDoctrine()->getManager();
 
         $response = new Response();
@@ -111,7 +112,7 @@ class ApiRESTController extends Controller {
 
             if ( $agencia_ ){
                 $indicadores[] = $indicador;
-                $respuesta['datos'] = $this->getDatosIndicador($indicadores);
+                $respuesta['datos'] = $this->getDatosIndicador($indicadores, $almacenamiento);
             } else {
                 $respuesta = array('state' => 'fail', 'message' => 'Indicador no está asignado a la agencia especificada');
             }
@@ -123,7 +124,7 @@ class ApiRESTController extends Controller {
         return $response;
     }
 
-    protected function getDatosIndicador($indicadores) {
+    protected function getDatosIndicador($indicadores, AlmacenamientoProxy $almacenamiento) {
         $em = $this->getDoctrine()->getManager();
 
         $fichaRepository = $em->getRepository(FichaTecnica::class);
@@ -132,7 +133,8 @@ class ApiRESTController extends Controller {
         foreach ($indicadores as $ind) {
             try {
                 $fichaRepository->crearIndicador($ind);
-                $datosIndicador = $fichaRepository->getDatosIndicador($ind);
+
+                $datosIndicador = $almacenamiento->getDatosIndicador($ind);
                 $datos[] = array('indicador_id' => $ind->getId(), 'nombre' => $ind->getNombre(),
                     'formula' => str_replace(array('{', '}'), array('__', '__'), strtolower($ind->getFormula())),
                     'filas' => $datosIndicador

@@ -95,8 +95,8 @@ class OrigenDatosAdminController extends Controller
         }
 
         return $this->renderView('OrigenDatosAdmin/merge_selection.html.twig', array('origen_dato' => $origenDato,
-                    'campos' => $campos_ord,
-                    'es_pivote' => $esPivote
+            'campos' => $campos_ord,
+            'es_pivote' => $esPivote
         ));
     }
 
@@ -135,30 +135,30 @@ class OrigenDatosAdminController extends Controller
         //Mardar a la cola de carga de datos cada origen seleccionado
         $parameterBag = $request->request;
         $em = $this->getDoctrine()->getManager();
-        
+
         $fecha = new \DateTime("now");
         $ahora = $fecha;
-        
+
         if (!$parameterBag->get('all_elements')){
             $selecciones = (is_array ($idx)) ? $idx : $parameterBag->get('idx');
         }
         else{
             $selecciones = $em->getRepository(OrigenDatos::class)->findAll();
         }
-        
+
         foreach ($selecciones as $origen) {
             if (!$parameterBag->get('all_elements'))
                 $origenDato = $em->find(OrigenDatos::class, $origen);
             else
                 $origenDato = $origen;
-            
+
             // Recuperar el nombre y significado de los campos del origen de datos
             $campos_sig = array();
             $campos = $origenDato->getCampos();
             foreach ($campos as $campo) {
                 $campos_sig[$campo->getNombre()] = $campo->getSignificado()->getCodigo();
             }
-            
+
             //Verificar si elorigen de datos tiene un campo para lectura incremental
             $campoLecturaIncremental = $origenDato->getCampoLecturaIncremental();
             $condicion_carga_incremental = "";
@@ -175,10 +175,10 @@ class OrigenDatosAdminController extends Controller
                 $ventana_inf = ($origenDato->getVentanaLimiteInferior() == null) ? 0 : $origenDato->getVentanaLimiteInferior();
                 $ventana_sup = ($origenDato->getVentanaLimiteSuperior() == null) ? 0 : $origenDato->getVentanaLimiteSuperior();
 
-                if ($campoLecturaIncremental == 'fecha'){                
+                if ($campoLecturaIncremental == 'fecha'){
                     $fechaIni = $fecha;
                     $fechaFin = $fecha;
-                    
+
                     $lim_inf = $fechaIni->sub(new \DateInterval('P'.$ventana_inf.'D'))->format('Y-m-d H:i:s');
                     $lim_sup = $fechaFin->sub(new \DateInterval('P'.$ventana_sup.'D'))->format('Y-m-d H:i:s');
 
@@ -191,21 +191,21 @@ class OrigenDatosAdminController extends Controller
                                                      AND $campoLecturaIncremental <= '$lim_sup' ";
 
                 $orden = " ORDER BY $campoLecturaIncremental ";
-                
+
             }
-            $msg = array('id_origen_dato' => $origen, 
-                        'sql' => $origenDato->getSentenciaSql(),
-                        'campos_significados' => $campos_sig,
-                        'lim_inf' => $lim_inf,
-                        'lim_sup' => $lim_sup,
-                        'condicion_carga_incremental' => $condicion_carga_incremental,
-                        'orden' => $orden,
-                        'esLecturaIncremental' => $esLecturaIncremental,
-                        'campoLecturaIncremental' => $campoLecturaIncremental,
-                        'r' => microtime(true)
-                    
-                );
-            
+            $msg = array('id_origen_dato' => $origen,
+                'sql' => $origenDato->getSentenciaSql(),
+                'campos_significados' => $campos_sig,
+                'lim_inf' => $lim_inf,
+                'lim_sup' => $lim_sup,
+                'condicion_carga_incremental' => $condicion_carga_incremental,
+                'orden' => $orden,
+                'esLecturaIncremental' => $esLecturaIncremental,
+                'campoLecturaIncremental' => $campoLecturaIncremental,
+                'r' => microtime(true)
+
+            );
+
             foreach ($origenDato->getVariables() as $var) {
                 foreach ($var->getIndicadores() as $ind) {
                     $ind->setUltimaLectura($ahora);
@@ -215,15 +215,18 @@ class OrigenDatosAdminController extends Controller
             $carga_directa = $origenDato->getEsCatalogo();
             // No mandar a la cola de carga los que son catálogos, Se cargarán directamente
             if ($carga_directa) {
-                $mensaje = $almacenamiento->cargarCatalogo($origenDato);
-                if ($mensaje !== true) {
+                $ruta = $this->getParameter('app.upload_directory');
+                $nombre = $origenDato->getArchivoNombre();
+                $phpexcel = $this->get('phpspreadsheet');
+                $em->getRepository(OrigenDatos::class)->cargarCatalogo($origenDato, $ruta, $nombre, $phpexcel);
+                /*if ($mensaje !== true) {
                     $this->addFlash('sonata_flash_error', $mensaje);
 
                     return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
-                }
+                }*/
             } else
                 //$this->get('old_sound_rabbit_mq.cargar_origen_datos_producer')
-                        //->publish(serialize($msg));
+                //->publish(serialize($msg));
 
                 $bus->dispatch(new SmsCargarOrigenDatos($origen));
         }
@@ -285,5 +288,5 @@ class OrigenDatosAdminController extends Controller
             return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
         }
     }
-    
+
 }

@@ -1,5 +1,23 @@
 $(document).ready(function() {
 
+    $("input[type=file]").pekeUpload({
+        btnText: trans.agregar_archivo,
+        bootstrap: true,
+        url: Routing.generate('guardar_archivo'),
+        showPercent: true,
+        limit: 1,
+        notAjax: false,
+        delfiletext: '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>',
+        limitError: trans.solo_un_archivo,
+        allowedExtensions: 'ods|xls|xlsx|csv',
+        invalidExtError: trans.tipo_archivo_invalido,
+        data: {'idOrigen': $('input[id$="_nombre"]').data('idorigen')},
+        onFileSuccess: (file, data) =>{
+            $('input[id$="_archivoNombre"]').val(file.name);
+        }
+    });
+
+
     //****************** PARTE PARA PROBAR LA SENTENCIA SQL
     // id que se está usando para los nombres de los formularios (es aleatorio)
     if ($('input[id$="_nombre"]').length) {
@@ -8,7 +26,8 @@ $(document).ready(function() {
         // La barra con los botones de acción
         // Agregaré el de probar sentencia     
         $('#sonata-ba-field-container-' + $id + '_sentenciaSql').append($('#btn_probar_sentencia'));
-        $('div .form-actions').after('<div ><table border=1 align=center id="datos" ></table></div>')
+        $('div .form-actions').after('<div ><table border=1 align=center id="datos" ></table></div>');
+
         $('#btn_probar_sentencia').after("<span id='resultado_probar_consulta'></span>");
 
         $('#btn_probar_sentencia').click(function() {
@@ -56,10 +75,6 @@ $(document).ready(function() {
     }
     //************************** CÓDIGO PARA MOSTRAR EL RESULTADO PARA CONFIGURACIÓN DE CAMPOS
 
-    //Quitar los otros botones, solo debe estar agregar y editar
-    $('input[name$="btn_create_and_create"]').remove();
-    $('input[name$="btn_create_and_list"]').remove();
-
     function cargarDatos(recargar_origen) {
         $('#datos').html('');
         $('#datos').addClass("table table-condensed table-hover");
@@ -86,10 +101,10 @@ $(document).ready(function() {
                 });
 
                 // Construir las opciones de diccionarios
-                var diccionarios = '<OPTION value=-1>' + trans.elija_diccionario + '</OPTION>';
+                /*var diccionarios = '<OPTION value=-1>' + trans.elija_diccionario + '</OPTION>';
                 $.each(resp.diccionarios, function(indice, fila) {
                     diccionarios = diccionarios + "<OPTION data-diccionario_codigo='" + fila.codigo + "' VALUE='" + fila.id + "'>" + fila.descripcion + "</OPTION>";
-                });
+                });*/
 
                 // Los encabezados de la fila
                 $('#datos').append("<CAPTION>" + trans.configure_campos +
@@ -99,7 +114,7 @@ $(document).ready(function() {
                         "<TH>" + trans.nombre_campo + "</TH>" +
                         //"<TH>" + trans.tipo + "</TH>" +
                         "<TH>" + trans.significado + "</TH>" +
-                        "<TH>" + trans.diccionario_transformacion + "</TH>" +
+                        //"<TH>" + trans.diccionario_transformacion + "</TH>" +
                         "<TH>" + trans.datos_muestra + "</TH>" +
                         "</TR></THEAD>" +
                         "<TBODY id='datos_body'></TBODY>");
@@ -113,7 +128,7 @@ $(document).ready(function() {
                             "<SELECT class='significado' data-significado_codigo='" + resp.campos[valor]['significado_codigo'] + "' id='significado_variable__" + id + "' title='" + trans.elija_significado_dato + "' >" + significado_datos + "</SELECT>" +
                             "</TD>" +
                             "<TD>" +
-                            "<SELECT class='diccionario' id='diccionario__" + id + "' >" + diccionarios + "</SELECT>" +
+                            //"<SELECT class='diccionario' id='diccionario__" + id + "' >" + diccionarios + "</SELECT>" +
                             "</TD>" +
                             "<TD id='datos_ejemplo_campo__" + id + "'>" +
                             resp.datos[valor] +
@@ -173,9 +188,9 @@ $(document).ready(function() {
                     guardar_cambio($(this));
                 });
                 
-                $('SELECT.diccionario').change(function() {
+                $/*('SELECT.diccionario').change(function() {
                     guardar_cambio($(this));
-                });
+                });*/
 
                 $objs = $('SELECT.significado');
                 $objs[parseInt($objs.length / 2)].focus();

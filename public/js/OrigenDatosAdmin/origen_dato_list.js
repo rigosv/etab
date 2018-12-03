@@ -3,11 +3,14 @@ $(document).ready(function(){
 
         $.get($(this).data('url'), function (resp) {
             $.notify({
-                message: resp
-            }, {animate:{
+                message: resp.mensaje
+            }, {
+                animate:{
                     enter: "animated fadeInUp",
                     exit: "animated fadeOutDown"
-                }});
+                },
+                type: resp.estado
+            });
         })
     })
 });

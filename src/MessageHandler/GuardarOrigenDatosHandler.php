@@ -3,6 +3,7 @@
 namespace App\MessageHandler;
 
 
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -20,13 +21,14 @@ class GuardarOrigenDatosHandler implements MessageHandlerInterface
     private $origenDato;
     private $msg;
     private $idConexion;
+    private $logger;
 
-    public function __construct(EntityManagerInterface $em, MessageBusInterface $bus, AlmacenamientoProxy $almacenamiento)
+    public function __construct(EntityManagerInterface $em, MessageBusInterface $bus, AlmacenamientoProxy $almacenamiento, LoggerInterface $logger)
     {
         $this->em = $em;
         $this->bus = $bus;
         $this->almacenamiento =  $almacenamiento;
-
+        $this->logger = $logger;
     }
 
     public function __invoke(SmsGuardarOrigenDatos $message)
@@ -34,7 +36,7 @@ class GuardarOrigenDatosHandler implements MessageHandlerInterface
         //dump($message);
 
         $this->msg = $message->getDatos();
-        echo ' GUARDANDO DATOS <br/> Msj: ' . $this->msg['id_origen_dato'] . '/' . (array_key_exists('numMsj', $this->msg) ? $this->msg['numMsj'] : '--') . '  ';
+        $this->logger->info(' GUARDANDO DATOS <br/> Msj: ' . $this->msg['id_origen_dato'] . '/' . (array_key_exists('numMsj', $this->msg) ? $this->msg['numMsj'] : '--') );
 
         $this->origenDato = $this->em->find(OrigenDatos::class, $this->msg['id_origen_dato']);
 
@@ -44,20 +46,20 @@ class GuardarOrigenDatosHandler implements MessageHandlerInterface
 
             $tabla = 'origenes.fila_origen_dato_' . $this->msg['id_origen_dato'];
 
-            $this->idConexion = (array_key_exists('id_conexion', $this->msg)) ? $this->msg['id_conexion'] : 0;
+            $this->msg['id_conexion'] = (array_key_exists('id_conexion', $this->msg)) ? $this->msg['id_conexion'] : 0;
 
             if ($this->msg['method'] == 'BEGIN') {
                 $this->mensajeBegin();
             } elseif ($this->msg['method'] == 'PUT') {
                 $this->mensajePut();
             } elseif ($this->msg['method'] == 'ERROR_LECTURA') {
-                $this->almacenamiento->borrarTablaAuxiliar($this->msg['id_origen_dato']);
+                $this->almacenamiento->borrarTablaAuxiliar($this->msg['id_origen_dato'], $this->msg['id_conexion']);
             } elseif ($this->msg['method'] == 'DELETE') {
                 $this->mensajeDelete();
             }
         }
 
-        echo '<br/>FIN GUARDAR<br/>';
+        $this->logger->info('FIN GUARDAR');
     }
 
     private function mensajePut(){
@@ -69,7 +71,7 @@ class GuardarOrigenDatosHandler implements MessageHandlerInterface
 
         } catch (\Exception $e) {
             $error = ' Conexion : ' . $this->idConexion . ' Error: ' . $e->getMessage();
-            echo $error;
+            $this->logger->error($e->getFile(). '('.$e->getLine().') ' .$error);
             $this->origenDato->setErrorCarga(true);
             $this->origenDato->setMensajeErrorCarga($error);
             $this->em->flush();
@@ -78,7 +80,7 @@ class GuardarOrigenDatosHandler implements MessageHandlerInterface
 
         $tf = microtime(true);
         $d = $tf - $ti;
-        echo '--> DURACIÓN(s): ' . number_format($d/1000000, 10) ;
+        $this->logger->info('--> DURACIÓN(s): ' . number_format($d/1000000, 10)) ;
 
     }
 
@@ -94,7 +96,7 @@ class GuardarOrigenDatosHandler implements MessageHandlerInterface
                    ";
             $cnx->exec($sql);
         } else {
-            $this->almacenamiento->inicializarTablaAuxliar($this->msg['id_origen_dato']);
+            $this->almacenamiento->inicializarTablaAuxliar($this->msg['id_origen_dato'], $this->msg['id_conexion']);
         }
 
         $this->origenDato->setCargaFinalizada(false);
@@ -107,7 +109,7 @@ class GuardarOrigenDatosHandler implements MessageHandlerInterface
         $cnx = $this->em->getConnection();
 
         //verificar si la tabla existe
-        $this->almacenamiento->inicializarTabla('origenes.fila_origen_dato_' . $this->msg['id_origen_dato']);
+        $this->almacenamiento->inicializarTabla($this->msg['id_origen_dato'], $this->msg['id_conexion']);
 
         if ($areaCosteo['area_costeo'] == 'rrhh') {
             //Solo agregar los datos nuevos
@@ -133,11 +135,10 @@ class GuardarOrigenDatosHandler implements MessageHandlerInterface
         } else {
 
             if ( $this->origenDato->getCampoLecturaIncremental() != null ) {
-                $this->almacenamiento->guardarDatosIncremental($this->idConexion, $this->msg['id_origen_dato'], $this->msg['campo_lectura_incremental'], $this->msg['lim_inf'], $this->msg['lim_sup']);
+                $this->almacenamiento->guardarDatosIncremental($this->msg['id_conexion'], $this->msg['id_origen_dato'], $this->msg['campo_lectura_incremental'], $this->msg['lim_inf'], $this->msg['lim_sup']);
             } else {
                 //Pasar todos los datos de la tabla auxiliar a la tabla destino final
-                $this->almacenamiento->guardarDatos($this->idConexion, $this->msg['id_origen_dato']);
-
+                $this->almacenamiento->guardarDatos($this->msg['id_conexion'], $this->msg['id_origen_dato']);
             }
         }
 
@@ -163,17 +164,14 @@ class GuardarOrigenDatosHandler implements MessageHandlerInterface
 
         $this->em->flush();
 
-        echo '
-                Carga finalizada de origen ' . $this->msg['id_origen_dato'] . ' Para la conexión ' . $this->idConexion . '  
-    
-                ';
+        $this->logger->info('Carga finalizada de origen ' . $this->msg['id_origen_dato'] . ' Para la conexión ' . $this->idConexion );
 
         //Recalcular la tabla del indicador
         //Recuperar las variables en las que está presente el origen de datos
         $origenDatos = $this->em->find(OrigenDatos::class, $this->msg['id_origen_dato']);
         foreach ($origenDatos->getVariables() as $var) {
             foreach ($var->getIndicadores() as $ind) {
-                //$this->bus->dispatch(new SmsCargarIndicadorEnTablero($ind->getId()));
+                //$this->bus->dispatch( new SmsCargarIndicadorEnTablero( $ind->getId() ) );
             }
         }
     }

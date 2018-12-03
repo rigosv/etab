@@ -140,8 +140,8 @@
             <argument>App\Entity\OrigenDatos</argument>
             <argument>App\Controller\OrigenDatosAdminController</argument>
             <call method="setMaxPerPage"><argument>%admin_max_per_page_number%</argument></call>
-
         </service>
+        <!--
         <service id="sonata.admin.diccionario" class="App\Admin\DiccionarioAdmin">
             <tag name="sonata.admin"
                  manager_type="orm" 
@@ -178,7 +178,7 @@
             <call method="setMaxPerPage"><argument>10</argument></call>
 
         </service>
-        
+        -->
         <service id="sonata.admin.variable" class="App\Admin\VariableDatoAdmin">
             <tag name="sonata.admin"
                  manager_type="orm" 

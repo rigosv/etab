@@ -27,7 +27,7 @@ interface OrigenDatosInterface
      * @param $idOrigenDatos
      * @return void
      */
-    public function inicializarTablaAuxliar($idOrigenDatos);
+    public function inicializarTablaAuxliar($idOrigenDatos, $idConexion);
 
     /**
      * Guarda la porción de datos leida desde el origen hacia la tabla auxiliar
@@ -42,15 +42,17 @@ interface OrigenDatosInterface
      *
      * @param $tabla
      */
-    public function borrarTablaAuxiliar($idOrigenDatos) ;
+    public function borrarTablaAuxiliar($idOrigenDatos, $idConexion) ;
 
 
     /**
-     * Verifica si existe la tabla de destino final, la crea si no existe
+     * Verifica si existe la tabla destino de datos
      *
-     * @param $nombreTabla
+     * @param $idOrigenDatos
+     * @param $idConexion
+     * @return mixed
      */
-    public function inicializarTabla($nombreTabla);
+    public function inicializarTabla($idOrigenDatos, $idConexion);
 
 
     /**
@@ -72,12 +74,5 @@ interface OrigenDatosInterface
      */
     public function guardarDatosIncremental($idConexion, $idOrigenDatos, $campoControlIncremento, $limiteInf, $limiteSup);
 
-    /**
-     * Recupera los datos de un origen de datos y los guarda en una tabla catálogo
-     *
-     * @param OrigenDatos $origenDato
-     * @return mixed
-     */
-    public  function cargarCatalogo(OrigenDatos $origenDato);
 
 }

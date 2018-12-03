@@ -44,7 +44,7 @@ class PostgreSQLOrigenDatos implements OrigenDatosInterface
         return $datos_a_enviar;
     }
 
-    public function inicializarTablaAuxliar($idOrigenDatos) {
+    public function inicializarTablaAuxliar($idOrigenDatos, $idConexion) {
         $sql = ' CREATE TABLE IF NOT EXISTS  '. $this->tabla.$idOrigenDatos.'_tmp (
                     id_origen_dato integer,
                     datos jsonb,
@@ -59,12 +59,14 @@ class PostgreSQLOrigenDatos implements OrigenDatosInterface
         $this->pdo->pgsqlCopyFromArray($this->tabla.$idOrigenDatos.'_tmp', $datos);
     }
 
-    public function borrarTablaAuxiliar($idOrigenDatos) {
+    public function borrarTablaAuxiliar($idOrigenDatos, $idConexion) {
         $sql = ' DROP TABLE IF EXISTS '.$this->tabla.$idOrigenDatos.'_tmp ';
         $this->cnx->exec($sql);
     }
 
-    public function inicializarTabla($nombreTabla) {
+    public function inicializarTabla($idOrigenDatos, $idConexion) {
+
+        $nombreTabla = $this->tabla.$idOrigenDatos;
 
         try {
             $this->cnx->query("select * from $nombreTabla LIMIT 1");
@@ -90,7 +92,7 @@ class PostgreSQLOrigenDatos implements OrigenDatosInterface
             $this->pdo->pgsqlCopyFromArray($this->tabla.$idOrigenDatos, $nuevosDatos);
         }
 
-        $this->borrarTablaAuxiliar($idOrigenDatos);
+        $this->borrarTablaAuxiliar($idOrigenDatos, $idOrigenDatos);
     }
 
     public function guardarDatosIncremental($idConexion, $idOrigenDatos, $campoControlIncremento, $limiteInf, $limiteSup){
@@ -114,20 +116,4 @@ class PostgreSQLOrigenDatos implements OrigenDatosInterface
         $this->cnx->exec($sql);
     }
 
-    public function cargarCatalogo(OrigenDatos $origenDato)
-    {
-        $origenDatosRepository =  $this->em->getRepository(OrigenDatos::class);
-
-        $datos = array();
-        if (count($origenDato->getConexiones()) > 0) {
-            foreach ($origenDato->getConexiones() as $cnx) {
-                $datos_cnx = $origenDatosRepository->getDatos($origenDato->getSentenciaSql(), $cnx);
-                $datos = array_merge($datos, $datos_cnx);
-            }
-        } else {
-            $datos = $origenDatosRepository->getDatos(null, null, $origenDato->getAbsolutePath());
-        }
-
-        return $origenDatosRepository->crearTablaCatalogo($origenDato, $datos);
-    }
 }
