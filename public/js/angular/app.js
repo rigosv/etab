@@ -15,10 +15,10 @@ App
                 $http.get(url + '/' + id).success(success).error(error)
             },
             crear: function(url, data, type, success, error) {
-                $http.post(url, data, { headers: { 'Content-Type': type } }).success(success).error(error)
+                $http.post(url, data, { headers: { 'Content-Type': type ? type : 'application/x-www-form-urlencoded' } }).success(success).error(error)
             },
             editar: function(url, id, data, type, success, error) {
-                $http.put(url + '/' + id, data, { headers: { 'Content-Type': type } }).success(success).error(error)
+                $http.put(url + '/' + id, data, { headers: { 'Content-Type': type ? type : 'application/x-www-form-urlencoded' } }).success(success).error(error)
             },
             consulta: function(url, success, error) {
                 $http.get(url).success(success).error(error)

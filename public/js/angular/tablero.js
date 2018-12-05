@@ -283,7 +283,7 @@ App.controller("TableroCtrl", function (
                 filtros: '',
                 ver_sql: false
             };
-            Crud.crear("../api/v1/tablero/datosIndicador/" + item.id + "/" + $scope.indicadores[index].dimensiones[0] , json, function(data) {
+            Crud.crear("../api/v1/tablero/datosIndicador/" + item.id + "/" + $scope.indicadores[index].dimensiones[0], json, 'application/json', function(data) {
                 if (data.status == 200) {
                     $scope.indicadores[index].data = data.data;
                     $scope.indicadores[index].informacion = data.informacion;
@@ -345,7 +345,7 @@ App.controller("TableroCtrl", function (
                 ver_sql: false
             };
             Crud.crear("../api/v1/tablero/datosIndicador/" + $scope.indicadores[index].id + "/" 
-            + $scope.indicadores[index].dimensiones[dimension].trim(), json, function(data) {
+                + $scope.indicadores[index].dimensiones[dimension].trim(), json, 'application/json', function(data) {
                 if (data.status == 200) {
                   $scope.indicadores[index].data = data.data;
 
@@ -444,8 +444,7 @@ App.controller("TableroCtrl", function (
                       function(e) {
                           $scope.indicadores[index].dimension++;
                           $scope.indicadores[index].filtros.push({
-                              codigo: $scope.indicadores[index].dimensiones[$scope.indicadores[index].dimension],
-                              etiqueta: $scope.indicadores[index].dimensiones[$scope.indicadores[index].dimension],
+                              codigo: $scope.indicadores[index].dimensiones[$scope.indicadores[index].dimension].trim(),
                               valor: e.data.value
                           });
                           $scope.agregarIndicadorDimension($scope.indicadores[index].dimension, e.data.index);

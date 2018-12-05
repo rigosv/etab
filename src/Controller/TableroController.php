@@ -350,9 +350,22 @@ class TableroController extends AbstractController {
         $em = $this->getDoctrine()->getManager();
         try{
             $datos = (object) $request->request->all(); 
-var_dump($datos);
-            $almacenamiento->crearIndicador($fichaTec, $dimension, $datos->filtros);
-            $data = $almacenamiento->calcularIndicador($fichaTec, $dimension, $datos->filtros, $datos->ver_sql);
+
+            if ($datos->filtros == null or $datos->filtros == '')
+                $filtros = null;
+            else{
+                $filtros_dimensiones = [];
+                $filtros_valores = [];
+                $filtros = [];
+                foreach ($datos->filtros as $f) 
+                {  
+                    $f = (object) $f;
+                    array_push($filtros, [$f->codigo => $f->valor]);
+                } 
+            }
+
+            $almacenamiento->crearIndicador($fichaTec, $dimension, $filtros);
+            $data = $almacenamiento->calcularIndicador($fichaTec, $dimension, $filtros, $datos->ver_sql);
                         
             if($data){   
                 $response = [
