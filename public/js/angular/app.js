@@ -1,6 +1,8 @@
-var App = angular.module('App', ['ui.bootstrap', 'ngStorage'], function($interpolateProvider) {
-    $interpolateProvider.startSymbol('<%');
-    $interpolateProvider.endSymbol('%>');
+var App = angular.module("App", ["ui.bootstrap", "ngStorage", "nvd3"], function(
+  $interpolateProvider
+) {
+  $interpolateProvider.startSymbol("<%");
+  $interpolateProvider.endSymbol("%>");
 });
 //hce las peticiones a la api
 App

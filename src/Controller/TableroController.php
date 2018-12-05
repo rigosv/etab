@@ -342,23 +342,24 @@ class TableroController extends AbstractController {
     }
 
     /**
-     * @Route("/datosIndicador/{id}/{dimension}", name="datosIndicador_index", methods={"GET"})
+     * @Route("/datosIndicador/{id}/{dimension}", name="datosIndicador_index", methods={"POST"})
      */
     public function datosIndicador(FichaTecnica $fichaTec, $dimension, Request $request, AlmacenamientoProxy $almacenamiento){
        
         // iniciar el manager de doctrine
         $em = $this->getDoctrine()->getManager();
         try{
-            $datos = (object) $request->query->all();
-
+            $datos = (object) $request->request->all(); 
+var_dump($datos);
             $almacenamiento->crearIndicador($fichaTec, $dimension, $datos->filtros);
             $data = $almacenamiento->calcularIndicador($fichaTec, $dimension, $datos->filtros, $datos->ver_sql);
-
-            if($data){                             
+                        
+            if($data){   
                 $response = [
                     'status' => 200,
                     'messages' => "Ok",
                     'data' => $data,
+                    'informacion' => $this->dimensionIndicador($fichaTec),
                     'total' => count($data)
                 ];                    
             } else{ 
@@ -381,6 +382,76 @@ class TableroController extends AbstractController {
         $serializer = new Serializer($normalizers, $encoders);
         // devolver la respuesta en json             
         return new Response($serializer->serialize($response, "json"));
+    }
+
+    /**
+     * @Route("/dimensionIndicador/{id}", name="dimensionIndicador_index", methods={"GET"})
+     */
+    public function dimensionIndicador(FichaTecnica $fichaTec)
+    {
+        $resp = array();
+        $em = $this->getDoctrine()->getManager();
+
+        if ($fichaTec) {
+            $resp['nombre_indicador'] = $fichaTec->getNombre();
+            $resp['id_indicador'] = $fichaTec->getId();
+            $resp['unidad_medida'] = $fichaTec->getUnidadMedida();
+            $resp['meta'] = $fichaTec->getMeta();
+            if ($fichaTec->getCamposIndicador() != '') {
+                $campos = explode(',', str_replace(array("'", ' '), array('', ''), $fichaTec->getCamposIndicador()));
+            } else {
+                $campos = array();
+            }
+            $dimensiones = array();
+            foreach ($campos as $campo) {
+                $significado = $em->getRepository(SignificadoCampo::class)
+                        ->findOneByCodigo($campo);
+                if (count($significado->getTiposGraficosArray()) > 0) {
+                    $dimensiones[$significado->getCodigo()]['descripcion'] = ucfirst(preg_replace('/^Identificador /i', '', $significado->getDescripcion()));
+                    $dimensiones[$significado->getCodigo()]['escala'] = $significado->getEscala();
+                    $dimensiones[$significado->getCodigo()]['origenX'] = $significado->getOrigenX();
+                    $dimensiones[$significado->getCodigo()]['origenY'] = $significado->getOrigenY();
+                    $dimensiones[$significado->getCodigo()]['graficos'] = $significado->getTiposGraficosArray();
+                }
+            }
+            $rangos_alertas_aux = array();
+            foreach ($fichaTec->getAlertas() as $k => $rango) {
+                $rangos_alertas_aux[$rango->getLimiteSuperior()]['limite_sup'] = $rango->getLimiteSuperior();
+                $rangos_alertas_aux[$rango->getLimiteSuperior()]['limite_inf'] = $rango->getLimiteInferior();
+                $rangos_alertas_aux[$rango->getLimiteSuperior()]['color'] = $rango->getColor()->getCodigo();
+                $rangos_alertas_aux[$rango->getLimiteSuperior()]['comentario'] = $rango->getComentario();
+            }
+            ksort($rangos_alertas_aux);
+            $rangos_alertas = array();
+            foreach ($rangos_alertas_aux as $rango) {
+                $rangos_alertas[] = $rango;
+            }
+            $resp['rangos'] = $rangos_alertas;
+            $resp['formula'] = $fichaTec->getFormula();
+            $resp['dimensiones'] = $dimensiones;
+
+            //Verificar que se tiene la más antigua de las últimas lecturas de los orígenes
+            //de datos del indicador
+            $ultima_lectura = null;
+            
+            foreach ($fichaTec->getVariables() as $var) {
+                $fecha_lectura = $var->getOrigenDatos()->getUltimaActualizacion();
+                if ($fecha_lectura > $ultima_lectura or $ultima_lectura == null) {
+                    $ultima_lectura = $fecha_lectura;
+                }
+            }
+            
+            $fichaTec->setUltimaLectura($ultima_lectura);
+            //$em->flush();
+
+            $d = $fichaTec->getUltimaLectura();
+            if ($d !== false)
+                $resp['ultima_lectura'] = $d->format('d/m/Y');
+            $resp['resultado'] = 'ok';
+        } else {
+            $resp['resultado'] = 'error';
+        }      
+        return $resp;
     }
 }
 

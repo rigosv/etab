@@ -3,7 +3,7 @@
 {% extends 'standard_layout.html.twig' %}
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('js/angularTablero/nvd3/build/nv.d3.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/FichaTecnicaAdmin/d3_nvd3.css') }}">
     <link rel="stylesheet" href="{{ asset('css/FichaTecnicaAdmin/tablero.css') }}">
 
 {% endblock %}
@@ -13,17 +13,18 @@
        
 
 <script src="{{ asset('js/angular/angular.js') }}" type="text/javascript"></script>
+
+<script src="{{ asset('js/angularTablero/d3.js') }}"></script> 
+<script src="{{ asset('js/angularTablero/d3_nvd3.js') }}"></script> 
+<script src="{{ asset('js/angularTablero/d3_angular_nvd3.js') }}"></script>
+<script src="{{ asset('js/angularTablero/ngRadialGauge/src/ng-radial-gauge-dir.js') }}"></script> 
+
 <script src="{{ asset('js/angular/ui-bootstrap.js') }}" type="text/javascript"></script>
 <script src="{{ asset('js/angular/ngStorage.js') }}" type="text/javascript"></script>
 <script src="{{ asset('js/angular/moment.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('js/angular/app.js') }}" type="text/javascript"></script>
 <script src="{{ asset('js/angular/tablero.js') }}" type="text/javascript"></script>
 <script src="{{ asset('js/angularTablero/dragydrog.js') }}"></script> 
-
-<script src="{{ asset('js/angularTablero/d3.js') }}"></script> 
-<script src="{{ asset('js/angularTablero/nvd3/build/nv.d3.js') }}"></script> 
-<script src="{{ asset('js/angularTablero/angular-nvd3/dist/angular-nvd3.js') }}"></script>
-<script src="{{ asset('js/angularTablero/ngRadialGauge/src/ng-radial-gauge-dir.js') }}"></script> 
 
 <script src="{{ asset('js/export_plugin/tableExport.js') }}" type="text/javascript"></script>
 <script src="{{ asset('js/export_plugin/filesaver.js') }}" type="text/javascript"></script>
@@ -116,6 +117,9 @@
                         <div class="container-fluid" ng-if="!item.cargando">
                             <div class="alert alert-warning" role="alert" ng-if="item.error == 'Warning'">{{ '_indicador_warning' | trans }}</div>
                             <div class="alert alert-danger" role="alert" ng-if="item.error == 'Error'">{{ '_indicador_error' | trans }}</div>
+
+                            <nvd3 options="item.options" data="item.grafica"></nvd3>
+            
                         </div>
                         <div class="container-fluid" ng-if="item.cargando" align="center">
                             <h4>{{ '_cargando_indicador_' | trans }} </h4>
