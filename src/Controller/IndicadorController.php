@@ -170,7 +170,8 @@ class IndicadorController extends AbstractController {
             $ultima_lectura = null;
             
             foreach ($fichaTec->getVariables() as $var) {
-                $fecha_lectura = $em->getRepository(OrigenDatos::class)->getUltimaActualizacion($var->getOrigenDatos());
+                $fecha_lectura = $var->getOrigenDatos()->getUltimaActualizacion();
+
                 if ($fecha_lectura > $ultima_lectura or $ultima_lectura == null) {
                     $ultima_lectura = $fecha_lectura;
                 }
@@ -179,8 +180,8 @@ class IndicadorController extends AbstractController {
             $fichaTec->setUltimaLectura($ultima_lectura);
             //$em->flush();
 
-            $d = \DateTime::createFromFormat('Y-m-d H:i:s', $fichaTec->getUltimaLectura());
-            if ($d !== false)
+            $d = $fichaTec->getUltimaLectura();
+            if ($d !== null)
                 $resp['ultima_lectura'] = date('d/m/Y', $d->getTimestamp());
             $resp['resultado'] = 'ok';
         } else {
