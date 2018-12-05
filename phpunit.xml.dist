@@ -36,6 +36,23 @@
         <!-- ###+ enqueue/redis ### -->
         <env name="ENQUEUE_DSN" value="redis:"/>
         <!-- ###- enqueue/redis ### -->
+
+        <!-- ###+ google/recaptcha ### -->
+        <!-- To use Google Recaptcha, you must register a site on Recaptcha's admin panel: -->
+        <!-- https://www.google.com/recaptcha/admin -->
+        <env name="GOOGLE_RECAPTCHA_SITE_KEY" value=""/>
+        <env name="GOOGLE_RECAPTCHA_SECRET" value=""/>
+        <!-- ###- google/recaptcha ### -->
+
+        <!-- ###+ lexik/jwt-authentication-bundle ### -->
+        <env name="JWT_SECRET_KEY" value="%kernel.project_dir%/config/jwt/private.pem"/>
+        <env name="JWT_PUBLIC_KEY" value="%kernel.project_dir%/config/jwt/public.pem"/>
+        <env name="JWT_PASSPHRASE" value="638c23a79978c04330eb1eca422e1fc9"/>
+        <!-- ###- lexik/jwt-authentication-bundle ### -->
+
+        <!-- ###+ nelmio/cors-bundle ### -->
+        <env name="CORS_ALLOW_ORIGIN" value="^https?://localhost(:[0-9]+)?$"/>
+        <!-- ###- nelmio/cors-bundle ### -->
     </php>
 
     <testsuites>
