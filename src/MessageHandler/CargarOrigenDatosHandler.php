@@ -124,13 +124,15 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
             $lim_sup =  '';
             if ($esLecturaIncremental){
                 //tomar la fecha de la última actualización del origen
-                $campoLecturaIncremental = $campoLecturaIncremental->getSignificado()->getCodigo();
+                $campoIncremental = $campoLecturaIncremental->getCodigo();
+                $tipoCampoIncremental = $campoLecturaIncremental->getSignificado()->getCodigo();
+
 
                 //Calcular los límites
                 $ventana_inf = ($origenDato->getVentanaLimiteInferior() == null) ? 0 : $origenDato->getVentanaLimiteInferior();
                 $ventana_sup = ($origenDato->getVentanaLimiteSuperior() == null) ? 0 : $origenDato->getVentanaLimiteSuperior();
 
-                if ($campoLecturaIncremental == 'fecha'){
+                if ($tipoCampoIncremental == 'fecha' or $tipoCampoIncremental == 'date'){
                     $fechaIni = $fecha;
                     $fechaFin = $fecha;
 
@@ -141,10 +143,10 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
                     $lim_inf = $fecha->format('Y') - $ventana_inf ;
                     $lim_sup = $fecha->format('Y') - $ventana_sup;
                 }
-                $condicion_carga_incremental = " AND $campoLecturaIncremental >= '$lim_inf'
-                                                                 AND $campoLecturaIncremental <= '$lim_sup' ";
+                $condicion_carga_incremental = " AND $campoIncremental >= '$lim_inf'
+                                                     AND $campoIncremental <= '$lim_sup' ";
 
-                $orden = " ORDER BY $campoLecturaIncremental ";
+                $orden = " ORDER BY $campoIncremental ";
             }
 
             $origenDato->setErrorCarga(false);
