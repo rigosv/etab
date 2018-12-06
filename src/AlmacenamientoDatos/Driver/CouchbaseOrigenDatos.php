@@ -26,6 +26,8 @@ class CouchbaseOrigenDatos implements OrigenDatosInterface
         // Authenticate, then open bucket
         $cluster->authenticate($authenticator);
         $this->bucket = $cluster->openBucket($this->bucketName);
+        $this->bucket->operationTimeout = 120 * 1000; // 60 seconds;
+
 
     }
 
@@ -61,12 +63,16 @@ class CouchbaseOrigenDatos implements OrigenDatosInterface
             $filas = ['id_origen_datos'=>(integer)$idOrigenDatos, 'datos'  => $datos];
             $this->bucket->insert($docName, $filas);
         } else {
-            //ya existe, actualizarlo
-            $datosJson = trim(trim(json_encode($datos),'[') ,']');
-            $stm = 'UPDATE `'.$this->bucketName.'` USE KEYS "'.$docName.'" SET datos = ARRAY_PUT(IFNULL(datos, []), '.$datosJson.')' ;
+            try {
+                //ya existe, actualizarlo
+                $r = $this->bucket->get($docName);
+                $datosExistentes = json_decode(json_encode($r->value->datos), True);
 
-            $query = \Couchbase\N1qlQuery::fromString($stm);
-            $this->bucket->query($query);
+                $filas = ['id_origen_datos'=>(integer)$idOrigenDatos, 'datos'  => array_merge( $datosExistentes, $datos)];
+                $this->bucket->upsert($docName, $filas);
+            } catch (\Exception $e ){
+
+            }
         }
 
     }
@@ -84,12 +90,15 @@ class CouchbaseOrigenDatos implements OrigenDatosInterface
 
         $docName = $this->doc . $idOrigenDatos . '_cnx_'.$idConexion;
         $docAux = $docName. '_tmp';
+        try {
+            $r = $this->bucket->get($docAux);
+            $this->bucket->upsert($docName, $r->value);
 
-        $r = $this->bucket->get($docAux);
-        $this->bucket->upsert($docName, $r->value);
+            //Borrar la tabla temporal
+            $this->borrarDocumento($docAux);
+        } catch (\Exception $e) {}
 
-        //Borrar la tabla temporal
-        $this->borrarDocumento($docAux);
+
     }
 
     public function guardarDatosIncremental($idConexion, $idOrigenDatos, $campoControlIncremento, $limiteInf, $limiteSup){

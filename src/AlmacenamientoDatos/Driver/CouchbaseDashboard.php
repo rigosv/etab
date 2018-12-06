@@ -167,7 +167,8 @@ class CouchbaseDashboard implements DashboardInterface
             else {
                 $query = \Couchbase\N1qlQuery::fromString($sql);
                 $result = $this->bucket->query($query);
-                return $result->rows;
+                $resp =  json_decode(json_encode($result->rows), True);
+                return $resp;
             }
         } catch (\Exception $e) {
             return $e->getMessage();

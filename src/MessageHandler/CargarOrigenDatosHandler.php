@@ -61,6 +61,7 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
     }
 
     private function enviarMsjInicio ($idOrigen) {
+        $this->numMsj = 0;
         $msg_init = array('id_origen_dato' => $idOrigen,
             'method' => 'BEGIN',
             'r' => microtime(true),
@@ -73,28 +74,27 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
 
     private function enviarDatos($idOrigen, $datos, $campos_sig, $ultima_lectura, $idConexion) {
         $datos_a_enviar = array();
-        $i = 0;
-        $ii = 0;
-        $grpMsj = 1;
 
-        if ( count($datos) > 0 ) {
-            $datos_a_enviar = $this->almacenamiento->prepararDatosEnvio($idOrigen, $campos_sig, $datos, $ultima_lectura, $idConexion);
-
+        $bus = $this->bus;
+        $send = function ($datosEnv, $indice) use ($idOrigen, $campos_sig, $ultima_lectura, $idConexion,  $bus){
             $msg_guardar = array('id_origen_dato' => $idOrigen,
                 'method' => 'PUT',
-                'datos' => $datos_a_enviar,
+                'datos' => $datosEnv,
                 'ultima_lectura' => $ultima_lectura,
                 'id_conexion' => $idConexion,
                 'r' => microtime(true),
-                'numMsj' => $this->numMsj++
+                'numMsj' => $indice + 1
             );
 
-            $this->bus->dispatch(new SmsGuardarOrigenDatos($msg_guardar));
+            $bus->dispatch(new SmsGuardarOrigenDatos($msg_guardar));
+        };
 
-
+        if ( count($datos) > 0 ) {
+            $datos_a_enviar = $this->almacenamiento->prepararDatosEnvio($idOrigen, $campos_sig, $datos, $ultima_lectura, $idConexion);
+            //Enviaré a guardar en pedazos de 5000
+            $partes = array_chunk($datos_a_enviar, 5000);
+            array_walk( $partes, $send);
         }
-        echo ' 
-            ';
     }
 
     private function procesarCarga ( $idOrigenDatos ){
@@ -155,8 +155,8 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
             $this->logger->info('============================== INICIO CARGA de origen de datos: '. $origenDato );
 
             try {
-                //Leeré los datos en grupos de 10,000
-                $tamanio = 10000;
+                //Leeré los datos en grupos de 100,000
+                $tamanio = 100000;
 
 
                 $sql = $origenDato->getSentenciaSql();

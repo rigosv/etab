@@ -135,7 +135,11 @@ class GuardarOrigenDatosHandler implements MessageHandlerInterface
         } else {
 
             if ( $this->origenDato->getCampoLecturaIncremental() != null ) {
-                $this->almacenamiento->guardarDatosIncremental($this->msg['id_conexion'], $this->msg['id_origen_dato'], $this->msg['campo_lectura_incremental'], $this->msg['lim_inf'], $this->msg['lim_sup']);
+                $campoLecturaInc = $this->origenDato->getCampoLecturaIncremental();
+                $limInf = $this->origenDato->getVentanaLimiteInferior();
+                $limSup =  $this->origenDato->getVentanaLimiteSuperior();
+                $this->almacenamiento->guardarDatosIncremental($this->msg['id_conexion'], $this->msg['id_origen_dato'],
+                    $campoLecturaInc, $limInf, $limSup);
             } else {
                 //Pasar todos los datos de la tabla auxiliar a la tabla destino final
                 $this->almacenamiento->guardarDatos($this->msg['id_conexion'], $this->msg['id_origen_dato']);
