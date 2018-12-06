@@ -30,6 +30,9 @@ class CouchbaseOrigenDatos implements OrigenDatosInterface
         $this->bucket = $cluster->openBucket($this->bucketName);
         $this->bucketAux = $cluster->openBucket($this->bucketAuxName);
 
+        $this->bucket->operationTimeout = 240 * 100; // 240 segundos
+        $this->bucketAux->operationTimeout = 240 * 100; // 240 segundos
+
     }
 
 
@@ -70,7 +73,7 @@ class CouchbaseOrigenDatos implements OrigenDatosInterface
     }
 
     public function borrarTablaAuxiliar($idOrigenDatos, $idConexion) {
-        $this->borrarDocumentoAux($idOrigenDatos, $idConexion);
+        $this->borrarDocumento($this->bucketAuxName, $idOrigenDatos, $idConexion);
     }
 
     public function inicializarTabla($idOrigenDatos, $idConexion) {
@@ -80,25 +83,27 @@ class CouchbaseOrigenDatos implements OrigenDatosInterface
 
     public function guardarDatos($idConexion, $idOrigenDatos) {
 
-        $stm = 'UPSERT INTO `' . $this->bucketName . '` (KEY _k, VALUE _v) '.
+        //Borrar los datos existentes
+        $this->borrarDocumento($this->bucketName, $idOrigenDatos, $idConexion);
+
+        $stm = 'UPSERT INTO `' . $this->bucketName . '` (KEY _k, VALUE _v) ' .
             ' SELECT META().id _k, _v ' .
-            ' FROM `' . $this->bucketAuxName. '` _v'.
+            ' FROM `' . $this->bucketAuxName . '` _v' .
             ' WHERE id_origen_datos = ' . $idOrigenDatos . ' AND id_conexion = ' . $idConexion;
         $query = \Couchbase\N1qlQuery::fromString($stm);
         $this->bucket->query($query);
 
-
-        //Borrar la tabla temporal
-        $this->borrarDocumentoAux($idOrigenDatos, $idConexion);
+        //Borrar los documentos temporales
+        $this->borrarDocumento($this->bucketAuxName, $idOrigenDatos, $idConexion);
     }
 
     public function guardarDatosIncremental($idConexion, $idOrigenDatos, $campoControlIncremento, $limiteInf, $limiteSup){
 
     }
 
-    private function borrarDocumentoAux($idOrigenDatos, $idConexion) {
+    private function borrarDocumento($bucketNane, $idOrigenDatos, $idConexion) {
         try {
-            $stm = 'DELETE FROM `'.$this->bucketAuxName.'` WHERE id_origen_datos= ' . $idOrigenDatos . ' AND id_conexion = ' . $idConexion;
+            $stm = 'DELETE FROM `'.$bucketNane.'` WHERE id_origen_datos= ' . $idOrigenDatos . ' AND id_conexion = ' . $idConexion;
             $query = \Couchbase\N1qlQuery::fromString($stm);
             $this->bucketAux->query($query);
         }catch (\Exception $e){
