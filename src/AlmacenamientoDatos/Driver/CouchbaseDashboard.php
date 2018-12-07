@@ -34,6 +34,9 @@ class CouchbaseDashboard implements DashboardInterface
         $this->bucket = $cluster->openBucket($this->bucketName);
         $this->bucketIndicador = $cluster->openBucket($this->bucketNameIndicador);
 
+        $this->bucket->operationTimeout = 240 * 100; // 240 segundos
+        $this->bucketIndicador->operationTimeout = 240 * 100; // 240 segundos
+
     }
 
 
@@ -86,7 +89,8 @@ class CouchbaseDashboard implements DashboardInterface
                     SELECT $camposVar,  $oper(TONUMBER(v.calculo)) AS  $nombreVar 
                     FROM `$this->bucketName` t UNNEST t.datos v WHERE t.id_origen_datos IN [".implode(',',$origenesIds)."]
                     GROUP BY $camposVar
-                    UNION";
+                    UNION
+                    ";
 
         }
         $varStmFin = trim($varStmFin, ', ');
