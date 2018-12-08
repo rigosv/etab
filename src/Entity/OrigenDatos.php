@@ -163,6 +163,20 @@ class OrigenDatos
      * @ORM\JoinColumn(name="campolecturaincremental_id", referencedColumnName="id")
      * */
     private $campoLecturaIncremental;
+
+    /**
+     * @var datetime $fechaCorte
+     *
+     * @ORM\Column(name="fecha_corte", type="datetime", nullable=true)
+     */
+    private $fechaCorte;
+
+    /**
+     * @var string $formatoFechaCorte
+     *
+     * @ORM\Column(name="formato_fecha_corte", type="string", length=100, nullable=true)
+     */
+    protected $formatoFechaCorte;
     
     /**
      * @var datetime ultimaActualizacion
@@ -838,6 +852,38 @@ class OrigenDatos
     public function getFile()
     {
         return $this->file;
+    }
+
+    /**
+     * @return datetime
+     */
+    public function getFechaCorte()
+    {
+        return $this->fechaCorte;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFormatoFechaCorte()
+    {
+        return $this->formatoFechaCorte;
+    }
+
+    /**
+     * @param datetime $fechaCorte
+     */
+    public function setFechaCorte($fechaCorte)
+    {
+        $this->fechaCorte = $fechaCorte;
+    }
+
+    /**
+     * @param string $formatoFechaCorte
+     */
+    public function setFormatoFechaCorte($formatoFechaCorte)
+    {
+        $this->formatoFechaCorte = $formatoFechaCorte;
     }
 
 }
