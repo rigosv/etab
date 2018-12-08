@@ -387,8 +387,8 @@ class FichaTecnicaRepository extends ServiceEntityRepository {
                     );
 
         }
-        
-        $sql = "SELECT $dimension AS category, $variables_query, round(($formula)::numeric,2) AS measure
+        $decimales = ( $fichaTecnica->getCantidadDecimales() == null ) ? 2 : $fichaTecnica->getCantidadDecimales();
+        $sql = "SELECT $dimension AS category, $variables_query, round(($formula)::numeric,$decimales) AS measure        
             FROM $tabla_indicador A" ;
         $sql .= ' WHERE 1=1 ' . $evitar_div_0 . ' ' . $filtros;
         

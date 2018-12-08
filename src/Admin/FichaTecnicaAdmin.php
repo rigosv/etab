@@ -57,6 +57,7 @@ class FichaTecnicaAdmin extends Admin
                         ->add('formula', null, array('label' => 'formula',
                             'help' => 'ayuda_ingreso_formula'
                         ))
+                        ->add('cantidadDecimales', null, array('label' => '_cantidad_decimales_', 'help' => '_cantidad_decimales_help_'))
                         ->add('meta', null, array('label' => '_meta_'))
                         ->add('periodo', null, array('label' => 'periodicidad'))
                         ->add('confiabilidad', null, array('label' => 'confiabilidad', 'required' => false ))
