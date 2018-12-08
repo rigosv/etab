@@ -71,37 +71,29 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
         $this->bus->dispatch(new SmsGuardarOrigenDatos($msg_init));
     }
 
-    private function enviarDatos($idOrigen, $datos, $campos_sig, $ultima_lectura, $idConexion, $lim_inf = '' , $lim_sup = '') {
+    private function enviarDatos($idOrigen, $datos, $campos_sig, $ultima_lectura, $idConexion) {
+        $datos_a_enviar = array();
 
-        $origenDato = $this->em->find(OrigenDatos::class, $idOrigen);
-
-        if ( count($datos) > 0 ) {
-            $datos_a_enviar = $this->almacenamiento->prepararDatosEnvio($idOrigen, $campos_sig, $datos, $ultima_lectura, $idConexion);
-
+        $bus = $this->bus;
+        $send = function ($datosEnv, $indice) use ($idOrigen, $campos_sig, $ultima_lectura, $idConexion,  $bus){
             $msg_guardar = array('id_origen_dato' => $idOrigen,
                 'method' => 'PUT',
-                'datos' => $datos_a_enviar,
+                'datos' => $datosEnv,
                 'ultima_lectura' => $ultima_lectura,
                 'id_conexion' => $idConexion,
                 'r' => microtime(true),
-                'numMsj' => $this->numMsj++,
-                'lim_inf' => $lim_inf,
-                'lim_sup' => $lim_sup
+                'numMsj' => $indice + 1
             );
 
-            $this->bus->dispatch(new SmsGuardarOrigenDatos($msg_guardar));
+            $bus->dispatch(new SmsGuardarOrigenDatos($msg_guardar));
+        };
 
-            if ( $origenDato->getCampoLecturaIncremental() != null ){
-                $ultimo = array_pop($datos_a_enviar);
-                try {
-                    $fecha = \DateTime::createFromFormat( $origenDato->getFormatoFechaCorte(), $ultimo[$origenDato->getCampoLecturaIncremental()->getSignificado()->getCodigo()] );
-                    $origenDato->setFechaCorte($fecha);
-                    $this->em->persist($origenDato);
-                    $this->em->flush();
-                } catch (\Exception $e) {}
-            }
+        if ( count($datos) > 0 ) {
+            $datos_a_enviar = $this->almacenamiento->prepararDatosEnvio($idOrigen, $campos_sig, $datos, $ultima_lectura, $idConexion);
+            //Enviaré a guardar en pedazos de 3000
+            $partes = array_chunk($datos_a_enviar, 3000);
+            array_walk( $partes, $send);
         }
-
     }
 
     private function procesarCarga ( $idOrigenDatos ){
