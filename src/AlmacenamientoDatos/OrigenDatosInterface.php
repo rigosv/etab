@@ -72,7 +72,7 @@ interface OrigenDatosInterface
      * @param $limiteInf
      * @param $limiteSup
      */
-    public function guardarDatosIncremental($idConexion, $idOrigenDatos, $campoControlIncremento, $limiteInf, $limiteSup);
+    public function guardarDatosIncremental($idConexion, $idOrigenDatos, $limiteInf, $limiteSup);
 
 
 }

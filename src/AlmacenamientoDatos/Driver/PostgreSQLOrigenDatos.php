@@ -95,14 +95,19 @@ class PostgreSQLOrigenDatos implements OrigenDatosInterface
         $this->borrarTablaAuxiliar($idOrigenDatos, $idOrigenDatos);
     }
 
-    public function guardarDatosIncremental($idConexion, $idOrigenDatos, $campoControlIncremento, $limiteInf, $limiteSup){
+    public function guardarDatosIncremental($idConexion, $idOrigenDatos, $limiteInf, $limiteSup){
+
+        $origenDato = $this->em->find(OrigenDatos::class, $idOrigenDatos);
+        $campoControlIncremento = $origenDato->getCampoLecturaIncremental()->getSignificado()->getCodigo();
+
+        $formatoFecha = str_replace(['Y', 'm', 'd'], ['YYYY', 'MM', 'DD'], $origenDato->getFormatoFecha() );
 
         $tablaDestino = $this->tabla.$idOrigenDatos;
         $tablaAuxiliar = $tablaDestino.'_tmp';
         $sql = "DELETE 
                         FROM $tablaDestino 
-                        WHERE datos->'$campoControlIncremento' >= '$limiteInf'
-                            AND datos->'$campoControlIncremento' <= '$limiteSup'
+                        WHERE to_date( datos->'$campoControlIncremento', $formatoFecha) >= to_date( '$limiteInf', $formatoFecha )
+                            AND to_date( datos->'$campoControlIncremento', $formatoFecha ) <= to_date( '$limiteSup', $formatoFecha )
                             AND ( (id_origen_dato = $idOrigenDatos and id_conexion = $idConexion)
                               OR (id_origen_dato = $idOrigenDatos AND id_conexion is null)
                               )

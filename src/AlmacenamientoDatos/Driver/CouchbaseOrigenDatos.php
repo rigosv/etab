@@ -97,7 +97,7 @@ class CouchbaseOrigenDatos implements OrigenDatosInterface
         $this->borrarDocumento($this->bucketAuxName, $idOrigenDatos, $idConexion);
     }
 
-    public function guardarDatosIncremental($idConexion, $idOrigenDatos, $campoControlIncremento, $limiteInf, $limiteSup){
+    public function guardarDatosIncremental($idConexion, $idOrigenDatos, $limiteInf, $limiteSup){
 
     }
 

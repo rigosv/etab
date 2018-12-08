@@ -73,8 +73,8 @@ class AlmacenamientoProxy implements DashboardInterface, OrigenDatosInterface
     }
 
 
-    public function guardarDatosIncremental($idConexion, $idOrigenDatos, $campoControlIncremento, $limiteInf, $limiteSup){
-        $this->origenDatosWrapped->guardarDatosIncremental($idConexion, $idOrigenDatos, $campoControlIncremento, $limiteInf, $limiteSup);
+    public function guardarDatosIncremental($idConexion, $idOrigenDatos, $limiteInf, $limiteSup){
+        $this->origenDatosWrapped->guardarDatosIncremental($idConexion, $idOrigenDatos, $limiteInf, $limiteSup);
     }
 
 
