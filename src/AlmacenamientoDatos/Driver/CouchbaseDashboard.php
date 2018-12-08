@@ -34,6 +34,8 @@ class CouchbaseDashboard implements DashboardInterface
         $this->bucket = $cluster->openBucket($this->bucketName);
         $this->bucketIndicador = $cluster->openBucket($this->bucketNameIndicador);
 
+        $this->bucket->operationTimeout = 240 * 1000; //240 segundos
+
     }
 
 
@@ -48,8 +50,8 @@ class CouchbaseDashboard implements DashboardInterface
         //Los campos de la ficha técnica determinan que campos se utilizarán de los orígenes de datos
         $campos = str_replace(' ', '', $fichaTec->getCamposIndicador());
 
-        $camposVar = 'v.' . str_replace(',', ', v.', $campos);
-        $camposInd = 'i.' . str_replace(',', ', i.', $campos);
+        $camposVar = ($dimension == null ) ? 'v.' . str_replace(',', ', v.', $campos) : 'v.' . $dimension;
+        $camposInd = ($dimension == null ) ? 'i.' . str_replace(',', ', i.', $campos) : 'i.' . $dimension;
 
         //Recuperar los datos de los orígenes asociados a cada variable del indicador
         $stmVar = '';
@@ -83,6 +85,7 @@ class CouchbaseDashboard implements DashboardInterface
         }
         $varStmFin = trim($varStmFin, ', ');
         $stmVar = trim($stmVar,'UNION');
+
 
         $stmFin = "
                     SELECT $camposInd, $varStmFin
