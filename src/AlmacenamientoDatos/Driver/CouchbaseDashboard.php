@@ -12,12 +12,12 @@ use App\Entity\SignificadoCampo;
 class CouchbaseDashboard implements DashboardInterface
 {
     private $em;
-    private $doc = 'origen_';
-    private $docIndicador = 'indicador_';
+    //private $doc = 'origen_';
+    //private $docIndicador = 'indicador_';
     private $bucketName = 'etab_origenes';
     private $bucket;
-    private $bucketNameIndicador = 'etab_indicadores';
-    private $bucketIndicador ;
+    //private $bucketNameIndicador = 'etab_indicadores';
+    //private $bucketIndicador ;
 
     public function __construct(EntityManager $em, ParameterBagInterface $params)
     {
@@ -32,7 +32,7 @@ class CouchbaseDashboard implements DashboardInterface
         // Authenticate, then open bucket
         $cluster->authenticate($authenticator);
         $this->bucket = $cluster->openBucket($this->bucketName);
-        $this->bucketIndicador = $cluster->openBucket($this->bucketNameIndicador);
+        //$this->bucketIndicador = $cluster->openBucket($this->bucketNameIndicador);
 
         $this->bucket->operationTimeout = 240 * 1000; //240 segundos
 

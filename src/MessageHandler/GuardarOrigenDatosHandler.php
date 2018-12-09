@@ -36,7 +36,7 @@ class GuardarOrigenDatosHandler implements MessageHandlerInterface
         //dump($message);
 
         $this->msg = $message->getDatos();
-        $this->logger->info(' GUARDANDO DATOS <br/> Msj: ' . $this->msg['id_origen_dato'] . '/' . (array_key_exists('numMsj', $this->msg) ? $this->msg['numMsj'] : '--') );
+        $this->logger->info(' GUARDANDO DATOS  Msj: ' . $this->msg['id_origen_dato'] . '/' . (array_key_exists('numMsj', $this->msg) ? $this->msg['numMsj'] : '--') );
 
         $this->origenDato = $this->em->find(OrigenDatos::class, $this->msg['id_origen_dato']);
 
@@ -67,7 +67,7 @@ class GuardarOrigenDatosHandler implements MessageHandlerInterface
 
         try {
 
-            $this->almacenamiento->insertarEnAuxiliar($this->msg['id_origen_dato'], $this->msg['id_conexion'], $this->msg['datos']);
+            $this->almacenamiento->insertarEnAuxiliar($this->msg['id_origen_dato'], $this->msg['id_conexion'], $this->msg['datos'], $this->msg['carga_id']);
 
         } catch (\Exception $e) {
             $error = ' Conexion : ' . $this->idConexion . ' Error: ' . $e->getMessage();
@@ -135,10 +135,10 @@ class GuardarOrigenDatosHandler implements MessageHandlerInterface
         } else {
 
             if ( $this->origenDato->getCampoLecturaIncremental() != null and $this->origenDato->getValorCorte() != null) {
-                $this->almacenamiento->guardarDatosIncremental($this->msg['id_conexion'], $this->msg['id_origen_dato'], $this->msg['lim_inf'], $this->msg['lim_sup']);
+                $this->almacenamiento->guardarDatosIncremental($this->msg['id_conexion'], $this->msg['id_origen_dato'], $this->msg['carga_id'], $this->msg['lim_inf'], $this->msg['lim_sup']);
             } else {
                 //Pasar todos los datos de la tabla auxiliar a la tabla destino final
-                $this->almacenamiento->guardarDatos($this->msg['id_conexion'], $this->msg['id_origen_dato']);
+                $this->almacenamiento->guardarDatos($this->msg['id_conexion'], $this->msg['id_origen_dato'], $this->msg['carga_id']);
             }
         }
 

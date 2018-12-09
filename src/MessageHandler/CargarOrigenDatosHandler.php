@@ -46,42 +46,45 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
 
     }
 
-    private function enviarMsjFinal ($idOrigen, $ahora, $idConexion) {
+    private function enviarMsjFinal ($idOrigen, $ahora, $idConexion, $cargaId, $lim_inf = '', $lim_sup = '') {
         //Después de enviados todos los registros para guardar, mandar mensaje para borrar los antiguos
         $msg_guardar = array('id_origen_dato' => $idOrigen,
             'method' => 'DELETE',
             'ultima_lectura' => $ahora,
             'id_conexion' =>$idConexion,
-            'numMsj' => $this->numMsj++
+            'numMsj' => $this->numMsj++,
+            'carga_id' => $cargaId,
+            'lim_inf' => $lim_inf,
+            'lim_sup' => $lim_sup
         );
 
-        //$this->container->get('old_sound_rabbit_mq.guardar_registro_producer')
-        //->publish(json_encode($msg_guardar));
         $this->bus->dispatch(new SmsGuardarOrigenDatos($msg_guardar));
     }
 
-    private function enviarMsjInicio ($idOrigen) {
+    private function enviarMsjInicio ($idOrigen, $cargaId) {
         $msg_init = array('id_origen_dato' => $idOrigen,
             'method' => 'BEGIN',
             'r' => microtime(true),
-            'numMsj' => $this->numMsj++
+            'numMsj' => $this->numMsj++,
+            'carga_id' => $cargaId
         );
 
         $this->bus->dispatch(new SmsGuardarOrigenDatos($msg_init));
     }
 
-    private function enviarDatos($idOrigen, $datos, $campos_sig, $ultima_lectura, $idConexion) {
+    private function enviarDatos($idOrigen, $datos, $campos_sig, $ultima_lectura, $idConexion, $cargaId) {
         $datos_a_enviar = array();
 
         $bus = $this->bus;
-        $send = function ($datosEnv, $indice) use ($idOrigen, $campos_sig, $ultima_lectura, $idConexion,  $bus){
+        $send = function ($datosEnv, $indice) use ($idOrigen, $campos_sig, $ultima_lectura, $idConexion,  $bus, $cargaId){
             $msg_guardar = array('id_origen_dato' => $idOrigen,
                 'method' => 'PUT',
                 'datos' => $datosEnv,
                 'ultima_lectura' => $ultima_lectura,
                 'id_conexion' => $idConexion,
                 'r' => microtime(true),
-                'numMsj' => $indice + 1
+                'numMsj' => $indice + 1,
+                'carga_id' => $cargaId,
             );
 
             $bus->dispatch(new SmsGuardarOrigenDatos($msg_guardar));
@@ -107,6 +110,8 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
         foreach ($campos as $campo) {
             $campos_sig[$campo->getNombre()] = $campo->getSignificado()->getCodigo();
         }
+
+        $cargaId = uniqid();
 
         // Es lectura desde bases de datos
         if ($origenDato->getSentenciaSql() != '') {
@@ -163,6 +168,7 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
                 //Leeré los datos en grupos de 100,000
                 $tamanio = 100000;
 
+                //Identificador de la carga
 
                 $sql = $origenDato->getSentenciaSql();
 
@@ -174,7 +180,7 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
 
                     $lect = 1;
                     $datos = true;
-                    $this->enviarMsjInicio($idOrigenDatos);
+                    $this->enviarMsjInicio($idOrigenDatos, $cargaId);
 
                     while ($leidos >= $tamanio and $datos != false) {
                         $errorEnLectura = false;
@@ -220,7 +226,7 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
                             $errorEnLectura = true;
                             $this->logger->warning('## SIN REGISTROS  ---> Origen: '.$idOrigenDatos);
                         } else {
-                            $this->enviarDatos($idOrigenDatos, $datos, $campos_sig, $ahora, $cnx->getId(), $lim_inf, $lim_sup);
+                            $this->enviarDatos($idOrigenDatos, $datos, $campos_sig, $ahora, $cnx->getId(), $cargaId);
                             if ($cnx->getIdMotor()->getCodigo() == 'pdo_dblib')
                                 $leidos = 1;
                             else
@@ -238,6 +244,7 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
                             'id_conexion' =>$cnx->getId(),
                             'numMsj' => $this->numMsj++,
                             'r' => microtime(true),
+                            'cargaId' => $cargaId
                         );
 
                         $this->bus->dispatch(new SmsGuardarOrigenDatos($msg_));
@@ -247,7 +254,7 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
                         $this->em->flush();
                     }
                     else{
-                        $this->enviarMsjFinal($idOrigenDatos, $ahora, $cnx->getId());
+                        $this->enviarMsjFinal($idOrigenDatos, $ahora, $cnx->getId(), $cargaId);
                     }
                 }
 
@@ -268,11 +275,11 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
 
             $datos = $this->em->getRepository(OrigenDatos::class)
                 ->getDatos(null, null, $this->params->get('app.upload_directory'), $origenDato->getArchivoNombre(), $this->phpspreadsheet);
-            $this->enviarMsjInicio($idOrigenDatos);
+            $this->enviarMsjInicio($idOrigenDatos, $cargaId);
 
-            $this->enviarDatos($idOrigenDatos, $datos, $campos_sig, $ahora, 0);
+            $this->enviarDatos($idOrigenDatos, $datos, $campos_sig, $ahora, 0, $cargaId);
 
-            $this->enviarMsjFinal($idOrigenDatos, $ahora, 0);
+            $this->enviarMsjFinal($idOrigenDatos, $ahora, 0, $cargaId);
         }
 
 

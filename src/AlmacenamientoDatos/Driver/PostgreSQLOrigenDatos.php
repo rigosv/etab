@@ -55,7 +55,7 @@ class PostgreSQLOrigenDatos implements OrigenDatosInterface
         $this->cnx->exec($sql);
     }
 
-    public function insertarEnAuxiliar($idOrigenDatos, $idConexion, $datos) {
+    public function insertarEnAuxiliar($idOrigenDatos, $idConexion, $datos, $idCarga) {
         $this->pdo->pgsqlCopyFromArray($this->tabla.$idOrigenDatos.'_tmp', $datos);
     }
 
@@ -77,7 +77,7 @@ class PostgreSQLOrigenDatos implements OrigenDatosInterface
 
     }
 
-    public function guardarDatos($idConexion, $idOrigenDatos) {
+    public function guardarDatos($idConexion, $idOrigenDatos, $idCarga) {
 
         $nuevosDatos = $this->pdo->pgsqlCopyToArray($this->tabla.$idOrigenDatos.'_tmp');
 
@@ -95,7 +95,7 @@ class PostgreSQLOrigenDatos implements OrigenDatosInterface
         $this->borrarTablaAuxiliar($idOrigenDatos, $idOrigenDatos);
     }
 
-    public function guardarDatosIncremental($idConexion, $idOrigenDatos, $limiteInf, $limiteSup){
+    public function guardarDatosIncremental($idConexion, $idOrigenDatos, $idCarga, $limiteInf, $limiteSup){
 
         $origenDato = $this->em->find(OrigenDatos::class, $idOrigenDatos);
         $campoControlIncremento = $origenDato->getCampoLecturaIncremental()->getSignificado()->getCodigo();

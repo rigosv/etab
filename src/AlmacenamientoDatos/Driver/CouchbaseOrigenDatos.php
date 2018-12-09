@@ -10,10 +10,10 @@ use App\Service\Util;
 class CouchbaseOrigenDatos implements OrigenDatosInterface
 {
     private $bucket;
-    private $bucketAux;
+    //private $bucketAux;
     private $doc = 'origen_';
     private $bucketName = 'etab_origenes';
-    private $bucketAuxName = 'etab_origenes_aux';
+    //private $bucketAuxName = 'etab_origenes_aux';
 
     public function __construct( ParameterBagInterface $params)
     {
@@ -28,10 +28,10 @@ class CouchbaseOrigenDatos implements OrigenDatosInterface
         // Authenticate, then open bucket
         $cluster->authenticate($authenticator);
         $this->bucket = $cluster->openBucket($this->bucketName);
-        $this->bucketAux = $cluster->openBucket($this->bucketAuxName);
+        //$this->bucketAux = $cluster->openBucket($this->bucketAuxName);
 
         $this->bucket->operationTimeout = 240 * 100; // 240 segundos
-        $this->bucketAux->operationTimeout = 240 * 100; // 240 segundos
+        //$this->bucketAux->operationTimeout = 240 * 100; // 240 segundos
 
     }
 
@@ -56,24 +56,29 @@ class CouchbaseOrigenDatos implements OrigenDatosInterface
     }
 
     public function inicializarTablaAuxliar($idOrigenDatos, $idConexion) {
-        $this->borrarTablaAuxiliar($idOrigenDatos, $idConexion);
+        //Ya no será necesaria esta función
+        //$this->borrarTablaAuxiliar($idOrigenDatos, $idConexion);
     }
 
-    public function insertarEnAuxiliar($idOrigenDatos, $idConexion, $datos ) {
+    public function insertarEnAuxiliar($idOrigenDatos, $idConexion, $datos, $idCarga ) {
 
         $parte = uniqid();
         $docName = $this->doc . $idOrigenDatos .'_cnx_'.$idConexion. '_parte_'. $parte ;
 
         $filas = ['id_origen_datos'=>(integer)$idOrigenDatos,
             'id_conexion' => (integer) $idConexion,
+            'id_carga' => $idCarga,
             'datos'  => $datos
         ];
-        $this->bucketAux->upsert($docName, $filas);
+        //$this->bucketAux->upsert($docName, $filas);
+        //Insertar directo en el bucket para evitar operaciones con grandes volúmenes de datos
+        $this->bucket->upsert($docName, $filas);
 
     }
 
     public function borrarTablaAuxiliar($idOrigenDatos, $idConexion) {
-        $this->borrarDocumento($this->bucketAuxName, $idOrigenDatos, $idConexion);
+        //Ya no será necesaria esta función
+        //$this->borrarDocumento($this->bucketAuxName, $idOrigenDatos, $idConexion);
     }
 
     public function inicializarTabla($idOrigenDatos, $idConexion) {
@@ -81,31 +86,35 @@ class CouchbaseOrigenDatos implements OrigenDatosInterface
     }
 
 
-    public function guardarDatos($idConexion, $idOrigenDatos) {
+    public function guardarDatos($idConexion, $idOrigenDatos, $idCarga) {
 
         //Borrar los datos existentes
-        $this->borrarDocumento($this->bucketName, $idOrigenDatos, $idConexion);
+        $this->borrarDocumento( $idOrigenDatos, $idConexion, $idCarga);
 
-        $stm = 'UPSERT INTO `' . $this->bucketName . '` (KEY _k, VALUE _v) ' .
+        /*$stm = 'UPSERT INTO `' . $this->bucketName . '` (KEY _k, VALUE _v) ' .
             ' SELECT META().id _k, _v ' .
             ' FROM `' . $this->bucketAuxName . '` _v' .
             ' WHERE id_origen_datos = ' . $idOrigenDatos . ' AND id_conexion = ' . $idConexion;
         $query = \Couchbase\N1qlQuery::fromString($stm);
         $this->bucket->query($query);
-
+        */
         //Borrar los documentos temporales
-        $this->borrarDocumento($this->bucketAuxName, $idOrigenDatos, $idConexion);
+        //$this->borrarDocumento($this->bucketAuxName, $idOrigenDatos, $idConexion);
     }
 
-    public function guardarDatosIncremental($idConexion, $idOrigenDatos, $limiteInf, $limiteSup){
+    public function guardarDatosIncremental($idConexion, $idOrigenDatos, $idCarga, $limiteInf, $limiteSup){
 
     }
 
-    private function borrarDocumento($bucketNane, $idOrigenDatos, $idConexion) {
+    private function borrarDocumento( $idOrigenDatos, $idConexion, $idCarga) {
         try {
-            $stm = 'DELETE FROM `'.$bucketNane.'` WHERE id_origen_datos= ' . $idOrigenDatos . ' AND id_conexion = ' . $idConexion;
+            $stm = 'DELETE FROM `'.$this->bucketName.'` 
+                WHERE id_origen_datos= ' . $idOrigenDatos . ' 
+                AND id_conexion = ' . $idConexion . "
+                AND id_carga != '" . $idCarga . "'"
+                ;
             $query = \Couchbase\N1qlQuery::fromString($stm);
-            $this->bucketAux->query($query);
+            $this->bucket->query($query);
         }catch (\Exception $e){
             echo $e->getMessage();
         }

@@ -53,8 +53,8 @@ class AlmacenamientoProxy implements DashboardInterface, OrigenDatosInterface
         $this->origenDatosWrapped->inicializarTablaAuxliar($idOrigenDatos, $idConexion);
     }
 
-    public function insertarEnAuxiliar($idOrigenDatos, $idConexion, $datos){
-        $this->origenDatosWrapped->insertarEnAuxiliar($idOrigenDatos, $idConexion, $datos);
+    public function insertarEnAuxiliar($idOrigenDatos, $idConexion, $datos, $idCarga){
+        $this->origenDatosWrapped->insertarEnAuxiliar($idOrigenDatos, $idConexion, $datos, $idCarga);
     }
 
 
@@ -68,13 +68,13 @@ class AlmacenamientoProxy implements DashboardInterface, OrigenDatosInterface
     }
 
 
-    public function guardarDatos($idConexion, $idOrigenDatos) {
-        $this->origenDatosWrapped->guardarDatos($idConexion, $idOrigenDatos);
+    public function guardarDatos($idConexion, $idOrigenDatos, $idCarga) {
+        $this->origenDatosWrapped->guardarDatos($idConexion, $idOrigenDatos, $idCarga);
     }
 
 
-    public function guardarDatosIncremental($idConexion, $idOrigenDatos, $limiteInf, $limiteSup){
-        $this->origenDatosWrapped->guardarDatosIncremental($idConexion, $idOrigenDatos, $limiteInf, $limiteSup);
+    public function guardarDatosIncremental($idConexion, $idOrigenDatos, $idCarga, $limiteInf, $limiteSup){
+        $this->origenDatosWrapped->guardarDatosIncremental($idConexion, $idOrigenDatos, $idCarga, $limiteInf, $limiteSup);
     }
 
 
