@@ -165,9 +165,9 @@ class OrigenDatos
     private $campoLecturaIncremental;
 
     /**
-     * @var datetime $valorCorte
+     * @var string $valorCorte
      *
-     * @ORM\Column(name="valor_corte", type="datetime", nullable=true)
+     * @ORM\Column(name="valor_corte", type="string", length=50, nullable=true)
      */
     private $valorCorte;
 
@@ -855,7 +855,7 @@ class OrigenDatos
     }
 
     /**
-     * @return datetime
+     * @return string
      */
     public function getValorCorte()
     {
@@ -871,7 +871,7 @@ class OrigenDatos
     }
 
     /**
-     * @param datetime $valorCorte
+     * @param datetime string
      */
     public function setValorCorte($valorCorte)
     {

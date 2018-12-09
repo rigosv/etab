@@ -33,9 +33,8 @@ class GuardarOrigenDatosHandler implements MessageHandlerInterface
 
     public function __invoke(SmsGuardarOrigenDatos $message)
     {
-        //dump($message);
-
         $this->msg = $message->getDatos();
+
         $this->logger->info(' GUARDANDO DATOS  Msj: ' . $this->msg['id_origen_dato'] . '/' . (array_key_exists('numMsj', $this->msg) ? $this->msg['numMsj'] : '--') );
 
         $this->origenDato = $this->em->find(OrigenDatos::class, $this->msg['id_origen_dato']);
@@ -134,7 +133,8 @@ class GuardarOrigenDatosHandler implements MessageHandlerInterface
             $cnx->exec($sql);
         } else {
 
-            if ( $this->origenDato->getCampoLecturaIncremental() != null and $this->origenDato->getValorCorte() != null) {
+            if ( $this->origenDato->getCampoLecturaIncremental() != null and $this->origenDato->getValorCorte() != null
+                and $this->msg['lim_inf'] != '' AND  $this->msg['lim_sup'] != '') {
                 $this->almacenamiento->guardarDatosIncremental($this->msg['id_conexion'], $this->msg['id_origen_dato'], $this->msg['carga_id'], $this->msg['lim_inf'], $this->msg['lim_sup']);
             } else {
                 //Pasar todos los datos de la tabla auxiliar a la tabla destino final

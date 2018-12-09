@@ -100,7 +100,7 @@ class PostgreSQLOrigenDatos implements OrigenDatosInterface
         $origenDato = $this->em->find(OrigenDatos::class, $idOrigenDatos);
         $campoControlIncremento = $origenDato->getCampoLecturaIncremental()->getSignificado()->getCodigo();
 
-        $formatoFecha = str_replace(['Y', 'm', 'd'], ['YYYY', 'MM', 'DD'], $origenDato->getFormatoValorCorte() );
+        $formatoFecha = str_replace(['Y', 'm', 'd', 'H', 'i', 's'], ['YYYY', 'MM', 'DD', 'HH', 'MI', 'SS'], $origenDato->getFormatoValorCorte() );
 
         $tablaDestino = $this->tabla.$idOrigenDatos;
         $tablaAuxiliar = $tablaDestino.'_tmp';

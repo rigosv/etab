@@ -35,7 +35,7 @@ class AlmacenamientoProxy implements DashboardInterface, OrigenDatosInterface
         //Por defecto es PostgresSQL
         if ($this->params->get('app.datos.tipo_almacenamiento') == 'couchbase'){
             $this->dashboardWrapped = new CouchbaseDashboard($this->em, $this->params);
-            $this->origenDatosWrapped = new CouchbaseOrigenDatos($this->params);
+            $this->origenDatosWrapped = new CouchbaseOrigenDatos($this->em, $this->params);
         } else {
             $this->dashboardWrapped = new PostgreSQLDashboard($this->em, $this->emDatos);
             $this->origenDatosWrapped = new PostgreSQLOrigenDatos($this->em, $this->emDatos);

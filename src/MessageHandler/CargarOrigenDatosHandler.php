@@ -72,11 +72,13 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
         $this->bus->dispatch(new SmsGuardarOrigenDatos($msg_init));
     }
 
-    private function enviarDatos($idOrigen, $datos, $campos_sig, $ultima_lectura, $idConexion, $cargaId) {
-        $datos_a_enviar = array();
+    private function enviarDatos($idOrigen, $datos, $campos_sig, $ultima_lectura, $idConexion, $cargaId, $lim_inf = '', $lim_sup='') {
+
+        $origenDato = $this->em->find(OrigenDatos::class, $idOrigen);
 
         $bus = $this->bus;
-        $send = function ($datosEnv, $indice) use ($idOrigen, $campos_sig, $ultima_lectura, $idConexion,  $bus, $cargaId){
+
+        $send = function ($datosEnv, $indice) use ($idOrigen, $campos_sig, $ultima_lectura, $idConexion,  $bus, $cargaId, $lim_inf, $lim_sup){
             $msg_guardar = array('id_origen_dato' => $idOrigen,
                 'method' => 'PUT',
                 'datos' => $datosEnv,
@@ -85,16 +87,30 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
                 'r' => microtime(true),
                 'numMsj' => $indice + 1,
                 'carga_id' => $cargaId,
+                'lim_inf' => $lim_inf,
+                'lim_sup' => $lim_sup
             );
-
             $bus->dispatch(new SmsGuardarOrigenDatos($msg_guardar));
         };
 
         if ( count($datos) > 0 ) {
             $datos_a_enviar = $this->almacenamiento->prepararDatosEnvio($idOrigen, $campos_sig, $datos, $ultima_lectura, $idConexion);
+
             //Enviaré a guardar en pedazos de 3000
             $partes = array_chunk($datos_a_enviar, 3000);
             array_walk( $partes, $send);
+
+            if ( $origenDato->getCampoLecturaIncremental() != null ) {
+
+                $valorCorte = array_pop($datos_a_enviar);
+
+                $origenDato->setValorCorte( $valorCorte[$origenDato->getCampoLecturaIncremental()->getSignificado()->getCodigo()]);
+                $this->em->persist($origenDato);
+
+                $this->em->flush();
+            }
+
+
         }
     }
 
@@ -122,34 +138,35 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
             $condicion_carga_incremental = "";
             $ultimaLecturaIncremental = null;
             $esLecturaIncremental = ( $campoLecturaIncremental == null or $origenDato->getValorCorte() == null) ? false: true;
+
             $orden = " ";
             $lim_inf= '';
             $lim_sup =  '';
             if ( $esLecturaIncremental ){
                 //tomar la fecha de la última actualización del origen
-                $campoIncremental = $campoLecturaIncremental->getCodigo();
-                $significadoCampoIncremental = $campoIncremental->getSignificado()->getCodigo();
+                $campoIncremental = $campoLecturaIncremental->getNombre();
+                $significadoCampoIncremental = $campoLecturaIncremental->getSignificado()->getCodigo();
 
                 //Calcular los límites
                 $ventana_inf = ($origenDato->getVentanaLimiteInferior() == null) ? 0 : $origenDato->getVentanaLimiteInferior();
                 $ventana_sup = ($origenDato->getVentanaLimiteSuperior() == null) ? 0 : $origenDato->getVentanaLimiteSuperior();
 
-                $fechaIni = $origenDato->getFechaCorte();
+                $valorCorte = $origenDato->getValorCorte();
                 $fechaFin = new \DateTime();
 
                 if ( $significadoCampoIncremental == 'fecha' or $significadoCampoIncremental == 'date') {
+                    $fechaIni = \Datetime::createFromFormat($origenDato->getFormatoValorCorte(), $valorCorte );
                     $lim_inf = $fechaIni->sub(new \DateInterval('P' . $ventana_inf . 'D'))->format($origenDato->getFormatoFechaCorte());
                     $lim_sup = $fechaFin->sub(new \DateInterval('P' . $ventana_sup . 'D'))->format($origenDato->getFormatoFechaCorte());
 
-                    $condicion_carga_incremental = " AND $campoIncremental >= '$lim_inf'
+                    $condicion_carga_incremental = " AND $campoIncremental > '$lim_inf'
                                                                  AND $campoIncremental <= '$lim_sup' ";
-
                 } else {
                     // Se está utilizando el campo año para la carga incremental
-                    $lim_inf = $fechaIni->format('Y') - $ventana_inf ;
+                    $lim_inf = $valorCorte - $ventana_inf ;
                     $lim_sup = $fechaFin->format('Y') - $ventana_sup;
 
-                    $condicion_carga_incremental = " AND $campoIncremental >= $lim_inf
+                    $condicion_carga_incremental = " AND $campoIncremental > $lim_inf
                                                                  AND $campoIncremental <= $lim_sup ";
 
                 }
@@ -226,7 +243,7 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
                             $errorEnLectura = true;
                             $this->logger->warning('## SIN REGISTROS  ---> Origen: '.$idOrigenDatos);
                         } else {
-                            $this->enviarDatos($idOrigenDatos, $datos, $campos_sig, $ahora, $cnx->getId(), $cargaId);
+                            $this->enviarDatos($idOrigenDatos, $datos, $campos_sig, $ahora, $cnx->getId(), $cargaId, $lim_inf, $lim_sup);
                             if ($cnx->getIdMotor()->getCodigo() == 'pdo_dblib')
                                 $leidos = 1;
                             else
@@ -254,12 +271,12 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
                         $this->em->flush();
                     }
                     else{
-                        $this->enviarMsjFinal($idOrigenDatos, $ahora, $cnx->getId(), $cargaId);
+                        $this->enviarMsjFinal($idOrigenDatos, $ahora, $cnx->getId(), $cargaId, $lim_inf, $lim_sup);
                     }
                 }
 
                 $tfc = new \DateTime();
-                $this->logger->info('============================= FIN DE CARGA de origen de datos: '. $origenDato . ' <BR> Finalizada en : '. $tfc->format('H:i:s.v'));
+                $this->logger->info('============================= FIN DE CARGA de origen de datos: '. $origenDato . '  Finalizada en : '. $tfc->format('H:i:s.v'));
 
                 $d = $tfc->diff($tic) ;
                 $dm = abs ( $tfc->format('v') - $tic->format('v') );
@@ -267,7 +284,6 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
                 $origenDato->setUltimaActualizacion($fecha);
                 $this->em->flush();
             } catch (\Exception $e) {
-                echo 'CODC 1' . $e->getMessage();
                 $this->logger->error($e->getFile() . '( '.$e->getLine().') '.$e->getMessage());
             }
 
