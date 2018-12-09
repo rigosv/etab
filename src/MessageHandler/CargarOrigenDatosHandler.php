@@ -66,8 +66,7 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
             'r' => microtime(true),
             'numMsj' => $this->numMsj++
         );
-        //$this->container->get('old_sound_rabbit_mq.guardar_registro_producer')
-        //->publish(json_encode($msg_init));
+
         $this->bus->dispatch(new SmsGuardarOrigenDatos($msg_init));
     }
 
@@ -117,7 +116,7 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
             $campoLecturaIncremental = $origenDato->getCampoLecturaIncremental();
             $condicion_carga_incremental = "";
             $ultimaLecturaIncremental = null;
-            $esLecturaIncremental = ( $campoLecturaIncremental == null or $origenDato->getFechaCorte() == null) ? false: true;
+            $esLecturaIncremental = ( $campoLecturaIncremental == null or $origenDato->getValorCorte() == null) ? false: true;
             $orden = " ";
             $lim_inf= '';
             $lim_sup =  '';
@@ -136,14 +135,19 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
                 if ( $significadoCampoIncremental == 'fecha' or $significadoCampoIncremental == 'date') {
                     $lim_inf = $fechaIni->sub(new \DateInterval('P' . $ventana_inf . 'D'))->format($origenDato->getFormatoFechaCorte());
                     $lim_sup = $fechaFin->sub(new \DateInterval('P' . $ventana_sup . 'D'))->format($origenDato->getFormatoFechaCorte());
+
+                    $condicion_carga_incremental = " AND $campoIncremental >= '$lim_inf'
+                                                                 AND $campoIncremental <= '$lim_sup' ";
+
                 } else {
                     // Se está utilizando el campo año para la carga incremental
                     $lim_inf = $fechaIni->format('Y') - $ventana_inf ;
                     $lim_sup = $fechaFin->format('Y') - $ventana_sup;
-                }
 
-                $condicion_carga_incremental = " AND $campoIncremental >= '$lim_inf'
-                                                                 AND $campoIncremental <= '$lim_sup' ";
+                    $condicion_carga_incremental = " AND $campoIncremental >= $lim_inf
+                                                                 AND $campoIncremental <= $lim_sup ";
+
+                }
 
                 $orden = " ORDER BY $campoIncremental ";
             }

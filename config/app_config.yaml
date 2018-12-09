@@ -3,7 +3,7 @@ parameters:
     locale: 'es'
     app.theme : 'default'
     app.upload_directory: '%kernel.project_dir%/public/uploads'
-    app.datos.tipo_almacenamiento: 'couchbase'
+    app.datos.tipo_almacenamiento: 'PostgreSQL'
     app.maindefault: '/indicadores/tablero'
     app.admindefault: '/indicadores/tablero'
     couchbase_url: '%env(resolve:COUCHBASE_URL)%'

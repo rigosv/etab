@@ -165,18 +165,18 @@ class OrigenDatos
     private $campoLecturaIncremental;
 
     /**
-     * @var datetime $fechaCorte
+     * @var datetime $valorCorte
      *
-     * @ORM\Column(name="fecha_corte", type="datetime", nullable=true)
+     * @ORM\Column(name="valor_corte", type="datetime", nullable=true)
      */
-    private $fechaCorte;
+    private $valorCorte;
 
     /**
-     * @var string $formatoFechaCorte
+     * @var string $formatoValorCorte
      *
-     * @ORM\Column(name="formato_fecha_corte", type="string", length=100, nullable=true)
+     * @ORM\Column(name="formato_valor_corte", type="string", length=100, nullable=true)
      */
-    protected $formatoFechaCorte;
+    protected $formatoValorCorte;
     
     /**
      * @var datetime ultimaActualizacion
@@ -857,33 +857,33 @@ class OrigenDatos
     /**
      * @return datetime
      */
-    public function getFechaCorte()
+    public function getValorCorte()
     {
-        return $this->fechaCorte;
+        return $this->valorCorte;
     }
 
     /**
      * @return string
      */
-    public function getFormatoFechaCorte()
+    public function getFormatoValorCorte()
     {
-        return $this->formatoFechaCorte;
+        return $this->formatoValorCorte;
     }
 
     /**
-     * @param datetime $fechaCorte
+     * @param datetime $valorCorte
      */
-    public function setFechaCorte($fechaCorte)
+    public function setValorCorte($valorCorte)
     {
-        $this->fechaCorte = $fechaCorte;
+        $this->valorCorte = $valorCorte;
     }
 
     /**
-     * @param string $formatoFechaCorte
+     * @param string $formatoValorCorte
      */
-    public function setFormatoFechaCorte($formatoFechaCorte)
+    public function setFormatoValorCorte($formatoValorCorte)
     {
-        $this->formatoFechaCorte = $formatoFechaCorte;
+        $this->formatoValorCorte = $formatoValorCorte;
     }
 
 }

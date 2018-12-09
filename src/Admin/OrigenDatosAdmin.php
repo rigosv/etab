@@ -117,8 +117,8 @@ class OrigenDatosAdmin extends Admin
                                     }
                                 }                                
                                 ))
-                            ->add('fechaCorte', null, array('label' => ('_fecha_corte_'), 'required' => false, 'help' => ('_fecha_corte_help_')))
-                            ->add('formatoFechaCorte', null, array('label' => ('_formato_fecha_corte_'), 'required' => false))
+                            ->add('valorCorte', null, array('label' => ('_valor_corte_'), 'required' => false, 'help' => ('_fecha_corte_help_')))
+                            ->add('formatoValorCorte', null, array('label' => ('_formato_valor_corte_'), 'required' => false))
                             ->add('ventanaLimiteInferior', null, array('label' => ('_ventana_limite_inferior_'), 'required' => false))
                             ->add('ventanaLimiteSuperior', null, array('label' => ('_ventana_limite_superior_'), 'required' => false))
                         ->end()

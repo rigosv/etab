@@ -527,8 +527,10 @@ _solo_un_archivo_: Solo puedo subir un archivo
 _agregar_archivo_: Agregar archivo
 _origen_datos_archivo_: Desde archivo
 _origen_datos_sql_: Desde base de datos
-_tipo_archivo_invalido_: Tipo de archivo no válido_cantidad_decimales_: Cantidad de decimales
+_tipo_archivo_invalido_: Tipo de archivo no válido
+_cantidad_decimales_: Cantidad de decimales
 _cantidad_decimales_help_: En el resultado de la fórmula se usará la cantidad de decimales especificados
-_formato_fecha_corte_: Formato de fecha del campo incremental. 'Y-m-d H:i:s' por defecto
-_fecha_corte_: Fecha de corte
-_fecha_corte_help_: Tomada de la fecha del último dato cargado
+_formato_valor_corte_: Formato valor corte
+_formato_valor_corte_help_: Formato de fecha del campo incremental. 'Y-m-d H:i:s' por defecto
+_valor_corte_: Valor de corte
+_valor_corte_help_: Último valor leído en la carga de datos
