@@ -150,7 +150,7 @@ class CouchbaseOrigenDatos implements OrigenDatosInterface
                 ;
 
         }
-echo $stm;
+
         $query = \Couchbase\N1qlQuery::fromString($stm);
         $this->bucket->query($query);
 
@@ -159,7 +159,7 @@ echo $stm;
                 WHERE id_origen_datos= ' . $idOrigenDatos . ' 
                 AND id_conexion = ' . $idConexion .
                 ' AND ARRAY_COUNT(_t.datos) = 0 '.
-                ' AND TONUMBER(_t.datos_lim_inf) >= ' .  $limiteInf .
+                ' AND TONUMBER(_t.datos_lim_inf) > ' .  $limiteInf .
                 ' AND TONUMBER(_t.datos_lim_sup) <= ' . $limiteSup
         ;
         $query = \Couchbase\N1qlQuery::fromString($stmB);
