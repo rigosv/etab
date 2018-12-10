@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use App\AlmacenamientoDatos\AlmacenamientoProxy;
 use App\Message\SmsCargarOrigenDatos;
 use App\Entity\OrigenDatos;
-use App\Message\SmsGuardarOrigenDatos;
+//use App\Message\SmsGuardarOrigenDatos;
 
 
 class CargarOrigenDatosHandler implements MessageHandlerInterface
@@ -48,7 +48,7 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
 
     private function enviarMsjFinal ($idOrigen, $ahora, $idConexion, $cargaId, $lim_inf = '', $lim_sup = '') {
         //Después de enviados todos los registros para guardar, mandar mensaje para borrar los antiguos
-        $msg_guardar = array('id_origen_dato' => $idOrigen,
+        /*$msg_guardar = array('id_origen_dato' => $idOrigen,
             'method' => 'DELETE',
             'ultima_lectura' => $ahora,
             'id_conexion' =>$idConexion,
@@ -58,19 +58,82 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
             'lim_sup' => $lim_sup
         );
 
-        $this->bus->dispatch(new SmsGuardarOrigenDatos($msg_guardar));
+        $this->bus->dispatch(new SmsGuardarOrigenDatos($msg_guardar));*/
+
+        $origenDato = $this->em->find(OrigenDatos::class, $idOrigen);
+
+        $areaCosteo = $origenDato->getAreaCosteo();
+        $tabla = 'origenes.fila_origen_dato_' . $idOrigen;
+        $cnx = $this->em->getConnection();
+
+        //verificar si la tabla existe
+        $this->almacenamiento->inicializarTabla($idOrigen, $idConexion);
+
+        if ($areaCosteo['area_costeo'] == 'rrhh') {
+            //Solo agregar los datos nuevos
+            $sql = " INSERT INTO $tabla 
+                                SELECT *  FROM $tabla" . "_tmp 
+                                WHERE id_origen_dato='$idOrigen'
+                                    AND datos->>'nit' 
+                                        NOT IN 
+                                        (SELECT datos->>'nit' FROM $tabla); 
+                                DROP TABLE IF EXISTS " . $tabla . '_tmp';
+            $cnx->exec($sql);
+
+        } elseif ($areaCosteo['area_costeo'] == 'ga_af') {
+            //Solo agregar los datos nuevos
+            $sql = " INSERT INTO $tabla 
+                                SELECT *  FROM $tabla" . "_tmp
+                                WHERE id_origen_dato='$idOrigen'
+                                    AND datos->>'codigo_af' 
+                                        NOT IN 
+                                        (SELECT datos->>'codigo_af' FROM $tabla); 
+                            DROP TABLE IF EXISTS " . $tabla . '_tmp; ';
+            $cnx->exec($sql);
+        } else {
+
+            if ( $origenDato->getCampoLecturaIncremental() != null and $origenDato->getValorCorte() != null
+                and $lim_inf != '' AND  $lim_sup != '') {
+                $this->almacenamiento->guardarDatosIncremental($idConexion, $idOrigen, $cargaId, $lim_inf, $lim_sup );
+            } else {
+                //Pasar todos los datos de la tabla auxiliar a la tabla destino final
+                $this->almacenamiento->guardarDatos( $idConexion, $idOrigen, $cargaId );
+            }
+        }
+
+        $inicio = new \DateTime($ahora);
+        $fin = new \DateTime("now");
+        $diffInSeconds = $fin->getTimestamp() - $inicio->getTimestamp();
+
+        $origenDato->setTiempoSegundosUltimaCarga($diffInSeconds);
+        $origenDato->setCargaFinalizada(true);
+        //$this->em->getConnection()->exec($sql);
+
+        //Poner la fecha de última lectura para todas las fichas que tienen este origen de datos
+        $ahora2 = new \DateTime();
+        $origenDato->setUltimaActualizacion($ahora2);
+
+        foreach ($origenDato->getVariables() as $var) {
+            foreach ($var->getIndicadores() as $ind) {
+                $ind->setUltimaLectura($ahora2);
+                $this->em->persist($ind);
+            }
+        }
+
+        $this->em->flush();
+
+        $this->logger->info('Carga finalizada de origen ' . $idOrigen . ' Para la conexión ' . $idConexion );
+
+        //Recalcular la tabla del indicador
+        //Recuperar las variables en las que está presente el origen de datos
+        $origenDatos = $this->em->find(OrigenDatos::class, $idOrigen);
+        foreach ($origenDatos->getVariables() as $var) {
+            foreach ($var->getIndicadores() as $ind) {
+                //$this->bus->dispatch( new SmsCargarIndicadorEnTablero( $ind->getId() ) );
+            }
+        }
     }
 
-    private function enviarMsjInicio ($idOrigen, $cargaId) {
-        $msg_init = array('id_origen_dato' => $idOrigen,
-            'method' => 'BEGIN',
-            'r' => microtime(true),
-            'numMsj' => $this->numMsj++,
-            'carga_id' => $cargaId
-        );
-
-        $this->bus->dispatch(new SmsGuardarOrigenDatos($msg_init));
-    }
 
     private function enviarDatos($idOrigen, $datos, $campos_sig, $ultima_lectura, $idConexion, $cargaId, $lim_inf = '', $lim_sup='') {
 
@@ -78,8 +141,8 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
 
         $bus = $this->bus;
 
-        $send = function ($datosEnv, $indice) use ($idOrigen, $campos_sig, $ultima_lectura, $idConexion,  $bus, $cargaId, $lim_inf, $lim_sup){
-            $msg_guardar = array('id_origen_dato' => $idOrigen,
+        $send = function ($datosEnv, $indice) use ($idOrigen, $idConexion,  $cargaId, $origenDato ){
+            /*$msg_guardar = array('id_origen_dato' => $idOrigen,
                 'method' => 'PUT',
                 'datos' => $datosEnv,
                 'ultima_lectura' => $ultima_lectura,
@@ -90,7 +153,27 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
                 'lim_inf' => $lim_inf,
                 'lim_sup' => $lim_sup
             );
-            $bus->dispatch(new SmsGuardarOrigenDatos($msg_guardar));
+            $bus->dispatch(new SmsGuardarOrigenDatos($msg_guardar));*/
+
+            $ti = microtime(true);
+
+            try {
+
+                $this->almacenamiento->insertarEnAuxiliar($idOrigen, $idConexion, $datosEnv, $cargaId);
+
+            } catch (\Exception $e) {
+                $error = ' Conexion : ' . $idConexion . ' Error: ' . $e->getMessage();
+                $this->logger->error($e->getFile(). '('.$e->getLine().') ' .$error);
+
+                $origenDato->setErrorCarga(true);
+                $origenDato->setMensajeErrorCarga($error);
+                $this->em->flush();
+
+            }
+
+            $tf = microtime(true);
+            $d = $tf - $ti;
+            $this->logger->info('--> DURACIÓN(s): ' . number_format($d/1000000, 10)) ;
         };
 
         if ( count($datos) > 0 ) {
@@ -256,7 +339,7 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
                     }
 
                     if ( $errorEnLectura ){
-                        $msg_ = array('id_origen_dato' => $idOrigenDatos,
+                        /*$msg_ = array('id_origen_dato' => $idOrigenDatos,
                             'method' => 'ERROR_LECTURA',
                             'id_conexion' =>$cnx->getId(),
                             'numMsj' => $this->numMsj++,
@@ -264,7 +347,8 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
                             'cargaId' => $cargaId
                         );
 
-                        $this->bus->dispatch(new SmsGuardarOrigenDatos($msg_));
+                        $this->bus->dispatch(new SmsGuardarOrigenDatos($msg_));*/
+                        $this->almacenamiento->borrarTablaAuxiliar( $idOrigenDatos, $cnx->getId() );
 
                         $origenDato->setErrorCarga(true);
                         $origenDato->setMensajeErrorCarga(' Conexion: ' . $cnx->getId() . ' Error: ' . $datos);
@@ -291,7 +375,7 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
 
             $datos = $this->em->getRepository(OrigenDatos::class)
                 ->getDatos(null, null, $this->params->get('app.upload_directory'), $origenDato->getArchivoNombre(), $this->phpspreadsheet);
-            $this->enviarMsjInicio($idOrigenDatos, $cargaId);
+            $this->enviarMsjInicio( $idOrigenDatos );
 
             $this->enviarDatos($idOrigenDatos, $datos, $campos_sig, $ahora, 0, $cargaId);
 
@@ -299,6 +383,36 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
         }
 
 
+    }
+
+    private function enviarMsjInicio ( $idOrigen ) {
+        /*$msg_init = array('id_origen_dato' => $idOrigen,
+            'method' => 'BEGIN',
+            'r' => microtime(true),
+            'numMsj' => $this->numMsj++,
+            'carga_id' => $cargaId
+        );
+
+        $this->bus->dispatch(new SmsGuardarOrigenDatos($msg_init));*/
+
+        $origenDato = $this->em->find(OrigenDatos::class, $idOrigen);
+
+        $cnx = $this->em->getConnection();
+        $areaCosteo = $origenDato->getAreaCosteo();
+        $tabla = 'origenes.fila_origen_dato_' . $idOrigen;
+
+        // Iniciar borrando los datos que pudieran existir en la tabla auxiliar
+        if (($areaCosteo['area_costeo'] != '')) {
+            $sql = ' DROP TABLE IF EXISTS costos.fila_origen_dato_' . $areaCosteo['area_costeo'] . ';
+                            SELECT * INTO ' . $tabla . "_tmp FROM fila_origen_dato_v2 LIMIT 0;                
+                   ";
+            $cnx->exec($sql);
+        } else {
+            $this->almacenamiento->inicializarTablaAuxliar( $idOrigen );
+        }
+
+        $origenDato->setCargaFinalizada(false);
+        $this->em->flush();
     }
 
 }

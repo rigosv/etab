@@ -49,8 +49,8 @@ class AlmacenamientoProxy implements DashboardInterface, OrigenDatosInterface
         return $this->origenDatosWrapped->prepararDatosEnvio($idOrigenDatos, $campos_sig, $datos, $ultimaLectura, $idConexion);
     }
 
-    public function inicializarTablaAuxliar($idOrigenDatos, $idConexion ){
-        $this->origenDatosWrapped->inicializarTablaAuxliar($idOrigenDatos, $idConexion);
+    public function inicializarTablaAuxliar($idOrigenDatos ){
+        $this->origenDatosWrapped->inicializarTablaAuxliar($idOrigenDatos);
     }
 
     public function insertarEnAuxiliar($idOrigenDatos, $idConexion, $datos, $idCarga){

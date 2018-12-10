@@ -44,7 +44,7 @@ class PostgreSQLOrigenDatos implements OrigenDatosInterface
         return $datos_a_enviar;
     }
 
-    public function inicializarTablaAuxliar($idOrigenDatos, $idConexion) {
+    public function inicializarTablaAuxliar($idOrigenDatos) {
         $sql = ' CREATE TABLE IF NOT EXISTS  '. $this->tabla.$idOrigenDatos.'_tmp (
                     id_origen_dato integer,
                     datos jsonb,

@@ -27,7 +27,7 @@ interface OrigenDatosInterface
      * @param $idOrigenDatos
      * @return void
      */
-    public function inicializarTablaAuxliar($idOrigenDatos, $idConexion);
+    public function inicializarTablaAuxliar($idOrigenDatos);
 
     /**
      * Guarda la porción de datos leida desde el origen hacia la tabla auxiliar

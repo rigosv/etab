@@ -33,7 +33,7 @@ class GuardarOrigenDatosHandler implements MessageHandlerInterface
 
     public function __invoke(SmsGuardarOrigenDatos $message)
     {
-        $this->msg = $message->getDatos();
+        /*$this->msg = $message->getDatos();
 
         $this->logger->info(' GUARDANDO DATOS  Msj: ' . $this->msg['id_origen_dato'] . '/' . (array_key_exists('numMsj', $this->msg) ? $this->msg['numMsj'] : '--') );
 
@@ -58,11 +58,11 @@ class GuardarOrigenDatosHandler implements MessageHandlerInterface
             }
         }
 
-        $this->logger->info('FIN GUARDAR');
+        $this->logger->info('FIN GUARDAR'); */
     }
 
     private function mensajePut(){
-        $ti = microtime(true);
+        /*$ti = microtime(true);
 
         try {
 
@@ -80,11 +80,11 @@ class GuardarOrigenDatosHandler implements MessageHandlerInterface
         $tf = microtime(true);
         $d = $tf - $ti;
         $this->logger->info('--> DURACIÓN(s): ' . number_format($d/1000000, 10)) ;
-
+        */
     }
 
     private function mensajeBegin(){
-        $cnx = $this->em->getConnection();
+        /*$cnx = $this->em->getConnection();
         $areaCosteo = $this->origenDato->getAreaCosteo();
         $tabla = 'origenes.fila_origen_dato_' . $this->msg['id_origen_dato'];
 
@@ -100,10 +100,11 @@ class GuardarOrigenDatosHandler implements MessageHandlerInterface
 
         $this->origenDato->setCargaFinalizada(false);
         $this->em->flush();
+        */
     }
 
     private function mensajeDelete(){
-        $areaCosteo = $this->origenDato->getAreaCosteo();
+        /*$areaCosteo = $this->origenDato->getAreaCosteo();
         $tabla = 'origenes.fila_origen_dato_' . $this->msg['id_origen_dato'];
         $cnx = $this->em->getConnection();
 
@@ -173,7 +174,7 @@ class GuardarOrigenDatosHandler implements MessageHandlerInterface
             foreach ($var->getIndicadores() as $ind) {
                 //$this->bus->dispatch( new SmsCargarIndicadorEnTablero( $ind->getId() ) );
             }
-        }
+        }*/
     }
 
 }

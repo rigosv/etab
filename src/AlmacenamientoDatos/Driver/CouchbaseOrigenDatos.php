@@ -31,7 +31,7 @@ class CouchbaseOrigenDatos implements OrigenDatosInterface
         $cluster->authenticate($authenticator);
         $this->bucket = $cluster->openBucket($this->bucketName);
 
-        $this->bucket->operationTimeout = 240 * 100; // 240 segundos
+        $this->bucket->operationTimeout = 840 * 100; // 240 segundos
 
     }
 
@@ -55,7 +55,7 @@ class CouchbaseOrigenDatos implements OrigenDatosInterface
         return $datos_a_enviar;
     }
 
-    public function inicializarTablaAuxliar($idOrigenDatos, $idConexion) {
+    public function inicializarTablaAuxliar($idOrigenDatos) {
         //Ya no será necesaria esta función
         //$this->borrarTablaAuxiliar($idOrigenDatos, $idConexion);
     }
