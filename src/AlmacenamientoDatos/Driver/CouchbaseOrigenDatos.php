@@ -128,25 +128,33 @@ class CouchbaseOrigenDatos implements OrigenDatosInterface
         if ($campoIncremental == 'fecha' or $campoIncremental =='date'){
             $li = \DateTime::createFromFormat($origen->getFormatoValorCorte(), $limiteInf)->format('Y-m-d H:i:s');
             $ls = \DateTime::createFromFormat($origen->getFormatoValorCorte(), $limiteSup)->format('Y-m-d H:i:s');
-
+            $corte = $li;
             $stm = 'UPDATE `' . $this->bucket . '` _t 
             SET _t.datos = ARRAY a FOR A IN _t.datos 
-                WHEN a.' . $campoIncremental . " <= '" . $li . "'" . ' END 
+                WHEN a.' . $campoIncremental . " <= '" . $corte . "'" . ' END 
             WHERE _t.id_origen_datos= ' . $idOrigenDatos . ' 
             AND _t.id_conexion = ' . $idConexion . "
-            AND _t.id_carga != '" . $idCarga . "'
-            AND _t.datos_lim_inf > '" .  $li . "'" .
-            " AND _t.datos_lim_sup <= '" . $ls . "'"
+            AND _t.id_carga != '" . $idCarga . "'".
+            ' AND ( ( TONUMBER(_t.datos_lim_inf) <= ' .  $corte .
+                    ' AND TONUMBER(_t.datos_lim_sup) >= ' . $corte .
+                    ') 
+                        OR TONUMBER(_t.datos_lim_inf) > ' . $corte . '
+                   )'
+                ;
             ;
         } else {
+            $corte = $limiteInf;
             $stm = 'UPDATE `' . $this->bucketName . '` _t 
-            SET _t.datos = ARRAY a FOR A IN _t.datos 
-                WHEN TONUMBER(a.' . $campoIncremental . ") <= " . $limiteInf  .' END 
+            SET _t.datos = ARRAY a FOR a IN _t.datos 
+                WHEN TONUMBER(a.' . $campoIncremental . ") <= " . $corte  .' END 
             WHERE _t.id_origen_datos= ' . $idOrigenDatos . ' 
             AND _t.id_conexion = ' . $idConexion . "
             AND _t.id_carga != '" . $idCarga . "' ".
-            ' AND TONUMBER(_t.datos_lim_inf) > ' .  $limiteInf .
-            ' AND TONUMBER(_t.datos_lim_sup) <= ' . $limiteSup
+            ' AND ( ( TONUMBER(_t.datos_lim_inf) <= ' .  $corte .
+                    ' AND TONUMBER(_t.datos_lim_sup) >= ' . $corte .
+                    ') 
+                        OR TONUMBER(_t.datos_lim_inf) > ' . $corte . '
+                   )'
                 ;
 
         }
@@ -158,10 +166,9 @@ class CouchbaseOrigenDatos implements OrigenDatosInterface
         $stmB = 'DELETE FROM `' . $this->bucketName . '` _t                 
                 WHERE id_origen_datos= ' . $idOrigenDatos . ' 
                 AND id_conexion = ' . $idConexion .
-                ' AND ARRAY_COUNT(_t.datos) = 0 '.
-                ' AND TONUMBER(_t.datos_lim_inf) > ' .  $limiteInf .
-                ' AND TONUMBER(_t.datos_lim_sup) <= ' . $limiteSup
+                ' AND ARRAY_COUNT(_t.datos) = 0 '
         ;
+
         $query = \Couchbase\N1qlQuery::fromString($stmB);
         $this->bucket->query($query);
     }
