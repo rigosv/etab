@@ -336,6 +336,7 @@ _comentarios_: Comentarios
 _enviar_: Enviar
 _guardar_como_: Guardar como
 _alerta_limite_inferior_: 'Límite inferior'
+_alerta_limite_superior_: 'Límite superior'
 _regresar_menu_principal_: Regresar al menú principal
 _agencia_: Agencia
 _usuario_no_agencia_: El usuario actual no tiene asignada una Agencia
@@ -528,3 +529,12 @@ _agregar_archivo_: Agregar archivo
 _origen_datos_archivo_: Desde archivo
 _origen_datos_sql_: Desde base de datos
 _tipo_archivo_invalido_: Tipo de archivo no válido
+
+_indicador_dimension_fin: 'Ha llegado al limite de dimensiones'
+
+_exportar_excel_: 'Exportar a Excel'
+_exportar_pdf_: 'Exportar a Pdf'
+_exportar_csv_: 'Exportar a Csv'
+
+periocidad: 'Periocidad'
+_restablecer_: 'Reestablecer'

@@ -1,0 +1,156 @@
+<div class="modal fade" id="modalFicha" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+       <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 id="myModalLabel2">{{ 'ficha_tecnica' | trans}}</h4>
+        </div>
+        <div class="modal-body" style="max-height:400px; max-width:100%; overflow:auto;" id="exportar_ficha">
+            
+            <table class="table table-bordered table-striped" >
+                <thead>
+                    <tr class="sonata-ba-view-title" bgcolor='#E1EFFB'>
+                        <th>{{ 'nombre_campo' | trans}}</th>
+                        <th>{{ '_descripcion_' | trans}}</th>                        
+                    </tr>
+                    
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>{{ 'nombre' | trans}}</th>
+                        <td><% indicadores[posicion].ficha.nombre %></td>
+                    </tr>
+                    <tr>
+                        <th>{{ '_interpretacion_' | trans}}</th>
+                        <td><% indicadores[posicion].ficha.tema %></td>
+                    </tr>
+                    <tr>
+                        <th>{{ 'concepto' | trans}}</th>
+                        <td><% indicadores[posicion].ficha.concepto %></td>
+                    </tr>
+                    <tr>
+                        <th>{{ 'unidad_medida' | trans}}</th>
+                        <td><% indicadores[posicion].ficha.unidad_medida %></td>
+                    </tr>
+                    <tr>
+                        <th>{{ '_acumulable_' | trans}}</th>
+                        <td><% indicadores[posicion].ficha.es_acumulado ? 'SI' : 'NO' %></td>
+                    </tr>
+                    <tr>
+                        <th>{{ '_observaciones_' | trans}}</th>
+                        <td><% indicadores[posicion].ficha.observacion %></td>
+                    </tr>
+                    <tr>
+                        <th>{{ 'clasificacion_tecnica' | trans}}</th>
+                        <td>
+                            <ul class="list-group">
+                                <li class="list-group-item" ng-repeat="(k, v) in indicadores[posicion].ficha.clasificacion_tecnica"><% v.descripcion %></li>                            
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>{{ '_meta_' | trans}}</th>
+                        <td><% indicadores[posicion].ficha.meta %></td>
+                    </tr>
+                    <tr>
+                        <th>{{ 'periocidad' | trans}}</th>
+                        <td><% indicadores[posicion].ficha.periodo.descripcion %></td>
+                    </tr>
+                    <tr>
+                        <th>{{ 'confiabilidad' | trans}}</th>
+                        <td><% indicadores[posicion].ficha.confiabilidad %></td>
+                    </tr>
+                    <tr>
+                        <th>{{ 'ultima_lectura' | trans}}</th>
+                        <td><% indicadores[posicion].ficha.ultima_lectura %></td>
+                    </tr>
+                    <tr>
+                        <th>{{ '_ultima_actualizacion_' | trans}}</th>
+                        <td><% indicadores[posicion].ficha.updated_at %></td>
+                    </tr>
+
+                    <tr>
+                        <th>{{ 'campos_indicador' | trans}}</th>
+                        <td><% indicadores[posicion].ficha.dimensiones %></td>
+                    </tr>
+                    <tr>
+                        <th>{{ 'Formula' | trans}}</th>
+                        <td><% indicadores[posicion].ficha.formula %></td>
+                    </tr>
+
+                    <tr>
+                        <th colspan="2" >
+                            <h4>{{ 'variables' | trans }}</h4>
+                            <table class="table table-bordered table-striped" ng-repeat="(k, v) in indicadores[posicion].ficha.variables">
+                                <caption>Var # <% $index + 1 %></caption>
+                                <tbody>
+                                    
+                                    <tr>
+                                        <th width="20%">{{ 'confiabilidad' | trans }}</th>
+                                        <td><% v.confiabilidad %></td>
+                                    </tr>
+                                    <tr>
+                                        <th>{{ 'nombre' | trans }} </th>
+                                        <td><% v.nombre %></td>
+                                    </tr>
+                                    <tr>
+                                        <th>{{ 'iniciales' | trans }} </th>
+                                        <td><% v.iniciales %></td>
+                                    </tr>
+                                    <tr>
+                                        <th>{{ '_fuente_' | trans }} </th>
+                                        <td><% v.fuente_dato ? v.fuente_dato.establecimiento + '('+ v.fuente_dato.contacto +')' : '' %></td>
+                                    </tr>
+                                    <tr>
+                                        <th>{{ 'origen_datos' | trans }} </th>
+                                        <td><% v.origen_dato ? v.origen_dato.nombre : '' %></td>
+                                    </tr>
+                                    <tr>
+                                        <th>{{ 'nombre_conexion' | trans }} </th>
+                                        <td>
+                                            <ul class="list-group">
+                                                <li class="list-group-item" ng-repeat="(k1, v1) in v.origen_dato.conexion"><% v1.nombre %> (<% v1.ip %>)</li>                            
+                                            </ul>                            
+                                    </tr>
+                                    <tr>
+                                        <th>{{ 'responsable_datos' | trans }} </th>
+                                        <td><% v.responsable_dato ? v.responsable_dato.establecimiento + '('+ v.responsable_dato.contacto +')' : '' %></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </th>
+                    </tr>
+                    <tr ng-if="indicadores[posicion].ficha.alertas.length > 0">
+                        <th colspan="2">
+                            <table class="table table-bordered table-striped" >
+                                <caption>{{ 'alertas' | trans}}</caption>
+                                <thead>
+                                    <tr class="sonata-ba-view-title" bgcolor='#E1EFFB'>
+                                        <th>{{ 'color' | trans}}</th>
+                                        <th>{{ '_alerta_limite_inferior_' | trans}}</th>
+                                        <th>{{ '_alerta_limite_superior_' | trans}}</th>
+                                        <th>{{ '_comentarios_' | trans}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="(k, v) in indicadores[posicion].ficha.alertas">
+                                        <td style="background:<% v.color.codigo %>"><% v.color.color %></td>
+                                        <td><% v.limite_inf %></td>
+                                        <td><% v.limite_sup %></td>
+                                        <td><% v.comentario %></td>
+                                    </tr> 
+                                </tbody>
+                            </table>
+                        </th>
+                    </tr>
+                </tbody>                
+            </table>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" ng-click="exportar_excel('exportar_ficha', indicadores[posicion].nombre)">{{ '_exportar_excel_' | trans}}</button>
+            <button type="button" class="btn btn-primary" ng-click="exportar_pdf('exportar_ficha', indicadores[posicion].nombre)">{{ '_exportar_pdf_' | trans}}</button>            
+            <button class="btn btn-warning" data-dismiss="modal" aria-hidden="true">{{ '_cerrar_' | trans}}</button>
+        </div>
+    </div>
+  </div>
+</div>

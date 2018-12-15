@@ -151,7 +151,7 @@ class FichaTecnica
     
     /**
      *
-     * @var periodo
+     * @var reporte
      *
      * @ORM\ManyToOne(targetEntity="GrupoIndicadores")
      * @ORM\JoinColumn(name="id_sala_reporte", referencedColumnName="id")

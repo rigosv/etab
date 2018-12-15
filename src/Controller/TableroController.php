@@ -183,14 +183,15 @@ class TableroController extends AbstractController {
 
             // devolver todos los datos si lo requiere   
             $conn = $em->getConnection();
+            $fav = "(CASE WHEN (SELECT id_indicador FROM usuario_indicadores_favoritos WHERE id_usuario =".$usuario->getId()." and id_indicador = id) > 1 THEN 1 ELSE 0 END) as es_favorito";
             if($datos->tipo == 'clasificados')
-                $sql = "SELECT * FROM ficha_tecnica where id in(select fichatecnica_id from fichatecnica_clasificaciontecnica where clasificaciontecnica_id = $datos->tecnica) $where order by nombre; ";
+                $sql = "SELECT *, $fav FROM ficha_tecnica where id in(select fichatecnica_id from fichatecnica_clasificaciontecnica where clasificaciontecnica_id = $datos->tecnica) $where order by nombre; ";
             
             if($datos->tipo == 'no_clasificados')
-                $sql = "SELECT * FROM ficha_tecnica where id not in(select fichatecnica_id from fichatecnica_clasificaciontecnica) $where order by nombre; ";
+                $sql = "SELECT *, $fav FROM ficha_tecnica where id not in(select fichatecnica_id from fichatecnica_clasificaciontecnica) $where order by nombre; ";
 
             if($datos->tipo == 'busqueda')
-                $sql = "SELECT * FROM ficha_tecnica where nombre like '%".$datos->busqueda."%' $where order by nombre; ";
+                $sql = "SELECT *, $fav FROM ficha_tecnica where nombre like '%".$datos->busqueda."%' $where order by nombre; ";
 
             if($datos->tipo == 'favoritos'){
                 $favoritos = [];
@@ -202,7 +203,7 @@ class TableroController extends AbstractController {
                     $where = "where id in($favoritos) $where";
                 }
                 
-                $sql = "SELECT * FROM ficha_tecnica $where order by nombre; ";
+                $sql = "SELECT *, $fav FROM ficha_tecnica $where order by nombre; ";
             }
             
             $statement = $conn->prepare($sql);
@@ -360,7 +361,7 @@ class TableroController extends AbstractController {
                 foreach ($datos->filtros as $f) 
                 {  
                     $f = (object) $f;
-                    array_push($filtros, [$f->codigo => $f->valor]);
+                    $filtros[$f->codigo] = $f->valor;
                 } 
             }
 
@@ -371,10 +372,12 @@ class TableroController extends AbstractController {
                 $response = [
                     'status' => 200,
                     'messages' => "Ok",
-                    'data' => $data,
-                    'informacion' => $this->dimensionIndicador($fichaTec),
-                    'total' => count($data)
-                ];                    
+                    'data' => $data                    
+                ];  
+                if(!$datos->ver_sql){
+                    $response['total'] = count($data);
+                    $response['informacion'] = $this->dimensionIndicador($fichaTec);
+                }
             } else{ 
                 $response = [
                     'status' => 404,
@@ -465,6 +468,154 @@ class TableroController extends AbstractController {
             $resp['resultado'] = 'error';
         }      
         return $resp;
+    }
+
+    /**
+     * @Route("/indicadorFavorito", name="indicadorFavorito", methods={"POST"})
+     */
+    public function indicadorFavorito(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $req = $request;
+        $favorito= false;
+        $indicador = $em->find(FichaTecnica::class, $req->get('id'));
+        $usuario = $this->getUser();
+        if ($req->get('es_favorito') == 'true' || $req->get('es_favorito') == 1) {
+            //Es favorito, entonces quitar
+            $usuario->removeFavorito($indicador);
+            $favorito= false;
+        } else {
+            $usuario->addFavorito($indicador);
+            $favorito= true;
+        }
+
+        $em->flush();
+
+        $response = [
+            'status' => 200,
+            'messages' => 'Ok',
+            'data' => $favorito
+        ];    
+        $encoders = array(new JsonEncoder());
+        $normalizers = array(new ObjectNormalizer());
+
+        $serializer = new Serializer($normalizers, $encoders);
+        return new Response($serializer->serialize($response, "json"));
+    }
+
+    /**
+     * @Route("/fichaIndicador/{id}", name="fichaIndicador_index", methods={"GET"})
+     */
+    public function fichaIndicador($id){
+        try{
+            // iniciar el manager de doctrine
+            $em = $this->getDoctrine()->getManager();
+            // Consultar que el modulo exista
+            $data = $em->getRepository(FichaTecnica::class)->find($id);
+            
+            // si existe el modulo
+            if($data){
+                $ultima_lectura = null;
+                $variables = [];
+                foreach ($data->getVariables() as $var) {
+                    $fecha_lectura = $var->getOrigenDatos()->getUltimaActualizacion();
+                    if ($fecha_lectura > $ultima_lectura or $ultima_lectura == null) {
+                        $ultima_lectura = $fecha_lectura;
+                    }
+                    $origen = $var->getOrigenDatos();
+                    $conexion = [];
+                    foreach ($origen->getConexiones() as $con) {
+                       array_push($conexion, array(
+                                "id" => $con->getId(),
+                                "nombre" => $con->getNombreConexion(),
+                                "ip" => $con->getIp(),
+                            )
+                       );
+                    }
+                    array_push($variables, array(
+                        "id" => $var->getId(),
+                        "nombre" => $var->getNombre(),
+                        "confiabilidad" => $var->getConfiabilidad(),
+                        "iniciales" => $var->getIniciales(),
+                        "comentario" => $var->getComentario(),
+                        "es_poblacion" => $var->getEsPoblacion(),
+                        "fuente_dato" => $var->getIdFuenteDato(),
+                        "responsable_dato" => $var->getIdResponsableDato(),
+                        "origen_dato" => array(
+                            "id" => $origen->getId(),
+                            "nombre" => $origen->getNombre(),
+                            "conexion" => $conexion
+                        )
+                    ));
+                }
+
+                $alertas = [];
+                foreach ($data->getAlertas() as $var) {                    
+                    array_push($alertas, array(
+                        "id" => $var->getId(),
+                        "color" => $var->getColor(),
+                        "limite_inf" => $var->getLimiteInferior(),
+                        "limite_sup" => $var->getLimiteSuperior(),
+                        "comentario" => $var->getComentario(),                    
+                    ));
+                }
+
+                $clasificaciones = [];
+                foreach ($data->getClasificacionTecnica() as $var) {                    
+                    array_push($clasificaciones, array(
+                        "id" => $var->getId(),
+                        "descripcion" => $var->getDescripcion()                    
+                    ));
+                }
+
+                $informacion = array(
+                    "id" => $data->getId(),
+                    "codigo" => $data->getcodigo(),
+                    "nombre" => $data->getNombre(),
+                    "tema" => $data->getTema(),
+                    "concepto" => $data->getConcepto(),
+                    "unidad_medida" => $data->getUnidadMedida(),
+                    "formula" => $data->getFormula(),
+                    "observacion" => $data->getObservacion(),                    
+                    "ruta" => $data->getRuta(),
+                    "dimensiones" => $data->getCamposIndicador(),
+                    "confiabilidad" => $data->getConfiabilidad(),
+                    "updated_at" => $data->getUpdatedAt()->format('d/m/Y'),
+                    "es_acumulado" => $data->getEsAcumulado(),
+                    "ultima_lectura" => $ultima_lectura->format('d/m/Y'),                    
+                    "meta" => $data->getMeta(),
+                    "periodo" => $data->getPeriodo(),
+                    "reporte" => $data->getReporte(),
+                    "clasificacion_tecnica" => $clasificaciones,
+                    "alertas" => $alertas,
+                    "variables" => $variables,
+                );
+                // ejecutar el contenido de la memoria
+                $em->flush();
+                    // devolver el mensaje en caso de que la contraseña no sea correcta
+                $response = [
+                    'status' => 200,
+                    'messages' => "Ok",
+                    'data' => $informacion
+                ];                    
+            } else{ // devolver el mensaje en caso de que el modulo no sea correcto
+                $response = [
+                    'status' => 404,
+                    'messages' => "Not Found",
+                    'data' => [],
+                ];
+            }
+        }catch(\Exception $e){
+            $response = [
+                'status' => 500,
+                'messages' => $e->getMessage(),
+                'data' => [],
+            ];                
+        }
+        $encoders = array(new JsonEncoder());
+        $normalizers = array(new ObjectNormalizer());
+
+        $serializer = new Serializer($normalizers, $encoders);
+        return new Response($serializer->serialize($response, "json"));
     }
 }
 
