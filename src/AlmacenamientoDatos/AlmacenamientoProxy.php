@@ -35,7 +35,7 @@ class AlmacenamientoProxy implements DashboardInterface, OrigenDatosInterface
         //Por defecto es PostgresSQL
         if ($this->params->get('app.datos.tipo_almacenamiento') == 'couchbase'){
             $this->dashboardWrapped = new CouchbaseDashboard($this->em, $this->params);
-            $this->origenDatosWrapped = new CouchbaseOrigenDatos($this->params);
+            $this->origenDatosWrapped = new CouchbaseOrigenDatos($this->em, $this->params);
         } else {
             $this->dashboardWrapped = new PostgreSQLDashboard($this->em, $this->emDatos);
             $this->origenDatosWrapped = new PostgreSQLOrigenDatos($this->em, $this->emDatos);
@@ -49,12 +49,12 @@ class AlmacenamientoProxy implements DashboardInterface, OrigenDatosInterface
         return $this->origenDatosWrapped->prepararDatosEnvio($idOrigenDatos, $campos_sig, $datos, $ultimaLectura, $idConexion);
     }
 
-    public function inicializarTablaAuxliar($idOrigenDatos, $idConexion ){
-        $this->origenDatosWrapped->inicializarTablaAuxliar($idOrigenDatos, $idConexion);
+    public function inicializarTablaAuxliar($idOrigenDatos ){
+        $this->origenDatosWrapped->inicializarTablaAuxliar($idOrigenDatos);
     }
 
-    public function insertarEnAuxiliar($idOrigenDatos, $idConexion, $datos){
-        $this->origenDatosWrapped->insertarEnAuxiliar($idOrigenDatos, $idConexion, $datos);
+    public function insertarEnAuxiliar($idOrigenDatos, $idConexion, $datos, $idCarga){
+        $this->origenDatosWrapped->insertarEnAuxiliar($idOrigenDatos, $idConexion, $datos, $idCarga);
     }
 
 
@@ -68,13 +68,13 @@ class AlmacenamientoProxy implements DashboardInterface, OrigenDatosInterface
     }
 
 
-    public function guardarDatos($idConexion, $idOrigenDatos) {
-        $this->origenDatosWrapped->guardarDatos($idConexion, $idOrigenDatos);
+    public function guardarDatos($idConexion, $idOrigenDatos, $idCarga) {
+        $this->origenDatosWrapped->guardarDatos($idConexion, $idOrigenDatos, $idCarga);
     }
 
 
-    public function guardarDatosIncremental($idConexion, $idOrigenDatos, $campoControlIncremento, $limiteInf, $limiteSup){
-        $this->origenDatosWrapped->guardarDatosIncremental($idConexion, $idOrigenDatos, $campoControlIncremento, $limiteInf, $limiteSup);
+    public function guardarDatosIncremental($idConexion, $idOrigenDatos, $idCarga, $limiteInf, $limiteSup){
+        $this->origenDatosWrapped->guardarDatosIncremental($idConexion, $idOrigenDatos, $idCarga, $limiteInf, $limiteSup);
     }
 
 

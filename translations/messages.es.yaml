@@ -538,3 +538,17 @@ _exportar_csv_: 'Exportar a Csv'
 
 periocidad: 'Periocidad'
 _restablecer_: 'Reestablecer'
+
+_cantidad_decimales_: Cantidad de decimales
+_cantidad_decimales_help_: En el resultado de la fórmula se usará la cantidad de decimales especificados
+_formato_valor_corte_: Formato valor corte
+_formato_valor_corte_help_: Formato de fecha del campo incremental. 'Y-m-d H:i:s' por defecto
+_valor_corte_: Valor de corte
+_valor_corte_help_: Último valor leído en la carga de datos
+
+_cantidad_decimales_: Cantidad de decimales
+_cantidad_decimales_help_: En el resultado de la fórmula se usará la cantidad de decimales especificados
+_formato_valor_corte_: Formato valor corte
+_formato_valor_corte_help_: Formato de fecha del campo incremental. 'Y-m-d H:i:s' por defecto
+_valor_corte_: Valor de corte
+_valor_corte_help_: Último valor leído en la carga de datos

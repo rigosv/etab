@@ -24,7 +24,7 @@ class FichaTecnica
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-    
+
     /**
      * @var string $codigo
      *
@@ -73,7 +73,7 @@ class FichaTecnica
      * @ORM\Column(name="observacion", type="text", nullable=true)
      */
     private $observacion;
-    
+
     /**
      * @var string $ruta
      *
@@ -131,13 +131,20 @@ class FichaTecnica
      **/
     private $clasificacionTecnica;
 
-    
+
     /**
      * @var float $meta
      *
      * @ORM\Column(name="meta", type="float", scale=2, nullable=true)
      */
     private $meta;
+
+    /**
+     * @var integer $cantidadDecimales
+     *
+     * @ORM\Column(name="cantidad_decimales", type="integer", nullable=true)
+     */
+    private $cantidadDecimales;
 
     /**
      *
@@ -148,7 +155,7 @@ class FichaTecnica
      * @ORM\OrderBy({"descripcion" = "ASC"})
      **/
     private $periodo;
-    
+
     /**
      *
      * @var reporte
@@ -160,7 +167,7 @@ class FichaTecnica
     private $reporte;
 
     /**
-    * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\ArrayCollection
      * @ORM\OneToMany(targetEntity="IndicadorAlertas", mappedBy="indicador", cascade={"all"}, orphanRemoval=true)
      *
      */
@@ -180,7 +187,7 @@ class FichaTecnica
      * @ORM\ManyToMany(targetEntity="User", mappedBy="indicadores")
      **/
     private $usuarios;
-    
+
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Group", mappedBy="indicadores")
      **/
@@ -201,11 +208,11 @@ class FichaTecnica
     private $campos;
 
     /**
-    * @var \Doctrine\Common\Collections\ArrayCollection
-    * @ORM\OneToMany(targetEntity="GrupoIndicadoresIndicador", mappedBy="indicador", cascade={"all"}, orphanRemoval=true)
-    */
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="GrupoIndicadoresIndicador", mappedBy="indicador", cascade={"all"}, orphanRemoval=true)
+     */
     private $grupos;
-    
+
     /**
      *
      * @var agencia
@@ -403,6 +410,7 @@ class FichaTecnica
         $this->periodos = new \Doctrine\Common\Collections\ArrayCollection();
         $this->variables = new \Doctrine\Common\Collections\ArrayCollection();
         $this->agenciasAcceso = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->cantidadDecimales = 2;
     }
 
     /**
@@ -810,7 +818,7 @@ class FichaTecnica
     public function addGruposUsuario(\App\Entity\Group $gruposUsuarios)
     {
         $this->gruposUsuarios[] = $gruposUsuarios;
-    
+
         return $this;
     }
 
@@ -827,7 +835,7 @@ class FichaTecnica
     /**
      * Get gruposUsuarios
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getGruposUsuarios()
     {
@@ -850,7 +858,7 @@ class FichaTecnica
     /**
      * Get agencia
      *
-     * @return \App\Entity\Agencia 
+     * @return \App\Entity\Agencia
      */
     public function getAgencia()
     {
@@ -873,7 +881,7 @@ class FichaTecnica
     /**
      * Get reporte
      *
-     * @return \App\Entity\GrupoIndicadores 
+     * @return \App\Entity\GrupoIndicadores
      */
     public function getReporte()
     {
@@ -896,7 +904,7 @@ class FichaTecnica
     /**
      * Get meta
      *
-     * @return float 
+     * @return float
      */
     public function getMeta()
     {
@@ -983,5 +991,21 @@ class FichaTecnica
     public function getAgenciasAcceso()
     {
         return $this->agenciasAcceso;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCantidadDecimales()
+    {
+        return $this->cantidadDecimales;
+    }
+
+    /**
+     * @param int $cantidadDecimales
+     */
+    public function setCantidadDecimales($cantidadDecimales)
+    {
+        $this->cantidadDecimales = $cantidadDecimales;
     }
 }

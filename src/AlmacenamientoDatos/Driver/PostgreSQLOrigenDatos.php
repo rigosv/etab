@@ -44,7 +44,7 @@ class PostgreSQLOrigenDatos implements OrigenDatosInterface
         return $datos_a_enviar;
     }
 
-    public function inicializarTablaAuxliar($idOrigenDatos, $idConexion) {
+    public function inicializarTablaAuxliar($idOrigenDatos) {
         $sql = ' CREATE TABLE IF NOT EXISTS  '. $this->tabla.$idOrigenDatos.'_tmp (
                     id_origen_dato integer,
                     datos jsonb,
@@ -55,7 +55,7 @@ class PostgreSQLOrigenDatos implements OrigenDatosInterface
         $this->cnx->exec($sql);
     }
 
-    public function insertarEnAuxiliar($idOrigenDatos, $idConexion, $datos) {
+    public function insertarEnAuxiliar($idOrigenDatos, $idConexion, $datos, $idCarga) {
         $this->pdo->pgsqlCopyFromArray($this->tabla.$idOrigenDatos.'_tmp', $datos);
     }
 
@@ -77,7 +77,7 @@ class PostgreSQLOrigenDatos implements OrigenDatosInterface
 
     }
 
-    public function guardarDatos($idConexion, $idOrigenDatos) {
+    public function guardarDatos($idConexion, $idOrigenDatos, $idCarga) {
 
         $nuevosDatos = $this->pdo->pgsqlCopyToArray($this->tabla.$idOrigenDatos.'_tmp');
 
@@ -95,14 +95,19 @@ class PostgreSQLOrigenDatos implements OrigenDatosInterface
         $this->borrarTablaAuxiliar($idOrigenDatos, $idOrigenDatos);
     }
 
-    public function guardarDatosIncremental($idConexion, $idOrigenDatos, $campoControlIncremento, $limiteInf, $limiteSup){
+    public function guardarDatosIncremental($idConexion, $idOrigenDatos, $idCarga, $limiteInf, $limiteSup){
+
+        $origenDato = $this->em->find(OrigenDatos::class, $idOrigenDatos);
+        $campoControlIncremento = $origenDato->getCampoLecturaIncremental()->getSignificado()->getCodigo();
+
+        $formatoFecha = str_replace(['Y', 'm', 'd', 'H', 'i', 's'], ['YYYY', 'MM', 'DD', 'HH', 'MI', 'SS'], $origenDato->getFormatoValorCorte() );
 
         $tablaDestino = $this->tabla.$idOrigenDatos;
         $tablaAuxiliar = $tablaDestino.'_tmp';
         $sql = "DELETE 
                         FROM $tablaDestino 
-                        WHERE datos->'$campoControlIncremento' >= '$limiteInf'
-                            AND datos->'$campoControlIncremento' <= '$limiteSup'
+                        WHERE to_date( datos->'$campoControlIncremento', $formatoFecha) >= to_date( '$limiteInf', $formatoFecha )
+                            AND to_date( datos->'$campoControlIncremento', $formatoFecha ) <= to_date( '$limiteSup', $formatoFecha )
                             AND ( (id_origen_dato = $idOrigenDatos and id_conexion = $idConexion)
                               OR (id_origen_dato = $idOrigenDatos AND id_conexion is null)
                               )

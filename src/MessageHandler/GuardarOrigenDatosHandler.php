@@ -33,10 +33,9 @@ class GuardarOrigenDatosHandler implements MessageHandlerInterface
 
     public function __invoke(SmsGuardarOrigenDatos $message)
     {
-        //dump($message);
+        /*$this->msg = $message->getDatos();
 
-        $this->msg = $message->getDatos();
-        $this->logger->info(' GUARDANDO DATOS <br/> Msj: ' . $this->msg['id_origen_dato'] . '/' . (array_key_exists('numMsj', $this->msg) ? $this->msg['numMsj'] : '--') );
+        $this->logger->info(' GUARDANDO DATOS  Msj: ' . $this->msg['id_origen_dato'] . '/' . (array_key_exists('numMsj', $this->msg) ? $this->msg['numMsj'] : '--') );
 
         $this->origenDato = $this->em->find(OrigenDatos::class, $this->msg['id_origen_dato']);
 
@@ -59,15 +58,15 @@ class GuardarOrigenDatosHandler implements MessageHandlerInterface
             }
         }
 
-        $this->logger->info('FIN GUARDAR');
+        $this->logger->info('FIN GUARDAR'); */
     }
 
     private function mensajePut(){
-        $ti = microtime(true);
+        /*$ti = microtime(true);
 
         try {
 
-            $this->almacenamiento->insertarEnAuxiliar($this->msg['id_origen_dato'], $this->msg['id_conexion'], $this->msg['datos']);
+            $this->almacenamiento->insertarEnAuxiliar($this->msg['id_origen_dato'], $this->msg['id_conexion'], $this->msg['datos'], $this->msg['carga_id']);
 
         } catch (\Exception $e) {
             $error = ' Conexion : ' . $this->idConexion . ' Error: ' . $e->getMessage();
@@ -81,11 +80,11 @@ class GuardarOrigenDatosHandler implements MessageHandlerInterface
         $tf = microtime(true);
         $d = $tf - $ti;
         $this->logger->info('--> DURACIÓN(s): ' . number_format($d/1000000, 10)) ;
-
+        */
     }
 
     private function mensajeBegin(){
-        $cnx = $this->em->getConnection();
+        /*$cnx = $this->em->getConnection();
         $areaCosteo = $this->origenDato->getAreaCosteo();
         $tabla = 'origenes.fila_origen_dato_' . $this->msg['id_origen_dato'];
 
@@ -101,10 +100,11 @@ class GuardarOrigenDatosHandler implements MessageHandlerInterface
 
         $this->origenDato->setCargaFinalizada(false);
         $this->em->flush();
+        */
     }
 
     private function mensajeDelete(){
-        $areaCosteo = $this->origenDato->getAreaCosteo();
+        /*$areaCosteo = $this->origenDato->getAreaCosteo();
         $tabla = 'origenes.fila_origen_dato_' . $this->msg['id_origen_dato'];
         $cnx = $this->em->getConnection();
 
@@ -134,11 +134,12 @@ class GuardarOrigenDatosHandler implements MessageHandlerInterface
             $cnx->exec($sql);
         } else {
 
-            if ( $this->origenDato->getCampoLecturaIncremental() != null ) {
-                $this->almacenamiento->guardarDatosIncremental($this->msg['id_conexion'], $this->msg['id_origen_dato'], $this->msg['campo_lectura_incremental'], $this->msg['lim_inf'], $this->msg['lim_sup']);
+            if ( $this->origenDato->getCampoLecturaIncremental() != null and $this->origenDato->getValorCorte() != null
+                and $this->msg['lim_inf'] != '' AND  $this->msg['lim_sup'] != '') {
+                $this->almacenamiento->guardarDatosIncremental($this->msg['id_conexion'], $this->msg['id_origen_dato'], $this->msg['carga_id'], $this->msg['lim_inf'], $this->msg['lim_sup']);
             } else {
                 //Pasar todos los datos de la tabla auxiliar a la tabla destino final
-                $this->almacenamiento->guardarDatos($this->msg['id_conexion'], $this->msg['id_origen_dato']);
+                $this->almacenamiento->guardarDatos($this->msg['id_conexion'], $this->msg['id_origen_dato'], $this->msg['carga_id']);
             }
         }
 
@@ -173,7 +174,7 @@ class GuardarOrigenDatosHandler implements MessageHandlerInterface
             foreach ($var->getIndicadores() as $ind) {
                 //$this->bus->dispatch( new SmsCargarIndicadorEnTablero( $ind->getId() ) );
             }
-        }
+        }*/
     }
 
 }

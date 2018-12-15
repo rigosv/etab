@@ -117,6 +117,14 @@ class OrigenDatosAdmin extends Admin
                                     }
                                 }                                
                                 ))
+                            ->add('valorCorte', null, array('label' => ('_valor_corte_'),
+                                'required' => false,
+                                'help' => '_valor_corte_help_'
+                            ))
+                            ->add('formatoValorCorte', null, array('label' => ('_formato_valor_corte_'),
+                                'required' => false,
+                                'help' => '_formato_valor_corte_help_'
+                            ))
                             ->add('ventanaLimiteInferior', null, array('label' => ('_ventana_limite_inferior_'), 'required' => false))
                             ->add('ventanaLimiteSuperior', null, array('label' => ('_ventana_limite_superior_'), 'required' => false))
                         ->end()

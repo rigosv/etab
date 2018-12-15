@@ -12,12 +12,12 @@ use App\Entity\SignificadoCampo;
 class CouchbaseDashboard implements DashboardInterface
 {
     private $em;
-    private $doc = 'origen_';
-    private $docIndicador = 'indicador_';
+    //private $doc = 'origen_';
+    //private $docIndicador = 'indicador_';
     private $bucketName = 'etab_origenes';
     private $bucket;
-    private $bucketNameIndicador = 'etab_indicadores';
-    private $bucketIndicador ;
+    //private $bucketNameIndicador = 'etab_indicadores';
+    //private $bucketIndicador ;
 
     public function __construct(EntityManager $em, ParameterBagInterface $params)
     {
@@ -32,32 +32,26 @@ class CouchbaseDashboard implements DashboardInterface
         // Authenticate, then open bucket
         $cluster->authenticate($authenticator);
         $this->bucket = $cluster->openBucket($this->bucketName);
-        $this->bucketIndicador = $cluster->openBucket($this->bucketNameIndicador);
+        //$this->bucketIndicador = $cluster->openBucket($this->bucketNameIndicador);
+
+        $this->bucket->operationTimeout = 240 * 1000; //240 segundos
 
     }
 
 
     public function crearIndicador(FichaTecnica $fichaTec, $dimension=null, $filtros=null) {
+        //No es necesaria esta función en couchbase
 
-        //Verificar si existe el documento de datos del indicador
-        $existe = $this->existeDocumento($this->bucketIndicador, $this->docIndicador.$fichaTec->getId());
+    }
 
-        // Verificar si la última vez que se cargaron datos para orígenes del indicador es posterior a la última
-        // vez que se mostró en el tablero
-        if ($fichaTec->getUpdatedAt() != '' and $fichaTec->getUltimaLectura() != '' and $existe == true) {
-            if ($fichaTec->getUltimaLectura() < $fichaTec->getUpdatedAt()){
-                //Retornar, no es necesario actualizar el documento del indicador
-                return true;
-            }
-        }
-
+    private function getFuenteDatos( FichaTecnica $fichaTec, $dimension=null, $filtros=null ) {
         $formula = strtoupper($fichaTec->getFormula());
 
         //Los campos de la ficha técnica determinan que campos se utilizarán de los orígenes de datos
         $campos = str_replace(' ', '', $fichaTec->getCamposIndicador());
 
-        $camposVar = 'v.' . str_replace(',', ', v.', $campos);
-        $camposInd = 'i.' . str_replace(',', ', i.', $campos);
+        $camposVar = ($dimension == null ) ? 'v.' . str_replace(',', ', v.', $campos) : 'v.' . $dimension;
+        $camposInd = ($dimension == null ) ? 'i.' . str_replace(',', ', i.', $campos) : 'i.' . $dimension;
 
         //Recuperar los datos de los orígenes asociados a cada variable del indicador
         $stmVar = '';
@@ -91,7 +85,7 @@ class CouchbaseDashboard implements DashboardInterface
         }
         $varStmFin = trim($varStmFin, ', ');
         $stmVar = trim($stmVar,'UNION');
-        $nombreDoc = $this->docIndicador.$fichaTec->getId();
+
 
         $stmFin = "
                     SELECT $camposInd, $varStmFin
@@ -100,12 +94,7 @@ class CouchbaseDashboard implements DashboardInterface
                         ) AS i
                     GROUP BY $camposInd
                     ";
-
-        $query = \Couchbase\N1qlQuery::fromString($stmFin);
-        $result = $this->bucket->query($query);
-
-        $this->bucketIndicador->upsert($this->docIndicador.$fichaTec->getId(), $result->rows);
-
+        return $stmFin;
     }
 
     public function calcularIndicador($fichaTecnica, $dimension, $filtros, $verSql){
@@ -122,7 +111,7 @@ class CouchbaseDashboard implements DashboardInterface
         if ( count($denominador) > 1 ) {
             preg_match('/\{.{1,}\}/', $denominador[1], $variables_d);
             if (count($variables_d) > 0)
-                $var_d = strtolower(str_replace(array('{', '}'), array('(v.', ')'), array_shift($variables_d)));
+                $var_d = strtolower(str_replace(array('{', '}'), array('(vv.', ')'), array_shift($variables_d)));
             $evitar_div_0 = 'AND ' . $var_d . ' > 0';
         }
 
@@ -136,30 +125,36 @@ class CouchbaseDashboard implements DashboardInterface
 
             $v = str_replace(array('{', '}'), array('', ''), $var[0]);
 
-            $formula = str_replace($var[0], (($oper=='SUM') ? $oper : '').str_replace(array('{','}'), array('(v.', ')'),$var[0]), $formula);
+            $formula = str_replace($var[0], (($oper=='SUM') ? $oper : '').str_replace(array('{','}'), array('(vv.', ')'),$var[0]), $formula);
 
-            $variables_query .= " $oper(v.$v) as $v, ";
+            $variables_query .= " $oper(vv.$v) as $v, ";
         }
         $variables_query = trim($variables_query, ', ');
 
         $nombre_indicador = $fichaTecnica->getId();
-        $doc_indicador = $this->docIndicador . $nombre_indicador;
+        //$doc_indicador = $this->docIndicador . $nombre_indicador;
 
         $filtros = '';
         if ($filtros != null) {
             foreach ($filtros as $campo => $valor) {
-                $filtros .= " AND v." . $campo . " = '$valor' ";
+                $filtros .= " AND vv." . $campo . " = '$valor' ";
             }
         }
 
-        $sql = "SELECT v.$dimension AS category,  $variables_query, ROUND(($formula),2) AS measure
-            FROM `".$this->bucketNameIndicador."` A USE KEYS '$doc_indicador' UNNEST A v";
-        $sql .= ' WHERE 1=1 ' . $evitar_div_0 . ' ' . $filtros;
+        $fuente = $this->getFuenteDatos($fichaTecnica, $dimension, $filtros);
 
-        $sql .= "
-            GROUP BY v.". $dimension;
-        $sql .=  " HAVING (($formula)) > 0 ";
-        $sql .= " ORDER BY v.$dimension";
+        //$sql = "SELECT v.$dimension AS category,  $variables_query, ROUND(($formula),2) AS measure
+        //   FROM `".$this->bucketNameIndicador."` A USE KEYS '$doc_indicador' UNNEST A v";
+        $decimales = ( $fichaTecnica->getCantidadDecimales() == null ) ? 2 : $fichaTecnica->getCantidadDecimales();
+        $sql = 'SELECT vv.'. $dimension .' AS category,  '. $variables_query .', ROUND(( '. $formula .' ), '. $decimales .') AS measure
+            FROM ( '. $fuente . ') AS vv';
+
+        $sql .= ' WHERE 1 = 1 ' . $evitar_div_0 . ' ' . $filtros;
+
+        $sql .= '
+            GROUP BY vv. '. $dimension;
+        $sql .=  ' HAVING (( ' . $formula . ' )) > 0 ';
+        $sql .= ' ORDER BY vv.'.$dimension ;
 
         try {
             if ($verSql == true)
@@ -185,9 +180,11 @@ class CouchbaseDashboard implements DashboardInterface
     }
 
     public function getDatosIndicador(FichaTecnica $fichaTecnica, $offset = 0 , $limit = 100000000000000) {
-        $stm = 'SELECT _v.* 
-                    FROM `'. $this->bucketNameIndicador . '` A 
-                        USE KEYS "'. $this->docIndicador.$fichaTecnica->getId() . '" UNNEST A _v
+
+        $fuente = $this->getFuenteDatos( $fichaTecnica );
+
+        $stm = 'SELECT A 
+                    FROM ( '. $fuente . ') AS A 
                         OFFSET ' .$offset
             . ' LIMIT ' . $limit;
         $query = \Couchbase\N1qlQuery::fromString($stm);
@@ -195,15 +192,4 @@ class CouchbaseDashboard implements DashboardInterface
         return $result->rows;
     }
 
-
-    private function existeDocumento($bucket, $docName){
-
-        $existe = true;
-        try {
-            $bucket->get( $docName );
-        } catch (\Exception $e){
-            $existe = false;
-        }
-        return $existe;
-    }
 }

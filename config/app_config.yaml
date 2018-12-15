@@ -1,7 +1,7 @@
 #app_config.yaml
 parameters:
     locale: 'es'
-    app.theme : 'simple'
+    app.theme : 'default'
     app.upload_directory: '%kernel.project_dir%/public/uploads'
     app.datos.tipo_almacenamiento: 'PostgreSQL'
     app.maindefault: '/indicadores/tablero'
@@ -9,6 +9,6 @@ parameters:
     couchbase_url: '%env(resolve:COUCHBASE_URL)%'
     couchbase_user: '%env(resolve:COUCHBASE_USER)%'
     couchbase_password: '%env(resolve:COUCHBASE_PASSWORD)%'
-    cium.disponible: true
+    cium.disponible: false
     cium.url: 'http://cium.saludchiapas.gob.mx/'
     

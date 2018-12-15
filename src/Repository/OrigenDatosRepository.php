@@ -24,6 +24,7 @@ class OrigenDatosRepository extends EntityRepository
         $tiene_pk = false;
         $tiene_null = false;
         $campos = $origen->getCampos();
+
         foreach ($campos as $campo) {
             $sig = $campo->getSignificado();
             if ($sig != null) {

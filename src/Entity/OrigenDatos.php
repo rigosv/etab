@@ -163,6 +163,20 @@ class OrigenDatos
      * @ORM\JoinColumn(name="campolecturaincremental_id", referencedColumnName="id")
      * */
     private $campoLecturaIncremental;
+
+    /**
+     * @var string $valorCorte
+     *
+     * @ORM\Column(name="valor_corte", type="string", length=50, nullable=true)
+     */
+    private $valorCorte;
+
+    /**
+     * @var string $formatoValorCorte
+     *
+     * @ORM\Column(name="formato_valor_corte", type="string", length=100, nullable=true)
+     */
+    protected $formatoValorCorte;
     
     /**
      * @var datetime ultimaActualizacion
@@ -838,6 +852,38 @@ class OrigenDatos
     public function getFile()
     {
         return $this->file;
+    }
+
+    /**
+     * @return string
+     */
+    public function getValorCorte()
+    {
+        return $this->valorCorte;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFormatoValorCorte()
+    {
+        return $this->formatoValorCorte;
+    }
+
+    /**
+     * @param datetime string
+     */
+    public function setValorCorte($valorCorte)
+    {
+        $this->valorCorte = $valorCorte;
+    }
+
+    /**
+     * @param string $formatoValorCorte
+     */
+    public function setFormatoValorCorte($formatoValorCorte)
+    {
+        $this->formatoValorCorte = $formatoValorCorte;
     }
 
 }
