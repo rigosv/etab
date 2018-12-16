@@ -1,0 +1,85 @@
+<div class="modal fade" id="modalConfiguracion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+       <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 id="myModalLabel2">{{ 'javascript.opciones_grafico' | trans }}</h4>
+        </div>
+        <div class="modal-body" style="max-height:400px; max-width:100%; overflow:auto;">
+            <div class="container-fluid">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="control-label required ">{{ 'javascript.ordenar_y' | trans}}:</label>
+                        <select class="ordenar_medida form-control" >
+                            <option value="-1"></option>
+                            <option value="desc">{{ 'javascript.descendente' | trans}}</option>
+                            <option value="asc">{{ 'javascript.ascendente' | trans}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="control-label required col-lg-8">{{ 'javascript.ordenar_x' | trans}}:</label>
+                        <select class="ordenar_dimension form-control" >
+                            <option value="-1"></option>
+                            <option value="desc">{{ 'javascript.descendente' | trans}}</option>
+                            <option value="asc">{{ 'javascript.ascendente' | trans}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="control-label required ">{{ 'javascript.tipo_grafico' | trans}}:</label>
+                        <select class="tipo_grafico_principal form-control" >
+                            <option ng-repeat="item in indicadores[posicion].informacion.dimensiones[indicadores[posicion].dimensiones[indicadores[posicion].dimension]].graficos" value="<% item.codigo %>"><% item.descripcion %></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="control-label required ">{{ 'javascript.max_escala_y' | trans}}:</label> 
+                        <select class="max_y form-control" >
+                            <option value="indicador">{{ 'javascript.max_indicador' | trans}}</option>
+                            <option value="rango_alertas">{{ 'javascript.max_rango_alertas' | trans}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="control-label required ">{{ '_manual_' | trans}}:</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" >
+                            <div class="input-group-btn"><button class="btn btn-default " type="button" ><span class="glyphicon glyphicon-ok"></span></button></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="control-label required ">{{ '_ancho_grafico_' | trans}}:</label> 
+                        <select class="max_y form-control" ng-model="indicadores[posicion].width">
+                            <option ng-repeat="item in medidas_width" value="col-sm-<%item + 1%>" selected="<% indicadores[posicion].width == 'col-sm-' + (item + 1) %>">col x <%item + 1%></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="control-label required ">{{ '_alto_grafico_' | trans}}:</label>
+                        <div class="input-group">
+                            <input type="number" min="250" string-to-number class="form-control" ng-model="indicadores[posicion].height">
+                            <div class="input-group-btn">
+                                <button class="btn btn-default " type="button" ng-click="actualizarsGrafica(posicion, false)">
+                                    <span class="glyphicon glyphicon-ok"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">            
+            <button class="btn btn-warning" data-dismiss="modal" aria-hidden="true">{{ '_cerrar_' | trans}}</button>
+        </div>
+    </div>
+  </div>
+</div>

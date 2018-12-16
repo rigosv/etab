@@ -364,9 +364,12 @@ class TableroController extends AbstractController {
                     $filtros[$f->codigo] = $f->valor;
                 } 
             }
-
+            $otros_filtros = '';
+            if(property_exists($datos,'otros_filtros')){
+                $otros_filtros = $datos->otros_filtros;
+            }
             $almacenamiento->crearIndicador($fichaTec, $dimension, $filtros);
-            $data = $almacenamiento->calcularIndicador($fichaTec, $dimension, $filtros, $datos->ver_sql);
+            $data = $almacenamiento->calcularIndicador($fichaTec, $dimension, $filtros, $datos->ver_sql, $otros_filtros);
                         
             if($data){   
                 $response = [
@@ -469,6 +472,7 @@ class TableroController extends AbstractController {
         }      
         return $resp;
     }
+
 
     /**
      * @Route("/indicadorFavorito", name="indicadorFavorito", methods={"POST"})

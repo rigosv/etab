@@ -24,9 +24,10 @@ interface DashboardInterface
      * @param $dimension
      * @param $filtros
      * @param $verSql
+     * @param $filtro_adicional
      * @return mixed
      */
-    public function calcularIndicador($fichaTec, $dimension, $filtros, $verSql);
+    public function calcularIndicador($fichaTec, $dimension, $filtros, $verSql, $filtro_adicional = '');
 
     /**
      * Devuelve el resultado de los cálculos estadísticos

@@ -60,7 +60,7 @@
         </div>
 
         <div id="sala" class="row" style="padding-top: 48px;" dnd-list="indicadores">        
-            <div class="<% item.tamanio ? item.tamanio : 'col-sm-4'%> indicadores <% item.full_screen ? 'div_full' : '' %>" style="cursor: all-scroll; page-break-after:always;" 
+            <div class="<% item.width ? item.width : 'col-sm-4'%> indicadores <% item.full_screen ? 'div_full' : '' %>" style="cursor: all-scroll; page-break-after:always;" 
             ng-repeat="item in indicadores" dnd-draggable="item" dnd-moved="indicadores.splice($index, 1); "
              dnd-effect-allowed="move" dnd-selected="indicadores.selected = item" ng-class="{'selected': indicadores.selected === item}" >
                 <div class="panel panel-default">
@@ -102,10 +102,10 @@
                                             <i class="glyphicon glyphicon-info-sign"></i> <span class="caret"></span>
                                         </a>
                                         <ul class="dropdown-menu" style="display:<% abrir2[$index] ? 'block' : 'none' %>" role="menu" id="dropdown_ficha_<% $index %>">
-                                            <li><a ng-click="abrir2[$index] = false; verFichaIndicador($index)"><i class="glyphicon glyphicon-folder-open"></i> {{ 'ver_ficha_tecnica' | trans }}</a></li>               
+                                            <li><a ng-click="abrir2[$index] = false; verFichaIndicador($index)"><i class="glyphicon glyphicon-folder-open"></i> {{ 'javascript.ver_ficha_tecnica' | trans }}</a></li>               
                                             <li><a ng-click="abrir2[$index] = false; verAlertasIndicador($index);" ng-if="item.informacion.rangos.length > 0"><i class="glyphicon glyphicon-exclamation-sign"></i> {{ 'indicador_alertas' | trans }}</a></li>                                        
-                                            <li><a ng-click="abrir2[$index] = false; verTablaDatosIndicador($index);"><i class="glyphicon glyphicon-list-alt"></i> {{ 'tabla_datos' | trans }}</a></li>
-                                            <li><a ng-click="abrir2[$index] = false; verSQLIndicador($index);"><i class="glyphicon glyphicon-eye-open"></i> {{ 'ver_sql' | trans }}</a></li>
+                                            <li><a ng-click="abrir2[$index] = false; verTablaDatosIndicador($index);"><i class="glyphicon glyphicon-list-alt"></i> {{ 'javascript.tabla_datos' | trans }}</a></li>
+                                            <li><a ng-click="abrir2[$index] = false; verSQLIndicador($index);"><i class="glyphicon glyphicon-eye-open"></i> {{ 'javascript.ver_sql' | trans }}</a></li>
                                         </ul>
                                     </li>
 
@@ -182,6 +182,10 @@
     <!-- MODAL FILTROS -->
     {% include 'FichaTecnicaAdmin/tablero_filtros.html.twig' %}
     <!-- FIN MODAL FILTROS -->
+
+    <!-- MODAL CONFIGURACION -->
+    {% include 'FichaTecnicaAdmin/tablero_configuracion.html.twig' %}
+    <!-- FIN MODAL CONFIGURACION -->
     
 </div>
 {% endblock %}
