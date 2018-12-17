@@ -49,7 +49,8 @@
                         <div class="col-sm-12">
                             
                             <ul class="list-group" style="max-height: 40vh; min-height: 70px; overflow: auto;" ng-if="salas.length > 0">
-                                <li ng-repeat="item in salas | filter:buscar_salas" class="list-group-item list_indicador d-flex justify-content-between align-items-center" ng-click="agregarSala(item)">
+                                <li ng-repeat="item in salas | filter:buscar_salas" class="list-group-item list_indicador d-flex justify-content-between align-items-center" ng-click="agregarSala(item)"
+                                style="<% item.id == sala ? 'background: #c0f4c0;' : '' %>">
                                     <% item.nombre | uppercase %>
                                     <span class="badge badge-primary badge-pill" ng-if="tablero_indicador[item.id] > 0"><% tablero_indicador[item.id] %></span>
                                 </li>
@@ -79,7 +80,8 @@
                         <div class="col-sm-12">
                             
                             <ul class="list-group" style="max-height: 40vh; min-height: 70px; overflow: auto;" ng-if="salas_propias.length > 0">
-                                <li ng-repeat="item in salas_propias | filter:buscar_salas_propias" class="list-group-item list_indicador d-flex justify-content-between align-items-center" ng-click="agregarSala(item)">
+                                <li ng-repeat="item in salas_propias | filter:buscar_salas_propias" class="list-group-item list_indicador d-flex justify-content-between align-items-center" ng-click="agregarSala(item)"
+                                style="<% item.id == sala ? 'background: #c0f4c0;' : '' %>">
                                     <% item.nombre | uppercase %>
                                     <span class="badge badge-primary badge-pill" ng-if="tablero_indicador[item.id] > 0"><% tablero_indicador[item.id] %></span>
                                 </li>                                    
@@ -108,7 +110,8 @@
                         <div class="col-sm-12">
                            
                             <ul class="list-group" style="max-height: 40vh; min-height: 70px; overflow: auto;" ng-if="salas_grupos.length > 0">
-                                <li ng-repeat="item in salas_grupos | filter:buscar_favorito" class="list-group-item list_indicador d-flex justify-content-between align-items-center" ng-click="agregarSala(item)">
+                                <li ng-repeat="item in salas_grupos | filter:buscar_favorito" class="list-group-item list_indicador d-flex justify-content-between align-items-center" ng-click="agregarSala(item)"
+                                style="<% item.id == sala ? 'background: #c0f4c0;' : '' %>">
                                     <% item.nombre | uppercase %>
                                     <span class="badge badge-primary badge-pill" ng-if="tablero_indicador[item.id] > 0"><% tablero_indicador[item.id] %></span>
                                 </li>                                    

@@ -28,6 +28,13 @@ class GrupoIndicadores
      * @ORM\Column(name="nombre", type="string", length=50, nullable=false)
      */
     private $nombre;
+
+    /**
+     * @var string $descripcion
+     *
+     * @ORM\Column(name="descripcion", type="string", length=50, nullable=false)
+     */
+    private $descripcion;
     
     /**
      * @var datetime $updatedAt
@@ -106,6 +113,29 @@ class GrupoIndicadores
     public function getNombre()
     {
         return $this->nombre;
+    }
+
+    /**
+     * Set descripcion
+     *
+     * @param  string           $descripcion
+     * @return GrupoIndicadores
+     */
+    public function setDescripcion($descripcion)
+    {
+        $this->descripcion = $descripcion;
+
+        return $this;
+    }
+
+    /**
+     * Get descripcion
+     *
+     * @return string
+     */
+    public function getDescripcion()
+    {
+        return $this->descripcion;
     }
 
     /**

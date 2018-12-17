@@ -183,27 +183,17 @@ class TableroController extends AbstractController {
 
             // devolver todos los datos si lo requiere   
             $conn = $em->getConnection();
-            $fav = "(CASE WHEN (SELECT id_indicador FROM usuario_indicadores_favoritos WHERE id_usuario =".$usuario->getId()." and id_indicador = id) > 1 THEN 1 ELSE 0 END) as es_favorito";
             if($datos->tipo == 'clasificados')
-                $sql = "SELECT *, $fav FROM ficha_tecnica where id in(select fichatecnica_id from fichatecnica_clasificaciontecnica where clasificaciontecnica_id = $datos->tecnica) $where order by nombre; ";
+                $sql = "SELECT * FROM ficha_tecnica where id in(select fichatecnica_id from fichatecnica_clasificaciontecnica where clasificaciontecnica_id = $datos->tecnica) $where order by nombre; ";
             
             if($datos->tipo == 'no_clasificados')
-                $sql = "SELECT *, $fav FROM ficha_tecnica where id not in(select fichatecnica_id from fichatecnica_clasificaciontecnica) $where order by nombre; ";
+                $sql = "SELECT * FROM ficha_tecnica where id not in(select fichatecnica_id from fichatecnica_clasificaciontecnica) $where order by nombre; ";
 
             if($datos->tipo == 'busqueda')
-                $sql = "SELECT *, $fav FROM ficha_tecnica where nombre like '%".$datos->busqueda."%' $where order by nombre; ";
+                $sql = "SELECT * FROM ficha_tecnica where nombre like '%".$datos->busqueda."%' $where order by nombre; ";
 
-            if($datos->tipo == 'favoritos'){
-                $favoritos = [];
-                foreach ($usuario->getFavoritos() as $fav) {                    
-                    array_push($favoritos, $fav->getId());
-                }
-                if(count($favoritos) > 0){
-                    $favoritos = implode(",", $favoritos);
-                    $where = "where id in($favoritos) $where";
-                }
-                
-                $sql = "SELECT *, $fav FROM ficha_tecnica $where order by nombre; ";
+            if($datos->tipo == 'favoritos'){                
+                $sql = "SELECT * FROM ficha_tecnica WHERE id in(SELECT id_indicador FROM usuario_indicadores_favoritos WHERE id_usuario =".$usuario->getId().") $where order by nombre; ";
             }
             
             $statement = $conn->prepare($sql);
@@ -310,13 +300,41 @@ class TableroController extends AbstractController {
             // ejecutar el contenido de la memoria
             $em->flush();
             // validar que hay datos
-            if($data){                             
+            if($data){ 
+                $data1 = []; $data2 = []; $data3 = [];
+                foreach ($data as $key => $value) {                    
+                    $sql = "SELECT * FROM grupo_indicadores_indicador
+                    where grupo_indicadores_id = ".$value["id"]." order by posicion asc; ";
+                    
+                    $statement = $conn->prepare($sql);
+                    $statement->execute();
+                    $value["indicadores"] = $statement->fetchAll();  
+                    array_push($data1, $value);                   
+                } 
+                foreach ($salas_grupos as $key => $value) {
+                    $sql = "SELECT * FROM grupo_indicadores_indicador
+                    where grupo_indicadores_id = ".$value["id"]." order by posicion asc; ";
+                    
+                    $statement = $conn->prepare($sql);
+                    $statement->execute();
+                    $value["indicadores"] = $statement->fetchAll();   
+                    array_push($data2, $value);                   
+                } 
+                foreach ($salas_propias as $key => $value) {
+                    $sql = "SELECT * FROM grupo_indicadores_indicador
+                    where grupo_indicadores_id = ".$value["id"]." order by posicion asc; ";
+                    
+                    $statement = $conn->prepare($sql);
+                    $statement->execute();
+                    $value["indicadores"] = $statement->fetchAll();                     
+                    array_push($data3, $value); 
+                }                            
                 $response = [
                     'status' => 200,
                     'messages' => "Ok",
-                    'data' => $data,
-                    'salas_grupos' => $salas_grupos,
-                    'salas_propias' => $salas_propias,
+                    'data' => $data1,
+                    'salas_grupos' => $data2,
+                    'salas_propias' => $data3,
                     'total' => count($data)
                 ];                    
             } else{ 
@@ -459,7 +477,22 @@ class TableroController extends AbstractController {
                     $ultima_lectura = $fecha_lectura;
                 }
             }
+            $usuario = $this->getUser();
+            $fav = "SELECT id_indicador FROM usuario_indicadores_favoritos WHERE id_usuario =".$usuario->getId()." and id_indicador = ".$fichaTec->getId();
+
+            $conn = $em->getConnection();
+            $fst = $conn->prepare($fav);
+            $fst->execute();
+            $favorito = $fst->fetchAll();
+            $es_favorito = false;
             
+            foreach($favorito as $vfav){
+                if($vfav["id_indicador"] > 0)
+                    $es_favorito = true;
+            }
+
+            $resp['es_favorito'] = $es_favorito;
+
             $fichaTec->setUltimaLectura($ultima_lectura);
             //$em->flush();
 

@@ -13,35 +13,12 @@ App.controller("TableroCtrl", function (
     $filter,
     Crud
 ) {
+    $scope.sala = "";
     $scope.abrio_sala = false;
     $scope.abrio_indicador = false;
 
     $scope.intento1 = 0;
     $scope.intento2 = 0;
-
-    $scope.today = function () {
-        $scope.anio = new Date();
-    };
-    $scope.today();
-
-    $scope.clear = function () {
-        $scope.anio = null;
-    };
-
-    $scope.open = function ($event) {
-        $scope.status.opened = true;
-    };
-
-    $scope.setDate = function (year, month, day) {
-        $scope.anio = new Date(year, month, day);
-    };
-
-    $scope.dateOptions = { formatYear: "yyyy", startingDay: 1, minMode: "year" };
-
-    $scope.formats = ["yyyy"];
-    $scope.format = $scope.formats[0];
-
-    $scope.status = { opened: false };
 
     $scope.tamanoHeight = $window.innerHeight / 1.5;
     $scope.$watch(function () {
@@ -236,6 +213,118 @@ App.controller("TableroCtrl", function (
 
     /**
      * @ngdoc method
+     * @name Tablero.TableroCtrl#agregarSala
+     * @methodOf Tablero.TableroCtrl
+     *
+     * @description
+     * funcion que cargar los indicadores de la sala
+     * @param {item} item sala seleccionada de la lista
+     */
+    $scope.agregarSala = function (item) {
+        if (item) {
+            $scope.sala = item.id;
+            $("#modalSalas").modal("hide");
+            $scope.abrio_sala = true;
+            $scope.indicadores = [];
+            angular.forEach(item.indicadores, function (element, key) {
+                $scope.indicadores.push({
+                    cargando: true,
+                    filtros: [],
+                    error: "",
+                    informacion: {},
+                    data: [],
+                    id: element.indicador_id,
+                    nombre: "",
+                    es_favorito: false,
+                    dimensiones: [],
+                    dimension: 0,
+                    sql: "",
+                    ficha: "",
+                    full_screen: false,
+                    configuracion: {
+                        width: "col-sm-4",
+                        height: "280",
+                        orden_x: "",
+                        orden_y: "",
+                        tipo_grafico: "columnas",
+                        maximo: "",
+                        maximo_manual: ""
+                    },
+                    otros_filtros: {
+                        desde: "",
+                        hasta: "",
+                        elementos: []
+                    },
+                    tipo_grafica: "discreteBarChart"
+                });
+            });
+            var index = 0;
+            angular.forEach(item.indicadores, function (element, key) {
+                $scope.indicadores[index].cargando = true;
+                if (element.orden != '' && element.orden != null) {
+                    $scope.indicadores[index].configuracion = JSON.parse(element.orden);
+                }
+
+                $scope.indicadores[index].filtros = element.filtro != '' ? JSON.parse(element.filtro) : "";
+                $scope.indicadores[index].otros_filtros = {
+                    desde: element.filtro_posicion_desde,
+                    hasta: element.filtro_posicion_hasta,
+                    elementos: element.filtro_elementos != '' && element.filtro_elementos != null ? element.filtro_elementos.split(',') : []
+                }
+                $scope.opcionesGraficas(index, "discreteBarChart", element.dimension, "#", $scope.indicadores[index].configuracion.height);
+                var json = { filtros: $scope.indicadores[index].filtros, ver_sql: false };
+                if (element.filtro_posicion_desde != "" || element.filtro_posicion_hasta != "" || (element.filtro_elementos != "" && element.filtro_elementos)) {
+                    json.otros_filtros = $scope.indicadores[index].otros_filtros;
+                }
+
+                Crud.crear("../api/v1/tablero/datosIndicador/" + $scope.indicadores[index].id + "/" + element.dimension, json, "application/json", function (data) {
+                    var dimension = -1; var dimensiones = [];
+                    if (data.status == 200) {
+                        var pos = 0;
+                        angular.forEach(data.informacion.dimensiones, function (v1, k1) {
+                            dimensiones.push(k1);
+                            if (k1 == element.dimension)
+                                dimension = pos;
+                            pos++;
+                        });
+                            
+                        $scope.indicadores[index].nombre = data.informacion.nombre_indicador;
+                        $scope.indicadores[index].es_favorito = data.informacion.es_favorito;
+                        $scope.indicadores[index].dimensiones = dimensiones;
+                        $scope.indicadores[index].dimension = dimension;
+                        $scope.indicadores[index].sql = "";
+                        $scope.indicadores[index].ficha = "";
+                        $scope.indicadores[index].full_screen = false;
+                        $scope.indicadores[index].tipo_grafica = "discreteBarChart";
+
+                        $scope.indicadores[index].informacion = data.informacion;
+                        $scope.indicadores[index].informacion.nombre = data.informacion.nombre_indicador;
+
+                    }
+
+                    $scope.repuestaIndicador(data, dimension, index);
+                    $scope.indicadores[index].cargando = false;
+                    $scope.actualizarsGrafica(index, false);
+                    index++;
+                }, function (e) {
+                    index++;
+                    $scope.indicadores[index].error = "Error";
+                    $scope.indicadores[index].cargando = false;
+                    setTimeout(function () {
+                        $scope.indicadores[index].error = "";
+                    }, 3000);
+                });
+
+            });
+        }
+    };
+
+    $scope.cerraSala = function(){
+        $scope.abrio_sala = false;
+        $scope.indicadores = [];
+    };
+    /**
+     * @ngdoc method
      * @name Tablero.TableroCtrl#cargarIndicadores
      * @methodOf Tablero.TableroCtrl
      *
@@ -243,13 +332,12 @@ App.controller("TableroCtrl", function (
      * funcion que cargar los datos del inidcador
      * @param {item} item inidcador seleccionado de la lista
      */
-    $scope.agregarIndicador = function (item) {
+    $scope.agregarIndicador = function (item, dimension = '') {
         if (item) {
             if (angular.isUndefined($scope.tablero_indicador[item.id])) $scope.tablero_indicador[item.id] = 0;
-
+            $scope.abrio_indicador = true;
             $scope.indicadores.push({
                 cargando: true,
-                breadcrumb: [],
                 filtros: [],
                 error: "",
                 id: item.id,
@@ -260,9 +348,20 @@ App.controller("TableroCtrl", function (
                 sql: "",
                 ficha: "",
                 full_screen: false,
-                width: "col-sm-4",
-                height: "280",
-                otros_filtros: { desde: "", hasta: "", elementos: [] },
+                configuracion: {
+                    width: "col-sm-4",
+                    height: "280",
+                    orden_x: "",
+                    orden_y: "",
+                    tipo_grafico: "columnas",
+                    maximo: "",
+                    maximo_manual: "",
+                },
+                otros_filtros: {
+                    desde: "",
+                    hasta: "",
+                    elementos: []
+                },
                 tipo_grafica: "discreteBarChart"
             });
             $scope.tablero_indicador[item.id]++;
@@ -276,9 +375,9 @@ App.controller("TableroCtrl", function (
                     $scope.indicadores[index].informacion = data.informacion;
                     $scope.indicadores[index].grafica = [];
                     var grafica = [];
-                    
+
                     grafica[0] = { key: $scope.indicadores[index].dimensiones[0], values: [] };
-                    
+
                     angular.forEach(data.data, function (val, key) {
                         color = "";
                         angular.forEach(data.informacion.rangos, function (v1, k1) {
@@ -286,7 +385,7 @@ App.controller("TableroCtrl", function (
                                 color = v1.color;
                             }
                         });
-                        
+
                         grafica[0].values.push({
                             color: color,
                             label: val.category,
@@ -327,7 +426,7 @@ App.controller("TableroCtrl", function (
     $scope.agregarIndicadorDimension = function (dimension, index) {
         if (!angular.isUndefined($scope.indicadores[index].dimensiones[dimension])) {
             $scope.indicadores[index].cargando = true;
-            $scope.opcionesGraficas(index, $scope.indicadores[index].tipo_grafica, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, $scope.indicadores[index].height);
+            $scope.opcionesGraficas(index, $scope.indicadores[index].tipo_grafica, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, $scope.indicadores[index].configuracion.height);
             var json = { filtros: $scope.indicadores[index].filtros, ver_sql: false };
             Crud.crear("../api/v1/tablero/datosIndicador/" + $scope.indicadores[index].id + "/" + $scope.indicadores[index].dimensiones[dimension].trim(), json, "application/json", function (data) {
                 $scope.repuestaIndicador(data, dimension, index);
@@ -361,8 +460,8 @@ App.controller("TableroCtrl", function (
         var dimension = $scope.indicadores[index].dimension;
         if (!angular.isUndefined($scope.indicadores[index].dimensiones[dimension])) {
             $scope.indicadores[index].cargando = true;
-            $scope.opcionesGraficas(index, $scope.indicadores[index].tipo_grafica, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, $scope.indicadores[index].height);
-            
+            $scope.opcionesGraficas(index, $scope.indicadores[index].tipo_grafica, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, $scope.indicadores[index].configuracion.height);
+
             var json = { filtros: $scope.indicadores[index].filtros, ver_sql: false, otros_filtros: $scope.indicadores[index].otros_filtros };
             Crud.crear("../api/v1/tablero/datosIndicador/" + $scope.indicadores[index].id + "/" + $scope.indicadores[index].dimensiones[dimension].trim(), json, "application/json", function (data) {
                 $scope.repuestaIndicador(data, dimension - 1, index);
@@ -383,12 +482,23 @@ App.controller("TableroCtrl", function (
         }
     };
 
+    /**
+     * @ngdoc method
+     * @name Tablero.TableroCtrl#repuestaIndicador
+     * @methodOf Tablero.TableroCtrl
+     *
+     * @description
+     * funcion procesa la respuesta para contruir los datos para el gráfico
+     * @param {data} data respuesta del servidor
+     * @param {dimension} dimension dimension actual de la gráfica
+     * @param {index} index bandera de posicion
+     */
     $scope.repuestaIndicador = function (data, dimension, index) {
         if (data.status == 200) {
             $scope.indicadores[index].data = data.data;
 
             var grafica = [];
-            grafica[0] = { key: $scope.indicadores[index].dimensiones[0], values: [] };
+            grafica[0] = { key: $scope.indicadores[index].dimensiones[dimension], values: [] };
             angular.forEach(data.data, function (val, key) {
                 color = "";
                 angular.forEach(data.informacion.rangos, function (v1, k1) {
@@ -396,7 +506,7 @@ App.controller("TableroCtrl", function (
                         color = v1.color;
                     }
                 });
-                
+
                 grafica[0].values.push({
                     color: color,
                     label: val.category,
@@ -414,7 +524,118 @@ App.controller("TableroCtrl", function (
         setTimeout(function () {
             $scope.indicadores[index].error = "";
         }, 3000);
-    }
+    };
+
+    /**
+     * @ngdoc method
+     * @name Tablero.TableroCtrl#actualizarsGrafica
+     * @methodOf Tablero.TableroCtrl
+     *
+     * @description
+     * funcion que actualiza el grafico
+     * @param {index} index bandera de posicion
+     * @param {hacer} hacer bandera para detyerminar si es para fullscreen
+     */
+    $scope.actualizarsGrafica = function (index, hacer = true) {
+        if (hacer) $scope.indicadores[index].full_screen = !$scope.indicadores[index].full_screen;
+        
+        var tamano = $scope.indicadores[index].configuracion.height;
+        let grafica = $scope.indicadores[index].grafica;
+        $scope.indicadores[index].grafica = [];
+        let dimension = $scope.indicadores[index].dimension;
+        setTimeout(() => {
+            $scope.indicadores[index].grafica = grafica;
+            $scope.opcionesGraficas(index, $scope.indicadores[index].tipo_grafica, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, tamano);
+            document.getElementById("update" + index).click();
+        }, 200);
+    };
+
+    /**
+     * @ngdoc method
+     * @name Tablero.TableroCtrl#ordenarArreglo
+     * @methodOf Tablero.TableroCtrl
+     *
+     * @description
+     * funcion que ordena los datos del gráfico
+     * @param {index} index que identifica el area de gráfico
+     * @param {ordenar_por} ordenar_por
+     * @param {ordenmodo_ordenar_por} modo_orden (asc, desc)
+     */
+    $scope.ordenarArreglo = function (index, ordenar_por, modo_orden) {
+        var data = $scope.indicadores[index].data;
+        if (ordenar_por == "valor") {
+            data.sort(function (a, b) {
+                if (modo_orden == "asc") {
+                    if (parseFloat(a.measure) > parseFloat(b.measure)) {
+                        return 1;
+                    }
+                    if (parseFloat(a.measure) < parseFloat(b.measure)) {
+                        return -1;
+                    }
+                }
+                if (modo_orden == "desc") {
+                    if (parseFloat(a.measure) < parseFloat(b.measure)) {
+                        return 1;
+                    }
+                    if (parseFloat(a.measure) > parseFloat(b.measure)) {
+                        return -1;
+                    }
+                }
+                return 0;
+            });
+        }
+        if (ordenar_por == "nombre") {
+            data.sort(function (a, b) {
+                if (modo_orden == "asc") {
+                    if (a.category > b.category) {
+                        return 1;
+                    }
+                    if (a.category < b.category) {
+                        return -1;
+                    }
+                }
+                if (modo_orden == "desc") {
+                    if (a.category < b.category) {
+                        return 1;
+                    }
+                    if (a.category > b.category) {
+                        return -1;
+                    }
+                }
+                return 0;
+            });
+        }
+        var dimension = $scope.indicadores[index].dimension;
+        $scope.indicadores[index].data = data;
+        var grafica = [];
+        grafica[0] = { key: $scope.indicadores[index].grafica[0].key, values: [] };
+
+        angular.forEach(data, function (val, key) {
+            color = "";
+            angular.forEach(
+                $scope.indicadores[index].informacion.rangos,
+                function (v1, k1) {
+                    if (
+                        val.measure >= v1.limite_inf &&
+                        val.measure <= v1.limite_sup
+                    ) {
+                        color = v1.color;
+                    }
+                }
+            );
+
+            grafica[0].values.push({
+                color: color,
+                label: val.category,
+                value: parseFloat(val.measure),
+                index: index,
+                dimension: dimension
+            });
+            $scope.indicadores[index].grafica = grafica;
+        });
+        $scope.actualizarsGrafica(index, false);
+    };
+
     $scope.posicion = null;
     /**
      * @ngdoc method
@@ -564,6 +785,9 @@ App.controller("TableroCtrl", function (
     $scope.quitarIndicador = function (item, index) {
         $scope.tablero_indicador[item.id]--;
         $scope.indicadores.splice(index, 1);
+        if ($scope.indicadores.length <= 0) {
+            $scope.abrio_indicador = false;
+        }
     };
 
     /**
@@ -580,31 +804,20 @@ App.controller("TableroCtrl", function (
      */
     $scope.opcionesGraficas = function (index, tipo, labelx, labely, tamano) {
         if ($scope.indicadores[index].full_screen) tamano = $window.innerHeight / 1.28;
+       
         $scope.indicadores[index].options = {
             chart: {
-                type: tipo, 
-                height: tamano, 
-                margin: { top: 20, right: 20, bottom: 50, left: 55 }, 
-                x: function (d) {
+                type: tipo, height: tamano, margin: { top: 20, right: 20, bottom: 50, left: 55 }, x: function (d) {
                     return d.label;
-                }, 
-                y: function (d) {
+                }, y: function (d) {
                     return d.value;
-                }, 
-                showValues: true, 
-                valueFormat: function (d) {
-                    return d3.format(",.4f")(d);
-                }, 
-                duration: 500, 
-                xAxis: { axisLabel: labelx }, 
-                yAxis: { axisLabel: labely }, 
-                callback: function (chart) {
+                }, showValues: true, valueFormat: function (d) {
+                    return d3.format(",.2f")(d);
+                }, duration: 500, xAxis: { axisLabel: labelx }, yAxis: { axisLabel: labely }, callback: function (chart) {
                     chart.discretebar.dispatch.on("elementClick", function (e) {
                         $scope.indicadores[index].dimension++;
                         $scope.indicadores[index].filtros.push({
-                            codigo: $scope.indicadores[index].dimensiones[
-                                $scope.indicadores[index].dimension - 1
-                            ].trim(),
+                            codigo: $scope.indicadores[index].dimensiones[$scope.indicadores[index].dimension - 1].trim(),
                             valor: e.data.label
                         });
                         $scope.agregarIndicadorDimension($scope.indicadores[index].dimension, e.data.index);
@@ -612,30 +825,6 @@ App.controller("TableroCtrl", function (
                 }
             }
         };
-    };
-
-    /**
-     * @ngdoc method
-     * @name Tablero.TableroCtrl#actualizarsGrafica
-     * @methodOf Tablero.TableroCtrl
-     *
-     * @description
-     * funcion que actualiza el grafico
-     * @param {index} index bandera de posicion
-     * @param {hacer} hacer bandera para detyerminar si es para fullscreen
-     */
-    $scope.actualizarsGrafica = function (index, hacer = true) {
-        if (hacer) $scope.indicadores[index].full_screen = !$scope.indicadores[index].full_screen;
-
-        var tamano = $scope.indicadores[index].height;
-        let grafica = $scope.indicadores[index].grafica;
-        $scope.indicadores[index].grafica = [];
-        let dimension = $scope.indicadores[index].dimension;
-        setTimeout(() => {
-            $scope.indicadores[index].grafica = grafica;
-            $scope.opcionesGraficas(index, $scope.indicadores[index].tipo_grafica, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, tamano);
-            document.getElementById("update" + index).click();
-        }, 200);
     };
 
     /**
@@ -699,6 +888,15 @@ App.controller("TableroCtrl", function (
         }
     };
 
+    /**
+     * @ngdoc method
+     * @name Tablero.TableroCtrl#utf8_encode
+     * @methodOf Tablero.TableroCtrl
+     *
+     * @description
+     * funcion que codifica una cadena a utf8
+     * @param {argString} string a convertir
+     */
     $scope.utf8_encode = function (argString) {
         if (argString === null || typeof argString === "undefined") {
             return "";
@@ -750,6 +948,16 @@ App.controller("TableroCtrl", function (
         return utftext;
     };
 
+    /**
+     * @ngdoc method
+     * @name Tablero.TableroCtrl#exportar_excel
+     * @methodOf Tablero.TableroCtrl
+     *
+     * @description
+     * funcion que exporta a archivo xls
+     * @param {id} id del elemento html que contiene el area a exportar
+     * @param {titulo} titulo que contendra el elemento exportado
+     */
     $scope.exportar_excel = function (id, titulo) {
         let colspan = $("#" + id).find("tr:first th").length;
         let excelData = "<table><tr><th colspan='" + colspan + "'><h4>" + titulo + " <h4></th></tr></table>";
@@ -761,6 +969,16 @@ App.controller("TableroCtrl", function (
         saveAs(blob, titulo + ".xls");
     };
 
+    /**
+     * @ngdoc method
+     * @name Tablero.TableroCtrl#exportar_pdf
+     * @methodOf Tablero.TableroCtrl
+     *
+     * @description
+     * funcion que exporta a archivo pdf
+     * @param {id} id del elemento html que contiene el area a exportar
+     * @param {titulo} titulo que contendra el elemento exportado
+     */
     $scope.exportar_pdf = function (id, titulo) {
         var html = document.getElementById(id).innerHTML;
         html = '<html lang="es">' + " <head>" + ' <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />' + ' <meta name="charset" content="UTF-8">' + ' <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">' + ' <meta name="apple-mobile-web-app-capable" content="yes">' + ' <title>PDF</title> <meta name="viewport" content="initial-scale=1" />' + ' <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">' + " </head>" + " <body>" + "<h4>" + titulo + "</h4>" + html + " </body>" + " </html>";
@@ -779,6 +997,16 @@ App.controller("TableroCtrl", function (
         }, 2000);
     };
 
+    /**
+     * @ngdoc method
+     * @name Tablero.TableroCtrl#exportar_csv
+     * @methodOf Tablero.TableroCtrl
+     *
+     * @description
+     * funcion que exporta un json a archivo csv
+     * @param {titulo} titulo que contendra el elemento exportado
+     * @param {json} json del elemento a exportar
+     */
     $scope.exportar_csv = function (titulo, json) {
         var fields = Object.keys(json[0]);
         var replacer = function (key, value) {
@@ -806,7 +1034,16 @@ App.controller("TableroCtrl", function (
         $scope.medidas_width.push(i);
     }
 
-
+    /**
+     * @ngdoc method
+     * @name Tablero.TableroCtrl#agregarOtrosFiltros
+     * @methodOf Tablero.TableroCtrl
+     *
+     * @description
+     * funcion que agrega al los filtros extra los elementos existentes
+     * @param {index} index que identifica el area de gráfico
+     * @param {valor} valor del elemento seleccionado
+     */
     $scope.agregarOtrosFiltros = function (index, valor) {
         if ($scope.indicadores[index].otros_filtros.elementos.indexOf(valor) > -1) {
             $scope.indicadores[index].otros_filtros.elementos.splice($scope.indicadores[index].otros_filtros.elementos.indexOf(valor), 1);

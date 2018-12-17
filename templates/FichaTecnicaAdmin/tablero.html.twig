@@ -60,12 +60,12 @@
         </div>
 
         <div id="sala" class="row" style="padding-top: 48px;" dnd-list="indicadores">        
-            <div class="<% item.width ? item.width : 'col-sm-4'%> indicadores <% item.full_screen ? 'div_full' : '' %>" style="cursor: all-scroll; page-break-after:always;" 
+            <div class="<% item.configuracion.width ? item.configuracion.width : 'col-sm-4'%> indicadores <% item.full_screen ? 'div_full' : '' %>" style="cursor: all-scroll; page-break-after:always;" 
             ng-repeat="item in indicadores" dnd-draggable="item" dnd-moved="indicadores.splice($index, 1); "
              dnd-effect-allowed="move" dnd-selected="indicadores.selected = item" ng-class="{'selected': indicadores.selected === item}" >
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h4><% item.nombre | uppercase %> <% $index %></h4>
+                        <h4><% item.nombre | uppercase %></h4>
                         <button type="button" class="close close_indicador" aria-label="Close" ng-click="quitarIndicador(item, $index)"><span aria-hidden="true">&times;</span></button>
                     </div>
                     <nav class="navbar navbar-default" >
@@ -83,8 +83,8 @@
                             <!-- Collect the nav links, forms, and other content for toggling -->
                             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-<% $index %>">
                                 <ul class="nav navbar-nav">
-                                    <li class="active"><a  title="{{ 'favoritos' | trans }}" ng-click="agregarFavorito(item)"> <i class="glyphicon glyphicon-star" style="color: <% item.es_favorito == 1 ? 'orange' : '' %>"></i> </a></li>
-                                    <li><a ng-click="verConfiguracion($index)" title="{{ '_configuracion_' | trans }}"> <i class="glyphicon glyphicon-cog"></i> </a></li>
+                                    <li class="active"><a  title="{{ 'favoritos' | trans }}" ng-click="agregarFavorito(item)"> <i class="glyphicon glyphicon-star" style="color: <% item.es_favorito ? 'orange' : '' %>"></i> </a></li>
+                                    <li><a ng-click="indicadores[posicion].orden_x = ''; indicadores[posicion].orden_y = ''; verConfiguracion($index)" title="{{ '_configuracion_' | trans }}"> <i class="glyphicon glyphicon-cog"></i> </a></li>
                                     <li><a ng-click="verFiltros($index)" title="{{ 'dimension_opciones' | trans }}"> <i class="glyphicon glyphicon-filter"></i> </a></li>                                    
                                     
                                     <li class="dropdown">
@@ -143,7 +143,7 @@
                     </div>
                     <div class="panel-footer">
                         <span class="pull-right" >
-                            {{ '_meta_' | trans }}: <% item.meta %>
+                            {{ '_meta_' | trans }}: <% item.informacion.meta %>
                         </span>
                         &nbsp;
                         <span class="pull-left"> 
