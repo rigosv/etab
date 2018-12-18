@@ -13,7 +13,7 @@ App.controller("TableroCtrl", function (
     $filter,
     Crud
 ) {
-    $scope.sala = "";
+    $scope.sala = { id: "", nombre: "" };
     $scope.abrio_sala = false;
     $scope.abrio_indicador = false;
 
@@ -21,11 +21,11 @@ App.controller("TableroCtrl", function (
     $scope.intento2 = 0;
 
     $scope.tamanoHeight = $window.innerHeight / 1.5;
-    $scope.$watch(function () {
+    $scope.$watch(function() {
         return window.innerHeight;
-    }, function (value) {
+      }, function(value) {
         $scope.tamanoHeight = value / 1.5;
-    });
+      });
     $scope.indicadores = [];
     $scope.clasificacion_uso = "";
     $scope.clasificacion_tecnica = "";
@@ -49,24 +49,24 @@ App.controller("TableroCtrl", function (
      * @param {modelo} modelo modelo donde se carga el resultado
      * @param {cargando} cargando bandera para mostrar la animacion cargando
      */
-    $scope.cargarCatalogo = function (url, modelo, cargando) {
-        modelo.length = 0;
-        $scope[cargando] = true;
-        Crud.lista(url, function (data) {
-            if (data.status == 200) {
-                $scope.intento1 = 0;
-                angular.forEach(data.data, function (value, key) {
-                    modelo.push(value);
-                });
-            }
-            $scope[cargando] = false;
-        }, function (e) {
-            setTimeout(function () {
-                if ($scope.intento1 < 1) {
-                    $scope.cargarCatalogo(url, modelo, cargando);
-                    $scope.intento1++;
-                } else $scope[cargando] = false;
-            }, 200);
+    $scope.cargarCatalogo = function(url, modelo, cargando) {
+      modelo.length = 0;
+      $scope[cargando] = true;
+      Crud.lista(url, function(data) {
+          if (data.status == 200) {
+            $scope.intento1 = 0;
+            angular.forEach(data.data, function(value, key) {
+              modelo.push(value);
+            });
+          }
+          $scope[cargando] = false;
+        }, function(e) {
+          setTimeout(function() {
+            if ($scope.intento1 < 1) {
+              $scope.cargarCatalogo(url, modelo, cargando);
+              $scope.intento1++;
+            } else $scope[cargando] = false;
+          }, 200);
         });
     };
     // cargar los catalogos para el indicador
@@ -86,31 +86,31 @@ App.controller("TableroCtrl", function (
      * @param {id} id identificador del elemento padre a buscar
      * @param {cargando} cargando bandera para mostrar la animacion cargando
      */
-    $scope.comboDependiente = function (url, modelo, id, cargando) {
-        modelo.length = 0;
-        $scope[cargando] = true;
-        Crud.lista(url + "?id=" + id, function (data) {
-            if (data.status == 200) {
-                $scope.intento2 = 0;
-                if (data.data.length == 0) {
-                    angular.forEach(modelo, function (value, key) {
-                        delete modelo[key];
-                    });
-                    modelo.length = 0;
-                }
-                angular.forEach(data.data, function (value, key) {
-                    modelo.push(value);
-                });
+    $scope.comboDependiente = function(url, modelo, id, cargando) {
+      modelo.length = 0;
+      $scope[cargando] = true;
+      Crud.lista(url + "?id=" + id, function(data) {
+          if (data.status == 200) {
+            $scope.intento2 = 0;
+            if (data.data.length == 0) {
+              angular.forEach(modelo, function(value, key) {
+                delete modelo[key];
+              });
+              modelo.length = 0;
             }
-            $scope[cargando] = false;
-        }, function (e) {
-            $scope[cargando] = false;
-            setTimeout(function () {
-                if ($scope.intento2 < 1) {
-                    $scope.comboDependiente(url, modelo, cargando);
-                    $scope.intento2++;
-                }
-            }, 200);
+            angular.forEach(data.data, function(value, key) {
+              modelo.push(value);
+            });
+          }
+          $scope[cargando] = false;
+        }, function(e) {
+          $scope[cargando] = false;
+          setTimeout(function() {
+            if ($scope.intento2 < 1) {
+              $scope.comboDependiente(url, modelo, cargando);
+              $scope.intento2++;
+            }
+          }, 200);
         });
     };
 
@@ -125,27 +125,26 @@ App.controller("TableroCtrl", function (
      * @param {modelo} modelo modelo donde se carga el resultado
      * @param {cargando} cargando bandera para mostrar la animacion cargando
      */
-    $scope.cargarIndicadores = function (url, modelo, cargando) {
-        modelo.length = 0;
-        $scope[cargando] = true;
-        Crud.lista(url, function (data) {
-            if (data.status == 200) {
-                $scope.intento1 = 0;
-                angular.forEach(data.data, function (value, key) {
-                    modelo.push(value);
-                });
-            }
-            $scope[cargando] = false;
-        }, function (e) {
-            setTimeout(function () {
-                if ($scope.intento1 < 1) {
-                    $scope.cargarIndicadores(url, modelo, cargando);
-                    $scope.intento1++;
-                } else $scope[cargando] = false;
-            }, 200);
+    $scope.cargarIndicadores = function(url, modelo, cargando) {
+      modelo.length = 0;
+      $scope[cargando] = true;
+      Crud.lista(url, function(data) {
+          if (data.status == 200) {
+            $scope.intento1 = 0;
+            angular.forEach(data.data, function(value, key) {
+              modelo.push(value);
+            });
+          }
+          $scope[cargando] = false;
+        }, function(e) {
+          setTimeout(function() {
+            if ($scope.intento1 < 1) {
+              $scope.cargarIndicadores(url, modelo, cargando);
+              $scope.intento1++;
+            } else $scope[cargando] = false;
+          }, 200);
         });
     };
-    $scope.titulo_sala = "";
     $scope.salas = [];
     $scope.salas_grupos = [];
     $scope.salas_propias = [];
@@ -158,23 +157,23 @@ App.controller("TableroCtrl", function (
      * @description
      * funcion que cargar la lista de salas disponibles
      */
-    $scope.cargarSalas = function () {
-        $scope["cc_salas"] = true;
-        Crud.lista("../api/v1/tablero/listaSalas", function (data) {
-            if (data.status == 200) {
-                $scope.intento1 = 0;
-                $scope.salas = data.data;
-                $scope.salas_grupos = data.salas_grupos;
-                $scope.salas_propias = data.salas_propias;
-            }
-            $scope["cc_salas"] = false;
-        }, function (e) {
-            setTimeout(function () {
-                if ($scope.intento1 < 1) {
-                    $scope.cargarSalas();
-                    $scope.intento1++;
-                } else $scope["cc_salas"] = false;
-            }, 200);
+    $scope.cargarSalas = function() {
+      $scope["cc_salas"] = true;
+      Crud.lista("../api/v1/tablero/listaSalas", function(data) {
+          if (data.status == 200) {
+            $scope.intento1 = 0;
+            $scope.salas = data.data;
+            $scope.salas_grupos = data.salas_grupos;
+            $scope.salas_propias = data.salas_propias;
+          }
+          $scope["cc_salas"] = false;
+        }, function(e) {
+          setTimeout(function() {
+            if ($scope.intento1 < 1) {
+              $scope.cargarSalas();
+              $scope.intento1++;
+            } else $scope["cc_salas"] = false;
+          }, 200);
         });
     };
     $scope.cargarSalas();
@@ -187,26 +186,26 @@ App.controller("TableroCtrl", function (
      * @description
      * funcion para la busqueda libre de indicadores
      */
-    $scope.bsucarIndicador = function (keyEvent) {
-        if (keyEvent.which === 13) {
-            $scope.inidcadores_busqueda = [];
-            $scope["cc_buscar"] = true;
-            Crud.lista("../api/v1/tablero/listaIndicadores?tipo=busqueda&busqueda=" + $scope.buscar_busqueda, function (data) {
-                if (data.status == 200) {
-                    $scope.intento1 = 0;
-                    $scope.inidcadores_busqueda = data.data;
-                    $scope.buscar_busqueda = "";
-                }
-                $scope["cc_buscar"] = false;
-            }, function (e) {
-                setTimeout(function () {
-                    if ($scope.intento1 < 1) {
-                        $scope.bsucarIndicador();
-                        $scope.intento1++;
-                    } else $scope["cc_buscar"] = false;
-                }, 200);
-            });
-        }
+    $scope.bsucarIndicador = function(keyEvent) {
+      if (keyEvent.which === 13) {
+        $scope.inidcadores_busqueda = [];
+        $scope["cc_buscar"] = true;
+        Crud.lista("../api/v1/tablero/listaIndicadores?tipo=busqueda&busqueda=" + $scope.buscar_busqueda, function(data) {
+            if (data.status == 200) {
+              $scope.intento1 = 0;
+              $scope.inidcadores_busqueda = data.data;
+              $scope.buscar_busqueda = "";
+            }
+            $scope["cc_buscar"] = false;
+          }, function(e) {
+            setTimeout(function() {
+              if ($scope.intento1 < 1) {
+                $scope.bsucarIndicador();
+                $scope.intento1++;
+              } else $scope["cc_buscar"] = false;
+            }, 200);
+          });
+      }
     };
 
     $scope.tablero_indicador = [];
@@ -220,109 +219,176 @@ App.controller("TableroCtrl", function (
      * funcion que cargar los indicadores de la sala
      * @param {item} item sala seleccionada de la lista
      */
-    $scope.agregarSala = function (item) {
-        if (item) {
-            $scope.sala = item.id;
-            $("#modalSalas").modal("hide");
-            $scope.abrio_sala = true;
-            $scope.indicadores = [];
-            angular.forEach(item.indicadores, function (element, key) {
-                $scope.indicadores.push({
-                    cargando: true,
-                    filtros: [],
-                    error: "",
-                    informacion: {},
-                    data: [],
-                    id: element.indicador_id,
-                    nombre: "",
-                    es_favorito: false,
-                    dimensiones: [],
-                    dimension: 0,
-                    sql: "",
-                    ficha: "",
-                    full_screen: false,
-                    configuracion: {
-                        width: "col-sm-4",
-                        height: "280",
-                        orden_x: "",
-                        orden_y: "",
-                        tipo_grafico: "columnas",
-                        maximo: "",
-                        maximo_manual: ""
-                    },
-                    otros_filtros: {
-                        desde: "",
-                        hasta: "",
-                        elementos: []
-                    },
-                    tipo_grafica: "discreteBarChart"
-                });
-            });
-            var index = 0;
-            angular.forEach(item.indicadores, function (element, key) {
-                $scope.indicadores[index].cargando = true;
-                if (element.orden != '' && element.orden != null) {
-                    $scope.indicadores[index].configuracion = JSON.parse(element.orden);
-                }
+    $scope.agregarSala = function(item) {
+      if (item) {
+        $scope.sala = item;
 
-                $scope.indicadores[index].filtros = element.filtro != '' ? JSON.parse(element.filtro) : "";
-                $scope.indicadores[index].otros_filtros = {
-                    desde: element.filtro_posicion_desde,
-                    hasta: element.filtro_posicion_hasta,
-                    elementos: element.filtro_elementos != '' && element.filtro_elementos != null ? element.filtro_elementos.split(',') : []
-                }
-                $scope.opcionesGraficas(index, "discreteBarChart", element.dimension, "#", $scope.indicadores[index].configuracion.height);
-                var json = { filtros: $scope.indicadores[index].filtros, ver_sql: false };
-                if (element.filtro_posicion_desde != "" || element.filtro_posicion_hasta != "" || (element.filtro_elementos != "" && element.filtro_elementos)) {
-                    json.otros_filtros = $scope.indicadores[index].otros_filtros;
-                }
-
-                Crud.crear("../api/v1/tablero/datosIndicador/" + $scope.indicadores[index].id + "/" + element.dimension, json, "application/json", function (data) {
-                    var dimension = -1; var dimensiones = [];
-                    if (data.status == 200) {
-                        var pos = 0;
-                        angular.forEach(data.informacion.dimensiones, function (v1, k1) {
-                            dimensiones.push(k1);
-                            if (k1 == element.dimension)
-                                dimension = pos;
-                            pos++;
-                        });
-                            
-                        $scope.indicadores[index].nombre = data.informacion.nombre_indicador;
-                        $scope.indicadores[index].es_favorito = data.informacion.es_favorito;
-                        $scope.indicadores[index].dimensiones = dimensiones;
-                        $scope.indicadores[index].dimension = dimension;
-                        $scope.indicadores[index].sql = "";
-                        $scope.indicadores[index].ficha = "";
-                        $scope.indicadores[index].full_screen = false;
-                        $scope.indicadores[index].tipo_grafica = "discreteBarChart";
-
-                        $scope.indicadores[index].informacion = data.informacion;
-                        $scope.indicadores[index].informacion.nombre = data.informacion.nombre_indicador;
-
-                    }
-
-                    $scope.repuestaIndicador(data, dimension, index);
-                    $scope.indicadores[index].cargando = false;
-                    $scope.actualizarsGrafica(index, false);
-                    index++;
-                }, function (e) {
-                    index++;
-                    $scope.indicadores[index].error = "Error";
-                    $scope.indicadores[index].cargando = false;
-                    setTimeout(function () {
-                        $scope.indicadores[index].error = "";
-                    }, 3000);
-                });
-
-            });
-        }
-    };
-
-    $scope.cerraSala = function(){
-        $scope.abrio_sala = false;
+        $("#modalSalas").modal("hide");
+        $scope.abrio_sala = true;
         $scope.indicadores = [];
+        angular.forEach(item.indicadores, function(element, key) {
+          $scope.indicadores.push({
+            cargando: true,
+            filtros: [],
+            error: "",
+            informacion: {},
+            data: [],
+            id: element.indicador_id,
+            nombre: "",
+            es_favorito: false,
+            dimensiones: [],
+            dimension: 0,
+            posicion: element.posicion,
+            sql: "",
+            ficha: "",
+            full_screen: false,
+            configuracion: {
+              width: "col-sm-4",
+              height: "280",
+              orden_x: "",
+              orden_y: "",
+              tipo_grafico: "columnas",
+              maximo: "",
+              maximo_manual: ""
+            },
+            otros_filtros: {
+              desde: "",
+              hasta: "",
+              elementos: []
+            },
+            tipo_grafica: "discreteBarChart"
+          });
+        });
+        angular.forEach(item.indicadores, function(element, index) {
+          $scope.indicadores[index].cargando = true;
+          if (element.orden != "" && element.orden != null) {
+            $scope.indicadores[index].configuracion = JSON.parse(element.orden);
+          }
+
+          $scope.indicadores[index].filtros = element.filtro != "" ? JSON.parse(element.filtro) : "";
+          $scope.indicadores[index].otros_filtros = { desde: element.filtro_posicion_desde, hasta: element.filtro_posicion_hasta, elementos: element.filtro_elementos != "" && element.filtro_elementos != null ? element.filtro_elementos.split(",") : [] };
+          $scope.opcionesGraficas(index, "discreteBarChart", element.dimension, "#", $scope.indicadores[index].configuracion.height);
+          var json = { filtros: $scope.indicadores[index].filtros, ver_sql: false };
+          if (element.filtro_posicion_desde != "" || element.filtro_posicion_hasta != "" || (element.filtro_elementos != "" && element.filtro_elementos)) {
+            json.otros_filtros = $scope.indicadores[index].otros_filtros;
+          }
+
+          Crud.crear("../api/v1/tablero/datosIndicador/" + $scope.indicadores[index].id + "/" + element.dimension, json, "application/json", function(data) {
+              var dimension = -1;
+              var dimensiones = [];
+              if (data.status == 200) {
+                var pos = 0;
+                angular.forEach(data.informacion.dimensiones, function(
+                  v1,
+                  k1
+                ) {
+                  dimensiones.push(k1);
+                  if (k1 == element.dimension) dimension = pos;
+                  pos++;
+                });
+
+                $scope.indicadores[index].nombre = data.informacion.nombre_indicador;
+                $scope.indicadores[index].es_favorito = data.informacion.es_favorito;
+                $scope.indicadores[index].dimensiones = dimensiones;
+                $scope.indicadores[index].dimension = dimension;
+                $scope.indicadores[index].sql = "";
+                $scope.indicadores[index].ficha = "";
+                $scope.indicadores[index].full_screen = false;
+                $scope.indicadores[index].tipo_grafica = "discreteBarChart";
+
+                $scope.indicadores[index].informacion = data.informacion;
+                $scope.indicadores[index].informacion.nombre = data.informacion.nombre_indicador;
+              }
+
+              $scope.repuestaIndicador(data, dimension, index);
+              $scope.indicadores[index].cargando = false;
+              $scope.actualizarsGrafica(index, false);
+            }, function(e) {
+              $scope.indicadores[index].error = "Error";
+              $scope.indicadores[index].cargando = false;
+              setTimeout(function() {
+                $scope.indicadores[index].error = "";
+              }, 3000);
+            });
+        });
+        $scope.listaAccionSala();
+        $scope.usuariosSala();
+        $scope.comentarioSala();
+      }
     };
+
+    /**
+     * @ngdoc method
+     * @name Tablero.TableroCtrl#cerraSala
+     * @methodOf Tablero.TableroCtrl
+     *
+     * @description
+     * funcion que cierra la sala abierta previamente
+     */
+    $scope.cerraSala = function() {
+      $scope.abrio_sala = false;
+      $scope.indicadores = [];
+      $scope.sala = { id: "", nombre: "" };
+    };
+    $scope.sala_cargando = false;
+
+    /**
+     * @ngdoc method
+     * @name Tablero.TableroCtrl#cerraSala
+     * @methodOf Tablero.TableroCtrl
+     *
+     * @description
+     * funcion que borra la sala seleccionada
+     * @param {item} item sala seleccionada de la lista
+     */
+    $scope.borrarSala = function(item) {
+      if (confirm($("#confirmar_sala").html())) {
+        var json = { id: item.id };
+        $scope.sala_cargando = true;
+        Crud.crear("../api/v1/tablero/borrarSala", json, "application/json", function(data) {
+            if (data.status == 200) {
+              $scope.cerraSala();
+              $scope.cargarSalas();
+              alert($("#elimina_ok_sala").html());
+            } else {
+              alert($("#elimina_error_sala").html());
+            }
+            $scope.sala_cargando = false;
+          }, function(e) {
+            $scope.sala_cargando = false;
+            alert($("#elimina_error_sala").html());
+          });
+      }
+    };
+
+    /**
+     * @ngdoc method
+     * @name Tablero.TableroCtrl#cerraSala
+     * @methodOf Tablero.TableroCtrl
+     *
+     * @description
+     * funcion que guarda o actualiza la informacion de la sala y la lista de indicadores
+     * @param {item} item sala seleccionada de la lista
+     */
+    $scope.guardarSala = function(item) {
+      var json = { sala: item, indicadores: $scope.indicadores };
+      $scope.sala_cargando = true;
+      Crud.crear("../api/v1/tablero/guardarSala", json, "application/json", function(data) {
+          if (data.status == 200) {
+            $scope.abrio_sala = true;
+            $scope.sala.id = data.data;
+            $scope.cargarSalas();
+            alert($("#guardar_sala_ok").html());
+          } else {
+            alert($("#guardar_sala_error").html());
+          }
+          $scope.sala_cargando = false;
+        }, function(e) {
+          alert($("#guardar_sala_error").html());
+          $scope.sala_cargando = false;
+        });
+    };
+
     /**
      * @ngdoc method
      * @name Tablero.TableroCtrl#cargarIndicadores
@@ -332,84 +398,86 @@ App.controller("TableroCtrl", function (
      * funcion que cargar los datos del inidcador
      * @param {item} item inidcador seleccionado de la lista
      */
-    $scope.agregarIndicador = function (item, dimension = '') {
-        if (item) {
-            if (angular.isUndefined($scope.tablero_indicador[item.id])) $scope.tablero_indicador[item.id] = 0;
-            $scope.abrio_indicador = true;
-            $scope.indicadores.push({
-                cargando: true,
-                filtros: [],
-                error: "",
-                id: item.id,
-                nombre: item.nombre,
-                es_favorito: item.es_favorito,
-                dimensiones: item.campos_indicador.split(","),
-                dimension: 0,
-                sql: "",
-                ficha: "",
-                full_screen: false,
-                configuracion: {
-                    width: "col-sm-4",
-                    height: "280",
-                    orden_x: "",
-                    orden_y: "",
-                    tipo_grafico: "columnas",
-                    maximo: "",
-                    maximo_manual: "",
-                },
-                otros_filtros: {
-                    desde: "",
-                    hasta: "",
-                    elementos: []
-                },
-                tipo_grafica: "discreteBarChart"
-            });
-            $scope.tablero_indicador[item.id]++;
-            var index = $scope.indicadores.length - 1;
-            $scope.opcionesGraficas(index, "discreteBarChart", $scope.indicadores[index].dimensiones[0], item.unidad_medida, "280");
+    $scope.agregarIndicador = function(item, dimension = "") {
+      if (item) {
+        if (angular.isUndefined($scope.tablero_indicador[item.id])) $scope.tablero_indicador[item.id] = 0;
+        $scope.abrio_indicador = true;
+        $scope.indicadores.push({
+          cargando: true,
+          filtros: [],
+          error: "",
+          id: item.id,
+          nombre: item.nombre,
+          es_favorito: item.es_favorito,
+          dimensiones: item.campos_indicador.split(","),
+          dimension: 0,
+          posicion: 0,
+          sql: "",
+          ficha: "",
+          full_screen: false,
+          configuracion: {
+            width: "col-sm-4",
+            height: "280",
+            orden_x: "",
+            orden_y: "",
+            tipo_grafico: "columnas",
+            maximo: "",
+            maximo_manual: ""
+          },
+          otros_filtros: {
+            desde: "",
+            hasta: "",
+            elementos: []
+          },
+          tipo_grafica: "discreteBarChart"
+        });
+        $scope.tablero_indicador[item.id]++;
+        var index = $scope.indicadores.length - 1;
+        $scope.indicadores[index].posicion = index + 1;
+        $scope.opcionesGraficas(index, "discreteBarChart", $scope.indicadores[index].dimensiones[0], item.unidad_medida, "280");
 
-            var json = { filtros: "", ver_sql: false };
-            Crud.crear("../api/v1/tablero/datosIndicador/" + item.id + "/" + $scope.indicadores[index].dimensiones[0], json, "application/json", function (data) {
-                if (data.status == 200) {
-                    $scope.indicadores[index].data = data.data;
-                    $scope.indicadores[index].informacion = data.informacion;
-                    $scope.indicadores[index].grafica = [];
-                    var grafica = [];
+        var json = { filtros: "", ver_sql: false };
+        Crud.crear("../api/v1/tablero/datosIndicador/" + item.id + "/" + $scope.indicadores[index].dimensiones[0], json, "application/json", function(data) {
+            if (data.status == 200) {
+              $scope.indicadores[index].data = data.data;
+              $scope.indicadores[index].informacion = data.informacion;
+              $scope.indicadores[index].grafica = [];
+              var grafica = [];
 
-                    grafica[0] = { key: $scope.indicadores[index].dimensiones[0], values: [] };
+              grafica[0] = { key: $scope.indicadores[index].dimensiones[0], values: [] };
 
-                    angular.forEach(data.data, function (val, key) {
-                        color = "";
-                        angular.forEach(data.informacion.rangos, function (v1, k1) {
-                            if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
-                                color = v1.color;
-                            }
-                        });
+              angular.forEach(data.data, function(val, key) {
+                color = "";
+                angular.forEach(data.informacion.rangos, function(v1, k1) {
+                  if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
+                    color = v1.color;
+                  }
+                });
 
-                        grafica[0].values.push({
-                            color: color,
-                            label: val.category,
-                            value: parseFloat(val.measure),
-                            index: index,
-                            dimension: 0
-                        });
-                    });
-                    $scope.indicadores[index].grafica = grafica;
-                } else {
-                    $scope.indicadores[index].error = "Warning";
-                }
-                $scope.indicadores[index].cargando = false;
-                setTimeout(function () {
-                    $scope.indicadores[index].error = "";
-                }, 3000);
-            }, function (e) {
-                $scope.indicadores[index].error = "Error";
-                $scope.indicadores[index].cargando = false;
-                setTimeout(function () {
-                    $scope.indicadores[index].error = "";
-                }, 3000);
-            });
-        }
+                grafica[0].values.push({
+                  color: color,
+                  label: val.category,
+                  value: parseFloat(val.measure),
+                  index: index,
+                  dimension: 0
+                });
+              });
+              $scope.indicadores[index].grafica = grafica;
+            } else {
+              $scope.indicadores[index].error = "Warning";
+            }
+            $scope.indicadores[index].cargando = false;
+            setTimeout(function() {
+              $scope.indicadores[index].error = "";
+            }, 3000);
+          }, function(e) {
+            $scope.indicadores[index].error = "Error";
+            $scope.indicadores[index].cargando = false;
+            setTimeout(function() {
+              $scope.indicadores[index].error = "";
+            }, 3000);
+          });
+      }
     };
 
     /**
@@ -423,28 +491,28 @@ App.controller("TableroCtrl", function (
      * @param {dimension} dimension
      * @param {index} index identificador de la posicion del grafico
      */
-    $scope.agregarIndicadorDimension = function (dimension, index) {
-        if (!angular.isUndefined($scope.indicadores[index].dimensiones[dimension])) {
-            $scope.indicadores[index].cargando = true;
-            $scope.opcionesGraficas(index, $scope.indicadores[index].tipo_grafica, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, $scope.indicadores[index].configuracion.height);
-            var json = { filtros: $scope.indicadores[index].filtros, ver_sql: false };
-            Crud.crear("../api/v1/tablero/datosIndicador/" + $scope.indicadores[index].id + "/" + $scope.indicadores[index].dimensiones[dimension].trim(), json, "application/json", function (data) {
-                $scope.repuestaIndicador(data, dimension, index);
-            }, function (e) {
-                $scope.indicadores[index].dimension--;
-                $scope.indicadores[index].error = "Error";
-                $scope.indicadores[index].cargando = false;
-                setTimeout(function () {
-                    $scope.indicadores[index].error = "";
-                }, 3000);
-            });
-        } else {
-            $scope.indicadores[index].dimension = $scope.indicadores[index].dimensiones.length - 1;
-            $scope.indicadores[index].error = "Success";
-            setTimeout(function () {
-                $scope.indicadores[index].error = "";
+    $scope.agregarIndicadorDimension = function(dimension, index) {
+      if (!angular.isUndefined($scope.indicadores[index].dimensiones[dimension])) {
+        $scope.indicadores[index].cargando = true;
+        $scope.opcionesGraficas(index, $scope.indicadores[index].tipo_grafica, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, $scope.indicadores[index].configuracion.height);
+        var json = { filtros: $scope.indicadores[index].filtros, ver_sql: false };
+        Crud.crear("../api/v1/tablero/datosIndicador/" + $scope.indicadores[index].id + "/" + $scope.indicadores[index].dimensiones[dimension].trim(), json, "application/json", function(data) {
+            $scope.repuestaIndicador(data, dimension, index);
+          }, function(e) {
+            $scope.indicadores[index].dimension--;
+            $scope.indicadores[index].error = "Error";
+            $scope.indicadores[index].cargando = false;
+            setTimeout(function() {
+              $scope.indicadores[index].error = "";
             }, 3000);
-        }
+          });
+      } else {
+        $scope.indicadores[index].dimension = $scope.indicadores[index].dimensiones.length - 1;
+        $scope.indicadores[index].error = "Success";
+        setTimeout(function() {
+          $scope.indicadores[index].error = "";
+        }, 3000);
+      }
     };
 
     /**
@@ -456,30 +524,30 @@ App.controller("TableroCtrl", function (
      * funcion que cargar el inidcador con la dimension y los filtros especificados
      * @param {index} index identificador de la posicion del grafico
      */
-    $scope.filtrarIndicador = function (index) {
-        var dimension = $scope.indicadores[index].dimension;
-        if (!angular.isUndefined($scope.indicadores[index].dimensiones[dimension])) {
-            $scope.indicadores[index].cargando = true;
-            $scope.opcionesGraficas(index, $scope.indicadores[index].tipo_grafica, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, $scope.indicadores[index].configuracion.height);
+    $scope.filtrarIndicador = function(index) {
+      var dimension = $scope.indicadores[index].dimension;
+      if (!angular.isUndefined($scope.indicadores[index].dimensiones[dimension])) {
+        $scope.indicadores[index].cargando = true;
+        $scope.opcionesGraficas(index, $scope.indicadores[index].tipo_grafica, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, $scope.indicadores[index].configuracion.height);
 
-            var json = { filtros: $scope.indicadores[index].filtros, ver_sql: false, otros_filtros: $scope.indicadores[index].otros_filtros };
-            Crud.crear("../api/v1/tablero/datosIndicador/" + $scope.indicadores[index].id + "/" + $scope.indicadores[index].dimensiones[dimension].trim(), json, "application/json", function (data) {
-                $scope.repuestaIndicador(data, dimension - 1, index);
-            }, function (e) {
-                $scope.indicadores[index].dimension--;
-                $scope.indicadores[index].error = "Error";
-                $scope.indicadores[index].cargando = false;
-                setTimeout(function () {
-                    $scope.indicadores[index].error = "";
-                }, 3000);
-            });
-        } else {
-            $scope.indicadores[index].dimension = $scope.indicadores[index].dimensiones.length - 1;
-            $scope.indicadores[index].error = "Success";
-            setTimeout(function () {
-                $scope.indicadores[index].error = "";
+        var json = { filtros: $scope.indicadores[index].filtros, ver_sql: false, otros_filtros: $scope.indicadores[index].otros_filtros };
+        Crud.crear("../api/v1/tablero/datosIndicador/" + $scope.indicadores[index].id + "/" + $scope.indicadores[index].dimensiones[dimension].trim(), json, "application/json", function(data) {
+            $scope.repuestaIndicador(data, dimension - 1, index);
+          }, function(e) {
+            $scope.indicadores[index].dimension--;
+            $scope.indicadores[index].error = "Error";
+            $scope.indicadores[index].cargando = false;
+            setTimeout(function() {
+              $scope.indicadores[index].error = "";
             }, 3000);
-        }
+          });
+      } else {
+        $scope.indicadores[index].dimension = $scope.indicadores[index].dimensiones.length - 1;
+        $scope.indicadores[index].error = "Success";
+        setTimeout(function() {
+          $scope.indicadores[index].error = "";
+        }, 3000);
+      }
     };
 
     /**
@@ -493,37 +561,37 @@ App.controller("TableroCtrl", function (
      * @param {dimension} dimension dimension actual de la gráfica
      * @param {index} index bandera de posicion
      */
-    $scope.repuestaIndicador = function (data, dimension, index) {
-        if (data.status == 200) {
-            $scope.indicadores[index].data = data.data;
+    $scope.repuestaIndicador = function(data, dimension, index) {
+      if (data.status == 200) {
+        $scope.indicadores[index].data = data.data;
 
-            var grafica = [];
-            grafica[0] = { key: $scope.indicadores[index].dimensiones[dimension], values: [] };
-            angular.forEach(data.data, function (val, key) {
-                color = "";
-                angular.forEach(data.informacion.rangos, function (v1, k1) {
-                    if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
-                        color = v1.color;
-                    }
-                });
+        var grafica = [];
+        grafica[0] = { key: $scope.indicadores[index].dimensiones[dimension], values: [] };
+        angular.forEach(data.data, function(val, key) {
+          color = "";
+          angular.forEach(data.informacion.rangos, function(v1, k1) {
+            if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
+              color = v1.color;
+            }
+          });
 
-                grafica[0].values.push({
-                    color: color,
-                    label: val.category,
-                    value: parseFloat(val.measure),
-                    index: index,
-                    dimension: dimension
-                });
-            });
-            $scope.indicadores[index].grafica = grafica;
-        } else {
-            $scope.indicadores[index].dimension--;
-            $scope.indicadores[index].error = "Warning";
-        }
-        $scope.indicadores[index].cargando = false;
-        setTimeout(function () {
-            $scope.indicadores[index].error = "";
-        }, 3000);
+          grafica[0].values.push({
+            color: color,
+            label: val.category,
+            value: parseFloat(val.measure),
+            index: index,
+            dimension: dimension
+          });
+        });
+        $scope.indicadores[index].grafica = grafica;
+      } else {
+        $scope.indicadores[index].dimension--;
+        $scope.indicadores[index].error = "Warning";
+      }
+      $scope.indicadores[index].cargando = false;
+      setTimeout(function() {
+        $scope.indicadores[index].error = "";
+      }, 3000);
     };
 
     /**
@@ -536,18 +604,18 @@ App.controller("TableroCtrl", function (
      * @param {index} index bandera de posicion
      * @param {hacer} hacer bandera para detyerminar si es para fullscreen
      */
-    $scope.actualizarsGrafica = function (index, hacer = true) {
-        if (hacer) $scope.indicadores[index].full_screen = !$scope.indicadores[index].full_screen;
-        
-        var tamano = $scope.indicadores[index].configuracion.height;
-        let grafica = $scope.indicadores[index].grafica;
-        $scope.indicadores[index].grafica = [];
-        let dimension = $scope.indicadores[index].dimension;
-        setTimeout(() => {
-            $scope.indicadores[index].grafica = grafica;
-            $scope.opcionesGraficas(index, $scope.indicadores[index].tipo_grafica, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, tamano);
-            document.getElementById("update" + index).click();
-        }, 200);
+    $scope.actualizarsGrafica = function(index, hacer = true) {
+      if (hacer) $scope.indicadores[index].full_screen = !$scope.indicadores[index].full_screen;
+
+      var tamano = $scope.indicadores[index].configuracion.height;
+      let grafica = $scope.indicadores[index].grafica;
+      $scope.indicadores[index].grafica = [];
+      let dimension = $scope.indicadores[index].dimension;
+      setTimeout(() => {
+        $scope.indicadores[index].grafica = grafica;
+        $scope.opcionesGraficas(index, $scope.indicadores[index].tipo_grafica, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, tamano);
+        document.getElementById("update" + index).click();
+      }, 200);
     };
 
     /**
@@ -561,79 +629,79 @@ App.controller("TableroCtrl", function (
      * @param {ordenar_por} ordenar_por
      * @param {ordenmodo_ordenar_por} modo_orden (asc, desc)
      */
-    $scope.ordenarArreglo = function (index, ordenar_por, modo_orden) {
-        var data = $scope.indicadores[index].data;
-        if (ordenar_por == "valor") {
-            data.sort(function (a, b) {
-                if (modo_orden == "asc") {
-                    if (parseFloat(a.measure) > parseFloat(b.measure)) {
-                        return 1;
-                    }
-                    if (parseFloat(a.measure) < parseFloat(b.measure)) {
-                        return -1;
-                    }
-                }
-                if (modo_orden == "desc") {
-                    if (parseFloat(a.measure) < parseFloat(b.measure)) {
-                        return 1;
-                    }
-                    if (parseFloat(a.measure) > parseFloat(b.measure)) {
-                        return -1;
-                    }
-                }
-                return 0;
-            });
-        }
-        if (ordenar_por == "nombre") {
-            data.sort(function (a, b) {
-                if (modo_orden == "asc") {
-                    if (a.category > b.category) {
-                        return 1;
-                    }
-                    if (a.category < b.category) {
-                        return -1;
-                    }
-                }
-                if (modo_orden == "desc") {
-                    if (a.category < b.category) {
-                        return 1;
-                    }
-                    if (a.category > b.category) {
-                        return -1;
-                    }
-                }
-                return 0;
-            });
-        }
-        var dimension = $scope.indicadores[index].dimension;
-        $scope.indicadores[index].data = data;
-        var grafica = [];
-        grafica[0] = { key: $scope.indicadores[index].grafica[0].key, values: [] };
-
-        angular.forEach(data, function (val, key) {
-            color = "";
-            angular.forEach(
-                $scope.indicadores[index].informacion.rangos,
-                function (v1, k1) {
-                    if (
-                        val.measure >= v1.limite_inf &&
-                        val.measure <= v1.limite_sup
-                    ) {
-                        color = v1.color;
-                    }
-                }
-            );
-
-            grafica[0].values.push({
-                color: color,
-                label: val.category,
-                value: parseFloat(val.measure),
-                index: index,
-                dimension: dimension
-            });
-            $scope.indicadores[index].grafica = grafica;
+    $scope.ordenarArreglo = function(index, ordenar_por, modo_orden) {
+      var data = $scope.indicadores[index].data;
+      if (ordenar_por == "valor") {
+        data.sort(function(a, b) {
+          if (modo_orden == "asc") {
+            if (parseFloat(a.measure) > parseFloat(b.measure)) {
+              return 1;
+            }
+            if (parseFloat(a.measure) < parseFloat(b.measure)) {
+              return -1;
+            }
+          }
+          if (modo_orden == "desc") {
+            if (parseFloat(a.measure) < parseFloat(b.measure)) {
+              return 1;
+            }
+            if (parseFloat(a.measure) > parseFloat(b.measure)) {
+              return -1;
+            }
+          }
+          return 0;
         });
-        $scope.actualizarsGrafica(index, false);
+      }
+      if (ordenar_por == "nombre") {
+        data.sort(function(a, b) {
+          if (modo_orden == "asc") {
+            if (a.category > b.category) {
+              return 1;
+            }
+            if (a.category < b.category) {
+              return -1;
+            }
+          }
+          if (modo_orden == "desc") {
+            if (a.category < b.category) {
+              return 1;
+            }
+            if (a.category > b.category) {
+              return -1;
+            }
+          }
+          return 0;
+        });
+      }
+      var dimension = $scope.indicadores[index].dimension;
+      $scope.indicadores[index].data = data;
+      var grafica = [];
+      grafica[0] = { key: $scope.indicadores[index].grafica[0].key, values: [] };
+
+      angular.forEach(data, function(val, key) {
+        color = "";
+        angular.forEach(
+          $scope.indicadores[index].informacion.rangos,
+          function(v1, k1) {
+            if (
+              val.measure >= v1.limite_inf &&
+              val.measure <= v1.limite_sup
+            ) {
+              color = v1.color;
+            }
+          }
+        );
+
+        grafica[0].values.push({
+          color: color,
+          label: val.category,
+          value: parseFloat(val.measure),
+          index: index,
+          dimension: dimension
+        });
+        $scope.indicadores[index].grafica = grafica;
+      });
+      $scope.actualizarsGrafica(index, false);
     };
 
     $scope.posicion = null;
@@ -646,26 +714,26 @@ App.controller("TableroCtrl", function (
      * funcion que cargar la informacion del sql
      * @param {index} index identificador de la posicion del grafico
      */
-    $scope.verSQLIndicador = function (index) {
-        $scope.posicion = index;
-        if ($scope.indicadores[index].sql == "") {
-            $scope.indicadores[index].cargando = true;
-            var json = { filtros: "", ver_sql: true };
-            var dimension = $scope.indicadores[index].dimension;
-            Crud.crear("../api/v1/tablero/datosIndicador/" + $scope.indicadores[index].id + "/" + $scope.indicadores[index].dimensiones[dimension], json, "application/json", function (data) {
-                if (data.status == 200) {
-                    $scope.indicadores[index].sql = data.data;
-                    $("#sql_indicador").html(sqlFormatter.format(data.data));
-                    $("#modalSQL").modal("toggle");
-                }
-                $scope.indicadores[index].cargando = false;
-            }, function (e) {
-                $scope.indicadores[index].cargando = false;
-            });
-        } else {
-            $("#sql_indicador").html(sqlFormatter.format($scope.indicadores[index].sql));
-            $("#modalSQL").modal("toggle");
-        }
+    $scope.verSQLIndicador = function(index) {
+      $scope.posicion = index;
+      if ($scope.indicadores[index].sql == "") {
+        $scope.indicadores[index].cargando = true;
+        var json = { filtros: "", ver_sql: true };
+        var dimension = $scope.indicadores[index].dimension;
+        Crud.crear("../api/v1/tablero/datosIndicador/" + $scope.indicadores[index].id + "/" + $scope.indicadores[index].dimensiones[dimension], json, "application/json", function(data) {
+            if (data.status == 200) {
+              $scope.indicadores[index].sql = data.data;
+              $("#sql_indicador").html(sqlFormatter.format(data.data));
+              $("#modalSQL").modal("toggle");
+            }
+            $scope.indicadores[index].cargando = false;
+          }, function(e) {
+            $scope.indicadores[index].cargando = false;
+          });
+      } else {
+        $("#sql_indicador").html(sqlFormatter.format($scope.indicadores[index].sql));
+        $("#modalSQL").modal("toggle");
+      }
     };
 
     /**
@@ -677,23 +745,23 @@ App.controller("TableroCtrl", function (
      * funcion que cargar la informacion del sql
      * @param {index} index identificador de la posicion del grafico
      */
-    $scope.verFichaIndicador = function (index) {
-        $scope.posicion = index;
-        if ($scope.indicadores[index].ficha == "") {
-            $scope.indicadores[index].cargando = true;
+    $scope.verFichaIndicador = function(index) {
+      $scope.posicion = index;
+      if ($scope.indicadores[index].ficha == "") {
+        $scope.indicadores[index].cargando = true;
 
-            Crud.ver("../api/v1/tablero/fichaIndicador", $scope.indicadores[index].id, function (data) {
-                if (data.status == 200) {
-                    $scope.indicadores[index].ficha = data.data;
-                    $("#modalFicha").modal("toggle");
-                }
-                $scope.indicadores[index].cargando = false;
-            }, function (e) {
-                $scope.indicadores[index].cargando = false;
-            });
-        } else {
-            $("#modalFicha").modal("toggle");
-        }
+        Crud.ver("../api/v1/tablero/fichaIndicador", $scope.indicadores[index].id, function(data) {
+            if (data.status == 200) {
+              $scope.indicadores[index].ficha = data.data;
+              $("#modalFicha").modal("toggle");
+            }
+            $scope.indicadores[index].cargando = false;
+          }, function(e) {
+            $scope.indicadores[index].cargando = false;
+          });
+      } else {
+        $("#modalFicha").modal("toggle");
+      }
     };
 
     /**
@@ -705,9 +773,9 @@ App.controller("TableroCtrl", function (
      * funcion que muestra la informacion de los datos del indicador
      * @param {index} index identificador de la posicion del grafico
      */
-    $scope.verTablaDatosIndicador = function (index) {
-        $scope.posicion = index;
-        $("#modalTablaDatos").modal("toggle");
+    $scope.verTablaDatosIndicador = function(index) {
+      $scope.posicion = index;
+      $("#modalTablaDatos").modal("toggle");
     };
 
     /**
@@ -719,9 +787,9 @@ App.controller("TableroCtrl", function (
      * funcion que muestra la informacion de las alertas del indicador
      * @param {index} index identificador de la posicion del grafico
      */
-    $scope.verAlertasIndicador = function (index) {
-        $scope.posicion = index;
-        $("#modalAlertas").modal("toggle");
+    $scope.verAlertasIndicador = function(index) {
+      $scope.posicion = index;
+      $("#modalAlertas").modal("toggle");
     };
 
     /**
@@ -733,9 +801,9 @@ App.controller("TableroCtrl", function (
      * funcion que muestra la configuracion de los graficos
      * @param {index} index identificador de la posicion del grafico
      */
-    $scope.verConfiguracion = function (index) {
-        $scope.posicion = index;
-        $("#modalConfiguracion").modal("toggle");
+    $scope.verConfiguracion = function(index) {
+      $scope.posicion = index;
+      $("#modalConfiguracion").modal("toggle");
     };
 
     /**
@@ -747,9 +815,9 @@ App.controller("TableroCtrl", function (
      * funcion que muestra las opciones de filtro
      * @param {index} index identificador de la posicion del grafico
      */
-    $scope.verFiltros = function (index) {
-        $scope.posicion = index;
-        $("#modalFiltros").modal("toggle");
+    $scope.verFiltros = function(index) {
+      $scope.posicion = index;
+      $("#modalFiltros").modal("toggle");
     };
 
     /**
@@ -761,15 +829,15 @@ App.controller("TableroCtrl", function (
      * funcion para agregar un indicador a la lista de favoritos
      * @param {item} item que corresponde al objeto indicador
      */
-    $scope.agregarFavorito = function (item) {
-        if (item) {
-            var json = { id: item.id, es_favorito: item.es_favorito };
-            Crud.crear("../api/v1/tablero/indicadorFavorito", json, "application/json", function (data) {
-                if (data.status == 200) {
-                    item.es_favorito = data.data;
-                }
-            }, function (e) { });
-        }
+    $scope.agregarFavorito = function(item) {
+      if (item) {
+        var json = { id: item.id, es_favorito: item.es_favorito };
+        Crud.crear("../api/v1/tablero/indicadorFavorito", json, "application/json", function(data) {
+            if (data.status == 200) {
+              item.es_favorito = data.data;
+            }
+          }, function(e) {});
+      }
     };
 
     /**
@@ -782,12 +850,12 @@ App.controller("TableroCtrl", function (
      * @param {item} item item a eliminar
      * @param {index} index posicion en la lista de graficas
      */
-    $scope.quitarIndicador = function (item, index) {
-        $scope.tablero_indicador[item.id]--;
-        $scope.indicadores.splice(index, 1);
-        if ($scope.indicadores.length <= 0) {
-            $scope.abrio_indicador = false;
-        }
+    $scope.quitarIndicador = function(item, index) {
+      $scope.tablero_indicador[item.id]--;
+      $scope.indicadores.splice(index, 1);
+      if ($scope.indicadores.length <= 0) {
+        $scope.abrio_indicador = false;
+      }
     };
 
     /**
@@ -802,29 +870,27 @@ App.controller("TableroCtrl", function (
      * @param {labelx} labelx etiqueta para el eje X
      * @param {labely} labely etiqueta para el eje Y
      */
-    $scope.opcionesGraficas = function (index, tipo, labelx, labely, tamano) {
-        if ($scope.indicadores[index].full_screen) tamano = $window.innerHeight / 1.28;
-       
-        $scope.indicadores[index].options = {
-            chart: {
-                type: tipo, height: tamano, margin: { top: 20, right: 20, bottom: 50, left: 55 }, x: function (d) {
-                    return d.label;
-                }, y: function (d) {
-                    return d.value;
-                }, showValues: true, valueFormat: function (d) {
-                    return d3.format(",.2f")(d);
-                }, duration: 500, xAxis: { axisLabel: labelx }, yAxis: { axisLabel: labely }, callback: function (chart) {
-                    chart.discretebar.dispatch.on("elementClick", function (e) {
-                        $scope.indicadores[index].dimension++;
-                        $scope.indicadores[index].filtros.push({
-                            codigo: $scope.indicadores[index].dimensiones[$scope.indicadores[index].dimension - 1].trim(),
-                            valor: e.data.label
-                        });
-                        $scope.agregarIndicadorDimension($scope.indicadores[index].dimension, e.data.index);
-                    });
-                }
-            }
-        };
+    $scope.opcionesGraficas = function(index, tipo, labelx, labely, tamano) {
+      if ($scope.indicadores[index].full_screen) tamano = $window.innerHeight / 1.28;
+
+      $scope.indicadores[index].options = { chart: { type: tipo, height: tamano, margin: { top: 20, right: 20, bottom: 50, left: 55 }, x: function(d) {
+            return d.label;
+          }, y: function(d) {
+            return d.value;
+          }, showValues: true, valueFormat: function(d) {
+            return d3.format(",.2f")(d);
+          }, duration: 500, xAxis: { axisLabel: labelx }, yAxis: { axisLabel: labely }, callback: function(chart) {
+            chart.discretebar.dispatch.on("elementClick", function(e) {
+              $scope.indicadores[index].dimension++;
+              $scope.indicadores[index].filtros.push({
+                codigo: $scope.indicadores[index].dimensiones[
+                  $scope.indicadores[index].dimension - 1
+                ].trim(),
+                valor: e.data.label
+              });
+              $scope.agregarIndicadorDimension($scope.indicadores[index].dimension, e.data.index);
+            });
+          } } };
     };
 
     /**
@@ -838,13 +904,13 @@ App.controller("TableroCtrl", function (
      * @param {tipo} tipo tipo de mensaje INFO, SUCCESS, WARNING, ERROR, DANGER
      * @param {id} id elemento donde se mostrara el mensaje
      */
-    $scope.imprimirMensaje = function (mensaje, tipo, id) {
-        id = angular.isUndefined(id) ? "#feedback_bar" : "#result_factura_test" + ", #" + id;
+    $scope.imprimirMensaje = function(mensaje, tipo, id) {
+      id = angular.isUndefined(id) ? "#feedback_bar" : "#result_factura_test" + ", #" + id;
 
-        $(id).html('<div class="alert alert-' + tipo + ' alert-dismissable" >' + '<i class="fa fa-' + tipo + '"></i> ' + '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' + "<b>Alert! </b>" + mensaje + "</div>");
-        setTimeout(function () {
-            $(id).html("");
-        }, 6000);
+      $(id).html('<div class="alert alert-' + tipo + ' alert-dismissable" >' + '<i class="fa fa-' + tipo + '"></i> ' + '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>' + "<b>Alert! </b>" + mensaje + "</div>");
+      setTimeout(function() {
+        $(id).html("");
+      }, 6000);
     };
 
     /**
@@ -857,35 +923,35 @@ App.controller("TableroCtrl", function (
      * @param {index} index bandera de posicion
      * @param {tipo} tipo tipo de imagen SVG, PNG
      */
-    $scope.exportarImagen = function (index, tipo) {
-        $("#svg" + index + " svg").attr({
-            version: "1.1",
-            xmlns: "http://www.w3.org/2000/svg",
-            id: "exportsvg" + index
-        });
-        var img = document.createElement("img");
+    $scope.exportarImagen = function(index, tipo) {
+      $("#svg" + index + " svg").attr({
+        version: "1.1",
+        xmlns: "http://www.w3.org/2000/svg",
+        id: "exportsvg" + index
+      });
+      var img = document.createElement("img");
 
-        var valor = '<?xml version="1.0" encoding="utf-8"?>' + $("#svg" + index)
-            .html()
-            .replace("\\n", "");
-        valor = window.btoa($scope.utf8_encode(valor));
-        var titulo = $scope.indicadores[index].nombre;
+      var valor = '<?xml version="1.0" encoding="utf-8"?>' + $("#svg" + index)
+          .html()
+          .replace("\\n", "");
+      valor = window.btoa($scope.utf8_encode(valor));
+      var titulo = $scope.indicadores[index].nombre;
 
-        var a = document.createElement("a");
-        if (tipo == "SVG") {
-            img.setAttribute("src", "data:image/svg+xml;base64," + valor);
+      var a = document.createElement("a");
+      if (tipo == "SVG") {
+        img.setAttribute("src", "data:image/svg+xml;base64," + valor);
 
-            img.onload = new function () {
-                a.setAttribute("id", "imgsvg" + index);
-                a.download = titulo + ".svg";
-                a.href = "data:image/svg+xml;base64," + valor;
-                a.click();
-                $("#imgsvg" + index).remove();
-            }();
-        }
-        if (tipo == "PNG") {
-            saveSvgAsPng(document.getElementById("exportsvg" + index), titulo + ".png");
-        }
+        img.onload = new function() {
+          a.setAttribute("id", "imgsvg" + index);
+          a.download = titulo + ".svg";
+          a.href = "data:image/svg+xml;base64," + valor;
+          a.click();
+          $("#imgsvg" + index).remove();
+        }();
+      }
+      if (tipo == "PNG") {
+        saveSvgAsPng(document.getElementById("exportsvg" + index), titulo + ".png");
+      }
     };
 
     /**
@@ -897,55 +963,55 @@ App.controller("TableroCtrl", function (
      * funcion que codifica una cadena a utf8
      * @param {argString} string a convertir
      */
-    $scope.utf8_encode = function (argString) {
-        if (argString === null || typeof argString === "undefined") {
-            return "";
+    $scope.utf8_encode = function(argString) {
+      if (argString === null || typeof argString === "undefined") {
+        return "";
+      }
+
+      var string = argString + ""; // .replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+      var utftext = "",
+        start,
+        end,
+        stringl = 0;
+
+      start = end = 0;
+      stringl = string.length;
+      for (var n = 0; n < stringl; n++) {
+        var c1 = string.charCodeAt(n);
+        var enc = null;
+
+        if (c1 < 128) {
+          end++;
+        } else if (c1 > 127 && c1 < 2048) {
+          enc = String.fromCharCode((c1 >> 6) | 192, (c1 & 63) | 128);
+        } else if ((c1 & 0xf800) != 0xd800) {
+          enc = String.fromCharCode((c1 >> 12) | 224, ((c1 >> 6) & 63) | 128, (c1 & 63) | 128);
+        } else {
+          // surrogate pairs
+          if ((c1 & 0xfc00) != 0xd800) {
+            throw new RangeError("Unmatched trail surrogate at " + n);
+          }
+          var c2 = string.charCodeAt(++n);
+          if ((c2 & 0xfc00) != 0xdc00) {
+            throw new RangeError("Unmatched lead surrogate at " + (n - 1));
+          }
+          c1 = ((c1 & 0x3ff) << 10) + (c2 & 0x3ff) + 0x10000;
+          enc = String.fromCharCode((c1 >> 18) | 240, ((c1 >> 12) & 63) | 128, ((c1 >> 6) & 63) | 128, (c1 & 63) | 128);
         }
-
-        var string = argString + ""; // .replace(/\r\n/g, "\n").replace(/\r/g, "\n");
-        var utftext = "",
-            start,
-            end,
-            stringl = 0;
-
-        start = end = 0;
-        stringl = string.length;
-        for (var n = 0; n < stringl; n++) {
-            var c1 = string.charCodeAt(n);
-            var enc = null;
-
-            if (c1 < 128) {
-                end++;
-            } else if (c1 > 127 && c1 < 2048) {
-                enc = String.fromCharCode((c1 >> 6) | 192, (c1 & 63) | 128);
-            } else if ((c1 & 0xf800) != 0xd800) {
-                enc = String.fromCharCode((c1 >> 12) | 224, ((c1 >> 6) & 63) | 128, (c1 & 63) | 128);
-            } else {
-                // surrogate pairs
-                if ((c1 & 0xfc00) != 0xd800) {
-                    throw new RangeError("Unmatched trail surrogate at " + n);
-                }
-                var c2 = string.charCodeAt(++n);
-                if ((c2 & 0xfc00) != 0xdc00) {
-                    throw new RangeError("Unmatched lead surrogate at " + (n - 1));
-                }
-                c1 = ((c1 & 0x3ff) << 10) + (c2 & 0x3ff) + 0x10000;
-                enc = String.fromCharCode((c1 >> 18) | 240, ((c1 >> 12) & 63) | 128, ((c1 >> 6) & 63) | 128, (c1 & 63) | 128);
-            }
-            if (enc !== null) {
-                if (end > start) {
-                    utftext += string.slice(start, end);
-                }
-                utftext += enc;
-                start = end = n + 1;
-            }
+        if (enc !== null) {
+          if (end > start) {
+            utftext += string.slice(start, end);
+          }
+          utftext += enc;
+          start = end = n + 1;
         }
+      }
 
-        if (end > start) {
-            utftext += string.slice(start, stringl);
-        }
+      if (end > start) {
+        utftext += string.slice(start, stringl);
+      }
 
-        return utftext;
+      return utftext;
     };
 
     /**
@@ -958,15 +1024,15 @@ App.controller("TableroCtrl", function (
      * @param {id} id del elemento html que contiene el area a exportar
      * @param {titulo} titulo que contendra el elemento exportado
      */
-    $scope.exportar_excel = function (id, titulo) {
-        let colspan = $("#" + id).find("tr:first th").length;
-        let excelData = "<table><tr><th colspan='" + colspan + "'><h4>" + titulo + " <h4></th></tr></table>";
+    $scope.exportar_excel = function(id, titulo) {
+      let colspan = $("#" + id).find("tr:first th").length;
+      let excelData = "<table><tr><th colspan='" + colspan + "'><h4>" + titulo + " <h4></th></tr></table>";
 
-        excelData += document.getElementById(id).innerHTML;
-        let blob = new Blob([excelData], {
-            type: "text/comma-separated-values;charset=utf-8"
-        });
-        saveAs(blob, titulo + ".xls");
+      excelData += document.getElementById(id).innerHTML;
+      let blob = new Blob([excelData], {
+        type: "text/comma-separated-values;charset=utf-8"
+      });
+      saveAs(blob, titulo + ".xls");
     };
 
     /**
@@ -979,22 +1045,22 @@ App.controller("TableroCtrl", function (
      * @param {id} id del elemento html que contiene el area a exportar
      * @param {titulo} titulo que contendra el elemento exportado
      */
-    $scope.exportar_pdf = function (id, titulo) {
-        var html = document.getElementById(id).innerHTML;
-        html = '<html lang="es">' + " <head>" + ' <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />' + ' <meta name="charset" content="UTF-8">' + ' <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">' + ' <meta name="apple-mobile-web-app-capable" content="yes">' + ' <title>PDF</title> <meta name="viewport" content="initial-scale=1" />' + ' <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">' + " </head>" + " <body>" + "<h4>" + titulo + "</h4>" + html + " </body>" + " </html>";
-        var iframe = document.createElement("iframe");
-        iframe.setAttribute("id", "printf");
+    $scope.exportar_pdf = function(id, titulo) {
+      var html = document.getElementById(id).innerHTML;
+      html = '<html lang="es">' + " <head>" + ' <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />' + ' <meta name="charset" content="UTF-8">' + ' <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">' + ' <meta name="apple-mobile-web-app-capable" content="yes">' + ' <title>PDF</title> <meta name="viewport" content="initial-scale=1" />' + ' <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">' + " </head>" + " <body>" + "<h4>" + titulo + "</h4>" + html + " </body>" + " </html>";
+      var iframe = document.createElement("iframe");
+      iframe.setAttribute("id", "printf");
 
-        document.body.appendChild(iframe);
+      document.body.appendChild(iframe);
 
-        var mywindow = document.getElementById("printf");
-        mywindow.contentWindow.document.write(html);
-        setTimeout(() => {
-            mywindow.contentWindow.print();
-        }, 500);
-        setTimeout(() => {
-            document.body.removeChild(iframe);
-        }, 2000);
+      var mywindow = document.getElementById("printf");
+      mywindow.contentWindow.document.write(html);
+      setTimeout(() => {
+        mywindow.contentWindow.print();
+      }, 500);
+      setTimeout(() => {
+        document.body.removeChild(iframe);
+      }, 2000);
     };
 
     /**
@@ -1007,31 +1073,31 @@ App.controller("TableroCtrl", function (
      * @param {titulo} titulo que contendra el elemento exportado
      * @param {json} json del elemento a exportar
      */
-    $scope.exportar_csv = function (titulo, json) {
-        var fields = Object.keys(json[0]);
-        var replacer = function (key, value) {
-            return value === null ? "" : value;
-        };
-        var csv = json.map(function (row) {
-            return fields
-                .map(function (fieldName) {
-                    return JSON.stringify(row[fieldName], replacer);
-                })
-                .join(",");
-        });
-        csv.unshift(fields.join(","));
+    $scope.exportar_csv = function(titulo, json) {
+      var fields = Object.keys(json[0]);
+      var replacer = function(key, value) {
+        return value === null ? "" : value;
+      };
+      var csv = json.map(function(row) {
+        return fields
+          .map(function(fieldName) {
+            return JSON.stringify(row[fieldName], replacer);
+          })
+          .join(",");
+      });
+      csv.unshift(fields.join(","));
 
-        var csvData = csv.join("\r\n");
+      var csvData = csv.join("\r\n");
 
-        let blob = new Blob([csvData], {
-            type: "text/comma-separated-values;charset=utf-8"
-        });
-        saveAs(blob, titulo + ".csv");
+      let blob = new Blob([csvData], {
+        type: "text/comma-separated-values;charset=utf-8"
+      });
+      saveAs(blob, titulo + ".csv");
     };
 
     $scope.medidas_width = [];
     for (i = 0; i < 12; i++) {
-        $scope.medidas_width.push(i);
+      $scope.medidas_width.push(i);
     }
 
     /**
@@ -1044,13 +1110,124 @@ App.controller("TableroCtrl", function (
      * @param {index} index que identifica el area de gráfico
      * @param {valor} valor del elemento seleccionado
      */
-    $scope.agregarOtrosFiltros = function (index, valor) {
-        if ($scope.indicadores[index].otros_filtros.elementos.indexOf(valor) > -1) {
-            $scope.indicadores[index].otros_filtros.elementos.splice($scope.indicadores[index].otros_filtros.elementos.indexOf(valor), 1);
-            $("#elemento" + index).removeAttr("checked");
-        } else {
-            $scope.indicadores[index].otros_filtros.elementos.push(valor);
-            $("#elemento" + index).attr("checked", "checked");
-        }
+    $scope.agregarOtrosFiltros = function(index, valor) {
+      if ($scope.indicadores[index].otros_filtros.elementos.indexOf(valor) > -1) {
+        $scope.indicadores[index].otros_filtros.elementos.splice($scope.indicadores[index].otros_filtros.elementos.indexOf(valor), 1);
+        $("#elemento" + index).removeAttr("checked");
+      } else {
+        $scope.indicadores[index].otros_filtros.elementos.push(valor);
+        $("#elemento" + index).attr("checked", "checked");
+      }
     };
-});
+
+    $scope.accion = { acciones: "", observaciones: "", responsables: "", lista: [] };
+
+    /**
+     * @ngdoc method
+     * @name Tablero.TableroCtrl#guardarAccionSala
+     * @methodOf Tablero.TableroCtrl
+     *
+     * @description
+     * funcion que guarda las acciones de la sala
+     */
+    $scope.guardarAccionSala = function() {
+      $scope.sala_cargando = true;
+      Crud.crear("../api/v1/tablero/salaAccion/" + $scope.sala.id, $scope.accion, "application/json", function(data) {
+          if (data.status == 200) {
+            $scope.accion.lista = data.data;
+            alert($("#guardar_sala_accion_ok").html());
+          } else {
+            alert($("#guardar_sala_accion_error").html());
+          }
+          $scope.sala_cargando = false;
+        }, function(e) {
+          alert($("#guardar_sala_accion_error").html());
+          $scope.sala_cargando = false;
+        });
+    };
+
+    /**
+     * @ngdoc method
+     * @name Tablero.TableroCtrl#listaAccionSala
+     * @methodOf Tablero.TableroCtrl
+     *
+     * @description
+     * funcion que muestra la lista de las accines de la sala
+     */
+    $scope.listaAccionSala = function() {
+      $scope.sala_cargando = true;
+      Crud.lista("../api/v1/tablero/salaAccion/" + $scope.sala.id, function(data) {
+          if (data.status == 200) {
+            $scope.accion.lista = data.data;
+          }
+          $scope.sala_cargando = false;
+        }, function(e) {
+          $scope.sala_cargando = false;
+        });
+    };
+    $scope.comentarios_compartir;
+    $scope.compartir = { usuarios_con_cuenta: [], usuarios_sin_cuenta: "", lista_usuarios: [], comentarios: "", correo: 0 };
+    /**
+     * @ngdoc method
+     * @name Tablero.TableroCtrl#usuariosSala
+     * @methodOf Tablero.TableroCtrl
+     *
+     * @description
+     * funcion que muestra la lista de usuarios para compartir la sala
+     */
+    $scope.usuariosSala = function() {
+      $scope.sala_cargando = true;
+      Crud.lista("../api/v1/tablero/usuariosSala/" + $scope.sala.id, function(data) {
+          if (data.status == 200) {
+            $scope.compartir.lista_usuarios = data.data;
+          }
+          $scope.sala_cargando = false;
+        }, function(e) {
+          $scope.sala_cargando = false;
+        });
+    };
+
+    /**
+     * @ngdoc method
+     * @name Tablero.TableroCtrl#comentarioSala
+     * @methodOf Tablero.TableroCtrl
+     *
+     * @description
+     * funcion que muestra la lista comentarios de la sala compartida
+     */
+    $scope.comentarioSala = function() {
+      $scope.sala_cargando = true;
+      Crud.lista("../api/v1/tablero/comentarioSala/" + $scope.sala.id, function(data) {
+          if (data.status == 200) {
+            $scope.comentarios_compartir = data.html;
+          }
+          $scope.sala_cargando = false;
+        }, function(e) {
+          $scope.sala_cargando = false;
+        });
+    };
+
+    /**
+     * @ngdoc method
+     * @name Tablero.TableroCtrl#comentarioSalaGuardar
+     * @methodOf Tablero.TableroCtrl
+     *
+     * @description
+     * funcion que guarda las acciones de la sala
+     */
+    $scope.comentarioSalaGuardar = function() {
+      $scope.sala_cargando = true;
+      Crud.crear("../api/v1/tablero/comentarioSala/" + $scope.sala.id, $scope.compartir, "application/json", function(data) {
+          if (data.status == 200) {
+              $scope.comentarios_compartir += data.html;
+            alert($("#guardar_sala_compartir_ok").html());
+          } else {
+            alert($("#guardar_sala_compartir_error").html());
+          }
+          $scope.sala_cargando = false;
+        }, function(e) {
+            alert($("#guardar_sala_compartir_error").html());
+          $scope.sala_cargando = false;
+        });
+    };
+  });

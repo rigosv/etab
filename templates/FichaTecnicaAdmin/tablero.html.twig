@@ -59,9 +59,15 @@
             </div>
         </div>
 
-        <div id="sala" class="row" style="padding-top: 48px;" dnd-list="indicadores">        
+        <div id="sala" class="row" style="padding-top: 48px;" dnd-list="indicadores">  
+            <div class="col-md-12" ng-if="abrio_sala" style="top: -45px;">
+                <div class="page-header" style="padding:1px; margin-top:15px;  margin-bottom: -45px;">
+                    <h1 id="header_sala"><span class="glyphicon glyphicon-th"></span> <% sala.nombre %></h1>
+                </div>
+            </div>
+
             <div class="<% item.configuracion.width ? item.configuracion.width : 'col-sm-4'%> indicadores <% item.full_screen ? 'div_full' : '' %>" style="cursor: all-scroll; page-break-after:always;" 
-            ng-repeat="item in indicadores" dnd-draggable="item" dnd-moved="indicadores.splice($index, 1); "
+            ng-repeat="item in indicadores | orderBy:item.posicion" dnd-draggable="item" dnd-moved="indicadores.splice($index, 1); "
              dnd-effect-allowed="move" dnd-selected="indicadores.selected = item" ng-class="{'selected': indicadores.selected === item}" >
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -88,17 +94,17 @@
                                     <li><a ng-click="verFiltros($index)" title="{{ 'dimension_opciones' | trans }}"> <i class="glyphicon glyphicon-filter"></i> </a></li>                                    
                                     
                                     <li class="dropdown">
-                                        <a ng-click="abrir1[$index] = !abrir1[$index]" class="dropdown-toggle" data-toggle="dropdown" data-id="dropdown_export_<% $index %>" role="button" aria-haspopup="true" aria-expanded="false" title="{{ '_exportar_' | trans }}">
+                                        <a ng-click="abrir1[$index] = !abrir1[$index]" class="dropdown-toggle" data-toggle="dropdown" data-id="dropdown_export_<% $index %>" role="button"  title="{{ '_exportar_' | trans }}">
                                             <i class="glyphicon glyphicon-export"></i> <span class="caret"></span>
                                         </a>
-                                        <ul class="dropdown-menu" style="display:<% abrir1[$index] ? 'block' : 'none' %>" role="menu" id="dropdown_export_<% $index %>">                                            
+                                        <ul class="dropdown-menu" role="menu" style="display:<% abrir1[$index] ? 'block' : 'none' %>" id="dropdown_export_<% $index %>">                                            
                                             <li><a ng-click="abrir1[$index] = false; exportarImagen($index, 'SVG');"><i class="glyphicon glyphicon-picture"></i> {{ '_exportar_svg_' | trans }}</a></li>
                                             <li><a ng-click="abrir1[$index] = false; exportarImagen($index, 'PNG');"><i class="glyphicon glyphicon-picture"></i> {{ '_exportar_png_' | trans }}</a></li>                                        
                                         </ul>
                                     </li>
 
                                     <li class="dropdown">
-                                        <a ng-click="abrir2[$index] = !abrir2[$index]" class="dropdown-toggle" data-toggle="dropdown" data-id="dropdown_ficha_<% $index %>" role="button" aria-haspopup="true" aria-expanded="false" title="{{ 'opciones' | trans }}">
+                                        <a ng-click="abrir2[$index] = !abrir2[$index]" class="dropdown-toggle" data-toggle="dropdown" data-id="dropdown_ficha_<% $index %>" role="button"  title="{{ 'opciones' | trans }}">
                                             <i class="glyphicon glyphicon-info-sign"></i> <span class="caret"></span>
                                         </a>
                                         <ul class="dropdown-menu" style="display:<% abrir2[$index] ? 'block' : 'none' %>" role="menu" id="dropdown_ficha_<% $index %>">
@@ -186,6 +192,19 @@
     <!-- MODAL CONFIGURACION -->
     {% include 'FichaTecnicaAdmin/tablero_configuracion.html.twig' %}
     <!-- FIN MODAL CONFIGURACION -->
+
+
+    <!-- MODAL GUARDAR SALA -->
+    {% include 'FichaTecnicaAdmin/tablero_sala_guardar.html.twig' %}
+    <!-- FIN MODAL GUARDAR SALA -->
+
+    <!-- MODAL ACCION SALA -->
+    {% include 'FichaTecnicaAdmin/tablero_sala_accion.html.twig' %}
+    <!-- FIN MODAL ACCION SALA -->
+
+    <!-- MODAL COMPARTIR SALA -->
+    {% include 'FichaTecnicaAdmin/tablero_sala_compartir.html.twig' %}
+    <!-- FIN MODAL COMPARTIR SALA -->
     
 </div>
 {% endblock %}

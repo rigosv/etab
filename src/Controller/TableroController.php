@@ -18,10 +18,11 @@ use App\Entity\ClasificacionUso;
 use App\Entity\ClasificacionTecnica;
 use App\Entity\User;
 use App\Entity\GrupoIndicadores;
+use App\Entity\GrupoIndicadoresIndicador;
 use App\Entity\UsuarioGrupoIndicadores;
+
 use App\Entity\SignificadoCampo;
 use App\Entity\OrigenDatos;
-use App\Entity\GrupoIndicadoresIndicador;
 
 
 /**
@@ -654,6 +655,147 @@ class TableroController extends AbstractController {
         $serializer = new Serializer($normalizers, $encoders);
         return new Response($serializer->serialize($response, "json"));
     }
-}
 
-//end class
+    //////////////////////// salas ///////////////////
+
+    /**
+     * @Route("/borrarSala", name="borrarSala_index", methods={"POST"})
+     */
+    public function borrarSala(Request $request)
+    {
+        $lasala = new GrupoIndicadores();
+        $em = $this->getDoctrine()->getManager();
+        $req = $request;
+        $resp = array();
+        $em->getConnection()->beginTransaction();
+        $sala = $req->get('id');
+        try {
+            if ($sala != '') 
+            {
+                $grupoIndicadores = $em->find(GrupoIndicadores::class, $sala);
+                //Borrar los indicadores antiguos de la sala                
+                foreach ($grupoIndicadores->getIndicadores() as $ind)
+                    $em->remove($ind);                          
+                    
+                foreach ($grupoIndicadores->getUsuarios() as $ind)
+                    $em->remove($ind);
+                
+                $lasala=$em->find(GrupoIndicadores::class, $sala);
+                $em->remove($lasala);
+                    
+                $em->flush();                               
+         
+                $em->getConnection()->commit();
+
+                $response = [
+                    'status' => 200,
+                    'messages' => 'Ok',
+                    'data' => []
+                ];   
+            } 
+            else 
+            {
+                $response = [
+                    'status' => 404,
+                    'messages' => "Not Found",
+                    'data' => [],
+                ];
+            }
+        } 
+        catch (\Exception $e) 
+        {
+            $response = [
+                'status' => 500,
+                'messages' => $e->getMessage(),
+                'data' => [],
+            ];    
+        }
+
+        $encoders = array(new JsonEncoder());
+        $normalizers = array(new ObjectNormalizer());
+
+        $serializer = new Serializer($normalizers, $encoders);
+        return new Response($serializer->serialize($response, "json"));
+    }
+
+    /**
+     * @Route("/guardarSala", name="guardarSala_index", methods={"POST"})
+     */
+    public function guardarSala(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $req = (object) $request->request->all();
+        $resp = array();
+        $sala = $req->sala;
+        $indicadores = $req->indicadores;
+        $em->getConnection()->beginTransaction();
+        try {
+            if ($sala["id"] != '') {
+                $grupoIndicadores = $em->find(GrupoIndicadores::class, $sala["id"]);
+                foreach ($grupoIndicadores->getIndicadores() as $ind)
+                    $em->remove($ind);
+                $em->flush();
+            } else {
+                $grupoIndicadores = new GrupoIndicadores();
+            }
+            $grupoIndicadores->setNombre($sala["nombre"]);
+            
+            foreach ($indicadores as $grafico) {
+                if(is_array($grafico))
+                    $grafico = (object) $grafico;
+                if (!empty($grafico->id)) {
+                    $indG = new GrupoIndicadoresIndicador();
+                    $ind = $em->find(FichaTecnica::class, $grafico->id);
+                    $indG->setDimension($grafico->dimensiones[$grafico->dimension]);
+                    $indG->setFiltro(json_encode($grafico->filtros));
+                    
+                    if(property_exists($grafico, 'filtro_desde'))
+                        $indG->setFiltroPosicionDesde($grafico->otros_filtros["desde"]);
+
+                    if(property_exists($grafico, 'filtro_hasta'))
+                        $indG->setFiltroPosicionHasta($grafico->otros_filtros["hasta"]);
+
+                    $indG->setFiltroElementos(implode(",", $grafico->otros_filtros["elementos"]));
+                    $indG->setIndicador($ind);
+                    $indG->setPosicion($grafico->posicion);
+
+                    if (property_exists($grafico, 'orden')) {
+                        $indG->setOrden(json_encode($grafico->configuracion));
+                    }
+                    $indG->setTipoGrafico($grafico->configuracion["tipo_grafico"]);
+                    $indG->setGrupo($grupoIndicadores);
+                    $grupoIndicadores->addIndicadore($indG);
+                }
+            }
+            $em->persist($grupoIndicadores);
+            $em->flush();
+            if ($sala["id"] == '') {
+                $usuarioGrupoIndicadores = new UsuarioGrupoIndicadores();
+                $usuarioGrupoIndicadores->setUsuario($this->getUser());
+                $usuarioGrupoIndicadores->setEsDuenio(true);
+                $usuarioGrupoIndicadores->setGrupoIndicadores($grupoIndicadores);
+                $em->persist($usuarioGrupoIndicadores);
+                $em->flush();
+            }
+            $response = [
+                'status' => 200,
+                'messages' => 'Ok',
+                'data' => $grupoIndicadores->getId()
+            ];   
+
+            $em->getConnection()->commit();
+        } catch (\Exception $e) {
+            $response = [
+                'status' => 500,
+                'messages' => $e->getMessage(),
+                'data' => [],
+            ];   
+        }
+
+        $encoders = array(new JsonEncoder());
+        $normalizers = array(new ObjectNormalizer());
+
+        $serializer = new Serializer($normalizers, $encoders);
+        return new Response($serializer->serialize($response, "json"));
+    }
+}

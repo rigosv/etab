@@ -16,15 +16,15 @@
                 <i class="glyphicon glyphicon-flag"></i> <span class="hidden-xs">{{"indicadores" | trans}}</span>
             </a>
             
-            <a href="#myModal" data-toggle="modal" class="btn btn-primary" title="{{'_guardar_sala_' | trans}}" id="_guardar_sala_" ng-if="abrio_sala || abrio_indicador">
+            <a data-target="#modalGuardarSala" data-toggle="modal" class="btn btn-primary" title="{{'_guardar_sala_' | trans}}" id="_guardar_sala_" ng-if="abrio_sala || abrio_indicador">
                 <i class="fa fa-save"></i> <span class="hidden-xs">{{"_guardar_sala_" | trans}}</span>
             </a>
            
-            <a href="#addAction" data-toggle="modal" class="btn btn-info" title="{{'_sala_acciones_' | trans}}" id="_sala_acciones_" ng-if="abrio_sala">
+            <a data-target="#modalAcciones" data-toggle="modal" class="btn btn-info" title="{{'_sala_acciones_' | trans}}" id="_sala_acciones_" ng-if="abrio_sala">
                 <i class="fa fa-bookmark"></i> <span class="hidden-xs">{{"_sala_acciones_" | trans}}</span>
             </a>
 
-            <a href="#compartir" data-toggle="modal" class="btn btn-info" title="{{'_compartir_sala_' | trans}}" id="_compartir_sala_" ng-if="abrio_sala">
+            <a data-target="#modalCompartir" data-toggle="modal" class="btn btn-info" title="{{'_compartir_sala_' | trans}}" id="_compartir_sala_" ng-if="abrio_sala">
                 <i class="fa fa-share"></i> <span class="hidden-xs">{{"_compartir_sala_" | trans}}</span>
             </a>
             
