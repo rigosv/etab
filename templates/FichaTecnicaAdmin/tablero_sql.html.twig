@@ -1,0 +1,24 @@
+<div class="modal fade" id="modalSQL" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+       <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 id="myModalLabel2"><% indicadores[posicion].nombre %></h4>
+        </div>
+        <div class="modal-body" style="max-height:400px; max-width:100%; overflow:auto;">
+            <hljs>
+                <pre>
+                    <code>
+                        <span id="sql_indicador">
+                            
+                        </span>
+                    </code>
+                </pre>
+            </hljs>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-warning" data-dismiss="modal" aria-hidden="true">{{ '_cerrar_' | trans}}</button>
+        </div>
+    </div>
+  </div>
+</div>

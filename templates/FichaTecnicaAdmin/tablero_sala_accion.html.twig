@@ -1,0 +1,76 @@
+<div class="modal fade" id="modalAcciones" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+       <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 id="myModalLabel2">{{ '_sala_acciones_' | trans }}</h4>
+        </div>
+        <div class="modal-body" style="max-height:400px; max-width:100%; overflow:auto;">
+            
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#nuevoAccion" aria-controls="nuevoAccion" role="tab" data-toggle="tab">{{ '_agregar_accion_' | trans }}</a></li>
+                <li role="presentation"><a href="#listaAccion" aria-controls="listaAccion" role="tab" data-toggle="tab">{{ '_historial_sala_' | trans }}</a></li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="nuevoAccion">
+                    <br>
+                    <form id="acciones_frm" class="form-horizontal" role="form">
+                        <div class="form-group" id="acciones_div">
+                            <label for="acciones" class="col-sm-2 control-label col-lg-3">
+                            {{ '_acciones_' | trans }}
+                            </label>
+                            <div class="col-sm-10 col-lg-8">
+                                <textarea class="form-control" rows="3" id="acciones" ng-model="accion.acciones"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="observaciones" class="col-sm-2 col-lg-3 control-label">{{ '_observaciones_' | trans }}</label>
+                            <div class="col-sm-10 col-lg-8">
+                                <textarea class="form-control" rows="3" id="observaciones" ng-model="accion.observaciones"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="responsables" class="col-sm-2 control-label col-lg-3">{{ '_responsables_' | trans }}</label>
+                            <div class="col-sm-10 col-lg-8">
+                                <textarea class="form-control" rows="3" id="responsables" ng-model="accion.responsables"></textarea>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <div role="tabpanel" class="tab-pane" id="listaAccion">
+                    <br>
+                    <table class="table table-bordered table-striped" >
+                        <thead>
+                            <tr class="sonata-ba-view-title" bgcolor='#E1EFFB'>
+                                <th ng-repeat="(key, value) in accion.lista[0]"><% key %></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="(key, value) in accion.lista">
+                                <td ng-repeat="(k, v) in value"><% v %></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <span style="display:none">
+                <span id="guardar_sala_accion_ok">{{ '_mensaje_ok_guardar_sala_accion_' | trans}}</span>
+                <span id="guardar_sala_accion_error">{{ '_mensaje_error_guardar_sala_accion_' | trans}}</span>
+            </span>
+
+        </div>
+        <div class="modal-footer">
+            <button id="guardar_accion_sala" class="btn btn-primary" ng-click="guardarAccionSala(sala)" ng-disabled="sala_cargando">
+                <img src="{{ app.request.schemeAndHttpHost ~ asset('images/ajax-loader.gif') }}" style="width:20px" ng-if="sala_cargando"/>
+                {{ '_guardar_sala_' | trans }}
+            </button>
+            <button class="btn btn-warning" data-dismiss="modal" aria-hidden="true">{{ '_cerrar_' | trans}}</button>
+        </div>
+    </div>
+  </div>
+</div>

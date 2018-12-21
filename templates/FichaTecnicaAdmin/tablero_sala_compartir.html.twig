@@ -1,0 +1,77 @@
+<div class="modal fade" id="modalCompartir" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+       <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 id="myModalLabel2">{{ '_compartir_sala_' | trans }}</h4>
+        </div>
+        <div class="modal-body" style="max-height:400px; max-width:100%; overflow:auto;">
+            
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#compartirUsuario" aria-controls="compartirUsuario" role="tab" data-toggle="tab">{{ 'users' | trans }}</a></li>
+                <li role="presentation"><a href="#compartirComentario" aria-controls="compartirComentario" role="tab" data-toggle="tab">{{ '_comentarios_' | trans }}</a></li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="compartirUsuario">
+                    <br>
+                    <form id="compartir_frm" class="form-horizontal content tab-pane" role="form">
+                        <div class="form-group" >
+                            <label class="control-label  ">{{ '_usuario_con_cuenta_' | trans }}</label>
+                            <select class="form-control" ng-model="configuracion.indicadores[posicion].tipo_grafico" multiple>
+                                <option  value="All">{{ '_todos_' | trans }}</option>
+                                <option ng-repeat="item in compartir.lista_usuarios" value="<% item.id %>"><% item.nombre %></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="usuario_sin">
+                            {{ '_usuario_sin_cuenta_' | trans }}
+                            </label>  
+                            <div class="well well-sm">{{ '_usuario_sin_cuenta_correos_' | trans }}</div>
+                            <textarea name="usuario_sin" id="usuario_sin" class="form-control" ng-model="compartir.usuarios_sin_cuenta"></textarea>
+                        </div>
+                    </form>
+
+                </div>
+                <div role="tabpanel" class="tab-pane" id="compartirComentario">
+                    <br>
+                    <div id="coments" class="content tab-pane">
+                        <label for="_comentarios_">{{ '_comentarios_' | trans }}</label>                                      
+                        <div id="chat">
+                            <form id="chat-form">                            
+                                <textarea name="chat-mensaje" id="chat-form-mensaje" required="true" class="form-control" ng-model="compartir.comentarios"></textarea>                                        
+                            </form>
+                            <br>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">{{ '_foro_discusion_' | trans }}</h3>
+                                </div>
+                                <div class="panel-body" id="content_mensajes" style="max-height: 375.2px; min-height: 70px; overflow: auto;">
+                                    <div class="comments-container">
+                                        <ul class="comments-list" id="chat-mensajes" to-html="<% comentarios_compartir %>"> </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <span style="display:none">
+                <span id="guardar_sala_compartir_ok">{{ '_mensaje_ok_guardar_sala_compartir_' | trans}}</span>
+                <span id="guardar_sala_compartir_error">{{ '_mensaje_error_guardar_sala_compartir_' | trans}}</span>
+            </span>
+
+        </div>
+        <div class="modal-footer">
+            <button id="guardar_accion_sala" class="btn btn-primary" ng-click="comentarioSalaGuardar(sala)" ng-disabled="sala_cargando">
+                <img src="{{ app.request.schemeAndHttpHost ~ asset('images/ajax-loader.gif') }}" style="width:20px" ng-if="sala_cargando"/>
+                {{ '_guardar_sala_' | trans }}
+            </button>
+            <button class="btn btn-warning" data-dismiss="modal" aria-hidden="true">{{ '_cerrar_' | trans}}</button>
+        </div>
+    </div>
+  </div>
+</div>

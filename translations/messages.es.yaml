@@ -198,7 +198,6 @@ javascript:
   elija_tipo_dato: 'Elija el tipo de dato'
   elija_significado_dato: 'Elija el significado del dato'
   configure_campos: 'Configure los campos: se muestra solo una parte de los datos'
-  nombre_campo: 'Nombre del campo'
   tipo: 'Tipo'
   significado: 'Significado'
   datos_muestra: 'Datos de muestra'
@@ -336,6 +335,7 @@ _comentarios_: Comentarios
 _enviar_: Enviar
 _guardar_como_: Guardar como
 _alerta_limite_inferior_: 'Límite inferior'
+_alerta_limite_superior_: 'Límite superior'
 _regresar_menu_principal_: Regresar al menú principal
 _agencia_: Agencia
 _usuario_no_agencia_: El usuario actual no tiene asignada una Agencia
@@ -528,9 +528,47 @@ _agregar_archivo_: Agregar archivo
 _origen_datos_archivo_: Desde archivo
 _origen_datos_sql_: Desde base de datos
 _tipo_archivo_invalido_: Tipo de archivo no válido
+
+_indicador_dimension_fin: 'Ha llegado al limite de dimensiones'
+
+_exportar_excel_: 'Exportar a Excel'
+_exportar_pdf_: 'Exportar a Pdf'
+_exportar_csv_: 'Exportar a Csv'
+
+periocidad: 'Periocidad'
+_restablecer_: 'Reestablecer'
+
 _cantidad_decimales_: Cantidad de decimales
 _cantidad_decimales_help_: En el resultado de la fórmula se usará la cantidad de decimales especificados
 _formato_valor_corte_: Formato valor corte
 _formato_valor_corte_help_: Formato de fecha del campo incremental. 'Y-m-d H:i:s' por defecto
 _valor_corte_: Valor de corte
 _valor_corte_help_: Último valor leído en la carga de datos
+
+_manual_: 'Manual'
+_ancho_grafico_: 'Tamaño ancho gráfico'
+_alto_grafico_: 'Tamaño alto gráfico'
+_exportar_diccionario_datos_: Exportar Diccinario de datos
+_cerrar_sala_: 'Cerrar sala'
+_compartir_sala_: 'Compartir sala'
+_editar_: Editar
+_borrar_: Borrar
+_actualizar_sala_: 'Actualizar Sala'
+
+_esta_seguro_eliminar_sala_: '¿Esta seguro de eliminar la sala?'
+_mensaje_ok_eliminar_sala_: 'La sala fue eliminada'
+_mensaje_error_eliminar_sala_: 'Error al eliminar la sala'
+_mensaje_ok_guardar_sala_: 'La sala se guardo correctamente'
+_mensaje_error_guardar_sala_: 'Error al guardar la sala'
+_mensaje_ok_guardar_sala_accion_: 'La acción de la sala se guardo correctamente'
+_mensaje_error_guardar_sala_accion_: 'Error al guardar la acción de la sala'
+_mensaje_ok_guardar_sala_compartir_: 'La sala se compartio correctamente'
+_mensaje_error_guardar_sala_compartir_: 'Error al compartir la sala'
+
+_historial_sala_: 'Historial de acciones'
+
+_foro_discusion_: 'Foro de discusión'
+_usuario_sin_cuenta_correos_ : 'Escribir el correo del usuario. Puede escribir mas de 1 separando por comas'
+_usuario_sin_cuenta_: 'Usuarios sin cuenta '
+_usuario_con_cuenta_: 'Usuarios con cuenta '
+_todos_: 'Todos'

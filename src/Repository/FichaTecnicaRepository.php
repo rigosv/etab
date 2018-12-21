@@ -320,7 +320,7 @@ class FichaTecnicaRepository extends ServiceEntityRepository {
         }
     }
 
-    public function calcularIndicador(FichaTecnica $fichaTecnica, $dimension, $filtro_registros = null, $ver_sql = false) {
+    public function calcularIndicador(FichaTecnica $fichaTecnica, $dimension, $filtro_registros = null, $ver_sql = false, $filtro_adicional = '') {
         
         $acumulado = $fichaTecnica->getEsAcumulado();
         $formula = str_replace(' ', '',strtolower($fichaTecnica->getFormula()));
@@ -387,10 +387,41 @@ class FichaTecnicaRepository extends ServiceEntityRepository {
                     );
 
         }
+        // codigo para determinar si hay otros tipos de filtros 
+        $otros_filtros = '';
+        if($filtro_adicional != ''){
+
+            $existe_fecha = $this->cnxDatos->executeQuery("SELECT * FROM $tabla_indicador LIMIT 1")->fetchAll();
+            $anio = ''; $mes = '';
+            foreach ($existe_fecha[0] as $key1 => $value1) {
+                
+                $cv1 = strtoupper($key1);
+                if($cv1 == 'MES' || $cv1 == 'MONTH' || $cv1 == 'ID_MES' || $cv1 == 'IDMES' || $cv1 == 'MES_ID' || $cv1 == 'MESID'){
+                    $mes = $key1;
+                }
+                if($cv1 == 'ANIO' || $cv1 == 'YEAR' || $cv1 == 'ID_ANIO' || $cv1 == 'IDANIO' || $cv1 == 'ANIO_ID' || $cv1 == 'ANIOID'){
+                    $anio = $key1;
+                }
+            }
+            
+            $desde = substr($filtro_adicional["desde"], 0, 10);
+            $hasta = substr($filtro_adicional["hasta"], 0, 10);
+            $eleme = implode("','", $filtro_adicional["elementos"]);
+            if($desde != '' && $hasta != '' && ($mes != '' && $anio != '')){
+                $fecha = "concat($anio, '-', $mes, '-', '28')::date";
+                $otros_filtros .= " and $fecha >= '".$desde."'::date and $fecha <= '".$hasta."'::date";
+            }
+            if(count($filtro_adicional["elementos"]) > 0){
+                $otros_filtros .= " and $dimension in('".$eleme."')";
+            }
+        }
+
         $decimales = ( $fichaTecnica->getCantidadDecimales() == null ) ? 2 : $fichaTecnica->getCantidadDecimales();
         $sql = "SELECT $dimension AS category, $variables_query, round(($formula)::numeric,$decimales) AS measure        
             FROM $tabla_indicador A" ;
-        $sql .= ' WHERE 1=1 ' . $evitar_div_0 . ' ' . $filtros;
+        $sql .= ' WHERE 1=1 ' . $evitar_div_0 . ' ' . $filtros .' '. $otros_filtros;
+
+        
         
         $sql .= "
             GROUP BY " . $dimension ;
