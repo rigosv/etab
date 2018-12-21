@@ -44,7 +44,7 @@
         {% endif %}#}
 
         {% if MINSALCalidadBundle.existe and ( is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_USER_TABLERO_CALIDAD') ) %}
-            <li ><a href="#calidad_datos">{{"_evaluacion_calidad_"|trans}}</a></li>
+            <li ><a href="#calidad_datos">{{"_evaluacion_calidad_"|trans([], 'MINSALCalidadBundle')}}</a></li>
         {% endif %}
 
         {% if is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_USER_LOG_ACTIVIDAD') %}
