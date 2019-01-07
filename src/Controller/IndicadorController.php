@@ -20,95 +20,23 @@ use App\Entity\GrupoIndicadoresIndicador;
 class IndicadorController extends AbstractController {
 
     /**
-     * @param null $sala_default
-     * @param Request $request
      * @return Response
      *
      * @Route("/indicadores/tablero", name="indicadores_tablero")
      */
-    public function tablero($sala_default = null, Request $request) {
+    public function tablero() {               
+        return $this->render('FichaTecnicaAdmin/tablero.html.twig');
+    }   
 
-        $em = $this->getDoctrine()->getManager();
-        $usuario = $this->getUser();
-        $usuarioSalas = array();
-
-        $req = $request;
-
-        $sala_default = ($sala_default == null) ? 0 : $sala_default;
-
-        if ($req->get('token') != ''){
-            $ae = $em->getRepository(AccesoExterno::class)->findOneBy(array('token' => $req->get('token')));
-            $ahora = new \DateTime();
-            if ($ae != null and $ahora <= $ae->getCaducidad()){
-                $salas = $ae->getSalas();
-                $usuarioSalas[$salas[0]->getId()] = $salas[0];
-            }
-        }
-
-
-        //Salas por usuario
-        if (($usuario->hasRole('ROLE_SUPER_ADMIN'))) {
-            foreach ($em->getRepository(GrupoIndicadores::class)->findBy(array(), array('nombre' => 'ASC')) as $sala) {
-                $usuarioSalas[$sala->getId()] = $sala;
-            }
-        } else {
-            foreach ($usuario->getGruposIndicadores() as $sala) {
-                $usuarioSalas[$sala->getGrupoIndicadores()->getId()] = $sala->getGrupoIndicadores();
-            }
-        }
-        //Salas asignadas al grupo al que pertenece el usuario
-        foreach ($usuario->getGroups() as $grp) {
-            foreach ($grp->getSalas() as $sala) {
-                $usuarioSalas[$sala->getId()] = $sala;
-            }
-        }
-
-        $salas = array();
-        foreach ($usuarioSalas as $sala) {
-            $salas[$sala->getId()]['datos_sala'] = $sala;
-            $salas[$sala->getId()]['indicadores_sala'] = $em->getRepository(GrupoIndicadores::class)
-                ->getIndicadoresSala($sala);
-        }
-
-        // si hay una sala por defecto recuperar toda la información de los
-        // indicadores contenidos en esta.
-        $indicadoresDimensiones = array();
-        if ($sala_default != 0) {
-            foreach ($salas[$sala_default]['indicadores_sala'] as $ind) {
-                $req_dimensiones = $this->forward('App\Controller\Indicador::getDimensiones', array('id' => $ind['idIndicador']));
-                $req_datos = $this->forward('App\Controller\IndicadorREST::getIndicador', array('id' => $ind['idIndicador'],
-                        'dimension' => $ind['dimension'],
-                        'filtro' => $ind['filtro'],
-                        'ver_sql' => false)
-                );
-                $indicadoresDimensiones[$ind['posicion']]['id'] = $ind['posicion'];
-                $indicadoresDimensiones[$ind['posicion']]['dimensiones'] = $req_dimensiones->getContent();
-                $indicadoresDimensiones[$ind['posicion']]['datos'] = $req_datos->getContent();
-            }
-        }
-
-        $datos = $em->getRepository(FichaTecnica::class)->getListadoIndicadores($usuario);
-
-        $confTablero = array('graficos_por_fila' => $this->getParameter('graficos_por_fila'),
-            'ancho_area_grafico' => $this->getParameter('ancho_area_grafico'),
-            'alto_area_grafico' => $this->getParameter('alto_area_grafico'),
-            'titulo_sala_tamanio_fuente' => $this->getParameter('titulo_sala_tamanio_fuente'),
-            'ocultar_menu_principal' => $this->getParameter('ocultar_menu_principal'),
-            'directorio' => $this->getParameter('directorio'),
-        );
-
-        return $this->render('FichaTecnicaAdmin/tablero.html.twig', array(
-            'categorias' => $datos['categorias'],
-            'clasificacionUso' => $datos['clasficacion_uso'],
-            'salas' => $salas,
-            'id_sala' => $sala_default,
-            'confTablero' => $confTablero,
-            'indicadoresDimensiones' => $indicadoresDimensiones,
-            'indicadores_no_clasificados' => $datos['indicadores_no_clasificados']
-        ));
+    /**
+     * @return Response
+     *
+     * @Route("/indicadores/pivot", name="pivotTable")
+     */
+    public function pivot() {               
+        return $this->render('FichaTecnicaAdmin/pivot.html.twig');
     }
-
-
+    
     /**
      * @Route("/profile/show", name="fos_user_profile_show")
      */

@@ -414,6 +414,7 @@ _exportar_fichas_tecnicas_: Exportar Fichas técnicas
 _url_acceso_ext_ayuda_: Utilice la siguiente ruta para el acceso externo
 _exportar_tablas_datos_: Exportar tablas de datos
 _matriz_seguimiento_: Matriz seguimiento
+matriz_seguimiento: Matriz seguimiento
 _reportes_: Reportes
 _desde_: Desde
 _hasta_: Hasta
@@ -572,3 +573,7 @@ _usuario_sin_cuenta_correos_ : 'Escribir el correo del usuario. Puede escribir m
 _usuario_sin_cuenta_: 'Usuarios sin cuenta '
 _usuario_con_cuenta_: 'Usuarios con cuenta '
 _todos_: 'Todos'
+_exportar_elegir_: 'Elige el formato para exportar'
+_exportar_a_: 'Exportar a'
+
+_exportar_datos_excel_ : 'Exportar datos a excel'

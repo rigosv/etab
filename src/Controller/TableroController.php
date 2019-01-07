@@ -798,4 +798,51 @@ class TableroController extends AbstractController {
         $serializer = new Serializer($normalizers, $encoders);
         return new Response($serializer->serialize($response, "json"));
     }
+    protected $tamanio = 50000; 
+    /**
+     * @Route("/datosPivot/{id}", name="pivot_index", methods={"POST", "GET"})
+     */
+    public function getPivot(FichaTecnica $fichaTec, Request $request, AlmacenamientoProxy $almacenamiento) {
+        // iniciar el manager de doctrine
+        $em = $this->getDoctrine()->getManager();
+        try{
+            $datos = (object) $request->request->all(); 
+           
+            $totalRegistros = $almacenamiento->totalRegistrosIndicador($fichaTec);
+            $almacenamiento->crearIndicador($fichaTec);
+            $data = $almacenamiento->getDatosIndicador($fichaTec, 0, $this->tamanio);
+                        
+            if($data){   
+                $response = [
+                    'status' => 200,
+                    'messages' => "Ok",
+                    'data' => $data                   
+                ];  
+                if(!$datos->ver_sql){
+                    $response['total'] = count($data);
+                    $response['informacion'] = $this->dimensionIndicador($fichaTec);
+                    $response['total_partes'] = ceil($totalRegistros / $this->tamanio );
+                }
+            } else{ 
+                $response = [
+                    'status' => 404,
+                    'messages' => "Not Found",
+                    'data' => [],
+                ];
+            }       
+        }catch(\Exception $e){
+            $response = [
+                'status' => 500,
+                'messages' => $e->getMessage(),
+                'data' => [],
+            ];    
+        }
+        $encoders = array(new JsonEncoder());
+        $normalizers = array(new ObjectNormalizer());
+
+        $serializer = new Serializer($normalizers, $encoders);
+        // devolver la respuesta en json             
+        return new Response($serializer->serialize($response, "json"));
+        
+    }
 }

@@ -433,7 +433,7 @@ App.controller("TableroCtrl", function (
         });
         $scope.tablero_indicador[item.id]++;
         var index = $scope.indicadores.length - 1;
-        $scope.indicadores[index].posicion = index + 1;
+        $scope.indicadores[index].posicion = index + 1;        
         $scope.opcionesGraficas(index, "discreteBarChart", $scope.indicadores[index].dimensiones[0], item.unidad_medida, "280");
 
         var json = { filtros: "", ver_sql: false };
@@ -491,7 +491,7 @@ App.controller("TableroCtrl", function (
      * @param {dimension} dimension
      * @param {index} index identificador de la posicion del grafico
      */
-    $scope.agregarIndicadorDimension = function(dimension, index) {
+    $scope.agregarIndicadorDimension = function(dimension, index) {      
       if (!angular.isUndefined($scope.indicadores[index].dimensiones[dimension])) {
         $scope.indicadores[index].cargando = true;
         $scope.opcionesGraficas(index, $scope.indicadores[index].tipo_grafica, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, $scope.indicadores[index].configuracion.height);
@@ -887,7 +887,7 @@ App.controller("TableroCtrl", function (
                   $scope.indicadores[index].dimension - 1
                 ].trim(),
                 valor: e.data.label
-              });
+              }); 
               $scope.agregarIndicadorDimension($scope.indicadores[index].dimension, e.data.index);
             });
           } } };
@@ -1024,9 +1024,9 @@ App.controller("TableroCtrl", function (
      * @param {id} id del elemento html que contiene el area a exportar
      * @param {titulo} titulo que contendra el elemento exportado
      */
-    $scope.exportar_excel = function(id, titulo) {
+    $scope.exportar_excel = function (id, titulo, nombre = true) {
       let colspan = $("#" + id).find("tr:first th").length;
-      let excelData = "<table><tr><th colspan='" + colspan + "'><h4>" + titulo + " <h4></th></tr></table>";
+      let excelData = nombre ? "<table><tr><th colspan='" + colspan + "'><h4>" + titulo + " <h4></th></tr></table>" : '';
 
       excelData += document.getElementById(id).innerHTML;
       let blob = new Blob([excelData], {
@@ -1045,22 +1045,38 @@ App.controller("TableroCtrl", function (
      * @param {id} id del elemento html que contiene el area a exportar
      * @param {titulo} titulo que contendra el elemento exportado
      */
-    $scope.exportar_pdf = function(id, titulo) {
-      var html = document.getElementById(id).innerHTML;
-      html = '<html lang="es">' + " <head>" + ' <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />' + ' <meta name="charset" content="UTF-8">' + ' <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">' + ' <meta name="apple-mobile-web-app-capable" content="yes">' + ' <title>PDF</title> <meta name="viewport" content="initial-scale=1" />' + ' <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">' + " </head>" + " <body>" + "<h4>" + titulo + "</h4>" + html + " </body>" + " </html>";
-      var iframe = document.createElement("iframe");
-      iframe.setAttribute("id", "printf");
+    $scope.exportar_pdf = function(id, titulo, nombre = true) {
+        
+        var contenido = document.getElementById(id).innerHTML;
+        html = '<html lang="es">' 
+        + " <head>" 
+        + ' <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />' 
+        + ' <meta name="charset" content="UTF-8">' 
+        + ' <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">' 
+        + ' <meta name="apple-mobile-web-app-capable" content="yes">' 
+        + ' <title>PDF</title> <meta name="viewport" content="initial-scale=1" />' 
+        + ' <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">' 
+        + " </head>" 
+        + " <body>" ;
+        html += nombre ? "<h4>" + titulo + "</h4>" : '' ;
+        html += contenido 
+        + " </body>" 
+        
+        + " </html>";
+        var iframe = document.createElement("iframe");
+        iframe.setAttribute("id", "printf");
 
-      document.body.appendChild(iframe);
+        document.body.appendChild(iframe);
 
-      var mywindow = document.getElementById("printf");
-      mywindow.contentWindow.document.write(html);
-      setTimeout(() => {
-        mywindow.contentWindow.print();
-      }, 500);
-      setTimeout(() => {
-        document.body.removeChild(iframe);
-      }, 2000);
+        var mywindow = document.getElementById("printf");
+        mywindow.contentWindow.document.write(html);
+        setTimeout(() => {
+            mywindow.contentWindow.print();
+        }, 500);
+        setTimeout(() => {
+            document.body.removeChild(iframe);
+        }, 2000);
+        
     };
 
     /**
@@ -1230,4 +1246,69 @@ App.controller("TableroCtrl", function (
           $scope.sala_cargando = false;
         });
     };
+
+    $scope.imprimirSala = function() {
+        $("#paraimprimir").html($("#contenedor_tablero").html());
+        var tamano = $scope.indicadores.length;
+        var cont = 0;
+        angular.forEach($scope.indicadores, function (data, index) {            
+
+            $("#paraimprimir .indicador" + index).find("svg").attr("xmlns", "http://www.w3.org/2000/svg")
+            $("#paraimprimir .indicador" + index).find("svg").attr("version", "1.1");
+            $("#paraimprimir .indicador" + index +" .navbar").remove();
+            $("#paraimprimir .indicador" + index + " .close_indicador").remove();
+            
+            html2canvas($("#paraimprimir .indicador" + index + " svg"), {
+              onrendered: function(canvas) {
+                var myImage = canvas.toDataURL();
+                var image = document.createElement("img");
+                image.setAttribute("width", "630");
+                image.src = myImage;
+
+                $("#paraimprimir .indicador" + index + " .panel-body").append(image);
+                cont++;
+                $scope.imprimir_sala(tamano, cont);
+              }
+            });
+
+        });
+    }
+    $scope.imprimir_sala = function (tamano, cont) {
+        if (tamano == cont) {
+            setTimeout(function () { 
+                var json = {};
+                json.html = window.encodeURIComponent($("#paraimprimir").html());
+                json.header = $scope.sala.nombre;
+                json.footer = "eTAB";
+                json.nombre = $scope.sala.nombre;
+                if (json) {
+                    $("#htmlhtml").val(json.html);
+                    $("#htmlheader").val(json.header);
+                    $("#htmlfooter").val(json.footer);
+                    $("#htmlnombre").val(json.nombre);
+                    $("#htmlconstruido").attr("action", Routing.generate("html_pdf"));
+                    $("#htmlconstruido").submit();
+                }
+            }, 100);
+        }
+    };
+
+    
+    $scope.opcionesExport = ['csv', 'xls', 'pdf'];
+
+    $scope.td_tipo_exportar = 'csv';
+    $scope.asignarTipoExport = function(option) {
+        $scope.td_tipo_exportar = option;
+    };
+
+    $scope.breadcum = function(index, item, link){
+      var filtros = item.filtros;   
+      $scope.indicadores[item.posicion - 1].dimension = index + 1;      
+      $scope.indicadores[item.posicion - 1].filtros = [];
+      angular.forEach(filtros, function(value, key) {
+        if(index >= key)
+          $scope.indicadores[item.posicion - 1].filtros.push(value);        
+      }); 
+      $scope.agregarIndicadorDimension(index + 1, item.posicion - 1);
+    }
   });

@@ -387,4 +387,68 @@ class TableroSalaController extends AbstractController
         $serializer = new Serializer($normalizers, $encoders);
         return new Response($serializer->serialize($response, "json"));
     }
+
+    /**
+     * @Route("/html_pdf", name="html_pdf", options={"expose"=true})
+     */
+    public function setHTML(Request $request, \jonasarts\Bundle\TCPDFBundle\TCPDF\TCPDF $pdf){ 
+        $datos = $request; 
+
+        $contenido  = str_replace("id=", "class=", urldecode($datos->get("html")));
+        $header     = str_replace("id=", "class=", urldecode($datos->get("header")));
+        $footer     = str_replace("id=", "class=", urldecode($datos->get("footer")));
+
+        
+        $public_path = $this->getParameter('kernel.project_dir') . '/public';
+        
+        $style = file_get_contents("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css");        
+        $html  = '<html>
+                    <head>
+                    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+                    <style>                                                            
+                        '.$style.'
+                    </style>        
+                    </head>
+                    <body>                                      
+                        '.$contenido.'                        
+                    </body>
+                </html>';
+        
+        //$pdf = $this->container->get('tcpdf')->create(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('Checherman');
+        $pdf->SetTitle(('eTAB ISECH'));
+        $pdf->SetSubject('Eliecer Ramirez Esquinca');
+        $pdf->SetKeywords('eTAB, PDF, ISECH, checherman, sm2015');
+        
+
+        $pdf->SetHeaderData($public_path.'/images/logo_salud_.png', '180');
+        // set header and footer fonts
+        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+        // set default monospaced font
+        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+        // set margins
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+        // set auto page breaks
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+        // set image scale factor
+        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+                
+        // set font
+        $pdf->SetFont('Helvetica', '', 10);
+        $pdf->AddPage();
+        
+        $filename = $datos->get("nombre");
+        
+        $pdf->writeHTML($html, true, false, true, false, '');          
+        $pdf->Output($filename.".pdf",'I');
+
+    }
 }

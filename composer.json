@@ -3,16 +3,21 @@
     "name": "minsal/etab",
     "license": "GPLv3",
     "require": {
-
         "php": "^7.1.3",
+        "ext-ctype": "*",
         "ext-iconv": "*",
         "enqueue/messenger-adapter": "^0.2.0",
         "enqueue/redis": "^0.9.1",
         "friendsofsymfony/jsrouting-bundle": "^2.2",
         "friendsofsymfony/rest-bundle": "v2.3.1",
+        "gedmo/doctrine-extensions": "^2.4",
+        "google/recaptcha": "~1.1",
         "h4cc/wkhtmltopdf-amd64": "0.12.4",
+        "jonasarts/tcpdf-bundle": "^4.0",
         "knplabs/knp-snappy-bundle": "v1.5.2",
+        "lexik/jwt-authentication-bundle": "^2.6",
         "nelmio/api-doc-bundle": "^3.3",
+        "nelmio/cors-bundle": "^1.5",
         "onurb/excel-bundle": "^1.0",
         "predis/predis": "v1.1.1",
         "sensio/framework-extra-bundle": "^5.2",
@@ -36,18 +41,10 @@
         "symfony/twig-bundle": "*",
         "symfony/validator": "*",
         "symfony/web-link": "*",
-        "symfony/webpack-encore-pack": "*",
-        "symfony/yaml": "*",
-
-        "ext-ctype": "*",
-        "gedmo/doctrine-extensions": "^2.4",
-        "google/recaptcha": "~1.1",
-
-        "lexik/jwt-authentication-bundle": "^2.6",
-        "nelmio/cors-bundle": "^1.5",
-
         "symfony/web-profiler-bundle": "*",
-        "symfony/web-server-bundle": "*"
+        "symfony/web-server-bundle": "*",
+        "symfony/webpack-encore-pack": "*",
+        "symfony/yaml": "*"
     },
     "require-dev": {
         "symfony/debug-pack": "*",

@@ -1,0 +1,67 @@
+<div class="modal fade" id="exportarDatos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel">{{ '_exportar_tabla_datos_' | trans}}</h3>
+         </div>
+         <div class="modal-body row">
+            <div class="col-lg-12">
+               <label>{{ '_exportar_a_' | trans}}</label>
+            </div>
+            <div class="col-lg-12">
+               <ul class="list-group" id="listado-favoritos">
+                  <li class="list-group-item"  ng-repeat="option in opcionesExport" style="cursor:pointer; <% td_tipo_exportar == option ? 'background: #c0f4c0;' : '' %>" ng-click="asignarTipoExport(option)">                     
+                    <% option | uppercase%>                    
+                  </li>
+                  
+               </ul>
+
+               <div id="salaDatos" class="row" style="display:none">  
+                    <div class="col-md-12" >
+                        <div class="page-header">
+                            <h1><span class="glyphicon glyphicon-th"></span> <% sala.nombre %></h1>
+                        </div>
+                    </div>
+
+                    <div ng-repeat="item in indicadores | orderBy:item.posicion">
+
+                        <table class="table table-bordered table-striped" >
+                            <caption><% item.nombre | uppercase %></caption>
+                            <thead>
+                                <tr class="sonata-ba-view-title" bgcolor='#E1EFFB'>
+                                    <th ng-repeat="(key, value) in item.data[0]"><% key %></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="(key, value) in item.data">
+                                    <td ng-repeat="(k, v) in value"><% v %></td>
+                                </tr>
+                            </tbody>
+                        </table>                                
+                            
+                    </div>
+                </div>
+
+            </div>
+         </div>
+         <div class="modal-footer">
+            <button id="exportar_datos_csv" class="btn btn-primary" ng-if="td_tipo_exportar == 'csv'" ng-click="exportar_csv(sala.nombre, indicadores)">                
+                {{ '_exportar_' | trans}}
+            </button>
+
+            <button id="exportar_datos_xls" class="btn btn-primary" ng-if="td_tipo_exportar == 'xls'" ng-click="exportar_excel('salaDatos', sala.nombre, false)">                
+                {{ '_exportar_' | trans}}
+            </button>
+
+            <button id="exportar_datos_pdf" class="btn btn-primary" ng-if="td_tipo_exportar == 'pdf'" ng-click="exportar_pdf('salaDatos', sala.nombre, false)">                
+                {{ '_exportar_' | trans}}
+            </button>
+
+            <button class="btn btn-warning" data-dismiss="modal" aria-hidden="true">
+                {{ '_cerrar_' | trans}}
+            </button>
+         </div>
+      </div>
+   </div>
+</div>

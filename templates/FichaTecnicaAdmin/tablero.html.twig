@@ -66,9 +66,9 @@
                 </div>
             </div>
 
-            <div class="<% item.configuracion.width ? item.configuracion.width : 'col-sm-4'%> indicadores <% item.full_screen ? 'div_full' : '' %>" style="cursor: all-scroll; page-break-after:always;" 
+            <div class="<% item.configuracion.width ? item.configuracion.width : 'col-sm-4'%> indicadores <% item.full_screen ? 'div_full' : '' %> indicador<% $index %>" style="cursor: all-scroll; page-break-after:always;" 
             ng-repeat="item in indicadores | orderBy:item.posicion" dnd-draggable="item" dnd-moved="indicadores.splice($index, 1); "
-             dnd-effect-allowed="move" dnd-selected="indicadores.selected = item" ng-class="{'selected': indicadores.selected === item}" >
+             dnd-effect-allowed="move" dnd-selected="indicadores.selected = item" ng-class="{'selected': indicadores.selected === item}" id="indicador<% $index %>">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4><% item.nombre | uppercase %></h4>
@@ -85,7 +85,7 @@
                                     <span class="icon-bar"></span>
                                 </button>
                             </div>
-
+                            
                             <!-- Collect the nav links, forms, and other content for toggling -->
                             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-<% $index %>">
                                 <ul class="nav navbar-nav">
@@ -124,9 +124,12 @@
                             </div><!-- /.navbar-collapse -->
                         </div><!-- /.container-fluid -->
                     </nav>
-                    <a title="" style="display:none" id="update<% $index %>"></a
-                    <ol class="breadcrumb tablero_breadcrumb " ng-if="item.breadcrumb.length > 0">
-                        <li class="<% $index == item.breadcrumb.length - 1 ? 'active' : '' %>" ng-repeat="link in item.breadcrumb"><a ><% link.nombre %></a></li>
+                    <a title="" style="display:none" id="update<% $index %>"></a>
+                    <ol class="breadcrumb tablero_breadcrumb " ng-if="item.filtros.length > 0">
+                        <li class="<% $index == item.dimension - 1 ? 'active' : '' %>" ng-repeat="link in item.filtros" >
+                            <span ng-if="$index == item.dimension - 1"><% link.codigo | uppercase %>: <% link.valor %>  </span>
+                            <a  ng-click="breadcum($index, item, link)" ng-if="$index != item.dimension - 1" style="cursor:pointer"><% link.codigo | uppercase %>: <% link.valor %></a>
+                        </li>
                     </ol>
                     <div class="panel-body">
 
@@ -160,6 +163,15 @@
             </div>
         </div>
     </div>
+
+    <form id="htmlconstruido" style="display:none" target="_blank" method="post">
+        <input type="text" id="htmlhtml" name="html">
+        <input type="text" id="htmlheader" name="header">
+        <input type="text" id="htmlfooter" name="footer">
+        <input type="text" id="htmlnombre" name="nombre">
+    </form>
+    <div id="paraimprimir" style="display:none"></div>
+
 
     <!-- MODAL INDICADOR -->
     {% include 'FichaTecnicaAdmin/tablero_indicadores.html.twig' %}
@@ -205,6 +217,10 @@
     <!-- MODAL COMPARTIR SALA -->
     {% include 'FichaTecnicaAdmin/tablero_sala_compartir.html.twig' %}
     <!-- FIN MODAL COMPARTIR SALA -->
+
+    <!-- MODAL EXPORTAR DATOS SALA -->
+    {% include 'FichaTecnicaAdmin/tablero_exportar_datos.html.twig' %}
+    <!-- FIN MODAL EXPORTAR DATOS SALA -->
     
 </div>
 {% endblock %}

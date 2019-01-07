@@ -30,22 +30,22 @@
             
             
             <div class="btn-group" id="_exportar_datos_btn" ng-if="abrio_sala || abrio_indicador">
-                <button class="btn btn-info dropdown-toggle" data-toggle="dropdown" title="Opciones">
+                <button class="btn btn-info dropdown-toggle" data-toggle="dropdown" title="Opciones" >
                     <i class="glyphicon glyphicon-export"></i> <span class="hidden-xs">{{"_exportar_" | trans}}</span> <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
                     <li>
-                        <a href="#exportarDatos" data-toggle="modal" class="" title="{{'_exportar_tabla_datos_' | trans}}" id="_exportar_datos_">
+                        <a href="#exportarDatos"  data-toggle="modal" class="" title="{{'_exportar_tabla_datos_' | trans}}" id="_exportar_datos_">
                             <i class="glyphicon glyphicon-export"></i>  <span class="hidden-xs">{{"_exportar_tabla_datos_" | trans}}</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#exportarDiccionarioDatos" data-toggle="modal" class="" title="{{'_exportar_diccionario_datos_' | trans}}" id="_exportar_diccionario_datos_">
+                        <a href="#exportarDiccionarioDatos"  data-toggle="modal" class="" title="{{'_exportar_diccionario_datos_' | trans}}" id="_exportar_diccionario_datos_">
                             <i class="glyphicon glyphicon-export"></i>  <span class="hidden-xs">{{"_exportar_diccionario_datos_" | trans}}</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#" onclick="imprimirSala()" title="{{'_exportar_pdf_' | trans}}" id="_exportar_pdf_">
+                        <a href="#" ng-click="imprimirSala()" title="{{'_exportar_pdf_' | trans}}" id="_exportar_pdf_">
                             <i class="glyphicon glyphicon-export"></i>  <span class="hidden-xs">{{"_exportar_pdf_" | trans}}</span>
                         </a>
                     </li>

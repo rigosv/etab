@@ -18,48 +18,6 @@ use App\Entity\Bitacora;
 
 class PivotTableController extends AbstractController {
 
-
-    /**
-     * @return Response
-     *
-     * @Route("/", name="pivotTable")
-     */
-
-    public function PivotTableAction() {
-        $em = $this->getDoctrine()->getManager();
-        $usuario = $this->getUser();
-
-        $datos = $em->getRepository(FichaTecnica::class)->getListadoIndicadores($usuario);
-
-        $formularios = array();
-
-        /*
-        if ($usuario->hasRole('ROLE_SUPER_ADMIN') or $usuario->hasRole('ROLE_USER_CAPTURA_DATOS')) {
-            //Recuperar los formularios
-            $formularios = $em->getRepository('GridFormBundle:Formulario')->findBy(array('areaCosteo'=>'almacen_datos'));
-        }*/
-
-        $MINSALCalidadBundle = ['habilitado' => false, 'estandares'=> ['pna' => [], 'hosp'=> []] ];
-        if (array_key_exists('MINSALCalidadBundle' , $this->getParameter('kernel.bundles'))
-            and ( $usuario->hasRole('ROLE_SUPER_ADMIN') or $usuario->hasRole('ROLE_USER_TABLERO_CALIDAD')) ) {
-
-            $MINSALCalidadBundle['habilitado'] = true;
-            //Recuperar los formularios
-            $MINSALCalidadBundle['estandares']['pna'] = $em->getRepository(Indicador)->getIndicadoresEvaluadosListaChequeoNivel('pna');
-            $MINSALCalidadBundle['estandares']['hosp'] = $em->getRepository('GridFormBundle:Indicador')->getIndicadoresEvaluadosListaChequeoNivel('hosp');
-
-        }
-
-        return $this->render('PivotTable/index.html.twig', array(
-            'categorias' => $datos['categorias'],
-            'clasificacionUso' => $datos['clasficacion_uso'],
-            'indicadores_no_clasificados' => $datos['indicadores_no_clasificados'],
-            'formularios' => $formularios,
-            'MINSALCalidadBundle' => $MINSALCalidadBundle
-        ));
-    }
-
-
     /**
      * @Route("/guardar_estado/", name="pivotable_guardar_estado", options={"expose"=true})
      */

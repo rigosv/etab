@@ -1,0 +1,130 @@
+{# Modificado para que agregar el botón para ir al listado #}
+
+{% extends 'standard_layout.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/FichaTecnicaAdmin/d3_nvd3.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/FichaTecnicaAdmin/tablero.css') }}">
+    <link rel="stylesheet" href="{{ asset('js/angularTablero/pivotTable/pivot.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/pivotTable/pivotTable.css') }}">
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+       
+
+<script src="{{ asset('js/angular/angular.js') }}" type="text/javascript"></script>
+
+<script src="{{ asset('js/angularTablero/d3.js') }}"></script> 
+<script src="{{ asset('js/angularTablero/d3_nvd3.js') }}"></script> 
+<script src="{{ asset('js/angularTablero/d3_angular_nvd3.js') }}"></script>
+<script src="{{ asset('js/angularTablero/ngRadialGauge/src/ng-radial-gauge-dir.js') }}"></script> 
+
+<script src="{{ asset('js/angular/ui-bootstrap.js') }}" type="text/javascript"></script>
+
+<script src="https://www.google.com/jsapi"></script>
+
+<script src="{{ asset('js/angularTablero/pivotTable.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/angularTablero/pivotTable/pivot.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/angularTablero/pivotTable/pivot.es.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/angularTablero/pivotTable/gcharts_renderers.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/angularTablero/rasterizeHTML.allinone.js') }}" type="text/javascript"></script>
+
+<script src="{{ asset('js/angular/ngStorage.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/angular/moment.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/angular/app.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/angular/pivot.js') }}" type="text/javascript"></script>
+
+<script src="{{ asset('js/export_plugin/tableExport.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/export_plugin/filesaver.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/export_plugin/jquery.base64.js') }}" type="text/javascript"></script>
+
+<script src="{{ asset('js/angular/jspdf.debug.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/angular/html2pdf.js') }}" type="text/javascript"></script>
+<script src="{{ asset('js/angular/jspdf.autotable.js') }}" type="text/javascript"></script>
+
+
+<script type="text/javascript" src="https://unpkg.com/sql-formatter@latest/dist/sql-formatter.min.js"></script>
+
+
+
+{% endblock %}
+
+{% block content %}
+<div ng-app="App" ng-controller="PivotCtrl">
+    
+    <!-- MENU -->
+    <nav class="navbar navbar-default navbar-fixed-top toolbar-tablero" style="margin-top:50px; background:#FFFFFF; z-index:10;" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapseTwo">
+            <span class="sr-only">Toggle navigation</span>
+            <i class="glyphicon glyphicon-wrench"></i>
+        </button>
+        </div>
+            <div class="collapse navbar-collapse" id="collapseTwo">
+                <a class="btn dropdown-toggle btn-success navbar-btn" data-toggle="modal" data-target="#modalIndicadores" >
+                    <i class="glyphicon glyphicon-flag"></i> <span class="hidden-xs">{{"indicadores" | trans}}</span>
+                </a>
+
+                <span id="opcion_exportar" style="display:" ng-if="indicadores[0]">
+                    <button id="export_excel" class="btn btn-warning" ng-click="verTablaDatosIndicador()" title="{{"_exportar_datos_excel_" | trans}}"><span class="glyphicon glyphicon-list-alt"></span></button>            
+                    <button id="ver_ficha" class="btn btn-info" ng-click="verFichaIndicador()" title="{{"_ver_ficha_" | trans}}"><span class="glyphicon glyphicon-briefcase"></span> </button>  
+                    <button id="export_grp" class="btn btn-primary" ng-click="exportarImagen()" title="{{"_imagen_" | trans}}"><span class="glyphicon glyphicon-picture"></span> </button> 
+                </span>
+            </div>
+        </div>
+    </nav>
+    <!-- FIN MENU -->
+
+    <div class="container-fluid" id="contenedor_tablero" >   
+        <div class="col-md-12" ng-if="indicadores[0]">
+            <div class="page-header" style="padding:1px; margin-top: 35px;">
+                <h1 id="header_sala">
+                    <span class="glyphicon glyphicon-flag"></span> 
+                    <% indicadores[0].nombre %>
+                </h1>
+            </div> 
+        </div>     
+        <div id="output"></div>
+        
+    </div>
+    <div class="container-fluid div_carga" style="z-index:99999"  align="center" ng-if="indicadores[0].cargando">
+        <button type="button" class="close close_indicador" style="margin-top:9px" aria-label="Close" ng-click="indicadores[0].cargando = false"><span aria-hidden="true">&times;</span></button>
+        <div align="center">
+            <h4>{{ '_cargando_indicador_' | trans }} </h4>
+            <img src="{{ app.request.schemeAndHttpHost ~ asset('images/ajax-loader.gif') }}" /> 
+        </div>                             
+    </div>
+
+    <form id="htmlconstruido" style="display:none" target="_blank" method="post">
+        <input type="text" id="htmlhtml" name="html">
+        <input type="text" id="htmlheader" name="header">
+        <input type="text" id="htmlfooter" name="footer">
+        <input type="text" id="htmlnombre" name="nombre">
+    </form>
+    <div id="paraimprimir" style="display:none"></div>
+
+    <!-- MODAL INDICADOR -->
+    {% include 'FichaTecnicaAdmin/tablero_indicadores.html.twig' %}
+    <!-- FIN MODAL INDICADOR -->
+
+    <!-- MODAL FICHA -->
+    {% include 'FichaTecnicaAdmin/tablero_ficha.html.twig' %}
+    <!-- FIN MODAL FICHA -->
+
+    <!-- MODAL TABLA DATOS -->
+    {% include 'FichaTecnicaAdmin/tablero_tabla_datos.html.twig' %}
+    <!-- FIN MODAL TABLA DATOS -->
+
+    <!-- MODAL EXPORTAR DATOS SALA -->
+    {% include 'FichaTecnicaAdmin/tablero_exportar_datos.html.twig' %}
+    <!-- FIN MODAL EXPORTAR DATOS SALA -->
+
+    <!-- MODAL TABLA DATOS -->
+    {% include 'FichaTecnicaAdmin/tablero_exportar_pivot.html.twig' %}
+    <!-- FIN MODAL TABLA DATOS -->
+    
+</div>
+{% endblock %}

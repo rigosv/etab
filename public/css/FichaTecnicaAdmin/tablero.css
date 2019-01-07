@@ -8,8 +8,13 @@
 }
 
 .modal-header .close {
-  margin-top: -30px;
-  font-size: 20pt;
+  margin-top: -10px;
+  font-size: 37pt;
+  text-shadow: 1px 1px 1px white;
+}
+
+#modalIndicadores .modal-header .close, #modalSalas .modal-header .close {
+  margin-top: -40px;
 }
 
 .glyphicon-refresh-animate {

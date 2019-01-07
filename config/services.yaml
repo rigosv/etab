@@ -38,3 +38,4 @@ services:
     # explicitly configure the service
     App\Service\Util:
         public: true
+    
