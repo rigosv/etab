@@ -31,7 +31,7 @@ class IndicadorController extends AbstractController {
     /**
      * @return Response
      *
-     * @Route("/indicadores/pivot", name="pivotTable")
+     * @Route("/indicadores/pivot", name="tablero_pivotTable")
      */
     public function pivot() {               
         return $this->render('FichaTecnicaAdmin/pivot.html.twig');

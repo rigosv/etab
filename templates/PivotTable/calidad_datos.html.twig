@@ -4,7 +4,7 @@
             <div class="panel-heading">
                 <h4 class="panel-title">
                     <a>
-                        {{"_primer_nivel_"|trans}}
+                        {{"_primer_nivel_"|trans([], 'MINSALCalidadBundle')}}
                     </a>
                 </h4>
             </div>
@@ -18,6 +18,9 @@
                     <A  class='calidad_datos_item list-group-item' data-id="general_pna">
                         Resultados generales
                     </A>
+                    <A  class='calidad_datos_item list-group-item' data-id="expedientes_pna">
+                        Reporte de Expedientes Evaluados
+                    </A>
                 </div>
             </div>
         </div>
@@ -27,7 +30,7 @@
             <div class="panel-heading">
                 <h4 class="panel-title">
                     <a>
-                        {{"_hospitales_"|trans}}
+                        {{"_hospitales_"|trans([], 'MINSALCalidadBundle')}}
                     </a>
                 </h4>
             </div>
@@ -40,6 +43,9 @@
                     {% endfor %}                    
                     <A  class='calidad_datos_item list-group-item' data-id="general_hosp">
                         Resultados generales
+                    </A>
+                    <A  class='calidad_datos_item list-group-item' data-id="expedientes_hosp">
+                        Reporte de Expedientes Evaluados
                     </A>
                 </div>
             </div>

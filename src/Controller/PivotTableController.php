@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use MINSAL\Bundle\CalidadBundle\Entity\Estandar;
+use MINSAL\Bundle\CalidadBundle\Entity\Indicador;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,6 +19,48 @@ use App\Entity\Bitacora;
  */
 
 class PivotTableController extends AbstractController {
+
+
+    /**
+     * @return Response
+     *
+     * @Route("/", name="pivotTable")
+     */
+
+    public function PivotTableAction() {
+        $em = $this->getDoctrine()->getManager();
+        $usuario = $this->getUser();
+
+        $datos = $em->getRepository(FichaTecnica::class)->getListadoIndicadores($usuario);
+
+        $formularios = array();
+
+        /*
+        if ($usuario->hasRole('ROLE_SUPER_ADMIN') or $usuario->hasRole('ROLE_USER_CAPTURA_DATOS')) {
+            //Recuperar los formularios
+            $formularios = $em->getRepository('GridFormBundle:Formulario')->findBy(array('areaCosteo'=>'almacen_datos'));
+        }*/
+
+        $MINSALCalidadBundle = ['habilitado' => false, 'estandares'=> ['pna' => [], 'hosp'=> []] ];
+        if (array_key_exists('MINSALCalidadBundle' , $this->getParameter('kernel.bundles'))
+            and ( $usuario->hasRole('ROLE_SUPER_ADMIN') or $usuario->hasRole('ROLE_USER_TABLERO_CALIDAD')) ) {
+
+            $MINSALCalidadBundle['habilitado'] = true;
+            //Recuperar los formularios
+            $MINSALCalidadBundle['estandares']['pna'] = $em->getRepository(Indicador::class)->getIndicadoresEvaluadosListaChequeoNivel('pna');
+            $MINSALCalidadBundle['estandares']['hosp'] = $em->getRepository(Indicador::class)->getIndicadoresEvaluadosListaChequeoNivel('hosp');
+
+        }
+
+        return $this->render('PivotTable/index.html.twig', array(
+            'categorias' => $datos['categorias'],
+            'clasificacionUso' => $datos['clasficacion_uso'],
+            'indicadores_no_clasificados' => $datos['indicadores_no_clasificados'],
+            'formularios' => $formularios,
+            'MINSALCalidadBundle' => $MINSALCalidadBundle
+        ));
+    }
+
 
     /**
      * @Route("/guardar_estado/", name="pivotable_guardar_estado", options={"expose"=true})
@@ -61,7 +105,7 @@ class PivotTableController extends AbstractController {
         $em = $this->getDoctrine()->getManager();
         $response = new Response();
         
-        $datos = $em->getRepository("GridFormBundle:Indicador")->getDatosCalidad($id);
+        $datos = $em->getRepository(Estandar::class)->getDatosCalidad($id);
         
         $response->setContent(json_encode($datos));
         return $response;
@@ -79,5 +123,31 @@ class PivotTableController extends AbstractController {
         $response->setContent(json_encode($datos));
         return $response;
     }
+
+    /**
+     * @Route("/pivotable/reporte-expediente-p/", name="get_reporte_expedientes_evaluacion_calidad_p", options={"expose"=true})
+     */
+    public function getReporteExpedientesEvaluacionCalidadP() {
+        $em = $this->getDoctrine()->getManager();
+        $response = new Response();
+
+        $datos = $em->getRepository(Indicador::class)->getDatosCalidad();
+
+        $response->setContent(json_encode($datos));
+        return $response;
+    }
+    /**
+     * @Route("/pivotable/reporte-expediente-h/", name="get_reporte_expedientes_evaluacion_calidad_h", options={"expose"=true})
+     */
+    public function getReporteExpedientesEvaluacionCalidadH() {
+        $em = $this->getDoctrine()->getManager();
+        $response = new Response();
+
+        $datos = $em->getRepository(Indicador::class)->getDatosCalidad();
+
+        $response->setContent(json_encode($datos));
+        return $response;
+    }
+
 
 }
