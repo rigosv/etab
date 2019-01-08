@@ -51,26 +51,19 @@
     <!-- FIN MENU -->
 
     <div class="container-fluid" id="contenedor_tablero" >
-        <div class="row" id="titulo_header" ng-if="titulo_sala != ''">
-            <div class="col-md-12">
-                <div class="page-header" style="padding:1px; margin-top:15px;  margin-bottom: -45px;">
-                    <h1 id="header_sala"><% titulo_sala %></h1>
-                </div> 
-            </div>
-        </div>
 
         <div id="sala" class="row" style="padding-top: 48px;" dnd-list="indicadores">  
-            <div class="col-md-12" ng-if="abrio_sala" style="top: -45px;">
+            <div class="col-md-12" ng-if="abrio_sala" style="top: -45px;" id="titulo_sala">
                 <div class="page-header" style="padding:1px; margin-top:15px;  margin-bottom: -45px;">
                     <h1 id="header_sala"><span class="glyphicon glyphicon-th"></span> <% sala.nombre %></h1>
                 </div>
             </div>
 
-            <div class="<% item.configuracion.width ? item.configuracion.width : 'col-sm-4'%> indicadores <% item.full_screen ? 'div_full' : '' %> indicador<% $index %>" style="cursor: all-scroll; page-break-after:always;" 
+            <div class="<% item.configuracion.width ? item.configuracion.width : 'col-sm-4'%> indicadores <% item.full_screen ? 'div_full' : '' %> indicador<% $index %>" style="cursor: all-scroll; " 
             ng-repeat="item in indicadores | orderBy:item.posicion" dnd-draggable="item" dnd-moved="indicadores.splice($index, 1); "
              dnd-effect-allowed="move" dnd-selected="indicadores.selected = item" ng-class="{'selected': indicadores.selected === item}" id="indicador<% $index %>">
                 <div class="panel panel-default">
-                    <div class="panel-heading">
+                    <div class="panel-heading" >
                         <h4><% item.nombre | uppercase %></h4>
                         <button type="button" class="close close_indicador" aria-label="Close" ng-click="quitarIndicador(item, $index)"><span aria-hidden="true">&times;</span></button>
                     </div>
@@ -118,7 +111,12 @@
                                     <li><a title="{{ '_refresh_' | trans }}" ng-click="item.filtros = []; item.dimension = 0; agregarIndicadorDimension(0, $index)"> <i class="glyphicon glyphicon-refresh"></i> </a></li>
                                     <li><a title="{{ '_full_screen_' | trans }}" ng-click="actualizarsGrafica($index);"> <i class="glyphicon glyphicon-<% item.full_screen ? 'resize-small' : 'resize-full' %>"></i> </a></li>
 
-                                    <li><a title="{{ '_ver_tendencia_' | trans }}"> <img src="{{ app.request.schemeAndHttpHost ~ asset('images/chart-line-solid.svg') }}" style="width: 17px;" />  </a></li>
+                                    <li>
+                                        <a title="{{ item.tendencia ? '_ver_tendencia_' : '_ver_grafica_' | trans }}" ng-click="item.tendencia = !item.tendencia; item.dimension = 0; agregarIndicadorDimension(0, $index)"> 
+                                            <img src="{{ app.request.schemeAndHttpHost ~ asset('images/chart-line-solid.svg') }}" style="width: 17px;" ng-if="!item.tendencia"/>
+                                            <i class="glyphicon glyphicon-stats" ng-if="item.tendencia"></i>  
+                                        </a>
+                                    </li>
                                     
                                 </ul>
                             </div><!-- /.navbar-collapse -->

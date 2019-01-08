@@ -210,7 +210,7 @@ App.controller("PivotCtrl", function (
           $.pivotUtilities.gchart_renderers
         );
         
-        var json = { filtros: "", ver_sql: false };
+        var json = { filtros: "", ver_sql: false, tendencia: false };
         
         Crud.crear("../api/v1/tablero/datosPivot/" + item.id, json, "application/json", function(data) {
             if (data.status == 200) {
@@ -321,8 +321,6 @@ App.controller("PivotCtrl", function (
      *
      * @description
      * funcion que exporta el grafico al formato seleccionado
-     * @param {index} index bandera de posicion
-     * @param {tipo} tipo tipo de imagen SVG, PNG
      */
     $scope.exportarImagen = function() {
       html2canvas($("#contenedor_tablero"), {

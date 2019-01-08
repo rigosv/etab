@@ -320,7 +320,7 @@ class FichaTecnicaRepository extends ServiceEntityRepository {
         }
     }
 
-    public function calcularIndicador(FichaTecnica $fichaTecnica, $dimension, $filtro_registros = null, $ver_sql = false, $filtro_adicional = '') {
+    public function calcularIndicador(FichaTecnica $fichaTecnica, $dimension, $filtro_registros = null, $ver_sql = false, $filtro_adicional = '', $tendencia = false) {
         
         $acumulado = $fichaTecnica->getEsAcumulado();
         $formula = str_replace(' ', '',strtolower($fichaTecnica->getFormula()));
@@ -415,18 +415,37 @@ class FichaTecnicaRepository extends ServiceEntityRepository {
                 $otros_filtros .= " and $dimension in('".$eleme."')";
             }
         }
+        $fecha_tendencia = '';
+        $grupo_tendencia = '';
+        $orden_tendencia = '';
+        if($tendencia){
+            $filtros = '';
 
+            $existe_fecha = $this->cnxDatos->executeQuery("SELECT * FROM $tabla_indicador LIMIT 1")->fetchAll();
+            $anio = ''; $mes = '';
+            foreach ($existe_fecha[0] as $key1 => $value1) {
+                
+                $cv1 = strtoupper($key1);
+                if($cv1 == 'MES' || $cv1 == 'MONTH' || $cv1 == 'ID_MES' || $cv1 == 'IDMES' || $cv1 == 'MES_ID' || $cv1 == 'MESID'){
+                    $mes = $key1;
+                }
+                if($cv1 == 'ANIO' || $cv1 == 'YEAR' || $cv1 == 'ID_ANIO' || $cv1 == 'IDANIO' || $cv1 == 'ANIO_ID' || $cv1 == 'ANIOID'){
+                    $anio = $key1;
+                }
+            }
+            $fecha_tendencia = ", to_date(CONCAT(A.$anio, '-', lpad(A.$mes, 2, '0')), 'YYYY-MM') AS fecha, A.$anio AS anio, lpad(A.$mes, 2, '0') AS mes";
+            $grupo_tendencia = ", A.$anio, A.$mes";
+            $orden_tendencia = ", fecha";
+        }
         $decimales = ( $fichaTecnica->getCantidadDecimales() == null ) ? 2 : $fichaTecnica->getCantidadDecimales();
-        $sql = "SELECT $dimension AS category, $variables_query, round(($formula)::numeric,$decimales) AS measure        
+        $sql = "SELECT $dimension AS category, $variables_query, round(($formula)::numeric,$decimales) AS measure $fecha_tendencia        
             FROM $tabla_indicador A" ;
         $sql .= ' WHERE 1=1 ' . $evitar_div_0 . ' ' . $filtros .' '. $otros_filtros;
 
-        
-        
-        $sql .= "
-            GROUP BY " . $dimension ;
+                
+        $sql .= " GROUP BY " . $dimension . $grupo_tendencia;
         $sql .=  " HAVING (($formula)::numeric) > 0 ";
-        $sql .= " ORDER BY $dimension";
+        $sql .= " ORDER BY $dimension $orden_tendencia";
 
         try {
             if ($ver_sql == true)

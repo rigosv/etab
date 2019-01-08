@@ -85,7 +85,7 @@ class AlmacenamientoProxy implements DashboardInterface, OrigenDatosInterface
     }
 
 
-    public function calcularIndicador($fichaTec, $dimension, $filtros, $verSql, $filtro_adicional = ''){
+    public function calcularIndicador($fichaTec, $dimension, $filtros, $verSql, $filtro_adicional = '', $tendencia = false){
 
         //Verificar si en los filtros vienen datos que son catálogos
         if ($filtros != null) {
@@ -106,7 +106,7 @@ class AlmacenamientoProxy implements DashboardInterface, OrigenDatosInterface
             $filtros = $newFiltros;
         }
 
-        $datos = $this->dashboardWrapped->calcularIndicador($fichaTec, $dimension, $filtros, $verSql, $filtro_adicional);
+        $datos = $this->dashboardWrapped->calcularIndicador($fichaTec, $dimension, $filtros, $verSql, $filtro_adicional, $tendencia);
 
         //Verificar si la dimensión es un catálogo
         $significado = $this->em->getRepository(SignificadoCampo::class)

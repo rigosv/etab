@@ -388,9 +388,34 @@ class TableroController extends AbstractController {
                 $otros_filtros = $datos->otros_filtros;
             }
             $almacenamiento->crearIndicador($fichaTec, $dimension, $filtros);
-            $data = $almacenamiento->calcularIndicador($fichaTec, $dimension, $filtros, $datos->ver_sql, $otros_filtros);
+            $data = $almacenamiento->calcularIndicador($fichaTec, $dimension, $filtros, $datos->ver_sql, $otros_filtros, $datos->tendencia);
                         
-            if($data){   
+            if($data){                 
+                if($datos->tendencia){
+                    $info = []; $valores = [];
+                    foreach ($data as $key => $value) {
+                        if(is_array($value)) $value = (object) $value;
+                        if(!array_key_exists($value->category, $info)){
+                            $info[$value->category] = array(
+                                "values" => [],
+                                "key" => $value->category
+                            );
+                            $valores[$value->category] = [];
+                        }
+                        $time = new \DateTime($value->fecha.'-01', new \DateTimeZone('America/Mexico_City'));
+                        array_push($valores[$value->category], array(
+                            "x" => $time->getTimestamp() * 1000,  // Fecha en milisegundos
+                            "y" => ($value->measure) * 1,      // Valor 
+                            "fecha" => $value->fecha              // fecha del evento opcional 
+                        ));
+                        $info[$value->category]["values"] = $valores[$value->category];
+                    }
+                    $dataTemp = [];
+                    foreach ($info as $key => $value) {
+                        array_push($dataTemp, $value);
+                    }
+                    $data = $dataTemp;
+                } 
                 $response = [
                     'status' => 200,
                     'messages' => "Ok",
@@ -399,6 +424,7 @@ class TableroController extends AbstractController {
                 if(!$datos->ver_sql){
                     $response['total'] = count($data);
                     $response['informacion'] = $this->dimensionIndicador($fichaTec);
+                    $response['ficha'] = $this->fichaIndicador($fichaTec->getId(), true);
                 }
             } else{ 
                 $response = [
@@ -543,7 +569,7 @@ class TableroController extends AbstractController {
     /**
      * @Route("/fichaIndicador/{id}", name="fichaIndicador_index", methods={"GET"})
      */
-    public function fichaIndicador($id){
+    public function fichaIndicador($id, $respuesta = false){
         try{
             // iniciar el manager de doctrine
             $em = $this->getDoctrine()->getManager();
@@ -649,11 +675,16 @@ class TableroController extends AbstractController {
                 'data' => [],
             ];                
         }
-        $encoders = array(new JsonEncoder());
-        $normalizers = array(new ObjectNormalizer());
+        if($respuesta){
+            return $informacion;
+        }
+        else{
+            $encoders = array(new JsonEncoder());
+            $normalizers = array(new ObjectNormalizer());
 
-        $serializer = new Serializer($normalizers, $encoders);
-        return new Response($serializer->serialize($response, "json"));
+            $serializer = new Serializer($normalizers, $encoders);
+            return new Response($serializer->serialize($response, "json"));
+        }
     }
 
     //////////////////////// salas ///////////////////

@@ -12,10 +12,10 @@
                         <label class="control-label  ">{{ 'javascript.ordenar_y' | trans}}:</label>
                         <div class="ordenar_medida form-control">
                             <label class="radio-inline" ng-click="ordenarArreglo(posicion, 'valor', 'asc')">
-                                <input type="radio" name="orden" id="orden1" value="asc" ng-model="configuracion.indicadores[posicion].orden_y" > {{ 'javascript.ascendente' | trans}}
+                                <input type="radio" name="orden" id="orden1" value="asc" ng-model="indicadores[posicion].configuracion.orden_y" > {{ 'javascript.ascendente' | trans}}
                             </label>
                             <label class="radio-inline" ng-click="ordenarArreglo(posicion, 'valor', 'desc')">
-                                <input type="radio" name="orden" id="orden2" value="desc" ng-model="configuracion.indicadores[posicion].orden_y" > {{ 'javascript.descendente' | trans}}
+                                <input type="radio" name="orden" id="orden2" value="desc" ng-model="indicadores[posicion].configuracion.orden_y" > {{ 'javascript.descendente' | trans}}
                             </label>                            
                         </div>                        
                     </div>
@@ -25,10 +25,10 @@
                         <label class="control-label ">{{ 'javascript.ordenar_x' | trans}}:</label>
                         <div class="ordenar_medida form-control">
                             <label class="radio-inline" ng-click="ordenarArreglo(posicion, 'nombre', 'asc')">
-                                <input type="radio" name="orden" id="orden3" value="asc" ng-model="configuracion.indicadores[posicion].orden_x" > {{ 'javascript.ascendente' | trans}}
+                                <input type="radio" name="orden" id="orden3" value="asc" ng-model="indicadores[posicion].configuracion.orden_x" > {{ 'javascript.ascendente' | trans}}
                             </label>
                             <label class="radio-inline" ng-click="ordenarArreglo(posicion, 'nombre', 'desc')">
-                                <input type="radio" name="orden" id="orden4" value="desc" ng-model="configuracion.indicadores[posicion].orden_x" > {{ 'javascript.descendente' | trans}}
+                                <input type="radio" name="orden" id="orden4" value="desc" ng-model="indicadores[posicion].configuracion.orden_x" > {{ 'javascript.descendente' | trans}}
                             </label>                            
                         </div>     
                     </div>
@@ -36,7 +36,7 @@
                 <div class="col-sm-12">
                     <div class="form-group">
                         <label class="control-label  ">{{ 'javascript.tipo_grafico' | trans}}:</label>
-                        <select class="tipo_grafico_principal form-control" ng-model="configuracion.indicadores[posicion].tipo_grafico">
+                        <select class="tipo_grafico_principal form-control" ng-model="indicadores[posicion].configuracion.tipo_grafico">
                             <option ng-repeat="item in indicadores[posicion].informacion.dimensiones[indicadores[posicion].dimensiones[indicadores[posicion].dimension]].graficos" value="<% item.codigo %>"><% item.descripcion %></option>
                         </select>
                     </div>
@@ -44,7 +44,7 @@
                 <!--<div class="col-sm-4">
                     <div class="form-group">
                         <label class="control-label  ">{{ 'javascript.max_escala_y' | trans}}:</label> 
-                        <select class="max_y form-control" ng-model="configuracion.indicadores[posicion].maximo">
+                        <select class="max_y form-control" ng-model="indicadores[posicion].configuracion.maximo">
                             <option value="indicador">{{ 'javascript.max_indicador' | trans}}</option>
                             <option value="rango_alertas">{{ 'javascript.max_rango_alertas' | trans}}</option>
                         </select>
@@ -54,7 +54,7 @@
                     <div class="form-group">
                         <label class="control-label  ">{{ '_manual_' | trans}}:</label>
                         <div class="input-group">
-                            <input type="text" class="form-control" ng-model="configuracion.indicadores[posicion].maximo_manual">
+                            <input type="text" class="form-control" ng-model="indicadores[posicion].configuracion.maximo_manual">
                             <div class="input-group-btn"><button class="btn btn-default " type="button" ><span class="glyphicon glyphicon-ok"></span></button></div>
                         </div>
                     </div>
@@ -63,8 +63,8 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label class="control-label  ">{{ '_ancho_grafico_' | trans}}:</label> 
-                        <select class="max_y form-control" ng-model="configuracion.indicadores[posicion].width">
-                            <option ng-repeat="item in medidas_width" value="col-sm-<%item + 1%>" selected="<% indicadores[posicion].width == 'col-sm-' + (item + 1) %>">col x <%item + 1%></option>
+                        <select class="max_y form-control" ng-model="indicadores[posicion].configuracion.width">
+                            <option ng-repeat="item in medidas_width" value="col-sm-<%item + 1%>" selected="<% indicadores[posicion].configuracion.width == 'col-sm-' + (item + 1) %>">col x <%item + 1%></option>
                         </select>
                     </div>
                 </div>
@@ -72,7 +72,7 @@
                     <div class="form-group">
                         <label class="control-label  ">{{ '_alto_grafico_' | trans}}:</label>
                         <div class="input-group">
-                            <input type="number" min="250" string-to-number class="form-control" ng-model="configuracion.indicadores[posicion].height">
+                            <input type="number" min="250" string-to-number class="form-control" ng-model="indicadores[posicion].configuracion.height">
                             <div class="input-group-btn">
                                 <button class="btn btn-default " type="button" ng-click="actualizarsGrafica(posicion, false)">
                                     <span class="glyphicon glyphicon-ok"></span>
