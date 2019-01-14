@@ -28,6 +28,17 @@ class FichaTecnicaAdminController extends Controller {
         $url = $this->container->get( 'router' )->generate( 'matriz-seguimiento' );
         return new RedirectResponse( $url );
     }
+
+    public function clonarAction(FichaTecnica $ficha) {
+        $em = $this->getDoctrine()->getManager();
+
+        $nueva = clone $ficha;
+        $nueva->setNombre('*** Copy of ****' . $ficha->getNombre());
+        $em->persist($nueva);
+        $em->flush();
+
+        return $this->redirectToRoute('admin_app_fichatecnica_edit', array('id' => $nueva->getId()));
+    }
     
     public function batchActionVerFicha($idx = null) {
         $parameterBag = $this->get('request')->request;
