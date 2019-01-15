@@ -11,6 +11,7 @@
 
 namespace App\Admin;
 
+
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\UserBundle\Admin\Model\UserAdmin as BaseAdmin;
@@ -20,11 +21,12 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TimezoneType;
 use Symfony\Component\Form\Extension\Core\Type\LocaleType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Sonata\UserBundle\Form\Type\UserGenderListType;
 use Sonata\UserBundle\Form\Type\SecurityRolesType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
-use App\Entity\GrupoIndicadores;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
+
+use App\Entity\GrupoIndicadores;
+use MINSAL\Bundle\CostosBundle\Entity\Estructura;
 
 class UserAdmin extends BaseAdmin {
     
@@ -56,21 +58,6 @@ class UserAdmin extends BaseAdmin {
         $accion = array_pop($acciones);
         $pass_requerido = ($accion == 'create') ? true : false;
         $existeCostosBundle =  array_key_exists('CostosBundle', $this->getConfigurationPool()->getContainer()->getParameter('kernel.bundles') );
-
-
-        $formMapper
-                ->tab('_usuario_')
-                    ->with('_perfil_', array('class' => 'col-md-6'))->end()
-                    ->with('General', array('class' => 'col-md-6'))->end()
-                ->end()
-                ->tab('_seguridad_')
-                    ->with('Groups', array('class' => 'col-md-6'))->end()
-                    ->with('Roles', array('class' => 'col-md-6'))->end()
-                ->end()
-                ->tab('_indicadores_y_salas_')
-                    ->with('_indicadores_', array('class' => 'col-md-6'))->end()
-                    ->with('_salas_situacionales_', array('class' => 'col-md-6'))->end()
-                ->end();
             
         
 
@@ -78,16 +65,15 @@ class UserAdmin extends BaseAdmin {
 
         $formMapper
                 ->tab('_usuario_')
-                    ->with('General')
+                    ->with('General', array('class' => 'col-md-6'))
                         ->add('username')
                         ->add('email')
                         ->add('plainPassword', TextType::class, array(
                             'required' => (!$this->getSubject() || is_null($this->getSubject()->getId()))
                         ))
-                        ->add('establecimientoPrincipal', TextType::class, array('label' => '_establecimiento_principal_'))
                         ->add('enabled', null, array('required' => false))
                     ->end()
-                    ->with('_perfil_')
+                    ->with('_perfil_', array('class' => 'col-md-6'))
                         ->add('dateOfBirth', DateType::class, array(
                             'years' => range(1900, $now->format('Y')),
                             'required' => false
@@ -112,18 +98,33 @@ class UserAdmin extends BaseAdmin {
                 ->end()
         ;
 
-        if ($this->getSubject() && !$this->getSubject()->hasRole('ROLE_SUPER_ADMIN')) {
+        if ($existeCostosBundle){
+
+            $formMapper
+                ->tab('_usuario_')
+                ->with('General')
+                ->add('establecimientoPrincipal',
+                    EntityType::class, array(
+                        'class' => Estructura::class,
+                        'label' => '_establecimiento_principal_',
+                        'help' => '_ayuda_establecimiento_principal_'
+                    ))
+                ->end()
+                ->end();
+        }
+
+        if ($this->isGranted('ROLE_SUPER_ADMIN')) {
             $formMapper
                     ->tab('_seguridad_')
                         
-                        ->with('Groups')
+                        ->with('Groups', array('class' => 'col-md-6'))
                             ->add('groups', ModelType::class, array(
                                 'required' => false,
                                 'expanded' => true,
                                 'multiple' => true
                             ))
                         ->end()
-                        ->with('Roles')
+                        ->with('Roles', array('class' => 'col-md-6'))
                             ->add('realRoles', SecurityRolesType::class, array(
                                 'label' => 'form.label_roles',
                                 'expanded' => true,
@@ -138,7 +139,7 @@ class UserAdmin extends BaseAdmin {
             $accion = explode('?',array_pop($acciones));
             if ($accion[0] == 'edit') {
                 $formMapper
-                    ->tab('_indicadores_y_salas_')
+                    ->tab('_indicadores_y_salas_', array('class' => 'col-md-6'))
                         ->with('_indicadores_')
                             ->add('indicadores', null, array('label' => '_indicadores_', 'expanded' => true))
                         ->end()
@@ -147,7 +148,7 @@ class UserAdmin extends BaseAdmin {
                                 'expanded' => true,
                                 'mapped' => false))
                         ->end()
-                        ->with('_salas_situacionales_')
+                        ->with('_salas_situacionales_', array('class' => 'col-md-6'))
                             ->add('salas', EntityType::class, array(
                             'class' => GrupoIndicadores::class,
                             'label' => '_salas_situacionales_',
@@ -156,22 +157,12 @@ class UserAdmin extends BaseAdmin {
                             'mapped' => false
                             ))
                         ->end()
-                        
-                        
                     ->end()
                 ;
             }
         }
 
-        if ($existeCostosBundle){
 
-            $formMapper
-                ->tab('_usuario_')
-                    ->with('General')
-                        ->add('establecimientoPrincipal', null, array('label' => '_establecimiento_principal_', 'help' => '_ayuda_establecimiento_principal_'))
-                    ->end()
-                ->end();
-        }
 
     }
 
@@ -181,7 +172,7 @@ class UserAdmin extends BaseAdmin {
                 return 'CRUD/user-edit.html.twig';
                 break;
             default:
-                return parent::getTemplate($name);
+                return parent::getTemplateRegistry()->getTemplate($name);
                 break;
         }
     }

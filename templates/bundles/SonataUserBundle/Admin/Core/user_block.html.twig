@@ -42,12 +42,23 @@ file that was distributed with this source code.
 
         <li class="user-footer">
             {#<div class="pull-left">
-                <a href="{{ _profile_uri }}" class="btn btn-default btn-flat"><i class="fa fa-user"></i> {{ _profile_text }}</a>
+                <a href="{{ _profile_uri }}" class="btn btn-default" title="{{ _profile_text }}"><i class="fa fa-user fa-2x"></i></a>
+            </div>#}
+            <div class="pull-left">
+                <a href='{{url('fos_user_change_password')}}' class="btn btn-primary" title="{{"_cambiar_clave_"|trans}}"><i class="fa fa-key fa-2x"></i> </a>
             </div>
-            #}
             <div class="pull-right">
-                <a href="{{ _logout_uri }}" class="btn btn-default btn-flat"><i class="fa fa-sign-out fa-fw"></i> {{ _logout_text }}</a>
+                <a href="{{ _logout_uri }}" class="btn btn-danger " title="{{ _logout_text }}"><i class="fa fa-sign-out fa-fw fa-2x"></i> </a>
             </div>
         </li>
+
+        <li class="divider"></li>
+        {% for locale, lenguaje in {'es':'Español', 'en_US':'English'} %}
+            {% if locale == app.request.locale %}
+                <li class='active'><A href='#'>{{lenguaje}}</a></li>
+            {% else %}
+                <li ><a href='{{url('change_locale',{_locale:locale})}}'>{{lenguaje}}</a></li>
+            {% endif %}
+        {% endfor %}
     {% endif %}
 {% endblock %}
