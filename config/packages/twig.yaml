@@ -3,3 +3,6 @@ twig:
     app_theme: '%app.theme%'
     cium_disponible: '%cium.disponible%'
     cium_url: '%cium.url%'
+  form_themes:
+    - '@SonataCore/Form/datepicker.html.twig'
+
