@@ -36,9 +36,17 @@
     border: 1px solid rgba(0,0,0,.15) !important;
 }
 
+.dropdown-menu>.active>a{
+    color: white !important;
+}
+
 .menu-principal a{
     color: #337ab7 !important;
 }
+.dropdown-menu>.active>a:hover {
+    color: black !important;
+}
+
 
 .nav .open>a, .nav .open>a:focus, .nav .open>a:hover {
     background-color: #eee !important;
