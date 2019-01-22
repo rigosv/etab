@@ -2,6 +2,8 @@
 
 namespace App\Controller\MatrizChiapas;
 
+use App\Entity\FichaTecnica;
+use App\Entity\MatrizChiapas\MatrizIndicadoresDesempeno;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
@@ -90,7 +92,7 @@ class MatrizSeguimientoRESTController extends Controller {
             $resp = array(); $indicadores_in = array();
             foreach ($matriz as $key => $value) {
                 $value = (object) $value;
-                $ind = $em->getRepository("App/Entity/MatrizChiapas/MatrizIndicadoresDesempeno")->find($value->id_desempeno);
+                $ind = $em->getRepository(MatrizIndicadoresDesempeno::class)->find($value->id_desempeno);
                 if($ind){
                     
                     $indicador = array();
@@ -156,7 +158,7 @@ class MatrizSeguimientoRESTController extends Controller {
                 foreach($indicadores as $indicator){
                     $indicador = array();
                     
-                    $ind = $em->getRepository("App/Entity/MatrizChiapas/MatrizIndicadoresDesempeno")->find($indicator["id"]);
+                    $ind = $em->getRepository(MatrizIndicadoresDesempeno::class)->find($indicator["id"]);
 
                     $indicador['id'] = $ind->getId();
                     $indicador['nombre'] = $ind->getNombre();
@@ -197,7 +199,7 @@ class MatrizSeguimientoRESTController extends Controller {
         $matrix = $request->query->get('matrix');
 
         $em = $this->getDoctrine()->getManager();        
-        $indicadores = $em->getRepository("App/Entity/MatrizChiapas/MatrizIndicadoresDesempeno")->findBy(array('matriz' => $matrix), array('id' => 'ASC'));
+        $indicadores = $em->getRepository(MatrizIndicadoresDesempeno::class)->findBy(array('matriz' => $matrix), array('id' => 'ASC'));
         if($indicadores){
             foreach($indicadores as $ind){
                 $indicador = array();
@@ -240,7 +242,7 @@ class MatrizSeguimientoRESTController extends Controller {
         $bien = true;
         $anio   = $request->request->get('anio');
         $matriz = $request->request->get('matriz');
-        $existe = $em->getRepository('App/Entity/MatrizChiapas/MatrizSeguimiento')->findBy(
+        $existe = $em->getRepository(MatrizSeguimiento::class)->findBy(
             array(
                 'anio' => $anio
             )
@@ -275,7 +277,7 @@ class MatrizSeguimientoRESTController extends Controller {
         $ve = (object) $ve; 
         try{
 
-            $seguimiento = $em->getRepository('App/Entity/MatrizChiapas/MatrizSeguimiento')->findBy(
+            $seguimiento = $em->getRepository(MatrizSeguimiento::class)->findBy(
                 array(
                     'desempeno' => $value->id,
                     'anio' => $anio,
@@ -284,7 +286,7 @@ class MatrizSeguimientoRESTController extends Controller {
                 )
             );
             if($seguimiento)
-                $seguimiento = $em->getRepository('App/Entity/MatrizChiapas/MatrizSeguimiento')->find($seguimiento[0]->getId());
+                $seguimiento = $em->getRepository(MatrizSeguimiento::class)->find($seguimiento[0]->getId());
             else{
                 $seguimiento = new MatrizSeguimiento();
             }
@@ -295,7 +297,7 @@ class MatrizSeguimientoRESTController extends Controller {
             if(isset($ve->meta))
                 $seguimiento->setMeta($ve->meta);
 
-            $desempeno = $em->getRepository('App/Entity/MatrizChiapas/MatrizIndicadoresDesempeno')->find($value->id);
+            $desempeno = $em->getRepository(MatrizIndicadoresDesempeno::class)->find($value->id);
 
             $seguimiento->setDesempeno($desempeno);
             if(isset($value->meta))
@@ -307,7 +309,7 @@ class MatrizSeguimientoRESTController extends Controller {
 
             foreach ($ve as $k1 => $v1) {
                 if($k1 != "meta" && $k1 != "id" && $k1 != "nombre" && $k1 != '$$hashKey'){
-                    $matrizDato = $em->getRepository('App/Entity/MatrizChiapas/MatrizSeguimientoDato')->findBy(
+                    $matrizDato = $em->getRepository(MatrizSeguimientoDato::class)->findBy(
                         array(
                             'matriz' => $seguimiento->getId(),
                             'mes' => $k1
@@ -315,7 +317,7 @@ class MatrizSeguimientoRESTController extends Controller {
                     );
 
                     if($matrizDato){
-                        $matrizDato = $em->getRepository('App/Entity/MatrizChiapas/MatrizSeguimientoDato')->find($matrizDato[0]->getId());
+                        $matrizDato = $em->getRepository(MatrizSeguimientoDato::class)->find($matrizDato[0]->getId());
                     }
                     else{
                         $matrizDato = new MatrizSeguimientoDato();                    
@@ -363,7 +365,7 @@ class MatrizSeguimientoRESTController extends Controller {
             $resp = array();
             foreach ($matriz as $key => $value) {
                 $value = (object) $value;
-                $ind = $em->getRepository("App/Entity/MatrizChiapas/MatrizIndicadoresDesempeno")->find($value->id_desempeno);
+                $ind = $em->getRepository(MatrizIndicadoresDesempeno::class)->find($value->id_desempeno);
                 if($ind){
                     
                     $indicador = array();
@@ -394,7 +396,7 @@ class MatrizSeguimientoRESTController extends Controller {
                     // obtener los datos del etab
                     $etab = array(); $i=0;
                     
-                    $fichaRepository = $em->getRepository('App/Entity/FichaTecnica');            
+                    $fichaRepository = $em->getRepository(FichaTecnica::class);
                     $errores = ""; $ci = 0;
                     foreach($ind->getMatrizIndicadoresEtab() as $indrs){
                         $fichaTec = $fichaRepository->find($indrs->getId());
@@ -469,7 +471,7 @@ class MatrizSeguimientoRESTController extends Controller {
         $bien = true;
         $anio   = $request->request->get('anio');
         $matriz = $request->request->get('matriz');
-        $existe = $em->getRepository('App/Entity/MatrizChiapas/MatrizSeguimiento')->findBy(
+        $existe = $em->getRepository(MatrizSeguimiento::class)->findBy(
             array(
                 'anio' => $anio
             )
@@ -508,7 +510,7 @@ class MatrizSeguimientoRESTController extends Controller {
         try{
             if($existe){         
 
-                $seguimiento = $em->getRepository('App/Entity/MatrizChiapas/MatrizSeguimiento')->findBy(
+                $seguimiento = $em->getRepository(MatrizSeguimiento::class)->findBy(
                     array(
                         'desempeno' => $value->id,
                         'anio' => $anio,
@@ -517,7 +519,7 @@ class MatrizSeguimientoRESTController extends Controller {
                     )
                 );
                 if($seguimiento)
-                    $seguimiento = $em->getRepository('App/Entity/MatrizChiapas/MatrizSeguimiento')->find($seguimiento[0]->getId());
+                    $seguimiento = $em->getRepository(MatrizSeguimiento::class)->find($seguimiento[0]->getId());
                 
                 foreach ($ve as $k1 => $v1) {
 
@@ -526,7 +528,7 @@ class MatrizSeguimientoRESTController extends Controller {
                             if($v1["real"] == "")
                                 $v1["real"] = null;
                             
-                            $matrizDato = $em->getRepository('App/Entity/MatrizChiapas/MatrizSeguimientoDato')->findBy(
+                            $matrizDato = $em->getRepository(MatrizSeguimientoDato::class)->findBy(
                                 array(
                                     'matriz' => $seguimiento->getId(),
                                     'mes' => $k1
@@ -534,7 +536,7 @@ class MatrizSeguimientoRESTController extends Controller {
                             );
 
                             if($matrizDato){
-                                $matrizDato = $em->getRepository('App/Entity/MatrizChiapas/MatrizSeguimientoDato')->find($matrizDato[0]->getId());
+                                $matrizDato = $em->getRepository(MatrizSeguimientoDato::class)->find($matrizDato[0]->getId());
                             }
                             else{
                                 $matrizDato = new MatrizSeguimientoDato();                    
@@ -579,7 +581,7 @@ class MatrizSeguimientoRESTController extends Controller {
             $resp = array();
             foreach ($matriz as $key => $value) {
                 $value = (object) $value;
-                $ind = $em->getRepository("App/Entity/MatrizChiapas/MatrizIndicadoresDesempeno")->find($value->id_desempeno);
+                $ind = $em->getRepository(MatrizIndicadoresDesempeno::class)->find($value->id_desempeno);
                 if($ind){
                     
                     $indicador = array();
@@ -613,7 +615,7 @@ class MatrizSeguimientoRESTController extends Controller {
                     }
 
                     $etab = array(); $i=0;
-                    $fichaRepository = $em->getRepository('App/Entity/FichaTecnica'); 
+                    $fichaRepository = $em->getRepository(FichaTecnica::class);
                     foreach($ind->getMatrizIndicadoresEtab() as $indrs){                        
                         $fichaTec = $fichaRepository->find($indrs->getId());
                         $fichaRepository->crearIndicador($fichaTec);
