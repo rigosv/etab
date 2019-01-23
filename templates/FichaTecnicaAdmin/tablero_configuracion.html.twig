@@ -35,9 +35,9 @@
                 </div>
                 <div class="col-sm-12">
                     <div class="form-group">
-                        <label class="control-label  ">{{ 'javascript.tipo_grafico' | trans}}:</label>
-                        <select class="tipo_grafico_principal form-control" ng-model="indicadores[posicion].configuracion.tipo_grafico">
-                            <option ng-repeat="item in indicadores[posicion].informacion.dimensiones[indicadores[posicion].dimensiones[indicadores[posicion].dimension]].graficos" value="<% item.codigo %>"><% item.descripcion %></option>
+                        <label class="control-label  ">{{ 'javascript.tipo_grafico' | trans}}: </label>
+                        <select class="tipo_grafico_principal form-control" ng-model="indicadores[posicion].configuracion.tipo_grafico" ng-change="actualizarsGrafica(posicion, false);">
+                            <option ng-repeat="item in indicadores[posicion].informacion.dimensiones[indicadores[posicion].dimensiones[indicadores[posicion].dimension].trim()].graficos" value="<% item.codigo %>"><% item.descripcion %></option>
                         </select>
                     </div>
                 </div>

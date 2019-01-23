@@ -206,7 +206,25 @@ class TableroController extends AbstractController {
             // ejecutar el contenido de la memoria
             $em->flush();
             // validar que hay datos
-            if($data){                             
+            if($data){   
+                foreach($data as $key => $value){                    
+                    if(is_array($value))
+                        $value = (object) $value;
+                    if ($value->campos_indicador != '') {
+                        $campos = explode(',', str_replace(array("'", ' '), array('', ''), $value->campos_indicador));
+                    } else {
+                        $campos = array();
+                    }
+                    $dimensiones = array();
+                    foreach ($campos as $campo) {
+                        $significado = $em->getRepository(SignificadoCampo::class)
+                                ->findOneByCodigo($campo);
+                        if (count($significado->getTiposGraficosArray()) > 0) {
+                            $dimensiones[$significado->getCodigo()]['graficos'] = $significado->getTiposGraficosArray();
+                        }
+                    }
+                    $data[$key]["dimensiones"] = $dimensiones;                 
+                }                          
                 $response = [
                     'status' => 200,
                     'messages' => "Ok",
@@ -386,6 +404,9 @@ class TableroController extends AbstractController {
             $otros_filtros = '';
             if(property_exists($datos,'otros_filtros')){
                 $otros_filtros = $datos->otros_filtros;
+            }
+            if(!property_exists($datos,'tendencia')){
+                $datos->tendencia = false;
             }
             $almacenamiento->crearIndicador($fichaTec, $dimension, $filtros);
             $data = $almacenamiento->calcularIndicador($fichaTec, $dimension, $filtros, $datos->ver_sql, $otros_filtros, $datos->tendencia);

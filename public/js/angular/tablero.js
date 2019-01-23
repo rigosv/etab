@@ -283,7 +283,7 @@ App.controller("TableroCtrl", function(
             height: "280",
             orden_x: "",
             orden_y: "",
-            tipo_grafico: "columnas",
+            tipo_grafico: element.tipo_grafico.codigo,
             maximo: "",
             maximo_manual: ""
           },
@@ -291,8 +291,7 @@ App.controller("TableroCtrl", function(
             desde: "",
             hasta: "",
             elementos: []
-          },
-          tipo_grafica: "discreteBarChart"
+          }
         });
       });
       angular.forEach(item.indicadores, function(element, index) {
@@ -354,7 +353,6 @@ App.controller("TableroCtrl", function(
               $scope.indicadores[index].sql = "";
               $scope.indicadores[index].ficha = data.ficha;
               $scope.indicadores[index].full_screen = false;
-              $scope.indicadores[index].tipo_grafica = "discreteBarChart";
 
               $scope.indicadores[index].informacion = data.informacion;
               $scope.indicadores[index].informacion.nombre =
@@ -478,6 +476,7 @@ App.controller("TableroCtrl", function(
       if (angular.isUndefined($scope.tablero_indicador[item.id]))
         $scope.tablero_indicador[item.id] = 0;
       $scope.abrio_indicador = true;
+      var campos_indicador = item.campos_indicador.split(",");
       $scope.indicadores.push({
         cargando: true,
         filtros: [],
@@ -485,7 +484,7 @@ App.controller("TableroCtrl", function(
         id: item.id,
         nombre: item.nombre,
         es_favorito: item.es_favorito,
-        dimensiones: item.campos_indicador.split(","),
+        dimensiones: campos_indicador,
         dimension: 0,
         posicion: 0,
         tendencia: false,
@@ -497,7 +496,7 @@ App.controller("TableroCtrl", function(
           height: "280",
           orden_x: "",
           orden_y: "",
-          tipo_grafico: "columnas",
+          tipo_grafico: item.dimensiones[campos_indicador[0]].graficos[0].codigo,
           maximo: "",
           maximo_manual: ""
         },
@@ -505,8 +504,7 @@ App.controller("TableroCtrl", function(
           desde: "",
           hasta: "",
           elementos: []
-        },
-        tipo_grafica: "discreteBarChart"
+        }
       });
       $scope.tablero_indicador[item.id]++;
       var index = $scope.indicadores.length - 1;
@@ -587,14 +585,15 @@ App.controller("TableroCtrl", function(
    * @param {index} index identificador de la posicion del grafico
    */
   $scope.agregarIndicadorDimension = function(dimension, index) {
+    var posicion = index;   
     if (
       !angular.isUndefined($scope.indicadores[index].dimensiones[dimension])
     ) {
       $scope.indicadores[index].cargando = true;
       if ($scope.indicadores[index].tendencia)
-        $scope.opcionesGraficasTendencias(index, $scope.indicadores[index].tipo_grafica, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, $scope.indicadores[index].configuracion.height);
+        $scope.opcionesGraficasTendencias(index, $scope.indicadores[index].configuracion.tipo_grafico, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, $scope.indicadores[index].configuracion.height);
       else
-        $scope.opcionesGraficas(index, $scope.indicadores[index].tipo_grafica, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, $scope.indicadores[index].configuracion.height);
+        $scope.opcionesGraficas(index, $scope.indicadores[index].configuracion.tipo_grafico, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, $scope.indicadores[index].configuracion.height);
       var json = { filtros: $scope.indicadores[index].filtros, ver_sql: false, tendencia: $scope.indicadores[index].tendencia};
       Crud.crear(
         "../api/v1/tablero/datosIndicador/" +
@@ -641,9 +640,9 @@ App.controller("TableroCtrl", function(
     ) {
       $scope.indicadores[index].cargando = true;
       if ($scope.indicadores[index].tendencia)
-        $scope.opcionesGraficasTendencias(index, $scope.indicadores[index].tipo_grafica, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, $scope.indicadores[index].configuracion.height);
+        $scope.opcionesGraficasTendencias(index, $scope.indicadores[index].configuracion.tipo_grafico, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, $scope.indicadores[index].configuracion.height);
       else
-        $scope.opcionesGraficas(index, $scope.indicadores[index].tipo_grafica, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, $scope.indicadores[index].configuracion.height);
+        $scope.opcionesGraficas(index, $scope.indicadores[index].configuracion.tipo_grafico, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, $scope.indicadores[index].configuracion.height);
 
       var json = {
         filtros: $scope.indicadores[index].filtros,
@@ -695,29 +694,55 @@ App.controller("TableroCtrl", function(
       $scope.indicadores[index].data = data.data;
 
       var grafica = [];
-      grafica[0] = {
-        key: $scope.indicadores[index].dimensiones[dimension],
-        values: []
-      };
+      var tipo = $scope.indicadores[index].configuracion.tipo_grafico.toUpperCase();
       if (!$scope.indicadores[index].tendencia){
-        angular.forEach(data.data, function(val, key) {
-          color = "";
-          angular.forEach(data.informacion.rangos, function(v1, k1) {
-            if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
-              color = v1.color;
-            }
-          });
+        // validar el tipo de grafica para asociar el dato 
+        if (tipo == 'LINECHART' || tipo == 'LINEA' || tipo == 'LINEAS'){
+          $scope.indicadores[index].tendencia = true;
+          $scope.agregarIndicadorDimension(dimension, index);
+        }
+        if (tipo == 'DISCRETEBARCHART' || tipo == 'BARRA' || tipo == 'BARRAS' || tipo == 'COLUMNAS' || tipo == 'COLUMNA' ) {
+          grafica[0] = {
+            key: $scope.indicadores[index].dimensiones[dimension],
+            values: []
+          };
+          angular.forEach(data.data, function(val, key) {
+            color = "";
+            angular.forEach(data.informacion.rangos, function(v1, k1) {
+              if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
+                color = v1.color;
+              }
+            });
 
-          grafica[0].values.push({
-            color: color,
-            label: val.category,
-            value: parseFloat(val.measure),
-            index: index,
-            dimension: dimension
+            grafica[0].values.push({
+              color: color,
+              label: val.category,
+              value: parseFloat(val.measure),
+              index: index,
+              dimension: dimension
+            });
           });
-        });
+        } else if (tipo == 'PIECHART' || tipo == 'PIE' || tipo == 'PASTEL' || tipo == 'TORTA') {
+          angular.forEach(data.data, function (val, key) {
+            color = "";
+            angular.forEach(data.informacion.rangos, function (v1, k1) {
+              if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
+                color = v1.color;
+              }
+            }); 
+            grafica.push({
+              color: color,
+              key: val.category,
+              y: parseFloat(val.measure),
+              index: index,
+              dimension: dimension
+            });
+          });                  
+        }
+        // fin asociacion
         $scope.indicadores[index].grafica = grafica;
-      }else{
+
+      }else{        
         $scope.indicadores[index].grafica = data.data;
       }
     } else {
@@ -742,19 +767,67 @@ App.controller("TableroCtrl", function(
    */
   $scope.actualizarsGrafica = function(index, hacer = true) {
     if (hacer)
-      $scope.indicadores[index].full_screen = !$scope.indicadores[index]
-        .full_screen;
-
+      $scope.indicadores[index].full_screen = !$scope.indicadores[index].full_screen;
+    var tipo = $scope.indicadores[index].configuracion.tipo_grafico.toUpperCase();
+    var grafica = [];
+    var dimension = $scope.indicadores[index].dimension;
+    // validar el tipo de grafica para asociar el dato 
+    if ($scope.indicadores[index].tendencia && (tipo != 'LINECHART' && tipo != 'LINEA' && tipo != 'LINEAS')){
+      $scope.indicadores[index].tendencia = false;
+      $scope.agregarIndicadorDimension(dimension, index);
+    }
+    if (tipo == 'LINECHART' || tipo == 'LINEA' || tipo == 'LINEAS') {
+      $scope.indicadores[index].tendencia = true;
+      $scope.agregarIndicadorDimension(dimension, index);
+    }
+    if (tipo == 'DISCRETEBARCHART' || tipo == 'BARRA' || tipo == 'BARRAS' || tipo == 'COLUMNAS' || tipo == 'COLUMNA') {      
+      grafica[0] = {
+        key: $scope.indicadores[index].dimensiones[dimension],
+        values: []
+      };
+      angular.forEach($scope.indicadores[index].data, function(val, key) {
+        color = "";
+        angular.forEach($scope.indicadores[index].informacion.rangos, function(v1, k1) {
+          if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
+            color = v1.color;
+          }
+        });
+      
+        grafica[0].values.push({
+          color: color,
+          label: val.category,
+          value: parseFloat(val.measure),
+          index: index,
+          dimension: dimension
+        });        
+      });
+    } else if (tipo == 'PIECHART' || tipo == 'PIE' || tipo == 'PASTEL' || tipo == 'TORTA') {      
+      angular.forEach($scope.indicadores[index].data, function(val, key) {
+        color = "";
+        angular.forEach($scope.indicadores[index].informacion.rangos, function(v1, k1) {
+          if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
+            color = v1.color;
+          }
+        });
+        grafica.push({
+          color: color,
+          key: val.category,
+          y: parseFloat(val.measure),
+          index: index,
+          dimension: dimension
+        });        
+      });
+    }
+    // fin asociacion    
     var tamano = $scope.indicadores[index].configuracion.height;
-    let grafica = $scope.indicadores[index].grafica;
     $scope.indicadores[index].grafica = [];
-    let dimension = $scope.indicadores[index].dimension;
+    
     setTimeout(() => {
       $scope.indicadores[index].grafica = grafica;
       if ($scope.indicadores[index].tendencia)
-        $scope.opcionesGraficasTendencias(index, $scope.indicadores[index].tipo_grafica, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, tamano);
+        $scope.opcionesGraficasTendencias(index, $scope.indicadores[index].configuracion.tipo_grafico, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, tamano);
       else
-        $scope.opcionesGraficas(index, $scope.indicadores[index].tipo_grafica, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, tamano);
+        $scope.opcionesGraficas(index, $scope.indicadores[index].configuracion.tipo_grafico, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, tamano);
       document.getElementById("update" + index).click();
     }, 200);
   };
@@ -817,28 +890,54 @@ App.controller("TableroCtrl", function(
     var dimension = $scope.indicadores[index].dimension;
     $scope.indicadores[index].data = data;
     var grafica = [];
-    grafica[0] = { key: $scope.indicadores[index].grafica[0].key, values: [] };
+    var tipo = $scope.indicadores[index].configuracion.tipo_grafico.toUpperCase();
+    // validar el tipo de grafica para asociar el dato 
+    if (tipo == 'LINECHART' || tipo == 'LINEA' || tipo == 'LINEAS'){
+      $scope.indicadores[index].tendencia = true;
+      $scope.agregarIndicadorDimension(dimension, index);
+    }
+    if (tipo == 'DISCRETEBARCHART' || tipo == 'BARRA' || tipo == 'BARRAS' || tipo == 'COLUMNAS' || tipo == 'COLUMNA' ){
+      grafica[0] = { key: $scope.indicadores[index].grafica[0].key, values: [] };
 
-    angular.forEach(data, function(val, key) {
-      color = "";
-      angular.forEach($scope.indicadores[index].informacion.rangos, function(
-        v1,
-        k1
-      ) {
-        if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
-          color = v1.color;
-        }
-      });
+      angular.forEach(data, function(val, key) {
+        color = "";
+        angular.forEach($scope.indicadores[index].informacion.rangos, function(
+          v1,
+          k1
+        ) {
+          if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
+            color = v1.color;
+          }
+        });
 
-      grafica[0].values.push({
-        color: color,
-        label: val.category,
-        value: parseFloat(val.measure),
-        index: index,
-        dimension: dimension
+        grafica[0].values.push({
+          color: color,
+          label: val.category,
+          value: parseFloat(val.measure),
+          index: index,
+          dimension: dimension
+        });        
+        // fin asociacion
       });
-      $scope.indicadores[index].grafica = grafica;
-    });
+    } else if (tipo == 'PIECHART' || tipo == 'PIE' || tipo == 'PASTEL' || tipo == 'TORTA'){
+      angular.forEach(data, function (val, key) {
+        color = "";
+        angular.forEach($scope.indicadores[index].informacion.rangos, function (v1, k1) {
+          if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
+            color = v1.color;
+          }
+        });
+        grafica.push({
+          color: color,
+          key: val.category,
+          y: parseFloat(val.measure),
+          index: index,
+          dimension: dimension
+        });        
+      });     
+    }
+    
+    $scope.indicadores[index].grafica = grafica;
     $scope.actualizarsGrafica(index, false);
   };
 
@@ -1022,42 +1121,96 @@ App.controller("TableroCtrl", function(
   $scope.opcionesGraficas = function(index, tipo, labelx, labely, tamano) {
     if ($scope.indicadores[index].full_screen)
       tamano = $window.innerHeight / 1.28;
-
-    $scope.indicadores[index].options = {
-      chart: {
-        type: tipo,
-        height: tamano,
-        margin: { top: 20, right: 20, bottom: 50, left: 55 },
-        x: function(d) {
-          return d.label;
-        },
-        y: function(d) {
-          return d.value;
-        },
-        showValues: true,
-        valueFormat: function(d) {
-          return d3.format(",.2f")(d);
-        },
-        duration: 500,
-        xAxis: { axisLabel: labelx },
-        yAxis: { axisLabel: labely },
-        callback: function(chart) {
-          chart.discretebar.dispatch.on("elementClick", function(e) {
+    var options = {};
+    tipo = tipo.toUpperCase();
+    if (tipo == 'PIECHART' || tipo == 'PIE' || tipo == 'PASTEL' || tipo == 'TORTA'){
+      options = {
+        chart: {
+          type: "pieChart",
+          height: tamano,
+          x: function (d) {
+            return d.key;
+          },
+          y: function (d) {
+            return d.y;
+          },
+          showLabels: true,
+          duration: 500,          
+          labelThreshold: 0.01,
+          labelSunbeamLayout: true,
+          legend: {
+            margin: {
+              top: 5,
+              right: 35,
+              bottom: 5,
+              left: 0
+            }
+          },
+          callback: function (chart) {            
+            chart.pie.dispatch.on("elementClick", function (e) {
+              $scope.indicadores[index].dimension++;
+              $scope.indicadores[index].filtros.push({
+                codigo: $scope.indicadores[index].dimensiones[$scope.indicadores[index].dimension - 1].trim(),
+                valor: e.data.key
+              });
+              $scope.agregarIndicadorDimension($scope.indicadores[index].dimension, e.data.index);
+            });
+          } 
+        }
+      };
+    } else if (tipo == 'DISCRETEBARCHART' || tipo == 'BARRA' || tipo == 'BARRAS' || tipo == 'COLUMNAS' || tipo == 'COLUMNA' || tipo == 'LINECHART' || tipo == 'LINEA' || tipo == 'LINEAS'){
+      options = {
+        chart: {
+          type: 'discreteBarChart',
+          height: tamano,
+          margin: { top: 20, right: 20, bottom: 50, left: 55 },
+          x: function (d) {
+            return d.label;
+          },
+          y: function (d) {
+            return d.value;
+          },
+          showValues: true,
+          valueFormat: function (d) {
+            return d3.format(",.2f")(d);
+          },
+          duration: 500,
+          xAxis: { axisLabel: labelx },
+          yAxis: { axisLabel: labely }                  
+        }
+      };
+      if (tipo == 'DISCRETEBARCHART' || tipo == 'BARRA' || tipo == 'BARRAS' || tipo == 'COLUMNAS' || tipo == 'COLUMNA'){
+        options.chart.callback = function (chart) {
+          chart.discretebar.dispatch.on("elementClick", function (e) {           
             $scope.indicadores[index].dimension++;
             $scope.indicadores[index].filtros.push({
-              codigo: $scope.indicadores[index].dimensiones[
-                $scope.indicadores[index].dimension - 1
-              ].trim(),
+              codigo: $scope.indicadores[index].dimensiones[$scope.indicadores[index].dimension - 1].trim(),
               valor: e.data.label
             });
-            $scope.agregarIndicadorDimension(
-              $scope.indicadores[index].dimension,
-              e.data.index
-            );
+            $scope.agregarIndicadorDimension($scope.indicadores[index].dimension,e.data.index);
           });
         }
       }
-    };
+      if (tipo == 'LINECHART' || tipo == 'LINEA' || tipo == 'LINEAS'){
+        options.chart.type = "lineChart";
+        options.chart.useInteractiveGuideline = true;
+        options.chart.dispatch = {
+          stateChange: function (e) {
+            console.log("stateChange");
+          },
+          changeState: function (e) {
+            console.log("changeState");
+          },
+          tooltipShow: function (e) {
+            console.log("tooltipShow");
+          },
+          tooltipHide: function (e) {
+            console.log("tooltipHide");
+          }
+        };
+      }
+    } 
+    $scope.indicadores[index].options =options
   };
 
   $scope.opcionesGraficasTendencias = function (index, tipo, labelx, labely, tamano) {
