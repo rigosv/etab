@@ -33,11 +33,42 @@
 
 .menu-principal .dropdown-menu{
     box-shadow: -5px 5px 5px rgba(0, 0, 0, .3);
+    border: 1px solid rgba(0,0,0,.15) !important;
 }
 
-.menu_level_2 {
-    margin-left: 30px;
+.dropdown-menu>.active>a{
+    color: white !important;
 }
+
+.menu-principal a{
+    color: #337ab7 !important;
+}
+.dropdown-menu>.active>a:hover {
+    color: black !important;
+}
+
+
+.nav .open>a, .nav .open>a:focus, .nav .open>a:hover {
+    background-color: #eee !important;
+
+}
+
+.dropdown-menu .dropdown-menu {
+    position: absolute !important;
+    display: none !important;
+    box-shadow: -5px 5px 5px rgba(0, 0, 0, .3) !important;
+    margin-left: 20px !important;
+}
+
+.dropdown-menu {
+    display: none !important;
+
+}
+
+.open>.dropdown-menu {
+    display: block !important;
+}
+
 
 @media (max-width: 767px) {
     .skin-black .main-header>.logo {

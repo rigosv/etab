@@ -4,6 +4,7 @@ var App = angular.module("App", ["ui.bootstrap", "ngStorage", "nvd3"], function(
   $interpolateProvider.startSymbol("<%");
   $interpolateProvider.endSymbol("%>");
 });
+
 //hce las peticiones a la api
 App
     .factory('Crud', function($http) {
@@ -156,7 +157,7 @@ App
             }
         };
     })
-    //crea el grafico de estrellas 
+    //crea el grafico de estrellas
     .directive('estrella', function() {
         return {
             restrict: 'A',

@@ -1,0 +1,6 @@
+{% extends '/standard_layout.html.twig' %}
+
+{% block sonata_admin_content %}
+    {{ parent() }}
+    {% include "@FOSUser/Profile/show_content.html.twig" %}
+{% endblock sonata_admin_content %}

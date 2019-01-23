@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -485,6 +486,17 @@ class OrigenDatoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $dir = $this->getParameter('app.upload_directory');
 
+        $fileSystem = new Filesystem();
+
+        // Si no existe el directorio crearlo
+        if (! $fileSystem->exists($dir)) {
+            try {
+                $fileSystem->mkdir($dir);
+            } catch (IOExceptionInterface $exception) {
+                echo "An error occurred while creating your directory at ".$exception->getPath();
+            }
+        }
+
         $files = $request->files->all();
         $fileA = array_shift($files);
         $file = array_shift($fileA);
@@ -500,8 +512,7 @@ class OrigenDatoController extends Controller
         try {
             //Si existía un archivo para ese origen de datos borrarlo
             if ( $archivoAnt != '' ) {
-                $fileAnt = new Filesystem();
-                $fileAnt->remove($dir.'/'.$archivoAnt);
+                $fileSystem->remove($dir.'/'.$archivoAnt);
             }
 
             $file->move(

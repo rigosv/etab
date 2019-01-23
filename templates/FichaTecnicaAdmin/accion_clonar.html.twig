@@ -1,0 +1,6 @@
+{% if admin.hasRoute('clonar') %}
+    <a href="{{ admin.generateObjectUrl('clonar', object) }}" class="btn btn-primary edit_link"
+       title="{{ '_clonar_ficha_tecnica_'| trans }}">
+        <i class="fa fa-clone" aria-hidden="true"></i>
+    </a>
+{% endif %}

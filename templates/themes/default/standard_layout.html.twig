@@ -1,6 +1,9 @@
 {% extends '@SonataAdmin/standard_layout.html.twig' %}
+
 {% block sonata_top_nav_menu %}
-    {% if app.user  %}
+    {% if app.user != '' and app.user.username == 'externo' %}
+        <li ><a href='{{url('sonata_user_admin_security_logout')}}'>{{'_salir_'|trans}}</a></li>
+    {% else %}
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
                 {% block sonata_top_nav_menu_user_block %}

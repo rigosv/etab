@@ -57,6 +57,9 @@ class FichaTecnicaAdmin extends Admin
                         ->add('formula', null, array('label' => 'formula',
                             'help' => 'ayuda_ingreso_formula'
                         ))
+                        ->add('tiposGraficos', null, array('label' => ('_tipos_graficos_'),
+                            'expanded' => false
+                        ))
                         ->add('cantidadDecimales', null, array('label' => '_cantidad_decimales_', 'help' => '_cantidad_decimales_help_'))
                         ->add('meta', null, array('label' => '_meta_'))
                         ->add('periodo', null, array('label' => 'periodicidad'))
@@ -150,9 +153,10 @@ class FichaTecnicaAdmin extends Admin
                 ->add('concepto', null, array('label' => 'concepto'))
                 ->add('camposIndicador', null, array('label' => 'campos_indicador'))
                 ->add('_action', 'actions', array(
-                'actions' => array('reporte' => array('template' => 'FichaTecnicaAdmin/accion_reporte.html.twig'),
-                        )
-               )) ;
+                    'actions' => array(
+                        'clonar' => array('template' => 'FichaTecnicaAdmin/accion_clonar.html.twig'),
+                    )
+                ));
 
         ;
     }
@@ -337,6 +341,7 @@ class FichaTecnicaAdmin extends Admin
     protected function configureRoutes(RouteCollection $collection)
     {
         $collection->add('matrizSeguimiento');
+        $collection->add('clonar', $this->getRouterIdParameter() . '/clonar');
     }
 
     public function getTemplate($name)

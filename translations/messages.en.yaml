@@ -492,3 +492,5 @@ _formato_valor_corte_: Cutting value format
 _formato_valor_corte_help_: "Date format of the incremental field. 'Y-m-d H:i:s'  by default"
 _valor_corte_: Cutting value
 _valor_corte_help_: Last value read in the data load
+_clonar_ficha_tecnica_: Clone technical profile
+_regresar_: Return

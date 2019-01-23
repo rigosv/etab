@@ -7,6 +7,9 @@
 
 {% endblock %}
 
+{% block sonata_left_side %}
+{% endblock %}
+
 {% block sonata_nav %}
     <nav class="navbar navbar-static-top menu-principal" role="navigation">
         <div class="navbar-left">
@@ -38,9 +41,6 @@
         {% endblock %}
     </nav>
 {% endblock sonata_nav %}
-
-{% block sonata_left_side %}
-{% endblock %}
 
 {% block sonata_page_content %}
     {{  parent() }}

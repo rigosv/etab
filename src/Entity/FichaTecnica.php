@@ -232,6 +232,15 @@ class FichaTecnica
     private $agenciasAcceso;
 
     /**
+     * @ORM\ManyToMany(targetEntity="TipoGrafico", cascade={"remove", "persist"})
+     * @ORM\JoinTable(name="fichatecnica_tiposgraficos",
+     *      joinColumns={@ORM\JoinColumn(name="fichatecnica_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="tipografico_id", referencedColumnName="id")}
+     *      )
+     * */
+    private $tiposGraficos;
+
+    /**
      * Get id
      *
      * @return integer
@@ -410,6 +419,7 @@ class FichaTecnica
         $this->periodos = new \Doctrine\Common\Collections\ArrayCollection();
         $this->variables = new \Doctrine\Common\Collections\ArrayCollection();
         $this->agenciasAcceso = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tiposGraficos = new \Doctrine\Common\Collections\ArrayCollection();
         $this->cantidadDecimales = 2;
     }
 
@@ -1008,4 +1018,39 @@ class FichaTecnica
     {
         $this->cantidadDecimales = $cantidadDecimales;
     }
+
+    /**
+     * Add tiposGraficos
+     *
+     * @param  \App\Entity\TipoGrafico $tiposGraficos
+     * @return FichaTecnica
+     */
+    public function addTiposGrafico(\App\Entity\TipoGrafico $tiposGraficos)
+    {
+        $this->tiposGraficos[] = $tiposGraficos;
+
+        return $this;
+    }
+
+    /**
+     * Remove tiposGraficos
+     *
+     * @param \App\Entity\TipoGrafico $tiposGraficos
+     */
+    public function removeTiposGrafico(\App\Entity\TipoGrafico $tiposGraficos)
+    {
+        $this->tiposGraficos->removeElement($tiposGraficos);
+    }
+
+    /**
+     * Get tiposGraficos
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTiposGraficos()
+    {
+        return $this->tiposGraficos;
+    }
+
+
 }

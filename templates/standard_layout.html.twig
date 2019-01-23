@@ -26,52 +26,9 @@
 {% block sonata_sidebar_search %}{% endblock %}
 
 {% block sonata_top_nav_menu %}
-    {#
-    {% if app.user %}
-        {{ knp_menu_render('sonata_admin_sidebar', {template: admin_pool.getTemplate('knp_menu_template')}) }}
-    {% endif %}
-    <div class="navbar-custom-menu">        
-        <ul class="nav navbar-nav">
-            {% if app.user != '' and app.user.username == 'externo' %}
-                <li ><a href='{{url('sonata_user_admin_security_logout')}}'>{{'_salir_'|trans}}</a></li>
-            {% else %}
-                <li class="dropdown user-menu">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-user">
-                        {% if app.user != '' %}
-                            {% include admin_pool.getTemplate('user_block') %}                                            
-                            <li><A class="btn btn-flat" href='{{url('fos_user_change_password')}}'>
-                                   <span class="glyphicon glyphicon-repeat"></span>{{"_cambiar_clave_"|trans}}</A>
-                            </li>
-                            <li class="divider"></li>
-                        {% endif %}                
-                    {% for locale, lenguaje in {'es_SV':'Español', 'en_US':'English'} %}
-                        {% if locale == app.request.locale %}
-                            <li class='active'><A href='#'>{{lenguaje}}</a></li>
-                        {% else %}
-                            <li ><a href='{{url('change_locale',{_locale:locale})}}'>{{lenguaje}}</a></li>
-                        {% endif %}
-                    {% endfor %}
-                    </ul>
-                </li>
-            {% endif %}
-        </ul>
-    </div>
-    #}
+
     {{ parent() }}
     <div id="div_cargando" class='affix'>
-        <img id="cargador" src="{{ app.request.schemeAndHttpHost ~ asset('images/ajax-loader.gif') }}" style="left: 48%;position: absolute;top: 45%;"/>
-        <span class="btn btn-default glyphicon glyphicon-remove" style="
-                        position: absolute;
-                        top: 14px;
-                        right: 10px;
-                        font-size: 16pt;
-                        z-index: 99999999;
-                    " onclick="cerrar_div_carga()"></span>
-    </div>  
-
-     
-
+        <img id="cargador" src="{{ app.request.schemeAndHttpHost ~ asset('images/ajax-loader.gif') }}"/>
+    </div>
 {% endblock %}

@@ -31,18 +31,18 @@ class MatrizIndicadoresDesempenoAdmin extends Admin
     {
         $showMapper
             ->add('id')
-            ->add('matriz', null, array('label' => $this->getTranslator()->trans('_matriz_'), 'required' => true))
+            ->add('matriz', null, array('label' => '_matriz_', 'required' => true))
             ->add('nombre') 
             ->add('orden') 
-            ->add('matrizIndicadoresEtab', null, array('label' => $this->getTranslator()->trans('_indicador_etab_'),                 
+            ->add('matrizIndicadoresEtab', null, array('label' => '_indicador_etab_',
                     'expanded' => true,
                     'class' => FichaTecnica::class,
                     'query_builder' => function ($repository) {
-                        return $repository->createQueryBuilder('i');
+                        return $repository->createQueryBuilder('i')->addOrderBy('nombre','ASC');
                     }))
                 ->add('indicators', CollectionType::class, 
                 array(              
-                    'label' => $this->getTranslator()->trans('_indicador_rel_'),
+                    'label' => '_indicador_rel_',
                     'required' => true
                 ), 
                 array(
@@ -58,18 +58,18 @@ class MatrizIndicadoresDesempenoAdmin extends Admin
 	public function configureFormFields(FormMapper $formMapper) 
 	{
         $formMapper
-                ->add('matriz', null, array('label' => $this->getTranslator()->trans('_matriz_')))                                
-                ->add('nombre', null, array('label' => $this->getTranslator()->trans('nombre')))
-                ->add('orden', null, array('label' => $this->getTranslator()->trans('orden')))
-				->add('matrizIndicadoresEtab', null, array('label' => $this->getTranslator()->trans('_indicador_etab_'),                 
-                    'expanded' => true,
+                ->add('matriz', null, array('label' => '_matriz_'))
+                ->add('nombre', null, array('label' => 'nombre'))
+                ->add('orden', null, array('label' => 'orden'))
+				->add('matrizIndicadoresEtab', null,  array('label' => '_indicador_etab_',
+                    'expanded' => false,
                     'class' => FichaTecnica::class,
                     'query_builder' => function ($repository) {
-                        return $repository->createQueryBuilder('i');
+                        return $repository->createQueryBuilder('i')->orderBy('i.nombre', 'ASC');
                     }))
                 ->add('indicators', CollectionType::class, 
                 array(              
-                    'label' => $this->getTranslator()->trans('_indicador_rel_'),
+                    'label' => '_indicador_rel_',
                     'required' => true
                 ), 
                 array(
@@ -83,18 +83,18 @@ class MatrizIndicadoresDesempenoAdmin extends Admin
 	public function configureDatagridFilters(DatagridMapper $datagridMapper) 
 	{
         $datagridMapper
-                ->add('nombre', null, array('label' => $this->getTranslator()->trans('nombre')))
-                ->add('matriz', null, array('label' => $this->getTranslator()->trans('_matriz_')))
+                ->add('nombre', null, array('label' => 'nombre'))
+                ->add('matriz', null, array('label' => '_matriz_'))
         ;
     }
 
     public function configureListFields(ListMapper $listMapper) 
 	{
         $listMapper
-                ->addIdentifier('matriz', null, array('label' => $this->getTranslator()->trans('_matriz_')))  
-                ->addIdentifier('nombre', null, array('label' => $this->getTranslator()->trans('nombre')))				
-                ->add('creado', null, array('label' => $this->getTranslator()->trans('creado')))
-				->add('actualizado', null, array('label' => $this->getTranslator()->trans('actualizado')))
+                ->addIdentifier('matriz', null, array('label' => '_matriz_'))
+                ->addIdentifier('nombre', null, array('label' => 'nombre'))
+                ->add('creado', null, array('label' => 'creado'))
+				->add('actualizado', null, array('label' => 'actualizado'))
         ;
     }	
 
@@ -131,7 +131,7 @@ class MatrizIndicadoresDesempenoAdmin extends Admin
     {
         $indicators = $MatrizIndicadoresDesempeno->getIndicators();
         $MatrizIndicadoresDesempeno->removeIndicators();
-        if (count($indicators) > 0) {
+        if ($indicators != null and count($indicators) > 0) {
             foreach ($indicators as $indicator) {
                 $indicator->setDesempeno($MatrizIndicadoresDesempeno);
                 $MatrizIndicadoresDesempeno->addIndicator($indicator);
@@ -144,4 +144,3 @@ class MatrizIndicadoresDesempenoAdmin extends Admin
         $this->setIndicadors($indicators);       
     }
 }
-?>

@@ -4,9 +4,9 @@ $(document).ready(function () {
     var idcontrol = uniqid[1];
  
 
-    $("#" + idcontrol + "_matrizIndicadoresEtab").attr("class", "list-group");
-    $("#" + idcontrol + "_matrizIndicadoresEtab li").attr("class", "list-group-item");
-    $("#" + idcontrol + "_matrizIndicadoresEtab").attr("style", "max-height:380px; overflow:auto;");
+    //$("#" + idcontrol + "_matrizIndicadoresEtab").attr("class", "list-group");
+    //$("#" + idcontrol + "_matrizIndicadoresEtab li").attr("class", "list-group-item");
+    //$("#" + idcontrol + "_matrizIndicadoresEtab").attr("style", "max-height:380px; overflow:auto;");
 
 
     $(".popover").attr(

@@ -64,6 +64,7 @@ class MatrizIndicadoresDesempeno
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      * @ORM\OneToMany(targetEntity="MatrizIndicadoresRel", mappedBy="desempeno", cascade={"all"}, orphanRemoval=true)
+     * @ORM\OrderBy({"nombre"="ASC"})
      *
      */
     private $indicators;
