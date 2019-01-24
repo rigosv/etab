@@ -65,7 +65,11 @@ class User extends BaseUser
      **/
     private $agencia;
 
+    // Utilizado si está activo el bundle formularios, se configura a través de EventListener
     private $establecimientoPrincipal;
+
+    // Utilizado si está activo el bundle formularios, se configura a través de EventListener
+    private $formularios;
     
     
 
@@ -133,6 +137,7 @@ class User extends BaseUser
         $this->gruposIndicadores = new \Doctrine\Common\Collections\ArrayCollection();
         $this->indicadores = new \Doctrine\Common\Collections\ArrayCollection();
         $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->formularios= new \Doctrine\Common\Collections\ArrayCollection();
         parent::__construct();
     }
 
@@ -303,6 +308,16 @@ class User extends BaseUser
     public function getEstablecimientoPrincipal()
     {
         return $this->establecimientoPrincipal;
+    }
+
+    /**
+     * Get formularios
+     *
+     * @return \MINSAL\Bundle\CostosBundle\Entity\Formulario
+     */
+    public function getFormularios()
+    {
+        return $this->formularios;
     }
     
 }
