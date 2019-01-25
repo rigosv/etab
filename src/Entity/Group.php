@@ -51,6 +51,7 @@ class Group extends BaseGroup
      * )
      **/
     protected $salas;
+
     
     /**
      * Get id

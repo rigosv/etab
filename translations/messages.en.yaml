@@ -494,3 +494,5 @@ _valor_corte_: Cutting value
 _valor_corte_help_: Last value read in the data load
 _clonar_ficha_tecnica_: Clone technical profile
 _regresar_: Return
+_solo_lectura_: Read only
+javascript.nombre_campo: Field name
