@@ -52,8 +52,6 @@ class Group extends BaseGroup
      **/
     protected $salas;
 
-    // Utilizado si está activo el bundle formularios, se configura a través de EventListener
-    private $formularios;
     
     /**
      * Get id
@@ -139,15 +137,5 @@ class Group extends BaseGroup
     public function getSalas()
     {
         return $this->salas;
-    }
-
-    /**
-     * Get formularios
-     *
-     * @return \MINSAL\Bundle\CostosBundle\Entity\Formulario
-     */
-    public function getFormularios()
-    {
-        return $this->formularios;
     }
 }

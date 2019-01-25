@@ -67,10 +67,6 @@ class User extends BaseUser
 
     // Utilizado si está activo el bundle formularios, se configura a través de EventListener
     private $establecimientoPrincipal;
-
-    // Utilizado si está activo el bundle formularios, se configura a través de EventListener
-    private $formularios;
-    
     
 
     /**
@@ -310,14 +306,4 @@ class User extends BaseUser
         return $this->establecimientoPrincipal;
     }
 
-    /**
-     * Get formularios
-     *
-     * @return \MINSAL\Bundle\CostosBundle\Entity\Formulario
-     */
-    public function getFormularios()
-    {
-        return $this->formularios;
-    }
-    
 }
