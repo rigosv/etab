@@ -23,6 +23,7 @@ use App\Entity\UsuarioGrupoIndicadores;
 
 use App\Entity\SignificadoCampo;
 use App\Entity\OrigenDatos;
+use App\Entity\TipoGrafico;
 
 
 /**
@@ -147,6 +148,10 @@ class TableroController extends AbstractController {
        
         // iniciar el manager de doctrine
         $em = $this->getDoctrine()->getManager();
+        $encoders = array(new JsonEncoder());
+        $normalizers = array(new ObjectNormalizer());
+
+        $serializer = new Serializer($normalizers, $encoders);
         try{ 
             $usuario = $this->getUser();
             $datos = (object) $request->query->all();  
@@ -207,9 +212,15 @@ class TableroController extends AbstractController {
             $em->flush();
             // validar que hay datos
             if($data){   
-                foreach($data as $key => $value){                    
+                foreach($data as $key => $value){ 
                     if(is_array($value))
                         $value = (object) $value;
+
+                    $sql = "SELECT codigo, descripcion FROM tipo_grafico WHERE id in(SELECT tipografico_id FROM fichatecnica_tiposgraficos WHERE fichatecnica_id =".$value->id.")";
+                    $statement = $conn->prepare($sql);
+                    $statement->execute();
+                    $graficos = $statement->fetchAll();
+                   
                     if ($value->campos_indicador != '') {
                         $campos = explode(',', str_replace(array("'", ' '), array('', ''), $value->campos_indicador));
                     } else {
@@ -217,10 +228,15 @@ class TableroController extends AbstractController {
                     }
                     $dimensiones = array();
                     foreach ($campos as $campo) {
-                        $significado = $em->getRepository(SignificadoCampo::class)
-                                ->findOneByCodigo($campo);
+                        $significado = $em->getRepository(SignificadoCampo::class)->findOneByCodigo($campo);
                         if (count($significado->getTiposGraficosArray()) > 0) {
-                            $dimensiones[$significado->getCodigo()]['graficos'] = $significado->getTiposGraficosArray();
+                            $graficos_filtrados_ficha = [];                                         
+                            if(count($graficos) > 0){                                                                                      
+                                $graficos_filtrados_ficha = $graficos;
+                            }else{
+                                $graficos_filtrados_ficha = $significado->getTiposGraficosArray();
+                            }
+                            $dimensiones[$significado->getCodigo()]['graficos'] = $graficos_filtrados_ficha;
                         }
                     }
                     $data[$key]["dimensiones"] = $dimensiones;                 
@@ -245,11 +261,7 @@ class TableroController extends AbstractController {
                 'data' => [],
             ];    
             
-        }
-        $encoders = array(new JsonEncoder());
-        $normalizers = array(new ObjectNormalizer());
-
-        $serializer = new Serializer($normalizers, $encoders);
+        }        
         // devolver la respuesta en json             
         return new Response($serializer->serialize($response, "json"));
     }
@@ -488,6 +500,12 @@ class TableroController extends AbstractController {
                 $campos = array();
             }
             $dimensiones = array();
+            $conn = $em->getConnection();
+            $sql = "SELECT codigo, descripcion FROM tipo_grafico WHERE id in(SELECT tipografico_id FROM fichatecnica_tiposgraficos WHERE fichatecnica_id =".$fichaTec->getId().")";
+            $statement = $conn->prepare($sql);
+            $statement->execute();
+            $graficos = $statement->fetchAll();
+
             foreach ($campos as $campo) {
                 $significado = $em->getRepository(SignificadoCampo::class)
                         ->findOneByCodigo($campo);
@@ -496,7 +514,14 @@ class TableroController extends AbstractController {
                     $dimensiones[$significado->getCodigo()]['escala'] = $significado->getEscala();
                     $dimensiones[$significado->getCodigo()]['origenX'] = $significado->getOrigenX();
                     $dimensiones[$significado->getCodigo()]['origenY'] = $significado->getOrigenY();
-                    $dimensiones[$significado->getCodigo()]['graficos'] = $significado->getTiposGraficosArray();
+                    
+                    $graficos_filtrados_ficha = [];
+                    if(count($graficos) > 0){                                                                                      
+                        $graficos_filtrados_ficha = $graficos;
+                    }else{
+                        $graficos_filtrados_ficha = $significado->getTiposGraficosArray();
+                    }
+                    $dimensiones[$significado->getCodigo()]['graficos'] = $graficos_filtrados_ficha;
                 }
             }
             $rangos_alertas_aux = array();

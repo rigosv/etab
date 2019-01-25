@@ -1,4 +1,4 @@
-var App = angular.module("App", ["ui.bootstrap", "ngStorage", "nvd3"], function(
+var App = angular.module("App", ["ui.bootstrap", "ngStorage", "ngRadialGauge", "nvd3"], function(
   $interpolateProvider
 ) {
   $interpolateProvider.startSymbol("<%");

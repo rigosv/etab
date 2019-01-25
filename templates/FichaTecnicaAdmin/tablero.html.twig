@@ -6,6 +6,35 @@
     <link rel="stylesheet" href="{{ asset('css/FichaTecnicaAdmin/d3_nvd3.css') }}">
     <link rel="stylesheet" href="{{ asset('css/FichaTecnicaAdmin/tablero.css') }}">
 
+    <style>
+        td{
+            min-width: 30px;
+            min-height: 90px;
+        }
+        td.valores{
+            text-align: right;
+        }
+        td.nombre_variable{
+            vertical-align: middle !important;
+        }
+        table{
+            background-color: white;
+            border-color: black !important;
+        }
+        .sonata-ba-content{
+            overflow: auto;
+        }
+        .content-header {
+            padding: 0px;
+        }
+        .navbar2 {
+            position: relative;
+            min-height: 50px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+        }
+    </style>
+
 {% endblock %}
 
 {% block javascripts %}
@@ -42,183 +71,210 @@
 <script type="text/javascript" src="https://unpkg.com/sql-formatter@latest/dist/sql-formatter.min.js"></script>
 
 {% endblock %}
+{% block sonata_page_content %}
+    <div ng-app="App" ng-controller="TableroCtrl"> 
+        {% block sonata_page_content_header %}
+            <!-- MENU -->
+            {% include 'FichaTecnicaAdmin/tablero_menu.html.twig' %}
+            <!-- FIN MENU -->
+        {% endblock %}
 
-{% block content %}
-<div ng-app="App" ng-controller="TableroCtrl">
-    
-    <!-- MENU -->
-    {% include 'FichaTecnicaAdmin/tablero_menu.html.twig' %}
-    <!-- FIN MENU -->
+        {% block sonata_admin_content %}
+            <div class="row" style="padding: 0px 10px;">            
+                <div class="col-sm-12" id="contenedor_tablero" >
 
-    <div class="container-fluid" id="contenedor_tablero" >
-
-        <div id="sala" class="row" style="padding-top: 48px;" dnd-list="indicadores">  
-            <div class="col-md-12" ng-if="abrio_sala" style="top: -45px;" id="titulo_sala">
-                <div class="page-header" style="padding:1px; margin-top:15px;  margin-bottom: -45px;">
-                    <h1 id="header_sala"><span class="glyphicon glyphicon-th"></span> <% sala.nombre %></h1>
-                </div>
-            </div>
-
-            <div class="<% item.configuracion.width ? item.configuracion.width : 'col-sm-4'%> indicadores <% item.full_screen ? 'div_full' : '' %> indicador<% $index %>" style="cursor: all-scroll; " 
-            ng-repeat="item in indicadores | orderBy:item.posicion" dnd-draggable="item" dnd-moved="indicadores.splice($index, 1); "
-             dnd-effect-allowed="move" dnd-selected="indicadores.selected = item" ng-class="{'selected': indicadores.selected === item}" id="indicador<% $index %>">
-                <div class="panel panel-default">
-                    <div class="panel-heading" >
-                        <h4><% item.nombre | uppercase %></h4>
-                        <button type="button" class="close close_indicador" aria-label="Close" ng-click="quitarIndicador(item, $index)"><span aria-hidden="true">&times;</span></button>
-                    </div>
-                    <nav class="navbar navbar-default" >
-                        <div class="container-fluid">
-                            <!-- Brand and toggle get grouped for better mobile display -->
-                            <div class="navbar-header">
-                                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-<% $index %>" aria-expanded="false">
-                                    <span class="sr-only">Toggle navigation</span>
-                                    <span class="icon-bar"></span>
-                                    <span class="icon-bar"></span>
-                                    <span class="icon-bar"></span>
-                                </button>
+                    <div id="sala" class="row" dnd-list="indicadores">  
+                        <div class="col-md-12" ng-if="abrio_sala" style="top: -45px;" id="titulo_sala">
+                            <div class="page-header" style="padding:1px; margin-top:15px;  margin-bottom: -45px;">
+                                <h1 id="header_sala"><span class="glyphicon glyphicon-th"></span> <% sala.nombre %></h1>
                             </div>
+                        </div>
+
+                        <div class="<% item.configuracion.width ? item.configuracion.width : 'col-sm-4'%> indicadores <% item.full_screen ? 'div_full' : '' %> indicador<% $index %>" style="cursor: all-scroll; " 
+                        ng-repeat="item in indicadores | orderBy:item.posicion" dnd-draggable="item" dnd-moved="indicadores.splice($index, 1); "
+                        dnd-effect-allowed="move" dnd-selected="indicadores.selected = item" ng-class="{'selected': indicadores.selected === item}" id="indicador<% $index %>">
+                            <div class="panel panel-default">
+                                <div class="panel-heading" >
+                                    <h4><% item.nombre | uppercase %></h4>
+                                    <button type="button" class="close close_indicador" aria-label="Close" ng-click="quitarIndicador(item, $index)"><span aria-hidden="true">&times;</span></button>
+                                </div>
+                                <nav class="navbar2 navbar-default" >
+                                    <div class="container-fluid">
+                                        <!-- Brand and toggle get grouped for better mobile display -->
+                                        <div class="navbar-header">
+                                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-<% $index %>" aria-expanded="false">
+                                                <span class="sr-only">Toggle navigation</span>
+                                                <span class="icon-bar"></span>
+                                                <span class="icon-bar"></span>
+                                                <span class="icon-bar"></span>
+                                            </button>
+                                        </div>
+                                        
+                                        <!-- Collect the nav links, forms, and other content for toggling -->
+                                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-<% $index %>">
+                                            <ul class="nav navbar-nav">
+                                                <li class="active"><a  title="{{ 'favoritos' | trans }}" ng-click="agregarFavorito(item)"> <i class="glyphicon glyphicon-star" style="color: <% item.es_favorito ? 'orange' : '' %>"></i> </a></li>
+                                                <li><a ng-click="indicadores[posicion].orden_x = ''; indicadores[posicion].orden_y = ''; verConfiguracion($index)" title="{{ '_configuracion_' | trans }}"> <i class="glyphicon glyphicon-cog"></i> </a></li>
+                                                <li><a ng-click="verFiltros($index)" title="{{ 'dimension_opciones' | trans }}"> <i class="glyphicon glyphicon-filter"></i> </a></li>                                    
+                                                
+                                                <li class="dropdown">
+                                                    <a ng-click="abrir1[$index] = !abrir1[$index]" class="dropdown-toggle" data-toggle="dropdown" data-id="dropdown_export_<% $index %>" role="button"  title="{{ '_exportar_' | trans }}">
+                                                        <i class="glyphicon glyphicon-export"></i> <span class="caret"></span>
+                                                    </a>
+                                                    <ul class="dropdown-menu" role="menu" style="display:<% abrir1[$index] ? 'block' : 'none' %>" id="dropdown_export_<% $index %>">                                            
+                                                        <li><a ng-click="abrir1[$index] = false; exportarImagen($index, 'SVG');"><i class="glyphicon glyphicon-picture"></i> {{ '_exportar_svg_' | trans }}</a></li>
+                                                        <li><a ng-click="abrir1[$index] = false; exportarImagen($index, 'PNG');"><i class="glyphicon glyphicon-picture"></i> {{ '_exportar_png_' | trans }}</a></li>                                        
+                                                    </ul>
+                                                </li>
+
+                                                <li class="dropdown">
+                                                    <a ng-click="abrir2[$index] = !abrir2[$index]" class="dropdown-toggle" data-toggle="dropdown" data-id="dropdown_ficha_<% $index %>" role="button"  title="{{ 'opciones' | trans }}">
+                                                        <i class="glyphicon glyphicon-info-sign"></i> <span class="caret"></span>
+                                                    </a>
+                                                    <ul class="dropdown-menu" style="display:<% abrir2[$index] ? 'block' : 'none' %>" role="menu" id="dropdown_ficha_<% $index %>">
+                                                        <li><a ng-click="abrir2[$index] = false; verFichaIndicador($index)"><i class="glyphicon glyphicon-folder-open"></i> {{ 'javascript.ver_ficha_tecnica' | trans }}</a></li>               
+                                                        <li><a ng-click="abrir2[$index] = false; verAlertasIndicador($index);" ng-if="item.informacion.rangos.length > 0"><i class="glyphicon glyphicon-exclamation-sign"></i> {{ 'indicador_alertas' | trans }}</a></li>                                        
+                                                        <li><a ng-click="abrir2[$index] = false; verTablaDatosIndicador($index);"><i class="glyphicon glyphicon-list-alt"></i> {{ 'javascript.tabla_datos' | trans }}</a></li>
+                                                        <li><a ng-click="abrir2[$index] = false; verSQLIndicador($index);"><i class="glyphicon glyphicon-eye-open"></i> {{ 'javascript.ver_sql' | trans }}</a></li>
+                                                    </ul>
+                                                </li>
+
+                                                <li><a title="{{ '_refresh_' | trans }}" ng-click="item.filtros = []; item.dimension = 0; agregarIndicadorDimension(0, $index)"> <i class="glyphicon glyphicon-refresh"></i> </a></li>
+                                                <li><a title="{{ '_full_screen_' | trans }}" ng-click="actualizarsGrafica($index);"> <i class="glyphicon glyphicon-<% item.full_screen ? 'resize-small' : 'resize-full' %>"></i> </a></li>
+
+                                                <li>
+                                                    <a title="{{ item.tendencia ? '_ver_tendencia_' : '_ver_grafica_' | trans }}" ng-click="item.tendencia = !item.tendencia; agregarIndicadorDimension(indicadores[$index].dimension, $index)"> 
+                                                        <img src="{{ app.request.schemeAndHttpHost ~ asset('images/chart-line-solid.svg') }}" style="width: 17px;" ng-if="!item.tendencia"/>
+                                                        <i class="glyphicon glyphicon-stats" ng-if="item.tendencia"></i>  
+                                                    </a>
+                                                </li>
+                                                
+                                            </ul>
+                                        </div><!-- /.navbar-collapse -->
+                                    </div><!-- /.container-fluid -->
+                                </nav>
+                                <a title="" style="display:none" id="update<% $index %>"></a>
+                                <ol class="breadcrumb tablero_breadcrumb " ng-if="item.filtros.length > 0">
+                                    <li class="<% $index == item.dimension - 1 ? 'active' : '' %>" ng-repeat="link in item.filtros" >
+                                        <span ng-if="$index == item.dimension - 1"><% link.codigo | uppercase %>: <% link.valor %>  </span>
+                                        <a  ng-click="breadcum($index, item, link)" ng-if="$index != item.dimension - 1" style="cursor:pointer"><% link.codigo | uppercase %>: <% link.valor %></a>
+                                    </li>
+                                </ol>
+                                <div class="panel-body">
+
+                                    <div class="container-fluid" style="<% item.full_screen ? 'overflow: auto; max-height:78vh' : '' %>">
+                                        <div class="alert alert-warning" role="alert" ng-if="item.error == 'Warning'">{{ '_indicador_warning' | trans }}</div>
+                                        <div class="alert alert-danger" role="alert" ng-if="item.error == 'Error'">{{ '_indicador_error' | trans }}</div>
+                                        <div class="alert alert-success" role="alert" ng-if="item.error == 'Success'">{{ '_indicador_dimension_fin' | trans }}</div>
+                                        <div class="alert alert-info" role="alert" ng-if="(item.radial || item.termometro) && !item.informacion.meta">{{ '_grafico_aprecia_mejor_meta' | trans }}</div>
+
+                                        <!-- para graficos de pastel, barra y lineas -->
+                                        <nvd3 options="item.options" data="item.grafica" id="svg<% $index %>" ng-if="!item.radial && !item.termometro"></nvd3>
+                                        
+                                        <!-- para el grafico de gauge lineal -->
+                                        <div class="row" ng-if="item.termometro">
+                                            <div ng-repeat="val in item.grafica" class="col-sm-12 relative gauge" style="cursor:pointer" ng-click="gaugeDimension(item.index, val)">
+                                                <nvd3 options="item.options" data="val" id="svg<% $index %>" ></nvd3>
+                                            </div>
+                                        </div>
+
+                                        <!-- para el grafico de gauge -->
+                                        <div class="row" ng-if="item.radial">
+                                            <div ng-repeat="val in item.grafica" class="col-sm-<% item.grafica.length == 1 ? 12 : 6 %> relative gauge" style="cursor:pointer" ng-click="gaugeDimension(item.index, val)">
+                                                <div ng-radial-gauge ranges="val.ranges"
+                                                    value="val.value" value-unit="val.unit" precision="val.precision" 
+                                                    lower-limit="val.lowerLimit" upper-limit="val.upperLimit" id="svg<% $index %>">
+                                                </div>
+                                                <div class="relative" align="center">
+                                                    <% val.label %>
+                                                </div>
+                                            </div>
+                                        </div>
                             
-                            <!-- Collect the nav links, forms, and other content for toggling -->
-                            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-<% $index %>">
-                                <ul class="nav navbar-nav">
-                                    <li class="active"><a  title="{{ 'favoritos' | trans }}" ng-click="agregarFavorito(item)"> <i class="glyphicon glyphicon-star" style="color: <% item.es_favorito ? 'orange' : '' %>"></i> </a></li>
-                                    <li><a ng-click="indicadores[posicion].orden_x = ''; indicadores[posicion].orden_y = ''; verConfiguracion($index)" title="{{ '_configuracion_' | trans }}"> <i class="glyphicon glyphicon-cog"></i> </a></li>
-                                    <li><a ng-click="verFiltros($index)" title="{{ 'dimension_opciones' | trans }}"> <i class="glyphicon glyphicon-filter"></i> </a></li>                                    
+                                    </div>
+                                    <div class="container-fluid div_carga"  align="center" ng-if="item.cargando">
+                                        <button type="button" class="close close_indicador" style="margin-top:9px" aria-label="Close" ng-click="item.cargando = false"><span aria-hidden="true">&times;</span></button>
+                                        <div align="center">
+                                            <h4>{{ '_cargando_indicador_' | trans }} </h4>
+                                            <img src="{{ app.request.schemeAndHttpHost ~ asset('images/ajax-loader.gif') }}" /> 
+                                        </div>                             
+                                    </div>
                                     
-                                    <li class="dropdown">
-                                        <a ng-click="abrir1[$index] = !abrir1[$index]" class="dropdown-toggle" data-toggle="dropdown" data-id="dropdown_export_<% $index %>" role="button"  title="{{ '_exportar_' | trans }}">
-                                            <i class="glyphicon glyphicon-export"></i> <span class="caret"></span>
-                                        </a>
-                                        <ul class="dropdown-menu" role="menu" style="display:<% abrir1[$index] ? 'block' : 'none' %>" id="dropdown_export_<% $index %>">                                            
-                                            <li><a ng-click="abrir1[$index] = false; exportarImagen($index, 'SVG');"><i class="glyphicon glyphicon-picture"></i> {{ '_exportar_svg_' | trans }}</a></li>
-                                            <li><a ng-click="abrir1[$index] = false; exportarImagen($index, 'PNG');"><i class="glyphicon glyphicon-picture"></i> {{ '_exportar_png_' | trans }}</a></li>                                        
-                                        </ul>
-                                    </li>
-
-                                    <li class="dropdown">
-                                        <a ng-click="abrir2[$index] = !abrir2[$index]" class="dropdown-toggle" data-toggle="dropdown" data-id="dropdown_ficha_<% $index %>" role="button"  title="{{ 'opciones' | trans }}">
-                                            <i class="glyphicon glyphicon-info-sign"></i> <span class="caret"></span>
-                                        </a>
-                                        <ul class="dropdown-menu" style="display:<% abrir2[$index] ? 'block' : 'none' %>" role="menu" id="dropdown_ficha_<% $index %>">
-                                            <li><a ng-click="abrir2[$index] = false; verFichaIndicador($index)"><i class="glyphicon glyphicon-folder-open"></i> {{ 'javascript.ver_ficha_tecnica' | trans }}</a></li>               
-                                            <li><a ng-click="abrir2[$index] = false; verAlertasIndicador($index);" ng-if="item.informacion.rangos.length > 0"><i class="glyphicon glyphicon-exclamation-sign"></i> {{ 'indicador_alertas' | trans }}</a></li>                                        
-                                            <li><a ng-click="abrir2[$index] = false; verTablaDatosIndicador($index);"><i class="glyphicon glyphicon-list-alt"></i> {{ 'javascript.tabla_datos' | trans }}</a></li>
-                                            <li><a ng-click="abrir2[$index] = false; verSQLIndicador($index);"><i class="glyphicon glyphicon-eye-open"></i> {{ 'javascript.ver_sql' | trans }}</a></li>
-                                        </ul>
-                                    </li>
-
-                                    <li><a title="{{ '_refresh_' | trans }}" ng-click="item.filtros = []; item.dimension = 0; agregarIndicadorDimension(0, $index)"> <i class="glyphicon glyphicon-refresh"></i> </a></li>
-                                    <li><a title="{{ '_full_screen_' | trans }}" ng-click="actualizarsGrafica($index);"> <i class="glyphicon glyphicon-<% item.full_screen ? 'resize-small' : 'resize-full' %>"></i> </a></li>
-
-                                    <li>
-                                        <a title="{{ item.tendencia ? '_ver_tendencia_' : '_ver_grafica_' | trans }}" ng-click="item.tendencia = !item.tendencia; agregarIndicadorDimension(indicadores[$index].dimension, $index)"> 
-                                            <img src="{{ app.request.schemeAndHttpHost ~ asset('images/chart-line-solid.svg') }}" style="width: 17px;" ng-if="!item.tendencia"/>
-                                            <i class="glyphicon glyphicon-stats" ng-if="item.tendencia"></i>  
-                                        </a>
-                                    </li>
-                                    
-                                </ul>
-                            </div><!-- /.navbar-collapse -->
-                        </div><!-- /.container-fluid -->
-                    </nav>
-                    <a title="" style="display:none" id="update<% $index %>"></a>
-                    <ol class="breadcrumb tablero_breadcrumb " ng-if="item.filtros.length > 0">
-                        <li class="<% $index == item.dimension - 1 ? 'active' : '' %>" ng-repeat="link in item.filtros" >
-                            <span ng-if="$index == item.dimension - 1"><% link.codigo | uppercase %>: <% link.valor %>  </span>
-                            <a  ng-click="breadcum($index, item, link)" ng-if="$index != item.dimension - 1" style="cursor:pointer"><% link.codigo | uppercase %>: <% link.valor %></a>
-                        </li>
-                    </ol>
-                    <div class="panel-body">
-
-                        <div class="container-fluid">
-                            <div class="alert alert-warning" role="alert" ng-if="item.error == 'Warning'">{{ '_indicador_warning' | trans }}</div>
-                            <div class="alert alert-danger" role="alert" ng-if="item.error == 'Error'">{{ '_indicador_error' | trans }}</div>
-                            <div class="alert alert-success" role="alert" ng-if="item.error == 'Success'">{{ '_indicador_dimension_fin' | trans }}</div>
-
-                            <nvd3 options="item.options" data="item.grafica" id="svg<% $index %>"></nvd3>
-                
+                                </div>
+                                <div class="panel-footer">
+                                    <span class="pull-right" >
+                                        {{ '_meta_' | trans }}: <% item.informacion.meta %>
+                                    </span>
+                                    &nbsp;
+                                    <span class="pull-left"> 
+                                        [<% item.informacion.ultima_lectura %>] 
+                                    </span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="container-fluid div_carga"  align="center" ng-if="item.cargando">
-                            <button type="button" class="close close_indicador" style="margin-top:9px" aria-label="Close" ng-click="item.cargando = false"><span aria-hidden="true">&times;</span></button>
-                            <div align="center">
-                                <h4>{{ '_cargando_indicador_' | trans }} </h4>
-                                <img src="{{ app.request.schemeAndHttpHost ~ asset('images/ajax-loader.gif') }}" /> 
-                            </div>                             
-                        </div>
-                        
-                    </div>
-                    <div class="panel-footer">
-                        <span class="pull-right" >
-                            {{ '_meta_' | trans }}: <% item.informacion.meta %>
-                        </span>
-                        &nbsp;
-                        <span class="pull-left"> 
-                            [<% item.informacion.ultima_lectura %>] 
-                        </span>
                     </div>
                 </div>
             </div>
-        </div>
+            <div>
+                <form id="htmlconstruido" style="display:none" target="_blank" method="post">
+                    <input type="text" id="htmlhtml" name="html">
+                    <input type="text" id="htmlheader" name="header">
+                    <input type="text" id="htmlfooter" name="footer">
+                    <input type="text" id="htmlnombre" name="nombre">
+                </form>
+
+                <div id="paraimprimir" style="display:none"></div>
+
+
+                <!-- MODAL INDICADOR -->
+                {% include 'FichaTecnicaAdmin/tablero_indicadores.html.twig' %}
+                <!-- FIN MODAL INDICADOR -->
+
+                <!-- MODAL SALAS -->
+                {% include 'FichaTecnicaAdmin/tablero_salas.html.twig' %}
+                <!-- FIN MODAL SALAS -->
+
+                <!-- MODAL FICHA -->
+                {% include 'FichaTecnicaAdmin/tablero_ficha.html.twig' %}
+                <!-- FIN MODAL FICHA -->
+
+                <!-- MODAL SQL -->
+                {% include 'FichaTecnicaAdmin/tablero_sql.html.twig' %}
+                <!-- FIN MODAL SQL -->
+
+                <!-- MODAL TABLA DATOS -->
+                {% include 'FichaTecnicaAdmin/tablero_tabla_datos.html.twig' %}
+                <!-- FIN MODAL TABLA DATOS -->
+
+                <!-- MODAL ALERTAS -->
+                {% include 'FichaTecnicaAdmin/tablero_alertas.html.twig' %}
+                <!-- FIN MODAL ALERTAS -->
+
+                <!-- MODAL FILTROS -->
+                {% include 'FichaTecnicaAdmin/tablero_filtros.html.twig' %}
+                <!-- FIN MODAL FILTROS -->
+
+                <!-- MODAL CONFIGURACION -->
+                {% include 'FichaTecnicaAdmin/tablero_configuracion.html.twig' %}
+                <!-- FIN MODAL CONFIGURACION -->
+
+
+                <!-- MODAL GUARDAR SALA -->
+                {% include 'FichaTecnicaAdmin/tablero_sala_guardar.html.twig' %}
+                <!-- FIN MODAL GUARDAR SALA -->
+
+                <!-- MODAL ACCION SALA -->
+                {% include 'FichaTecnicaAdmin/tablero_sala_accion.html.twig' %}
+                <!-- FIN MODAL ACCION SALA -->
+
+                <!-- MODAL COMPARTIR SALA -->
+                {% include 'FichaTecnicaAdmin/tablero_sala_compartir.html.twig' %}
+                <!-- FIN MODAL COMPARTIR SALA -->
+
+                <!-- MODAL EXPORTAR DATOS SALA -->
+                {% include 'FichaTecnicaAdmin/tablero_exportar_datos.html.twig' %}
+                <!-- FIN MODAL EXPORTAR DATOS SALA -->
+            </div>
+        {% endblock %}
     </div>
-
-    <form id="htmlconstruido" style="display:none" target="_blank" method="post">
-        <input type="text" id="htmlhtml" name="html">
-        <input type="text" id="htmlheader" name="header">
-        <input type="text" id="htmlfooter" name="footer">
-        <input type="text" id="htmlnombre" name="nombre">
-    </form>
-    <div id="paraimprimir" style="display:none"></div>
-
-
-    <!-- MODAL INDICADOR -->
-    {% include 'FichaTecnicaAdmin/tablero_indicadores.html.twig' %}
-    <!-- FIN MODAL INDICADOR -->
-
-    <!-- MODAL SALAS -->
-    {% include 'FichaTecnicaAdmin/tablero_salas.html.twig' %}
-    <!-- FIN MODAL SALAS -->
-
-    <!-- MODAL FICHA -->
-    {% include 'FichaTecnicaAdmin/tablero_ficha.html.twig' %}
-    <!-- FIN MODAL FICHA -->
-
-    <!-- MODAL SQL -->
-    {% include 'FichaTecnicaAdmin/tablero_sql.html.twig' %}
-    <!-- FIN MODAL SQL -->
-
-    <!-- MODAL TABLA DATOS -->
-    {% include 'FichaTecnicaAdmin/tablero_tabla_datos.html.twig' %}
-    <!-- FIN MODAL TABLA DATOS -->
-
-    <!-- MODAL ALERTAS -->
-    {% include 'FichaTecnicaAdmin/tablero_alertas.html.twig' %}
-    <!-- FIN MODAL ALERTAS -->
-
-    <!-- MODAL FILTROS -->
-    {% include 'FichaTecnicaAdmin/tablero_filtros.html.twig' %}
-    <!-- FIN MODAL FILTROS -->
-
-    <!-- MODAL CONFIGURACION -->
-    {% include 'FichaTecnicaAdmin/tablero_configuracion.html.twig' %}
-    <!-- FIN MODAL CONFIGURACION -->
-
-
-    <!-- MODAL GUARDAR SALA -->
-    {% include 'FichaTecnicaAdmin/tablero_sala_guardar.html.twig' %}
-    <!-- FIN MODAL GUARDAR SALA -->
-
-    <!-- MODAL ACCION SALA -->
-    {% include 'FichaTecnicaAdmin/tablero_sala_accion.html.twig' %}
-    <!-- FIN MODAL ACCION SALA -->
-
-    <!-- MODAL COMPARTIR SALA -->
-    {% include 'FichaTecnicaAdmin/tablero_sala_compartir.html.twig' %}
-    <!-- FIN MODAL COMPARTIR SALA -->
-
-    <!-- MODAL EXPORTAR DATOS SALA -->
-    {% include 'FichaTecnicaAdmin/tablero_exportar_datos.html.twig' %}
-    <!-- FIN MODAL EXPORTAR DATOS SALA -->
-    
-</div>
 {% endblock %}

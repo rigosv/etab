@@ -274,6 +274,9 @@ App.controller("TableroCtrl", function(
           es_favorito: false,
           dimensiones: [],
           dimension: 0,
+          radial: false,
+          termometro: false,
+          mapa: false,
           posicion: element.posicion,
           sql: "",
           ficha: "",
@@ -299,7 +302,7 @@ App.controller("TableroCtrl", function(
         if (element.orden != "" && element.orden != null) {
           $scope.indicadores[index].configuracion = JSON.parse(element.orden);
         }
-
+        $scope.indicadores[index].index = index;
         $scope.indicadores[index].filtros =
           element.filtro != "" ? JSON.parse(element.filtro) : "";
         $scope.indicadores[index].otros_filtros = {
@@ -311,7 +314,7 @@ App.controller("TableroCtrl", function(
               : []
         };
         
-        $scope.opcionesGraficas(index, "discreteBarChart", element.dimension, "#", $scope.indicadores[index].configuracion.height);
+        $scope.opcionesGraficas(index, $scope.indicadores[index].configuracion.tipo_grafico, element.dimension, "#", $scope.indicadores[index].configuracion.height);
 
         var json = {
           filtros: $scope.indicadores[index].filtros,
@@ -487,7 +490,11 @@ App.controller("TableroCtrl", function(
         dimensiones: campos_indicador,
         dimension: 0,
         posicion: 0,
+        index: 0,
         tendencia: false,
+        radial: false,
+        termometro: false,
+        mapa: false,
         sql: "",
         ficha: "",
         full_screen: false,
@@ -508,9 +515,10 @@ App.controller("TableroCtrl", function(
       });
       $scope.tablero_indicador[item.id]++;
       var index = $scope.indicadores.length - 1;
+      $scope.indicadores[index].posicion = index;
       $scope.indicadores[index].posicion = index + 1;
       
-      $scope.opcionesGraficas(index, "discreteBarChart", $scope.indicadores[index].dimensiones[0], item.unidad_medida, "280");
+      $scope.opcionesGraficas(index, $scope.indicadores[index].configuracion.tipo_grafico, $scope.indicadores[index].dimensiones[0], item.unidad_medida, "280");
         
       var json = { filtros: "", ver_sql: false, tendencia: false };
       Crud.crear(
@@ -694,9 +702,14 @@ App.controller("TableroCtrl", function(
       $scope.indicadores[index].data = data.data;
 
       var grafica = [];
-      var tipo = $scope.indicadores[index].configuracion.tipo_grafico.toUpperCase();
+      var tipo = 'DISCRETEBARCHART';
+      if ($scope.indicadores[index].configuracion.tipo_grafico)
+        tipo = $scope.indicadores[index].configuracion.tipo_grafico.toUpperCase();
       if (!$scope.indicadores[index].tendencia){
         // validar el tipo de grafica para asociar el dato 
+        $scope.indicadores[index].radial = false;
+        $scope.indicadores[index].termometro = false;
+        $scope.indicadores[index].mapa = false;
         if (tipo == 'LINECHART' || tipo == 'LINEA' || tipo == 'LINEAS'){
           $scope.indicadores[index].tendencia = true;
           $scope.agregarIndicadorDimension(dimension, index);
@@ -738,7 +751,84 @@ App.controller("TableroCtrl", function(
               dimension: dimension
             });
           });                  
-        }
+        } else if(tipo == 'GAUGE' || tipo == 'VELOCIMETRO' || tipo == 'ODOMETRO'){          
+          $scope.indicadores[index].radial = true;
+          
+          angular.forEach(data.data, function (val, key) {
+            color = "";
+            var rangos = [];
+            angular.forEach(data.informacion.rangos, function (v1, k1) {
+              if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
+                color = v1.color;
+              }
+              rangos.push({ "min": v1.limite_inf, "max": v1.limite_sup, "color": color })
+            });
+
+            var upperLimit = 0;
+            if (data.informacion.meta) {
+              if (parseFloat(val.measure) > parseFloat(data.informacion.meta)) {
+                rangos.push({ "min": parseFloat(data.informacion.meta), "max": parseFloat(val.measure), "color": "#2196f3" });
+                upperLimit = parseFloat(val.measure);
+              } else {
+                upperLimit = parseFloat(data.informacion.meta);
+              }
+            } else {
+              upperLimit = parseFloat(val.measure);
+            }
+            if (data.informacion.rangos.length <= 0) {
+              rangos = [
+                { "min": 0, "max": (upperLimit * 0.40), "color": "#C50200" },
+                { "min": (upperLimit * 0.40) + .1, "max": (upperLimit * 0.60), "color": "#FF7700" },
+                { "min": (upperLimit * 0.60) + .1, "max": (upperLimit * 0.80), "color": "#FDC702" },
+                { "min": (upperLimit * 0.80) + .1, "max": upperLimit, "color": "#8BC556" }
+              ];
+            }
+            grafica.push({
+              index: index,
+              dimension: dimension,
+              upperLimit: upperLimit,
+              lowerLimit: 0,
+              unit: data.informacion.unidad_medida,
+              precision: 0,
+              label: val.category,
+              ranges: rangos,
+              value: parseFloat(val.measure)
+            });
+          });
+        } else if (tipo == "LINEARGAUGE" || tipo == "TERMOMETRO") {
+          $scope.indicadores[index].termometro = true;
+          var meta = data.informacion.meta ? parseFloat(data.informacion.meta) : 100;
+          angular.forEach(data.data, function (val, key) {
+            color = "";
+            var rangos = [];
+
+            angular.forEach(data.informacion.rangos, function (v1, k1) {
+              if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
+                color = v1.color;
+              }
+              rangos.push(v1.limite_sup);
+            });
+
+            if (data.informacion.rangos.length <= 0) {
+              var upperLimit = parseFloat(val.measure);
+              rangos = [(upperLimit * 0.40), (upperLimit * 0.60), (upperLimit * 0.80), (upperLimit * 0.80)];
+            }
+
+            grafica.push({
+              index: index,
+              dimension: dimension,
+              title: val.category,
+              label: val.category,
+              subtitle: data.informacion.unidad_medida,
+              ranges: rangos,
+              measures: [parseFloat(val.measure)],
+              markers: [meta],
+              color: color
+            });
+          });
+        } else if (tipo == 'MAPA' || tipo == 'GEOLOCATION') {
+          $scope.indicadores[index].mapa = true;
+        }        
         // fin asociacion
         $scope.indicadores[index].grafica = grafica;
 
@@ -768,10 +858,15 @@ App.controller("TableroCtrl", function(
   $scope.actualizarsGrafica = function(index, hacer = true) {
     if (hacer)
       $scope.indicadores[index].full_screen = !$scope.indicadores[index].full_screen;
-    var tipo = $scope.indicadores[index].configuracion.tipo_grafico.toUpperCase();
+    var tipo = 'DISCRETEBARCHART';
+    if ($scope.indicadores[index].configuracion.tipo_grafico)
+      tipo = $scope.indicadores[index].configuracion.tipo_grafico.toUpperCase();
     var grafica = [];
     var dimension = $scope.indicadores[index].dimension;
     // validar el tipo de grafica para asociar el dato 
+    $scope.indicadores[index].radial = false;
+    $scope.indicadores[index].termometro = false;
+    $scope.indicadores[index].mapa = false;
     if ($scope.indicadores[index].tendencia && (tipo != 'LINECHART' && tipo != 'LINEA' && tipo != 'LINEAS')){
       $scope.indicadores[index].tendencia = false;
       $scope.agregarIndicadorDimension(dimension, index);
@@ -817,6 +912,84 @@ App.controller("TableroCtrl", function(
           dimension: dimension
         });        
       });
+    } else if (tipo == 'GAUGE' || tipo == 'VELOCIMETRO' || tipo == 'ODOMETRO') {
+      $scope.indicadores[index].radial = true;
+      var data = $scope.indicadores[index];
+      angular.forEach(data.data, function (val, key) {
+        color = "";
+        var rangos = [];
+        angular.forEach(data.informacion.rangos, function (v1, k1) {
+          if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
+            color = v1.color;
+          }
+          rangos.push({ "min": v1.limite_inf, "max": v1.limite_sup, "color": color })
+        });
+        
+        var upperLimit = 0;
+        if(data.informacion.meta){
+          if (parseFloat(val.measure) > parseFloat(data.informacion.meta)) {
+            rangos.push({ "min": parseFloat(data.informacion.meta), "max": parseFloat(val.measure), "color": "#2196f3" });
+            upperLimit = parseFloat(val.measure);
+          } else {
+            upperLimit = parseFloat(data.informacion.meta);
+          }
+        }else{
+          upperLimit = parseFloat(val.measure);
+        }
+        if (data.informacion.rangos.length <= 0) {
+          rangos = [
+            { "min": 0,                        "max": (upperLimit * 0.40), "color": "#C50200" }, 
+            { "min": (upperLimit * 0.40) + .1, "max": (upperLimit * 0.60), "color": "#FF7700" }, 
+            { "min": (upperLimit * 0.60) + .1, "max": (upperLimit * 0.80), "color": "#FDC702" }, 
+            { "min": (upperLimit * 0.80) + .1, "max": upperLimit,          "color": "#8BC556" }
+          ];
+        }
+        grafica.push({
+          index: index,
+          dimension: dimension,
+          upperLimit: upperLimit,
+          lowerLimit: 0,
+          unit: data.informacion.unidad_medida,
+          precision: 0,
+          label: val.category,
+          ranges: rangos,
+          value: parseFloat(val.measure)
+        });
+      });
+    } else if (tipo == "LINEARGAUGE" || tipo == "TERMOMETRO") {
+      $scope.indicadores[index].termometro = true;      
+      var data = $scope.indicadores[index];
+      var meta = data.informacion.meta ? parseFloat(data.informacion.meta) : 100;
+      angular.forEach(data.data, function (val, key) {
+        color = "";
+        var rangos = [];
+        
+        angular.forEach(data.informacion.rangos, function (v1, k1) {
+          if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
+            color = v1.color;
+          }
+          rangos.push(v1.limite_sup);
+        });
+
+        if (data.informacion.rangos.length <= 0) {
+          var upperLimit = parseFloat(val.measure);
+          rangos = [(upperLimit * 0.40),(upperLimit * 0.60), (upperLimit * 0.80), (upperLimit * 0.80)];
+        }
+
+        grafica.push({
+          index: index,
+          dimension: dimension,
+          title: val.category,
+          label: val.category,
+          subtitle: data.informacion.unidad_medida,
+          ranges: rangos,
+          measures: [parseFloat(val.measure)],
+          markers: [meta],
+          color: color
+        });
+      });
+    } else if (tipo == 'MAPA' || tipo == 'GEOLOCATION') {
+      $scope.indicadores[index].mapa = true;
     }
     // fin asociacion    
     var tamano = $scope.indicadores[index].configuracion.height;
@@ -890,8 +1063,13 @@ App.controller("TableroCtrl", function(
     var dimension = $scope.indicadores[index].dimension;
     $scope.indicadores[index].data = data;
     var grafica = [];
-    var tipo = $scope.indicadores[index].configuracion.tipo_grafico.toUpperCase();
+    var tipo = 'DISCRETEBARCHART';
+    if ($scope.indicadores[index].configuracion.tipo_grafico)
+      tipo = $scope.indicadores[index].configuracion.tipo_grafico.toUpperCase();
     // validar el tipo de grafica para asociar el dato 
+    $scope.indicadores[index].radial = false;
+    $scope.indicadores[index].termometro = false;
+    $scope.indicadores[index].mapa = false;
     if (tipo == 'LINECHART' || tipo == 'LINEA' || tipo == 'LINEAS'){
       $scope.indicadores[index].tendencia = true;
       $scope.agregarIndicadorDimension(dimension, index);
@@ -935,6 +1113,84 @@ App.controller("TableroCtrl", function(
           dimension: dimension
         });        
       });     
+    } else if (tipo == 'GAUGE' || tipo == 'VELOCIMETRO' || tipo == 'ODOMETRO') {
+      $scope.indicadores[index].radial = true;
+      var data = $scope.indicadores[index];
+      angular.forEach(data.data, function (val, key) {
+        color = "";
+        var rangos = [];
+        angular.forEach(data.informacion.rangos, function (v1, k1) {
+          if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
+            color = v1.color;
+          }
+          rangos.push({ "min": v1.limite_inf, "max": v1.limite_sup, "color": color })
+        });
+
+        var upperLimit = 0;
+        if (data.informacion.meta) {
+          if (parseFloat(val.measure) > parseFloat(data.informacion.meta)) {
+            rangos.push({ "min": parseFloat(data.informacion.meta), "max": parseFloat(val.measure), "color": "#2196f3" });
+            upperLimit = parseFloat(val.measure);
+          } else {
+            upperLimit = parseFloat(data.informacion.meta);
+          }
+        } else {
+          upperLimit = parseFloat(val.measure);
+        }
+        if (data.informacion.rangos.length <= 0) {
+          rangos = [
+            { "min": 0, "max": (upperLimit * 0.40), "color": "#C50200" },
+            { "min": (upperLimit * 0.40) + .1, "max": (upperLimit * 0.60), "color": "#FF7700" },
+            { "min": (upperLimit * 0.60) + .1, "max": (upperLimit * 0.80), "color": "#FDC702" },
+            { "min": (upperLimit * 0.80) + .1, "max": upperLimit, "color": "#8BC556" }
+          ];
+        }
+        grafica.push({
+          index: index,
+          dimension: dimension,
+          upperLimit: upperLimit,
+          lowerLimit: 0,
+          unit: data.informacion.unidad_medida,
+          precision: 0,
+          label: val.category,
+          ranges: rangos,
+          value: parseFloat(val.measure)
+        });
+      });
+    } else if (tipo == "LINEARGAUGE" || tipo == "TERMOMETRO") {
+      $scope.indicadores[index].termometro = true;
+      var data = $scope.indicadores[index];
+      var meta = data.informacion.meta ? parseFloat(data.informacion.meta) : 100;
+      angular.forEach(data.data, function (val, key) {
+        color = "";
+        var rangos = [];
+
+        angular.forEach(data.informacion.rangos, function (v1, k1) {
+          if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
+            color = v1.color;
+          }
+          rangos.push(v1.limite_sup);
+        });
+
+        if (data.informacion.rangos.length <= 0) {
+          var upperLimit = parseFloat(val.measure);
+          rangos = [(upperLimit * 0.40), (upperLimit * 0.60), (upperLimit * 0.80), (upperLimit * 0.80)];
+        }
+
+        grafica.push({
+          index: index,
+          dimension: dimension,
+          title: val.category,
+          label: val.category,
+          subtitle: data.informacion.unidad_medida,
+          ranges: rangos,
+          measures: [parseFloat(val.measure)],
+          markers: [meta],
+          color: color
+        });
+      });
+    } else if (tipo == 'MAPA' || tipo == 'GEOLOCATION'){
+      $scope.indicadores[index].mapa = true;
     }
     
     $scope.indicadores[index].grafica = grafica;
@@ -1122,7 +1378,10 @@ App.controller("TableroCtrl", function(
     if ($scope.indicadores[index].full_screen)
       tamano = $window.innerHeight / 1.28;
     var options = {};
-    tipo = tipo.toUpperCase();
+    if(tipo)
+      tipo = tipo.toUpperCase();
+    else
+      tipo = "DISCRETEBARCHART";
     if (tipo == 'PIECHART' || tipo == 'PIE' || tipo == 'PASTEL' || tipo == 'TORTA'){
       options = {
         chart: {
@@ -1209,7 +1468,17 @@ App.controller("TableroCtrl", function(
           }
         };
       }
-    } 
+    } else if (tipo == "LINEARGAUGE" || tipo == "TERMOMETRO") {
+      options = {
+        chart: {
+          type: 'bulletChart',
+          height: 120,
+          margin: { top: 20, right: 20, bottom: 50, left: 55 },          
+          showValues: true,          
+          duration: 500          
+        }
+      };
+    }
     $scope.indicadores[index].options =options
   };
 
@@ -1263,6 +1532,15 @@ App.controller("TableroCtrl", function(
         }
       }
     };
+  }
+
+  $scope.gaugeDimension = function (index, e){
+    $scope.indicadores[index].dimension++;
+    $scope.indicadores[index].filtros.push({
+      codigo: $scope.indicadores[index].dimensiones[$scope.indicadores[index].dimension - 1].trim(),
+      valor: e.label
+    });
+    $scope.agregarIndicadorDimension($scope.indicadores[index].dimension, e.index);
   }
   /**
    * @ngdoc method
