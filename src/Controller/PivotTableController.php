@@ -42,14 +42,14 @@ class PivotTableController extends AbstractController {
         }*/
 
         $MINSALCalidadBundle = ['habilitado' => false, 'estandares'=> ['pna' => [], 'hosp'=> []] ];
-        if (array_key_exists('MINSALCalidadBundle' , $this->getParameter('kernel.bundles'))
+
+        if (array_key_exists('CalidadBundle' , $this->getParameter('kernel.bundles'))
             and ( $usuario->hasRole('ROLE_SUPER_ADMIN') or $usuario->hasRole('ROLE_USER_TABLERO_CALIDAD')) ) {
 
             $MINSALCalidadBundle['habilitado'] = true;
             //Recuperar los formularios
             $MINSALCalidadBundle['estandares']['pna'] = $em->getRepository(Indicador::class)->getIndicadoresEvaluadosListaChequeoNivel('pna');
             $MINSALCalidadBundle['estandares']['hosp'] = $em->getRepository(Indicador::class)->getIndicadoresEvaluadosListaChequeoNivel('hosp');
-
         }
 
         return $this->render('PivotTable/index.html.twig', array(

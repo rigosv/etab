@@ -84,7 +84,8 @@ class MenuBuilderListener
 
             $menu['indicadores']->addChild('tabla_pivote', [
                 'label' => '_tabla_pivote_',
-                'route' => 'tablero_pivotTable'
+                //'route' => 'tablero_pivotTable',
+                'route' => 'pivotTable'
             ])/*->setExtras([
                 'icon' => '<i class="fa fa-bar-chart"></i>',
             ])*/
