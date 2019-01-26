@@ -459,6 +459,25 @@ md-content.md-default-theme, md-content {
     overflow: auto;
 }
 
-.modebar-btn--logo{
-    display: none;
+.grupo_indicadores .panel-heading {
+    background-color: #F5F5F5;
+    color: black;
+    font-size: 14pt;
+}
+
+.grupo_indicadores .panel-body{
+    overflow-y: auto;
+    max-height: 90%;
+    padding: 0px !important;
+}
+
+#calidad_datos .panel-body{
+    overflow-y: auto;
+    max-height: 500px;
+    padding: 0px !important;
+}
+
+.grupo_indicadores .list-group, #calidad_datos .list-group {
+    cursor: pointer;
+    width: 100%;
 }

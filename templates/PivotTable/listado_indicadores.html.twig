@@ -54,7 +54,7 @@
                             {{categoria.cat.descripcion}} <span class="badge" >({{categoria.indicadores|length}})</span>
                         </h4>
                     </div>
-                    <div id="collapsecat{{categoria.cat.id}}" >
+                    <div class='panel-body' id="collapsecat{{categoria.cat.id}}" >
                         <div class="list-group">
                             {% for indicador in categoria.indicadores %}
                                 <A id='{{indicador.id}}' class='indicador list-group-item'
@@ -76,7 +76,7 @@
                         {{"_no_clasificados_"|trans}} <span class="badge" id='cantidad_no_clasificados'>{{indicadores_no_clasificados|length}}</span>
                     </h4>
                 </div>
-                <div id="collapseNC" >
+                <div class='panel-body' id="collapseNC" >
                     <div class="list-group">
                         {% for indicador in indicadores_no_clasificados %}
                             <A class='indicador list-group-item' id='{{indicador.id}}'

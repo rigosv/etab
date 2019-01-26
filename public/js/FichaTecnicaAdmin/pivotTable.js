@@ -213,6 +213,20 @@ $(document).ready(function() {
             $.pivotUtilities.plotly_renderers);
         var dataClass = $.pivotUtilities.SubtotalPivotData;
 
+        var configPlotly = {
+            displayModeBar: true,
+            displaylogo: false,
+            modeBarButtonsToRemove: ['select2d', 'lasso2d', 'resetScale2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian' ],
+            responsive: true,
+            locale: 'es',
+            toImageButtonOptions: {
+                format: 'png', // one of png, svg, jpeg, webp
+                filename: 'grafico',
+                height: 500,
+                width: 700,
+                scale: 1, // Multiply title/legend/axis/canvas sizes by this factor
+            }
+        };
 
         if (esCalidad){
             $("#output").pivotUI(datos, {
@@ -225,6 +239,7 @@ $(document).ready(function() {
                     arrowCollapsed: "[+] ",
                     arrowExpanded: "[-] ",
                     collapseRowsAt: 0,
+                    plotlyConfig : configPlotly,
                     heatmap: {
                         colorScaleGenerator : function(values) {
                             var max, min;
@@ -252,7 +267,8 @@ $(document).ready(function() {
                 rendererOptions: {
                     arrowCollapsed: "[+] ",
                     arrowExpanded: "[-] ",
-                    collapseRowsAt: 0
+                    collapseRowsAt: 0,
+                    plotlyConfig : configPlotly,
                 }
             }, true, 'es');
         }
