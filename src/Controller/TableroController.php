@@ -211,12 +211,12 @@ class TableroController extends AbstractController {
                 $sql = "SELECT * FROM ficha_tecnica where id not in(select fichatecnica_id from fichatecnica_clasificaciontecnica) $where order by nombre; ";
 
             if($datos->tipo == 'busqueda')
-                $sql = "SELECT * FROM ficha_tecnica where nombre like '%".$datos->busqueda."%' $where order by nombre; ";
+                $sql = "SELECT * FROM ficha_tecnica where nombre ilike '%".$datos->busqueda."%' $where order by nombre; ";
 
             if($datos->tipo == 'favoritos'){                
                 $sql = "SELECT * FROM ficha_tecnica WHERE id in(SELECT id_indicador FROM usuario_indicadores_favoritos WHERE id_usuario =".$usuario->getId().") $where order by nombre; ";
             }
-            
+
             $statement = $conn->prepare($sql);
             $statement->execute();
             $data = $statement->fetchAll();
