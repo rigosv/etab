@@ -181,18 +181,18 @@ class TableroController extends AbstractController {
                 //Salas por usuario
                 foreach ($usuario->getGruposIndicadores() as $sala) {                    
                     foreach ($sala->getGrupoIndicadores() as $indicador) { 
-                        foreach ($usuario->getIndicadores() as $indicador) {                    
+                        //foreach ($usuario->getIndicadores() as $indicador) {
                             array_push($indicadores_permitidos, $indicador->getId());
-                        }
+                        //}
                     }
                 }
                 //Salas asignadas al grupo al que pertenece el usuario
                 foreach ($usuario->getGroups() as $grp) {
                     foreach ($grp->getSalas() as $sala) {
                         foreach ($sala->getGrupoIndicadores() as $indicador) { 
-                            foreach ($usuario->getIndicadores() as $indicador) {                    
+                            //foreach ($usuario->getIndicadores() as $indicador) {
                                 array_push($indicadores_permitidos, $indicador->getId());
-                            }
+                            //}
                         }
                     }
                 }
