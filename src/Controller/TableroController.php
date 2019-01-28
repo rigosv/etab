@@ -44,12 +44,13 @@ class TableroController extends AbstractController {
 
             // devolver todos los datos si lo requiere             
             $repository = $this->getDoctrine()->getRepository(ClasificacionUso::class);
-                    
-            $query = $repository->createQueryBuilder('p')  
-                ->orderBy('p.descripcion', 'ASC')
-                ->getQuery();
 
-            $data = $query->getResult();
+            $data = $repository->createQueryBuilder('p')
+                ->orderBy('p.descripcion', 'ASC')
+                ->getQuery()
+                ->getArrayResult();
+
+            //$data = $query->getResult();
 
             $total = count($data);
             
@@ -78,12 +79,13 @@ class TableroController extends AbstractController {
             ];    
             
         }
-        $encoders = array(new JsonEncoder());
+        /*$encoders = array(new JsonEncoder());
         $normalizers = array(new ObjectNormalizer());
 
         $serializer = new Serializer($normalizers, $encoders);
         // devolver la respuesta en json             
-        return new Response($serializer->serialize($response, "json"));
+        return new Response($serializer->serialize($response, "json"));*/
+        return new JsonResponse($response);
     }
 
     /**
