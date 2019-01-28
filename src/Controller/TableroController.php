@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 use App\AlmacenamientoDatos\AlmacenamientoProxy;
 
@@ -96,19 +97,29 @@ class TableroController extends AbstractController {
             $datos = (object) $request->query->all();           
 
             // devolver todos los datos si lo requiere    
-            $conn = $em->getConnection();
+            /*$conn = $em->getConnection();
             
-            $sql = "SELECT * FROM clasificacion_uso where id = :id order by descripcion; ";
+            $sql = "SELECT * FROM clasificacion_tecnica where clasificacionuso_id = :id order by descripcion ";
             
             $statement = $conn->prepare($sql);
             $statement->bindValue('id', $datos->id);
             $statement->execute();
-            $data = $statement->fetchAll();
+            $data = $statement->fetchAll();*/
+
+
+            $data = $em->getRepository(ClasificacionTecnica::class)
+                        ->createQueryBuilder('ct')
+                        ->where('ct.clasificacionUso = :usoId')
+                        ->orderBy('ct.descripcion','ASC')
+                        ->setParameter('usoId', $datos->id )
+                        ->getQuery()
+                        ->getArrayResult()
+                    ;
 
             $total = count($data);
             
             // ejecutar el contenido de la memoria
-            $em->flush();
+            // $em->flush();
             // validar que hay datos
             if($data){                
                 $response = [
@@ -132,12 +143,14 @@ class TableroController extends AbstractController {
             ];    
             
         }
-        $encoders = array(new JsonEncoder());
+        /*$encoders = array(new JsonEncoder());
         $normalizers = array(new ObjectNormalizer());
 
         $serializer = new Serializer($normalizers, $encoders);
         // devolver la respuesta en json             
-        return new Response($serializer->serialize($response, "json"));
+        return new Response($serializer->serialize($response, "json"));*/
+        return new JsonResponse($response);
+
     }
 
 
