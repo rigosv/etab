@@ -108,7 +108,7 @@ class FichaTecnica
     private $updatedAt;
 
     /**
-     * @var string $esAcumulado
+     * @var boolean $esAcumulado
      *
      * @ORM\Column(name="es_acumulado", type="boolean", nullable=true)
      */
