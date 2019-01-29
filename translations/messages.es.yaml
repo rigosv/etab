@@ -581,12 +581,6 @@ _ver_grafica_: 'Ver gráfica'
 _clonar_ficha_tecnica_: Clonar ficha técnica
 _regresar_: Regresar
 _guardar_ : Guardar
-<<<<<<< HEAD
-_solo_lectura_: Solo lectura
-javascript.nombre_campo: Nombre de campo
-_grafico_aprecia_mejor_meta: 'Este gráfico se aprecia mejor si se le configura una meta'
-=======
 _grafico_aprecia_mejor_meta: 'Este gráfico se aprecia mejor si se le configura una meta'
 _solo_lectura_: Solo lectura
 javascript.nombre_campo: Nombre de campo
->>>>>>> bc9b29c5f219f32e0f579c1adabc854ad7029822

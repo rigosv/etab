@@ -13,6 +13,7 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
+use App\Entity\Social;
 use App\Entity\FichaTecnica;
 use App\Entity\GrupoIndicadores;
 
@@ -358,6 +359,19 @@ class TableroSalaController extends AbstractController
                 }
             }   
         }
+
+        if($msg!="")
+        {
+            $social = new Social();
+            $ahora = new \DateTime("now");
+            
+            $social->setToken($token);
+            $social->setCreado($ahora);
+            $social->setSala($sala);
+            
+            $em->persist($social);
+            $em->flush();
+        }    
 
         $response = [
             'status' => 200,
