@@ -54,9 +54,7 @@
     *width: 180px;
 }
 
-.pvtTable {
-    width: 20%;
-}
+
 
 .checkContainer {
     width: 200px !important;
@@ -85,6 +83,8 @@ div.popover-content, div.popover-title {
     margin: 15px 0;
     padding: 39px 19px 14px;
     position: relative;
+    margin-bottom: 20px !important;
+    overflow: auto;
 }
 
 .marco-sala:after {
@@ -129,12 +129,6 @@ div.popover-content, div.popover-title {
     float: left;
     overflow-y: auto;
     border: 1px green solid;
-}
-
-.content {
-    overflow: auto;
-    padding: 0 10px;
-    min-height: 450px;
 }
 
 .calidad_datos_item {
@@ -233,9 +227,9 @@ div.popover-content, div.popover-title {
 }
 
 .pvtAxisContainer li span, .pvtFilterBox button {
-    padding: 8px;
+    padding: 5px !important;
     color: #fff;
-    background-color: #5cb85c;
+    background-color: #5cb85c !important;
     border-color: #FFF;
     font-size: 14px;
     margin-bottom: 10px;
@@ -390,38 +384,6 @@ a {
     position: relative !important;
 }
 
-::-webkit-scrollbar-button {
-    display: block;
-    height: 13px;
-    border-radius: 1px;
-    border: 1px solid rgb(212, 209, 200);
-    background-color: rgb(33, 150, 243);
-}
-
-::-webkit-scrollbar-button:hover {
-    background-color: rgb(38, 170, 56);
-}
-
-::-webkit-scrollbar-thumb {
-    background-color: #CCC;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background-color: rgb(33, 150, 243);
-}
-
-::-webkit-scrollbar-track {
-    background-color: rgba(247, 244, 244, 0.952);
-    border-radius: 2px;
-}
-
-::-webkit-scrollbar-track:hover {
-    background-color: #ebebeb;
-}
-
-::-webkit-scrollbar {
-    width: 10px;
-}
 
 md-content.md-default-theme, md-content {
     background-color: rgb(255, 255, 255) !important;
@@ -480,13 +442,42 @@ md-content.md-default-theme, md-content {
 }
 
 #output {
-    height: calc(67vh);
     margin-top: 50px;
-    overflow: auto;
+    /*height: calc(67vh);
+    overflow: auto;*/
     width: 100%;
 }
 
 .pvtCheckContainer {
     overflow: auto;
-    max-height: 55vh;
+
+}
+
+.pvtTableContainer {
+    max-height: 50vh !important;
+    max-width: 80vw !important;
+    overflow: auto;
+}
+
+.grupo_indicadores .panel-heading {
+    background-color: #F5F5F5;
+    color: black;
+    font-size: 14pt;
+}
+
+.grupo_indicadores .panel-body{
+    overflow-y: auto;
+    max-height: 90%;
+    padding: 0px !important;
+}
+
+#calidad_datos .panel-body{
+    overflow-y: auto;
+    max-height: 500px;
+    padding: 0px !important;
+}
+
+.grupo_indicadores .list-group, #calidad_datos .list-group {
+    cursor: pointer;
+    width: 100%;
 }

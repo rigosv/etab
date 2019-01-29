@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 use App\AlmacenamientoDatos\AlmacenamientoProxy;
 
@@ -41,14 +42,28 @@ class TableroController extends AbstractController {
         try{ 
             $datos = (object) $request->query->all();           
 
-            // devolver todos los datos si lo requiere             
-            $repository = $this->getDoctrine()->getRepository(ClasificacionUso::class);
-                    
-            $query = $repository->createQueryBuilder('p')  
-                ->orderBy('p.descripcion', 'ASC')
-                ->getQuery();
 
-            $data = $query->getResult();
+            if ( $this->getUser()->hasRole('ROLE_SUPER_ADMIN') ) {
+                // devolver todos los datos si lo requiere
+                $repository = $this->getDoctrine()->getRepository(ClasificacionUso::class);
+
+                $data = $repository->createQueryBuilder('p')
+                    ->orderBy('p.descripcion', 'ASC')
+                    ->getQuery()
+                    ->getArrayResult();
+            } else {
+                //Devolver las clasificaciones de uso con indicadores del usuario
+                $indicadores_permitidos = $this->getIndicadoresPermitidos();
+
+                $data = [];
+                foreach ($indicadores_permitidos as $ind ) {
+                    foreach( $ind->getClasificacionTecnica() as $ct ) {
+                        $cu = $ct->getClasificacionUso();
+                        $data[ $cu->getId() ] = ['id' => $cu->getId(), 'codigo' => $cu->getCodigo(), 'descripcion' => $cu->getDescripcion() ];
+                    }
+                }
+
+            }
 
             $total = count($data);
             
@@ -77,12 +92,8 @@ class TableroController extends AbstractController {
             ];    
             
         }
-        $encoders = array(new JsonEncoder());
-        $normalizers = array(new ObjectNormalizer());
 
-        $serializer = new Serializer($normalizers, $encoders);
-        // devolver la respuesta en json             
-        return new Response($serializer->serialize($response, "json"));
+        return new JsonResponse($response);
     }
 
     /**
@@ -93,22 +104,34 @@ class TableroController extends AbstractController {
         // iniciar el manager de doctrine
         $em = $this->getDoctrine()->getManager();
         try{ 
-            $datos = (object) $request->query->all();           
+            $datos = (object) $request->query->all();
 
-            // devolver todos los datos si lo requiere    
-            $conn = $em->getConnection();
-            
-            $sql = "SELECT * FROM clasificacion_tecnica where clasificacionuso_id = :id order by descripcion; ";
-            
-            $statement = $conn->prepare($sql);
-            $statement->bindValue('id', $datos->id);
-            $statement->execute();
-            $data = $statement->fetchAll();
+            $stm = $em->getRepository(ClasificacionTecnica::class)
+                        ->createQueryBuilder('ct')
+                        ->where('ct.clasificacionUso = :usoId')
+                        ->orderBy('ct.descripcion','ASC')
+                        ->setParameter('usoId', $datos->id )
+
+                    ;
+            if ( !$this->getUser()->hasRole('ROLE_SUPER_ADMIN') ) {
+                $indicadores_permitidos = $this->getIndicadoresPermitidos();
+                $clasificacionesPermitidas = [];
+                foreach ($indicadores_permitidos as $ind ) {
+                    foreach( $ind->getClasificacionTecnica() as $ct ) {
+                        array_push($clasificacionesPermitidas, $ct->getId() );
+                    }
+                }
+
+                $stm
+                    ->andWhere('ct.id IN (:ctPermitidas)')
+                    ->setParameter('ctPermitidas', $clasificacionesPermitidas )
+                    ;
+            }
+
+            $data = $stm->getQuery()->getArrayResult();
 
             $total = count($data);
-            
-            // ejecutar el contenido de la memoria
-            $em->flush();
+
             // validar que hay datos
             if($data){                
                 $response = [
@@ -132,12 +155,9 @@ class TableroController extends AbstractController {
             ];    
             
         }
-        $encoders = array(new JsonEncoder());
-        $normalizers = array(new ObjectNormalizer());
 
-        $serializer = new Serializer($normalizers, $encoders);
-        // devolver la respuesta en json             
-        return new Response($serializer->serialize($response, "json"));
+        return new JsonResponse($response);
+
     }
 
 
@@ -157,30 +177,11 @@ class TableroController extends AbstractController {
             $datos = (object) $request->query->all();  
             $where = '';
             if (!$usuario->hasRole('ROLE_SUPER_ADMIN')) {
-                $indicadores_permitidos = [];
+                $inds = $this->getIndicadoresPermitidos();
+                $indicadores_permitidos = array_map( function ($ind){
+                    return $ind->getId();
+                }, $inds);
 
-                //Indicadores por usuario
-                foreach ($usuario->getIndicadores() as $indicador) {                    
-                    array_push($indicadores_permitidos, $indicador->getId());
-                }
-                //Salas por usuario
-                foreach ($usuario->getGruposIndicadores() as $sala) {                    
-                    foreach ($sala->getGrupoIndicadores() as $indicador) { 
-                        foreach ($usuario->getIndicadores() as $indicador) {                    
-                            array_push($indicadores_permitidos, $indicador->getId());
-                        }
-                    }
-                }
-                //Salas asignadas al grupo al que pertenece el usuario
-                foreach ($usuario->getGroups() as $grp) {
-                    foreach ($grp->getSalas() as $sala) {
-                        foreach ($sala->getGrupoIndicadores() as $indicador) { 
-                            foreach ($usuario->getIndicadores() as $indicador) {                    
-                                array_push($indicadores_permitidos, $indicador->getId());
-                            }
-                        }
-                    }
-                }
                 if(count($indicadores_permitidos) > 0){
                     $indicadores_permitidos = implode(",", $indicadores_permitidos);
                     $where = "and id in($indicadores_permitidos)";
@@ -196,12 +197,12 @@ class TableroController extends AbstractController {
                 $sql = "SELECT * FROM ficha_tecnica where id not in(select fichatecnica_id from fichatecnica_clasificaciontecnica) $where order by nombre; ";
 
             if($datos->tipo == 'busqueda')
-                $sql = "SELECT * FROM ficha_tecnica where nombre like '%".$datos->busqueda."%' $where order by nombre; ";
+                $sql = "SELECT * FROM ficha_tecnica where nombre ilike '%".$datos->busqueda."%' $where order by nombre; ";
 
             if($datos->tipo == 'favoritos'){                
                 $sql = "SELECT * FROM ficha_tecnica WHERE id in(SELECT id_indicador FROM usuario_indicadores_favoritos WHERE id_usuario =".$usuario->getId().") $where order by nombre; ";
             }
-            
+
             $statement = $conn->prepare($sql);
             $statement->execute();
             $data = $statement->fetchAll();
@@ -264,6 +265,40 @@ class TableroController extends AbstractController {
         }        
         // devolver la respuesta en json             
         return new Response($serializer->serialize($response, "json"));
+    }
+
+    /**
+     * @return array
+     * Recupera un arreglo de indicadores a los cuales el usuario tiene permiso
+     */
+    public function getIndicadoresPermitidos() : array {
+        $usuario = $this->getUser();
+        $indicadores_permitidos = [];
+
+        //Indicadores por usuario
+        foreach ($usuario->getIndicadores() as $indicador) {
+            array_push($indicadores_permitidos, $indicador);
+        }
+        //Salas por usuario
+        foreach ($usuario->getGruposIndicadores() as $usrSala) {
+            $sala = $usrSala->getGrupoIndicadores();
+            foreach ($sala->getIndicadores() as $indicador) {
+                array_push($indicadores_permitidos, $indicador->getIndicador());
+            }
+
+        }
+        //Salas asignadas al grupo al que pertenece el usuario
+        foreach ($usuario->getGroups() as $grp) {
+            foreach ($grp->getSalas() as $sala) {
+                foreach ($sala->getIndicadores() as $indicador) {
+                    //foreach ($usuario->getIndicadores() as $indicador) {
+                    array_push($indicadores_permitidos, $indicador);
+                    //}
+                }
+            }
+        }
+
+        return $indicadores_permitidos;
     }
 
     /**

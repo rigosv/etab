@@ -126,7 +126,11 @@ class OrigenDatosAdmin extends Admin
                                 'help' => '_formato_valor_corte_help_'
                             ))
                             ->add('ventanaLimiteInferior', null, array('label' => ('_ventana_limite_inferior_'), 'required' => false))
-                            ->add('ventanaLimiteSuperior', null, array('label' => ('_ventana_limite_superior_'), 'required' => false))
+                            ->add('ventanaLimiteSuperior', null, array(
+                                'label' => '_ventana_limite_superior_',
+                                'required' => false,
+                                'help' => '<BR/><IMG src="/images/carga_incremental.png" />'
+                            ))
                         ->end()
                     ->end()
                     ->setHelps(array(
@@ -138,8 +142,8 @@ class OrigenDatosAdmin extends Admin
         
         $formMapper
             ->setHelps(array(
-                'ventanaLimiteInferior' => ('_ayuda_ventana_limite_inferior_'),
-                'ventanaLimiteSuperior' => ('_ayuda_ventana_limite_superior_')
+                'ventanaLimiteInferior' => '_ayuda_ventana_limite_inferior_',
+                //'ventanaLimiteSuperior' => ('_ayuda_ventana_limite_superior_')
             ));
         
     }
