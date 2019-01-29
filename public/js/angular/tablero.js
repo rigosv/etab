@@ -263,6 +263,7 @@ App.controller("TableroCtrl", function(
       $scope.abrio_sala = true;
       $scope.indicadores = [];
       angular.forEach(item.indicadores, function(element, key) {
+        console.log(element.tipo_grafico.codigo);
         $scope.indicadores.push({
           cargando: true,
           filtros: [],
@@ -297,6 +298,7 @@ App.controller("TableroCtrl", function(
           }
         });
       });
+      
       angular.forEach(item.indicadores, function(element, index) {
         $scope.indicadores[index].cargando = true;
         if (element.orden != "" && element.orden != null) {

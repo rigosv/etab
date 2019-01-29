@@ -98,7 +98,7 @@ class TableroController extends AbstractController {
             // devolver todos los datos si lo requiere    
             $conn = $em->getConnection();
             
-            $sql = "SELECT * FROM clasificacion_uso where id = :id order by descripcion; ";
+            $sql = "SELECT * FROM clasificacion_tecnica where clasificacionuso_id = :id order by descripcion; ";
             
             $statement = $conn->prepare($sql);
             $statement->bindValue('id', $datos->id);
