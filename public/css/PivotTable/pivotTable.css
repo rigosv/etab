@@ -481,3 +481,7 @@ md-content.md-default-theme, md-content {
     cursor: pointer;
     width: 100%;
 }
+
+.tab-pane {
+    height: 75vh;
+}
