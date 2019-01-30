@@ -1540,4 +1540,22 @@ App.controller("TableroPublicoCtrl", function(
       }
     });
   };
+
+  $scope.moverIndicador = function (index, item) {
+    if (item.index < index)
+      index--;
+    if (!angular.isUndefined(index)) {
+      setTimeout(() => {
+        var tamanio = $scope.indicadores[index].configuracion.height;
+        $scope.indicadores[index].configuracion.height = 100;
+        $scope.actualizarsGrafica(index, false);
+        setTimeout(() => {
+          $scope.indicadores[index].configuracion.height = tamanio;
+          $scope.actualizarsGrafica(index, false);
+        }, 100);
+      }, 100);
+
+    }
+    return item;
+  };
 });

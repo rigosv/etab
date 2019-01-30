@@ -262,8 +262,7 @@ App.controller("TableroCtrl", function(
       $("#modalSalas").modal("hide");
       $scope.abrio_sala = true;
       $scope.indicadores = [];
-      angular.forEach(item.indicadores, function(element, key) {
-        console.log(element.tipo_grafico.codigo);
+      angular.forEach(item.indicadores, function(element, key) {        
         $scope.indicadores.push({
           cargando: true,
           filtros: [],
@@ -287,7 +286,7 @@ App.controller("TableroCtrl", function(
             height: "280",
             orden_x: "",
             orden_y: "",
-            tipo_grafico: element.tipo_grafico.codigo,
+            tipo_grafico: element.tipo_grafico,
             maximo: "",
             maximo_manual: ""
           },
@@ -2032,5 +2031,23 @@ App.controller("TableroCtrl", function(
 
   $scope.cambiarPermanencia = function(){
     $scope.compartir.es_permanente = !$scope.compartir.es_permanente;
+  };
+
+  $scope.moverIndicador = function (index, item) { 
+    if(item.index < index)
+      index--;
+    if (!angular.isUndefined(index)) {      
+      setTimeout(() => {       
+        var tamanio = $scope.indicadores[index].configuracion.height;        
+        $scope.indicadores[index].configuracion.height = 100;
+        $scope.actualizarsGrafica(index, false);
+        setTimeout(() => {
+          $scope.indicadores[index].configuracion.height = tamanio;
+          $scope.actualizarsGrafica(index, false);
+        }, 100);  
+      }, 100);  
+        
+    }
+    return item;
   };
 });

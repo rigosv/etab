@@ -1,7 +1,7 @@
 #app_config.yaml
 parameters:
     locale: 'es'
-    app.theme : 'default'
+    app.theme : 'MINSAL_ESA'
     app.logo_correo_archivo: 'logo_salud.png'
     app.from_correo: 'default@correo.com'
     app.upload_directory: '%kernel.project_dir%/public/uploads'

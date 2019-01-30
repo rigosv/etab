@@ -83,7 +83,7 @@
             <div class="row" style="padding: 0px 10px;">            
                 <div class="col-sm-12" id="contenedor_tablero" >
 
-                    <div id="sala" class="row" dnd-list="indicadores">  
+                    <div id="sala" class="row" dnd-list="indicadores" dnd-drop="moverIndicador(index, item)">  
                         <div class="col-md-12" ng-if="abrio_sala" style="top: -45px;" id="titulo_sala">
                             <div class="page-header" style="padding:1px; margin-top:15px;  margin-bottom: -45px;">
                                 <h1 id="header_sala"><span class="glyphicon glyphicon-th"></span> <% sala.nombre %></h1>
@@ -91,7 +91,7 @@
                         </div>
 
                         <div class="<% item.configuracion.width ? item.configuracion.width : 'col-sm-4'%> indicadores <% item.full_screen ? 'div_full' : '' %> indicador<% $index %>" style="cursor: all-scroll; " 
-                        ng-repeat="item in indicadores | orderBy:item.posicion" dnd-draggable="item" dnd-moved="indicadores.splice($index, 1); "
+                        ng-repeat="item in indicadores | orderBy:item.posicion" dnd-draggable="item" dnd-moved="indicadores.splice($index, 1)" 
                         dnd-effect-allowed="move" dnd-selected="indicadores.selected = item" ng-class="{'selected': indicadores.selected === item}" id="indicador<% $index %>">
                             <div class="panel panel-default">
                                 <div class="panel-heading" >
@@ -121,7 +121,7 @@
                                                     <a ng-click="abrir1[$index] = !abrir1[$index]" class="dropdown-toggle" data-toggle="dropdown" data-id="dropdown_export_<% $index %>" role="button"  title="{{ '_exportar_' | trans }}">
                                                         <i class="glyphicon glyphicon-export"></i> <span class="caret"></span>
                                                     </a>
-                                                    <ul class="dropdown-menu" role="menu" style="display:<% abrir1[$index] ? 'block' : 'none' %>" id="dropdown_export_<% $index %>">                                            
+                                                    <ul class="dropdown-menu" role="menu" style="display:<% abrir1[$index] ? 'block' : 'none' %> !important" id="dropdown_export_<% $index %>">                                            
                                                         <li><a ng-click="abrir1[$index] = false; exportarImagen($index, 'SVG');"><i class="glyphicon glyphicon-picture"></i> {{ '_exportar_svg_' | trans }}</a></li>
                                                         <li><a ng-click="abrir1[$index] = false; exportarImagen($index, 'PNG');"><i class="glyphicon glyphicon-picture"></i> {{ '_exportar_png_' | trans }}</a></li>                                        
                                                     </ul>
@@ -131,7 +131,7 @@
                                                     <a ng-click="abrir2[$index] = !abrir2[$index]" class="dropdown-toggle" data-toggle="dropdown" data-id="dropdown_ficha_<% $index %>" role="button"  title="{{ 'opciones' | trans }}">
                                                         <i class="glyphicon glyphicon-info-sign"></i> <span class="caret"></span>
                                                     </a>
-                                                    <ul class="dropdown-menu" style="display:<% abrir2[$index] ? 'block' : 'none' %>" role="menu" id="dropdown_ficha_<% $index %>">
+                                                    <ul class="dropdown-menu" style="display:<% abrir2[$index] ? 'block' : 'none' %> !important" role="menu" id="dropdown_ficha_<% $index %>">
                                                         <li><a ng-click="abrir2[$index] = false; verFichaIndicador($index)"><i class="glyphicon glyphicon-folder-open"></i> {{ 'javascript.ver_ficha_tecnica' | trans }}</a></li>               
                                                         <li><a ng-click="abrir2[$index] = false; verAlertasIndicador($index);" ng-if="item.informacion.rangos.length > 0"><i class="glyphicon glyphicon-exclamation-sign"></i> {{ 'indicador_alertas' | trans }}</a></li>                                        
                                                         <li><a ng-click="abrir2[$index] = false; verTablaDatosIndicador($index);"><i class="glyphicon glyphicon-list-alt"></i> {{ 'javascript.tabla_datos' | trans }}</a></li>
