@@ -586,18 +586,22 @@ class TableroController extends AbstractController {
                 }
             }
             $usuario = $this->getUser();
-            $fav = "SELECT id_indicador FROM usuario_indicadores_favoritos WHERE id_usuario =".$usuario->getId()." and id_indicador = ".$fichaTec->getId();
+            if($usuario){
+                $fav = "SELECT id_indicador FROM usuario_indicadores_favoritos WHERE id_usuario =".$usuario->getId()." and id_indicador = ".$fichaTec->getId();
 
-            $conn = $em->getConnection();
-            $fst = $conn->prepare($fav);
-            $fst->execute();
-            $favorito = $fst->fetchAll();
+                $conn = $em->getConnection();
+                $fst = $conn->prepare($fav);
+                $fst->execute();
+                $favorito = $fst->fetchAll();
+
+                foreach($favorito as $vfav){
+                    if($vfav["id_indicador"] > 0)
+                        $es_favorito = true;
+                }
+            }
             $es_favorito = false;
             
-            foreach($favorito as $vfav){
-                if($vfav["id_indicador"] > 0)
-                    $es_favorito = true;
-            }
+            
 
             $resp['es_favorito'] = $es_favorito;
 

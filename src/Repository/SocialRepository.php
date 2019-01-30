@@ -29,11 +29,12 @@ class SocialRepository extends ServiceEntityRepository
 		
 		foreach($result as $res)
 		{
-			$tiempo=$this->duracion(\DateTime::createFromFormat('Y-m-d H:i:s',$res['creado']));
-			if(stripos($tiempo,'dia'))
+            $tiempo=$this->duracion(\DateTime::createFromFormat('Y-m-d H:i:s',$res['creado']));
+            
+			if(stripos($tiempo, 'dia') && !$res['es_permanente'])
 			{
-				if(substr($tiempo,0,stripos($tiempo,' '))>2)
-				return "Error";
+				if(substr($tiempo,0,stripos($tiempo,' ')) > $res['tiempo_dias'])
+				    return "Error";
 			}
 		}
 		return $result;

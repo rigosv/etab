@@ -70,13 +70,14 @@ security:
         - { path: ^/admin/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/logout$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/login-check$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/login-check$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         # -> end
 
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/ae, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/externo/autenticar, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/iframe/, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/publico, role: IS_AUTHENTICATED_ANONYMOUSLY }
         
 
         # Secured part of the site

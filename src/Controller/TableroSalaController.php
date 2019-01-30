@@ -248,6 +248,9 @@ class TableroSalaController extends AbstractController
         $comentario = new ComentariosSala();
         $ahora = new \DateTime("now");
         $ret = ""; $msg = "";
+
+        $datos = (object) $request->request->all();
+        
         if($req->get('comentarios')!="")
         {
             $comentario->setComentario($req->get('comentarios'));
@@ -368,6 +371,8 @@ class TableroSalaController extends AbstractController
             $social->setToken($token);
             $social->setCreado($ahora);
             $social->setSala($sala);
+            $social->setTiempoDias($datos->tiempo_dias);
+            $social->setEsPermanente($datos->es_permanente);
             
             $em->persist($social);
             $em->flush();

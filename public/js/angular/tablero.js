@@ -1886,7 +1886,9 @@ App.controller("TableroCtrl", function(
     usuarios_sin_cuenta: "",
     lista_usuarios: [],
     comentarios: "",
-    correo: 0
+    correo: 0,
+    tiempo_dias: 1,
+    es_permanente: false
   };
   /**
    * @ngdoc method
@@ -2026,5 +2028,9 @@ App.controller("TableroCtrl", function(
         });
       }
     });
+  };
+
+  $scope.cambiarPermanencia = function(){
+    $scope.compartir.es_permanente = !$scope.compartir.es_permanente;
   };
 });

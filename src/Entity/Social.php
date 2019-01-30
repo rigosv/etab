@@ -35,6 +35,20 @@ class Social
      */
     private $token;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="tiempo_dias", type="integer", length=11)
+     */
+    private $tiempo_dias;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="es_permanente", type="boolean")
+     */
+    private $es_permanente;
+
 	/**
      * @ORM\ManyToOne(targetEntity="GrupoIndicadores")
      * @ORM\JoinColumn(name="sala", referencedColumnName="id")
@@ -59,7 +73,7 @@ class Social
      * Set creado
      *
      * @param \DateTime $creado
-     * @return Boletin
+     * @return Social
      */
     public function setCreado($creado)
     {
@@ -83,7 +97,7 @@ class Social
      * Set token
      *
      * @param string $token
-     * @return Boletin
+     * @return Social
      */
     public function setToken($token)
     {
@@ -103,10 +117,56 @@ class Social
     }
 
     /**
+     * Set tiempo_dias
+     *
+     * @param string $tiempo_dias
+     * @return Social
+     */
+    public function setTiempoDias($tiempo_dias)
+    {
+        $this->tiempo_dias = $tiempo_dias;
+    
+        return $this;
+    }
+
+    /**
+     * Get tiempo_dias
+     *
+     * @return string 
+     */
+    public function getTiempoDias()
+    {
+        return $this->tiempo_dias;
+    }
+
+    /**
+     * Set es_permanente
+     *
+     * @param string $es_permanente
+     * @return Social
+     */
+    public function setEsPermanente($es_permanente)
+    {
+        $this->es_permanente = $es_permanente;
+    
+        return $this;
+    }
+
+    /**
+     * Get es_permanente
+     *
+     * @return string 
+     */
+    public function getEsPermanente()
+    {
+        return $this->es_permanente;
+    }
+
+    /**
      * Set sala
      *
      * @param integer $sala
-     * @return Boletin
+     * @return Social
      */
     public function setSala($sala)
     {
