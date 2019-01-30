@@ -39,8 +39,8 @@ class TokenController extends Controller
 				'bien' => ""));
 		else
 		{	
-            $sa['indicadores'] = $em->getRepository('IndicadoresBundle:GrupoIndicadores')
-                    ->getIndicadoresSala($em->getRepository('IndicadoresBundle:GrupoIndicadores')->find($sa[0]['sala']));
+            $sa['indicadores'] = $em->getRepository(GrupoIndicadores::class)
+                    ->getIndicadoresSala($em->getRepository(GrupoIndicadores::class)->find($sa[0]['sala']));
         	$indicadores = $em->getRepository("IndicadoresBundle:FichaTecnica")->getIndicadoresPublicos();        
         	return $this->render('FichaTecnicaAdmin/tablero_public.html.twig', array(
                     'indicadores' => $indicadores,

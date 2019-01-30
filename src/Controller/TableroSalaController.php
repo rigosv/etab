@@ -250,7 +250,7 @@ class TableroSalaController extends AbstractController
         $ret = ""; $msg = "";
 
         $datos = (object) $request->request->all();
-        
+
         if($req->get('comentarios')!="")
         {
             $comentario->setComentario($req->get('comentarios'));
@@ -315,15 +315,18 @@ class TableroSalaController extends AbstractController
                         'email' => $usuario->getEmail(), 
                         'nombre' => $usuario->getFirstname(), 
                         'apellido' => $usuario->getLastname()
-                    )); 
-                    $documento1 = __DIR__.'/../../public/images/logo_salud.png';
+                    ));
+                    $documento1 = __DIR__.'/../../public/themes/'
+                                    . $this->getParameter('app.theme')
+                                    . '/images/'. $this->getParameter('app.logo_correo_archivo');
+
                     $message = (new \Swift_Message('Sala eTAB'))
                         ->attach(\Swift_Attachment::fromPath($documento1))
-                        ->setFrom('eTAB@SM2015.com.mx')
+                        ->setFrom($this->getParameter('app.from_correo'))
                         ->setTo($usuario->getEmail()) 
-                        ->setBody($this->renderView('/Page:sala.html.twig', array('dato' => $dato,'array' => $array)),"text/html");
+                        ->setBody($this->renderView('Page/sala.html.twig', array('dato' => $dato,'array' => $array)),"text/html");
                      $mailer->send($message);
-                    $msg.="se envio correo a: ".$name." (".$usuario->getEmail().")\n\n";
+                    $msg.="se envió correo a: ".$name." (".$usuario->getEmail().")\n\n";
                 }
             }            
         }
@@ -349,16 +352,24 @@ class TableroSalaController extends AbstractController
                         'email' => $usuario[$i], 
                         'nombre' => "", 
                         'apellido' => ""
-                    )); 
-                    
-                    $documento1 = __DIR__.'/../../public/images/logo_salud.png';
+                    ));
+
+                    $documento1 = __DIR__.'/../../public/themes/'
+                        . $this->getParameter('app.theme')
+                        . '/images/'. $this->getParameter('app.logo_correo_archivo');
+
+                    $data = file_get_contents($documento1);
+                    $tipo = pathinfo($documento1, PATHINFO_EXTENSION);
+                    $dato['imagenbase64'] = 'data:image/' . $tipo . ';base64,' . base64_encode($data);
+
                     $message = (new \Swift_Message('Sala eTAB'))
                         ->attach(\Swift_Attachment::fromPath($documento1))
-                        ->setFrom('eTAB@SM2015.com.mx')
-                        ->setTo(trim($usuario[$i])) 
+                        ->setFrom($this->getParameter('app.from_correo'))
+                        ->setTo(trim($usuario[$i]))
                         ->setBody($this->renderView('Page/sala.html.twig', array('dato' => $dato,'array' => $array)),"text/html");
-                     $mailer->send($message);
+                    $mailer->send($message);
                     $msg.="se envio correo a: ".$usuario[$i]."\n\n";
+
                 }
             }   
         }

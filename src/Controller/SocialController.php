@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -84,9 +85,9 @@ class SocialController extends AbstractController {
     public function getUsuariosSala($idSala) {
         $em = $this->getDoctrine()->getManager();
         
-        $usuarios_asignados = $em->getRepository('IndicadoresBundle:UsuarioGrupoIndicadores')
+        $usuarios_asignados = $em->getRepository(UsuarioGrupoIndicadores::class)
                         ->findBy(array('grupoIndicadores' => $idSala));
-        $usuarios_asignados_por_usuario_actual = $em->getRepository('IndicadoresBundle:UsuarioGrupoIndicadores')
+        $usuarios_asignados_por_usuario_actual = $em->getRepository(UsuarioGrupoIndicadores::class)
                         ->findBy(array('usuarioAsigno'=>$this->getUser(),
                                         'grupoIndicadores' => $idSala));
         $usuarios_sala_por_usuario_actual = array(); 
@@ -99,7 +100,7 @@ class SocialController extends AbstractController {
             $usuarios_sala[] = $ua->getUsuario()->getId();
         }
         
-        $usuarios = $em->getRepository('IndicadoresBundle:User')
+        $usuarios = $em->getRepository(User::class)
                         ->findBy(array(), array('username'=>'ASC'));
         
         $ret = '<SELECT id="usuarios_sala_" multiple="" style="width:100%">';
@@ -123,12 +124,12 @@ class SocialController extends AbstractController {
     public function setUsuarioSala(GrupoIndicadores $sala, $id_usuario, $accion) {
         $em = $this->getDoctrine()->getManager();
         if ($accion == 'borrar'){
-            $usuarios_asignados = $em->getRepository('IndicadoresBundle:UsuarioGrupoIndicadores')
+            $usuarios_asignados = $em->getRepository(UsuarioGrupoIndicadores::class)
                         ->findOneBy(array('usuario'=>$id_usuario,
                                         'grupoIndicadores' => $sala));
             $em->remove($usuarios_asignados);
         } else{
-            $usuario = $em->find('IndicadoresBundle:User', $id_usuario);
+            $usuario = $em->find(User::class, $id_usuario);
             $usuarioSala = new UsuarioGrupoIndicadores();
             $usuarioSala->setGrupoIndicadores($sala);
             $usuarioSala->setUsuario($usuario);
