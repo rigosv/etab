@@ -3,6 +3,11 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+use App\Entity\Social;
+use App\Entity\GrupoIndicadores;
+use App\Entity\FichaTecnica;
+
 use App\Entity\Boletin;
 use App\Admin\BoletinAdmin;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -22,7 +27,7 @@ class TokenController extends Controller
 	public function tokenAction($sala,$token)
 	{
 		$em = $this->getDoctrine()->getManager();
-		$sa = $em->getRepository('IndicadoresBundle:Boletin')->getRuta($sala,$token);
+		$sa = $em->getRepository(Boletin::class)->getRuta($sala,$token);
 
 		if (!$sa) 
 			return $this->render('IndicadoresBundle:Page:error.html.twig', array(
@@ -43,7 +48,48 @@ class TokenController extends Controller
                 ));
 		}
 		
-	}
+    }
+    /**
+    * @Route("/publico/sala/{sala}/{token}", name="sala_publico", options={"expose"=true})
+    */
+    public function salaPublicoAction($sala,$token)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $sa = $em->getRepository(Social::class)->getRuta($sala,$token);
+
+        if (!$sa) 
+            return $this->render('Page/error.html.twig', array(
+                'error' => "No existe la sala: $sala",
+                'bien' => "")); 
+        else if($sa=="Error")   
+            return $this->render('Page/error.html.twig', array(
+                'error' => "El tiempo de este boletin ha expirado",
+                'bien' => ""));
+        else
+        {   
+            $conn = $em->getConnection();
+            
+            $sql = "SELECT * FROM grupo_indicadores where id = $sala; ";
+            
+            $statement = $conn->prepare($sql);
+            $statement->execute();
+            $data = $statement->fetchAll();
+
+            $data1 = []; 
+            foreach ($data as $key => $value) {                    
+                $sql = "SELECT * FROM grupo_indicadores_indicador
+                where grupo_indicadores_id = ".$value["id"]." order by posicion asc; ";
+                
+                $statement = $conn->prepare($sql);
+                $statement->execute();
+                $value["indicadores"] = $statement->fetchAll();  
+                array_push($data1, $value);                   
+            } 
+
+            return $this->render('FichaTecnicaAdmin/tablero_publico.html.twig', array('data' => json_encode($data1[0])));
+        }
+        
+    }
 
 	 /**
      * @Route("/iframe/{username}/{pass}", name="login_iframe", options={"expose"=true})
@@ -65,7 +111,7 @@ class TokenController extends Controller
         $user_manager = $this->get('fos_user.user_manager');
         $user = $user_manager->findUserByUsername($_username);
         // Or by yourself
-        $user = $this->getDoctrine()->getManager()->getRepository("IndicadoresBundle:User")
+        $user = $this->getDoctrine()->getManager()->getRepository(User::class)
                 ->findOneBy(array('username' => $_username));
         /// End Retrieve user
 

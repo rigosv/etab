@@ -13,6 +13,7 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
+use App\Entity\Social;
 use App\Entity\FichaTecnica;
 use App\Entity\GrupoIndicadores;
 
@@ -239,7 +240,7 @@ class TableroSalaController extends AbstractController
     /**
      * @Route("/comentarioSala/{sala}", name="comentarioSala", methods={"POST"})
      */
-    public function comentarioSalaGuardar(GrupoIndicadores $sala, Request $request) {
+    public function comentarioSalaGuardar(GrupoIndicadores $sala, Request $request, \Swift_Mailer $mailer) {        
         $session = new Session();
         $em = $this->getDoctrine()->getManager();
         $req = $request;
@@ -247,6 +248,9 @@ class TableroSalaController extends AbstractController
         $comentario = new ComentariosSala();
         $ahora = new \DateTime("now");
         $ret = ""; $msg = "";
+
+        $datos = (object) $request->request->all();
+        
         if($req->get('comentarios')!="")
         {
             $comentario->setComentario($req->get('comentarios'));
@@ -312,14 +316,13 @@ class TableroSalaController extends AbstractController
                         'nombre' => $usuario->getFirstname(), 
                         'apellido' => $usuario->getLastname()
                     )); 
-                    $documento1 = $this->container->getParameter('kernel.root_dir').'/../web/bundles/indicadores/images/logo_salud.png';
-                    $message = \Swift_Message::newInstance()
+                    $documento1 = __DIR__.'/../../public/images/logo_salud.png';
+                    $message = (new \Swift_Message('Sala eTAB'))
                         ->attach(\Swift_Attachment::fromPath($documento1))
-                        ->setSubject('Sala eTAB')
                         ->setFrom('eTAB@SM2015.com.mx')
                         ->setTo($usuario->getEmail()) 
                         ->setBody($this->renderView('/Page:sala.html.twig', array('dato' => $dato,'array' => $array)),"text/html");
-                    $this->get('mailer')->send($message);
+                     $mailer->send($message);
                     $msg.="se envio correo a: ".$name." (".$usuario->getEmail().")\n\n";
                 }
             }            
@@ -347,31 +350,33 @@ class TableroSalaController extends AbstractController
                         'nombre' => "", 
                         'apellido' => ""
                     )); 
-                    $documento1 = $this->container->getParameter('kernel.root_dir').'/../web/bundles/indicadores/images/logo_salud.png';
-                    $message = \Swift_Message::newInstance()
+                    
+                    $documento1 = __DIR__.'/../../public/images/logo_salud.png';
+                    $message = (new \Swift_Message('Sala eTAB'))
                         ->attach(\Swift_Attachment::fromPath($documento1))
-                        ->setSubject('Sala eTAB')
                         ->setFrom('eTAB@SM2015.com.mx')
                         ->setTo(trim($usuario[$i])) 
                         ->setBody($this->renderView('Page/sala.html.twig', array('dato' => $dato,'array' => $array)),"text/html");
-                    $this->get('mailer')->send($message);
+                     $mailer->send($message);
                     $msg.="se envio correo a: ".$usuario[$i]."\n\n";
                 }
-            }
-
-            if($msg!="")
-            {
-                $social = new Social();
-                $ahora = new \DateTime("now");
-                
-                $social->setToken($token);
-                $social->setCreado($ahora);
-                $social->setSala($sala);
-                
-                $em->persist($social);
-                $em->flush();
-            }    
+            }   
         }
+
+        if($msg!="")
+        {
+            $social = new Social();
+            $ahora = new \DateTime("now");
+            
+            $social->setToken($token);
+            $social->setCreado($ahora);
+            $social->setSala($sala);
+            $social->setTiempoDias($datos->tiempo_dias);
+            $social->setEsPermanente($datos->es_permanente);
+            
+            $em->persist($social);
+            $em->flush();
+        }    
 
         $response = [
             'status' => 200,

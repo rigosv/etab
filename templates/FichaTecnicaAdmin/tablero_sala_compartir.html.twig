@@ -32,6 +32,19 @@
                             <div class="well well-sm">{{ '_usuario_sin_cuenta_correos_' | trans }}</div>
                             <textarea name="usuario_sin" id="usuario_sin" class="form-control" ng-model="compartir.usuarios_sin_cuenta"></textarea>
                         </div>
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label ng-click="cambiarPermanencia()">
+                                    <input type="checkbox" ng-model="compartir.es_permanente" ng-checked="compartir.es_permanente" ng-click="cambiarPermanencia()"> {{ '_es_permanente_' | trans }}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="tiempo_dias">
+                            {{ '_tiempo_en_dias_' | trans }}
+                            </label>  
+                            <input type="number" name="tiempo_dias" id="tiempo_dias" class="form-control" ng-model="compartir.tiempo_dias">
+                        </div>
                     </form>
 
                 </div>

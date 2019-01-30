@@ -584,3 +584,5 @@ _guardar_ : Guardar
 _grafico_aprecia_mejor_meta: 'Este gráfico se aprecia mejor si se le configura una meta'
 _solo_lectura_: Solo lectura
 javascript.nombre_campo: Nombre de campo
+_es_permanente_: 'es permanente'
+_tiempo_en_dias_: 'Tiempo de duración disponible (días)'

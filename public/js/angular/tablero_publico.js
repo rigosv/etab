@@ -5,7 +5,7 @@
  * Controlador general que maneja el tablero
  */
 
-App.controller("TableroCtrl", function(
+App.controller("TableroPublicoCtrl", function(
   $scope,
   $http,
   $localStorage,
@@ -29,17 +29,6 @@ App.controller("TableroCtrl", function(
       $scope.tamanoHeight = value / 1.5;
     }
   );
-  $scope.indicadores = [];
-  $scope.clasificacion_uso = "";
-  $scope.clasificacion_tecnica = "";
-
-  $scope.clasificaciones_usos = [];
-  $scope.clasificaciones_tecnicas = [];
-
-  $scope.inidcadores_clasificados = [];
-  $scope.inidcadores_no_clasificados = [];
-  $scope.inidcadores_busqueda = [];
-  $scope.inidcadores_favoritos = [];
 
   /**
    * @ngdoc method
@@ -76,22 +65,6 @@ App.controller("TableroCtrl", function(
       }
     );
   };
-  // cargar los catalogos para el indicador
-  $scope.cargarCatalogo(
-    "../api/v1/tablero/clasificacionUso",
-    $scope.clasificaciones_usos,
-    "cc_uso"
-  );
-  $scope.cargarCatalogo(
-    "../api/v1/tablero/listaIndicadores?tipo=no_clasificados",
-    $scope.inidcadores_no_clasificados,
-    "cc_sin"
-  );
-  $scope.cargarCatalogo(
-    "../api/v1/tablero/listaIndicadores?tipo=favoritos",
-    $scope.inidcadores_favoritos,
-    "cc_favprito"
-  );
 
   /**
    * @ngdoc method
@@ -136,115 +109,7 @@ App.controller("TableroCtrl", function(
       }
     );
   };
-
-  /**
-   * @ngdoc method
-   * @name Tablero.TableroCtrl#cargarIndicadores
-   * @methodOf Tablero.TableroCtrl
-   *
-   * @description
-   * funcion que cargar la lista de inidcadores, segun el filtro correspodiente, construido desde la vista
-   * @param {url} url URL en la api para la peticion
-   * @param {modelo} modelo modelo donde se carga el resultado
-   * @param {cargando} cargando bandera para mostrar la animacion cargando
-   */
-  $scope.cargarIndicadores = function(url, modelo, cargando) {
-    modelo.length = 0;
-    $scope[cargando] = true;
-    Crud.lista(
-      url,
-      function(data) {
-        if (data.status == 200) {
-          $scope.intento1 = 0;
-          angular.forEach(data.data, function(value, key) {
-            modelo.push(value);
-          });
-        }
-        $scope[cargando] = false;
-      },
-      function(e) {
-        setTimeout(function() {
-          if ($scope.intento1 < 1) {
-            $scope.cargarIndicadores(url, modelo, cargando);
-            $scope.intento1++;
-          } else $scope[cargando] = false;
-        }, 200);
-      }
-    );
-  };
-  $scope.salas = [];
-  $scope.salas_grupos = [];
-  $scope.salas_propias = [];
-
-  /**
-   * @ngdoc method
-   * @name Tablero.TableroCtrl#cargarSalas
-   * @methodOf Tablero.TableroCtrl
-   *
-   * @description
-   * funcion que cargar la lista de salas disponibles
-   */
-  $scope.cargarSalas = function() {
-    $scope["cc_salas"] = true;
-    Crud.lista(
-      "../api/v1/tablero/listaSalas",
-      function(data) {
-        if (data.status == 200) {
-          $scope.intento1 = 0;
-          $scope.salas = data.data;
-          $scope.salas_grupos = data.salas_grupos;
-          $scope.salas_propias = data.salas_propias;
-        }
-        $scope["cc_salas"] = false;
-      },
-      function(e) {
-        setTimeout(function() {
-          if ($scope.intento1 < 1) {
-            $scope.cargarSalas();
-            $scope.intento1++;
-          } else $scope["cc_salas"] = false;
-        }, 200);
-      }
-    );
-  };
-  $scope.cargarSalas();
-
-  /**
-   * @ngdoc method
-   * @name Tablero.TableroCtrl#bsucarIndicador
-   * @methodOf Tablero.TableroCtrl
-   *
-   * @description
-   * funcion para la busqueda libre de indicadores
-   */
-  $scope.bsucarIndicador = function(keyEvent) {
-    if (keyEvent.which === 13) {
-      $scope.inidcadores_busqueda = [];
-      $scope["cc_buscar"] = true;
-      Crud.lista(
-        "../api/v1/tablero/listaIndicadores?tipo=busqueda&busqueda=" +
-          $scope.buscar_busqueda,
-        function(data) {
-          if (data.status == 200) {
-            $scope.intento1 = 0;
-            $scope.inidcadores_busqueda = data.data;
-            $scope.buscar_busqueda = "";
-          }
-          $scope["cc_buscar"] = false;
-        },
-        function(e) {
-          setTimeout(function() {
-            if ($scope.intento1 < 1) {
-              $scope.bsucarIndicador();
-              $scope.intento1++;
-            } else $scope["cc_buscar"] = false;
-          }, 200);
-        }
-      );
-    }
-  };
-
-  $scope.tablero_indicador = [];
+  
 
   /**
    * @ngdoc method
@@ -255,7 +120,7 @@ App.controller("TableroCtrl", function(
    * funcion que cargar los indicadores de la sala
    * @param {item} item sala seleccionada de la lista
    */
-  $scope.agregarSala = function(item) {
+  $scope.agregarSala = function(item) {   
     if (item) {
       $scope.sala = item;
 
@@ -263,7 +128,6 @@ App.controller("TableroCtrl", function(
       $scope.abrio_sala = true;
       $scope.indicadores = [];
       angular.forEach(item.indicadores, function(element, key) {
-        console.log(element.tipo_grafico.codigo);
         $scope.indicadores.push({
           cargando: true,
           filtros: [],
@@ -332,7 +196,7 @@ App.controller("TableroCtrl", function(
         }
 
         Crud.crear(
-          "../api/v1/tablero/datosIndicador/" +
+          "../../../api/v1/tablero/datosIndicador/" +
             $scope.indicadores[index].id +
             "/" +
             element.dimension,
@@ -377,9 +241,6 @@ App.controller("TableroCtrl", function(
           }
         );
       });
-      $scope.listaAccionSala();
-      $scope.usuariosSala();
-      $scope.comentarioSala();
     }
   };
 
@@ -392,196 +253,10 @@ App.controller("TableroCtrl", function(
    * funcion que cierra la sala abierta previamente
    */
   $scope.cerraSala = function() {
-    $scope.abrio_sala = false;
-    $scope.indicadores = [];
-    $scope.sala = { id: "", nombre: "" };
+    
   };
+
   $scope.sala_cargando = false;
-
-  /**
-   * @ngdoc method
-   * @name Tablero.TableroCtrl#cerraSala
-   * @methodOf Tablero.TableroCtrl
-   *
-   * @description
-   * funcion que borra la sala seleccionada
-   * @param {item} item sala seleccionada de la lista
-   */
-  $scope.borrarSala = function(item) {
-    if (confirm($("#confirmar_sala").html())) {
-      var json = { id: item.id };
-      $scope.sala_cargando = true;
-      Crud.crear(
-        "../api/v1/tablero/borrarSala",
-        json,
-        "application/json",
-        function(data) {
-          if (data.status == 200) {
-            $scope.cerraSala();
-            $scope.cargarSalas();
-            alert($("#elimina_ok_sala").html());
-          } else {
-            alert($("#elimina_error_sala").html());
-          }
-          $scope.sala_cargando = false;
-        },
-        function(e) {
-          $scope.sala_cargando = false;
-          alert($("#elimina_error_sala").html());
-        }
-      );
-    }
-  };
-
-  /**
-   * @ngdoc method
-   * @name Tablero.TableroCtrl#cerraSala
-   * @methodOf Tablero.TableroCtrl
-   *
-   * @description
-   * funcion que guarda o actualiza la informacion de la sala y la lista de indicadores
-   * @param {item} item sala seleccionada de la lista
-   */
-  $scope.guardarSala = function(item) {
-    var json = { sala: item, indicadores: $scope.indicadores };
-    $scope.sala_cargando = true;
-    Crud.crear(
-      "../api/v1/tablero/guardarSala",
-      json,
-      "application/json",
-      function(data) {
-        if (data.status == 200) {
-          $scope.abrio_sala = true;
-          $scope.sala.id = data.data;
-          $scope.cargarSalas();
-          alert($("#guardar_sala_ok").html());
-        } else {
-          alert($("#guardar_sala_error").html());
-        }
-        $scope.sala_cargando = false;
-      },
-      function(e) {
-        alert($("#guardar_sala_error").html());
-        $scope.sala_cargando = false;
-      }
-    );
-  };
-
-  /**
-   * @ngdoc method
-   * @name Tablero.TableroCtrl#cargarIndicadores
-   * @methodOf Tablero.TableroCtrl
-   *
-   * @description
-   * funcion que cargar los datos del inidcador
-   * @param {item} item inidcador seleccionado de la lista
-   */
-  $scope.agregarIndicador = function(item, dimension = "") {
-    if (item) {
-      if (angular.isUndefined($scope.tablero_indicador[item.id]))
-        $scope.tablero_indicador[item.id] = 0;
-      $scope.abrio_indicador = true;
-      var campos_indicador = item.campos_indicador.split(",");
-      $scope.indicadores.push({
-        cargando: true,
-        filtros: [],
-        error: "",
-        id: item.id,
-        nombre: item.nombre,
-        es_favorito: item.es_favorito,
-        dimensiones: campos_indicador,
-        dimension: 0,
-        posicion: 0,
-        index: 0,
-        tendencia: false,
-        radial: false,
-        termometro: false,
-        mapa: false,
-        sql: "",
-        ficha: "",
-        full_screen: false,
-        configuracion: {
-          width: "col-sm-4",
-          height: "280",
-          orden_x: "",
-          orden_y: "",
-          tipo_grafico: item.dimensiones[campos_indicador[0]].graficos[0].codigo,
-          maximo: "",
-          maximo_manual: ""
-        },
-        otros_filtros: {
-          desde: "",
-          hasta: "",
-          elementos: []
-        }
-      });
-      $scope.tablero_indicador[item.id]++;
-      var index = $scope.indicadores.length - 1;
-      $scope.indicadores[index].posicion = index;
-      $scope.indicadores[index].posicion = index + 1;
-      
-      $scope.opcionesGraficas(index, $scope.indicadores[index].configuracion.tipo_grafico, $scope.indicadores[index].dimensiones[0], item.unidad_medida, "280");
-        
-      var json = { filtros: "", ver_sql: false, tendencia: false };
-      Crud.crear(
-        "../api/v1/tablero/datosIndicador/" +
-          item.id +
-          "/" +
-          $scope.indicadores[index].dimensiones[0],
-        json,
-        "application/json",
-        function(data) {
-          if (data.status == 200) {
-            $scope.indicadores[index].data = data.data;
-            $scope.indicadores[index].informacion = data.informacion;
-            $scope.indicadores[index].ficha = data.ficha;
-            $scope.indicadores[index].grafica = [];
-            var grafica = [];
-
-            grafica[0] = {
-              key: $scope.indicadores[index].dimensiones[0],
-              values: []
-            };
-            
-            angular.forEach(data.data, function(val, key) {
-              color = "";
-              angular.forEach(data.informacion.rangos, function(v1, k1) {
-                if (
-                  val.measure >= v1.limite_inf &&
-                  val.measure <= v1.limite_sup
-                ) {
-                  color = v1.color;
-                }
-              });
-
-              grafica[0].values.push({
-                color: color,
-                label: val.category,
-                value: parseFloat(val.measure),
-                index: index,
-                dimension: 0
-              });
-            });
-            $scope.indicadores[index].grafica = grafica;
-
-          } else {
-            $scope.indicadores[index].error = "Warning";
-          }
-          $scope.indicadores[index].cargando = false;
-          setTimeout(function() {
-            $scope.indicadores[index].error = "";
-          }, 3000);
-        },
-        function(e) {
-          $scope.indicadores[index].error = "Error";
-          $scope.indicadores[index].cargando = false;
-          setTimeout(function() {
-            $scope.indicadores[index].error = "";
-          }, 3000);
-        }
-      );
-    }
-  };
 
   /**
    * @ngdoc method
@@ -606,7 +281,7 @@ App.controller("TableroCtrl", function(
         $scope.opcionesGraficas(index, $scope.indicadores[index].configuracion.tipo_grafico, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, $scope.indicadores[index].configuracion.height);
       var json = { filtros: $scope.indicadores[index].filtros, ver_sql: false, tendencia: $scope.indicadores[index].tendencia};
       Crud.crear(
-        "../api/v1/tablero/datosIndicador/" +
+        "../../../api/v1/tablero/datosIndicador/" +
           $scope.indicadores[index].id +
           "/" +
           $scope.indicadores[index].dimensiones[dimension].trim(),
@@ -660,7 +335,7 @@ App.controller("TableroCtrl", function(
         otros_filtros: $scope.indicadores[index].otros_filtros
       };
       Crud.crear(
-        "../api/v1/tablero/datosIndicador/" +
+        "../../../api/v1/tablero/datosIndicador/" +
           $scope.indicadores[index].id +
           "/" +
           $scope.indicadores[index].dimensiones[dimension].trim(),
@@ -1215,7 +890,7 @@ App.controller("TableroCtrl", function(
     var json = { filtros: "", ver_sql: true, tendencia: false };
     var dimension = $scope.indicadores[index].dimension;
     Crud.crear(
-      "../api/v1/tablero/datosIndicador/" +
+      "../../../api/v1/tablero/datosIndicador/" +
         $scope.indicadores[index].id +
         "/" +
         $scope.indicadores[index].dimensiones[dimension],
@@ -1249,7 +924,7 @@ App.controller("TableroCtrl", function(
     $scope.indicadores[index].cargando = true;
 
     Crud.ver(
-      "../api/v1/tablero/fichaIndicador",
+      "../../../api/v1/tablero/fichaIndicador",
       $scope.indicadores[index].id,
       function(data) {
         if (data.status == 200) {
@@ -1330,20 +1005,7 @@ App.controller("TableroCtrl", function(
    * @param {item} item que corresponde al objeto indicador
    */
   $scope.agregarFavorito = function(item) {
-    if (item) {
-      var json = { id: item.id, es_favorito: item.es_favorito };
-      Crud.crear(
-        "../api/v1/tablero/indicadorFavorito",
-        json,
-        "application/json",
-        function(data) {
-          if (data.status == 200) {
-            item.es_favorito = data.data;
-          }
-        },
-        function(e) {}
-      );
-    }
+    
   };
 
   /**
@@ -1357,11 +1019,7 @@ App.controller("TableroCtrl", function(
    * @param {index} index posicion en la lista de graficas
    */
   $scope.quitarIndicador = function(item, index) {
-    $scope.tablero_indicador[item.id]--;
-    $scope.indicadores.splice(index, 1);
-    if ($scope.indicadores.length <= 0) {
-      $scope.abrio_indicador = false;
-    }
+    
   };
 
   /**
@@ -1820,154 +1478,7 @@ App.controller("TableroCtrl", function(
     }
   };
 
-  $scope.accion = {
-    acciones: "",
-    observaciones: "",
-    responsables: "",
-    lista: []
-  };
-
-  /**
-   * @ngdoc method
-   * @name Tablero.TableroCtrl#guardarAccionSala
-   * @methodOf Tablero.TableroCtrl
-   *
-   * @description
-   * funcion que guarda las acciones de la sala
-   */
-  $scope.guardarAccionSala = function() {
-    $scope.sala_cargando = true;
-    Crud.crear(
-      "../api/v1/tablero/salaAccion/" + $scope.sala.id,
-      $scope.accion,
-      "application/json",
-      function(data) {
-        if (data.status == 200) {
-          $scope.accion.lista = data.data;
-          alert($("#guardar_sala_accion_ok").html());
-        } else {
-          alert($("#guardar_sala_accion_error").html());
-        }
-        $scope.sala_cargando = false;
-      },
-      function(e) {
-        alert($("#guardar_sala_accion_error").html());
-        $scope.sala_cargando = false;
-      }
-    );
-  };
-
-  /**
-   * @ngdoc method
-   * @name Tablero.TableroCtrl#listaAccionSala
-   * @methodOf Tablero.TableroCtrl
-   *
-   * @description
-   * funcion que muestra la lista de las accines de la sala
-   */
-  $scope.listaAccionSala = function() {
-    $scope.sala_cargando = true;
-    Crud.lista(
-      "../api/v1/tablero/salaAccion/" + $scope.sala.id,
-      function(data) {
-        if (data.status == 200) {
-          $scope.accion.lista = data.data;
-        }
-        $scope.sala_cargando = false;
-      },
-      function(e) {
-        $scope.sala_cargando = false;
-      }
-    );
-  };
-  $scope.comentarios_compartir;
-  $scope.compartir = {
-    usuarios_con_cuenta: [],
-    usuarios_sin_cuenta: "",
-    lista_usuarios: [],
-    comentarios: "",
-    correo: 0,
-    tiempo_dias: 1,
-    es_permanente: false
-  };
-  /**
-   * @ngdoc method
-   * @name Tablero.TableroCtrl#usuariosSala
-   * @methodOf Tablero.TableroCtrl
-   *
-   * @description
-   * funcion que muestra la lista de usuarios para compartir la sala
-   */
-  $scope.usuariosSala = function() {
-    $scope.sala_cargando = true;
-    Crud.lista(
-      "../api/v1/tablero/usuariosSala/" + $scope.sala.id,
-      function(data) {
-        if (data.status == 200) {
-          $scope.compartir.lista_usuarios = data.data;
-        }
-        $scope.sala_cargando = false;
-      },
-      function(e) {
-        $scope.sala_cargando = false;
-      }
-    );
-  };
-
-  /**
-   * @ngdoc method
-   * @name Tablero.TableroCtrl#comentarioSala
-   * @methodOf Tablero.TableroCtrl
-   *
-   * @description
-   * funcion que muestra la lista comentarios de la sala compartida
-   */
-  $scope.comentarioSala = function() {
-    $scope.sala_cargando = true;
-    Crud.lista(
-      "../api/v1/tablero/comentarioSala/" + $scope.sala.id,
-      function(data) {
-        if (data.status == 200) {
-          $scope.comentarios_compartir = data.html;
-        }
-        $scope.sala_cargando = false;
-      },
-      function(e) {
-        $scope.sala_cargando = false;
-      }
-    );
-  };
-
-  /**
-   * @ngdoc method
-   * @name Tablero.TableroCtrl#comentarioSalaGuardar
-   * @methodOf Tablero.TableroCtrl
-   *
-   * @description
-   * funcion que guarda las acciones de la sala
-   */
-  $scope.comentarioSalaGuardar = function() {
-    $scope.sala_cargando = true;
-    Crud.crear(
-      "../api/v1/tablero/comentarioSala/" + $scope.sala.id,
-      $scope.compartir,
-      "application/json",
-      function(data) {
-        if (data.status == 200) {
-          $scope.comentarios_compartir += data.html;
-          alert($("#guardar_sala_compartir_ok").html());
-        } else {
-          alert($("#guardar_sala_compartir_error").html());
-        }
-        $scope.sala_cargando = false;
-      },
-      function(e) {
-        alert($("#guardar_sala_compartir_error").html());
-        $scope.sala_cargando = false;
-      }
-    );
-  };
-
+ 
   $scope.imprimirSala = function() {        
     var cont = 0; var div = 0;
     $("#paraimprimir").html(
@@ -2028,9 +1539,5 @@ App.controller("TableroCtrl", function(
         });
       }
     });
-  };
-
-  $scope.cambiarPermanencia = function(){
-    $scope.compartir.es_permanente = !$scope.compartir.es_permanente;
   };
 });
