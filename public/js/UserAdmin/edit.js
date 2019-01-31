@@ -5,7 +5,7 @@ $(document).ready(function() {
     var idcontrol = uniqid[1];
 
 
-    $("#" + idcontrol + "_groups").attr("class", "list-group");
+    /*$("#" + idcontrol + "_groups").attr("class", "list-group");
     $("#" + idcontrol + "_groups li").attr("class", "list-group-item");
     $("#sonata-ba-field-container-" + idcontrol + "_groups ").attr("style", "padding: 0px 20px 0px 15px;");
     $("#" + idcontrol + "_groups").attr("style", "max-height:380px; overflow:auto;");
@@ -31,9 +31,9 @@ $(document).ready(function() {
         $("#" + idcontrol + "_indicadores").html() +
         '</ul>' +
         '</div>'
-    );
+    );*/
 
-    $("#" + idcontrol + "_salas").attr("class", "list-group");
+    /*$("#" + idcontrol + "_salas").attr("class", "list-group");
     $("#" + idcontrol + "_salas li").attr("class", "list-group-item");
     $("#sonata-ba-field-container-" + idcontrol + "_salas ").attr("style", "padding: 0px 20px 0px 15px;");
     $("#sonata-ba-field-container-" + idcontrol + "_salas ").html(
@@ -42,7 +42,7 @@ $(document).ready(function() {
         $("#" + idcontrol + "_salas").html() +
         '</ul>' +
         '</div>'
-    );
+    );*/
 
     
     $(".editable").attr("class", "");
@@ -52,18 +52,18 @@ $(document).ready(function() {
 
 
 
-    //Ocultar los indicadores asignados
-    $('div[id$="_gruposIndicadores"]').hide();
+    //Ocultar las salas asignados
+    //$('div[id$="_gruposIndicadores"]').hide();
 
-    // Recuperar los indicadores del usuario
-    $('div[id$="_gruposIndicadores"] span').each(function (i, nodo) {
+    // Recuperar las salas del usuario
+    /*$('div[id$="_gruposIndicadores"] span').each(function (i, nodo) {
         //alert($(nodo).html().trim());
         $('div[id$="salas"] input:checkbox[value=' + $(nodo).html().trim() + ']').attr('checked', true);
 
-    });
+    });*/
 
     //Mandar al servidor a guardar o borrar la asignación de sala al usuario
-    $('div[id$="salas"] input:checkbox').change(function () {
+    /*$('div[id$="salas"] input:checkbox').change(function () {
         var accion;
         if ($(this).is(':checked'))
             accion = 'add';
@@ -71,11 +71,20 @@ $(document).ready(function() {
             accion = 'remove';
         $.get(Routing.generate('usuario_asignar_sala',
             { id: $('input[id$="_id"]').val(), id_sala: $(this).val(), accion: accion }));
+    });*/
+
+    $('div[id$="_realRoles"] option').each(function (i, nodo) {
+        fixNombresRoles($(this));
     });
 
-    $('ul[id$="_realRoles"] span').each(function (i, nodo) {
-
-        $(this).html($(this).html().replace('ROLE_SONATA_ADMIN_', ''));
-        $(this).html($(this).html().replace('ROLE_SONATA_USER_ADMIN_', ''));
+    $('div[id$="_realRoles"] li').each(function (i, nodo) {
+        fixNombresRoles($(this));
     });
+
+    function fixNombresRoles(control){
+        $(control).html($(control).html().replace('ROLE_SONATA_USER_ADMIN_', ''));
+        $(control).html($(control).html().replace('ROLE_SONATA_ADMIN_', ''));
+        $(control).html($(control).html().replace('ROLE_SONATA_', ''));
+        $(control).html($(control).html().replace('ROLE_', ''));
+    }
 });
