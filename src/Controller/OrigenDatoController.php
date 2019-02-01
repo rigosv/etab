@@ -467,7 +467,7 @@ class OrigenDatoController extends Controller
 
         $configurado = $em->getRepository(OrigenDatos::class)->estaConfigurado($origen);
 
-        $resp = ['estado' => 'success', 'mensaje' => $translator->trans('_se_ha_iniciado_la_carga_del_origen_') . '<B> ' . $origen->getNombre() . '</B>' ];
+        $resp = ['estado' => 'success', 'mensaje' => $translator->trans('_se_ha_iniciado_la_carga_del_origen_') . $origen->getNombre() ];
         if  ( $configurado ) {
             $bus->dispatch(new SmsCargarOrigenDatos($origen->getId()));
         } else {
