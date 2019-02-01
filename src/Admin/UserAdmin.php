@@ -12,6 +12,7 @@
 namespace App\Admin;
 
 
+use App\Entity\FichaTecnica;
 use App\Entity\UsuarioGrupoIndicadores;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -150,9 +151,15 @@ class UserAdmin extends BaseAdmin {
                 $formMapper
                     ->tab('_indicadores_y_salas_')
                         ->with('_indicadores_', array('class' => 'col-md-6'))
-                            ->add('indicadores', null, array(
+                            ->add('indicadores', EntityType::class, array(
                                 'label' => '_indicadores_',
-                                'expanded' => false
+                                'class' => FichaTecnica::class,
+                                'expanded' => false,
+                                'multiple' => true,
+                                'query_builder' => function (EntityRepository $er) {
+                                    return $er->createQueryBuilder('i')
+                                        ->orderBy('i.nombre', 'ASC');
+                                },
                             ))
                         ->end()
                         ->with('_salas_situacionales_', array('class' => 'col-md-6'))
