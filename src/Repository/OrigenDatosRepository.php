@@ -67,11 +67,8 @@ class OrigenDatosRepository extends EntityRepository
             $conn = $this->getEntityManager()
                 ->getRepository(Conexion::class)
                 ->getConexionGenerica($conexion);
-            if ($conexion->getIdMotor()->getCodigo() == 'pdo_dblib') {
-                $query = mssql_query($origenDato->getSentenciaSql(), $conn);
-                $total = mssql_num_rows($query);
-            } else
-                $total = $conn->query($origenDato->getSentenciaSql())->rowCount();
+
+            $total = $conn->query($origenDato->getSentenciaSql())->rowCount();
 
             return $total;
         } else
@@ -93,17 +90,7 @@ class OrigenDatosRepository extends EntityRepository
 
                 if ($conn === false ) return false;
 
-                if ($conexion->getIdMotor()->getCodigo() == 'pdo_dblib') {
-                    $query = mssql_query($sql, $conn);
-                    if (mssql_num_rows($query) > 0) {
-                        while ($row = mssql_fetch_assoc($query))
-                            $datos[] = $row;
-                    }
-                } else {
-
-                    $datos = $conn->executeQuery($sql)->fetchAll();
-
-                }
+                $datos = $conn->executeQuery($sql)->fetchAll();
 
                 //Cerrar la conexión
                 $conn = null;

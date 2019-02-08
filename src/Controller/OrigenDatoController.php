@@ -37,11 +37,10 @@ class OrigenDatoController extends Controller
     {
         try {
             $conn = $this->getConexionGenerica('base_datos', null, $request);
-            if ($this->driver != 'pdo_dblib'){
-                $conn->connect();
-            }
+
+            $conn->connect();
             $mensaje = '<span style="color: green">' . $translator->trans('conexion_success') . '</span>';
-        } catch (\PDOException $e) {
+        } catch (\Exception $e) {
             $mensaje = '<span style="color: red">' . $translator->trans('conexion_error') . ': ' . $e->getMessage() . '</span>';
         } catch (DBAL\Exception\ConnectionException  $e) {
             $mensaje = '<span style="color: red">' . $translator->trans('conexion_error') . ': ' . $e->getMessage() . '</span>';
@@ -69,22 +68,21 @@ class OrigenDatoController extends Controller
                     $cnxObj = $this->getDoctrine()->getManager()->find(Conexion::class, $cnx);
                     $conn = $this->getConexionGenerica('consulta_sql', $cnxObj, $request);
                     $conexion = $cnxObj->getNombreConexion();
-                    //$sql = str_ireplace('FROM', ", '" . $cnxObj->getNombreConexion() . "' AS origen_datos FROM ", $sql);
-                    if ($this->driver == 'pdo_dblib') {
-                        $sql_ = 'SELECT TOP 20 * FROM ('. $sql . ') cons';
-                        $query = mssql_query($sql_, $conn);
-                        if (mssql_num_rows($query) > 0)
-                            while ($row = mssql_fetch_assoc($query)) {
-                                $datos[] = $row;
-                            }
-                    } else {
-                        $query = $conn->query($sql);
-                        $i = 0;
-                        while ($row = $query->fetch() and $i++ < 20) {
-                            $datos[] = $row;
-                        }
 
+                    if ($this->driver == 'sqlsrv') {
+                        $datos = $cnx->executeQuery('SELECT TOP 1 (' . $sql . ') cons')->fetchAll();
+                        dump($datos); exit;
+                        $sql_ = 'SELECT TOP 20 * FROM (' . $sql . ') cons';
+                    } else {
+                        $sql_ = ' SELECT * FROM (' . $sql . ' ) A LIMIT 20';
                     }
+                    $query = $conn->query($sql_);
+
+                    while ($row = $query->fetch()) {
+                        $datos[] = $row;
+                    }
+
+
                     $resultado['estado'] = 'ok';
                     $resultado['mensaje'] = '<span style="color: green">' . $translator->trans('sentencia_success') . '</span>';
                     $resultado['datos'] = array_merge($resultado['datos'], $datos);
@@ -122,55 +120,43 @@ class OrigenDatoController extends Controller
         $req = $request;
         $em = $this->getDoctrine()->getManager();
 
-        try {
-            if ($objeto_prueba == 'base_datos') {
-                $motor = $em->find(MotorBd::class, $req->get('idMotor'));
-                $datos = array('dbname' => $req->get('nombreBaseDatos'),
-                    'user' => $req->get('usuario'),
-                    'password' => $req->get('clavefirst'),
-                    'host' => $req->get('ip'),
-                    'driver' => $motor->getCodigo(),
-                    'port' => $req->get('puerto')
-                );
-            } elseif ($objeto_prueba == 'consulta_sql') {
-
-                $datos = array('dbname' => $conexion->getNombreBaseDatos(),
-                    'user' => $conexion->getUsuario(),
-                    'password' => $conexion->getClave(),
-                    'host' => $conexion->getIp(),
-                    'driver' => $conexion->getIdMotor()->getCodigo(),
-                    'port' => $conexion->getPuerto()
-                );
-            }
-        } catch (\Exception $e) {
-            throw new \PDOException($e->getMessage());
-        }
-
-        //Debido a un bug en el controlador para mssqlserver usaré las funciones antiguas para conectarme
-        // Estar pendiente de la resolución del bug para que se vuelva a utilizar PDO
-        $this->driver = $datos['driver'];
-        if ($datos['driver'] == 'pdo_dblib') {
-            $servername = $datos['host'];
-            if ($datos['port'] != '')
-                $servername .= ',' . $datos['port'];
-            $conn = mssql_connect($servername, $datos['user'], $datos['password']);
-            mssql_select_db($datos['dbname'], $conn);
-        } else {
-            // Construir el Conector genérico
-            $config = new DBAL\Configuration();
-
-            $connectionParams = array(
-                'dbname' => $datos['dbname'],
-                'user' => $datos['user'],
-                'password' => $datos['password'],
-                'host' => $datos['host'],
-                'driver' => $datos['driver']
+        if ($objeto_prueba == 'base_datos') {
+            $motor = $em->find(MotorBd::class, $req->get('idMotor'));
+            $datos = array('dbname' => $req->get('nombreBaseDatos'),
+                'user' => $req->get('usuario'),
+                'password' => $req->get('clavefirst'),
+                'host' => $req->get('ip'),
+                'driver' => $motor->getCodigo(),
+                'port' => $req->get('puerto')
             );
-            if ($datos['port'] != '' and $datos['driver'] != 'pdo_sqlite')
-                $connectionParams['port'] = $datos['port'];
+        } elseif ($objeto_prueba == 'consulta_sql') {
 
-            $conn = DBAL\DriverManager::getConnection($connectionParams, $config);
+            $datos = array('dbname' => $conexion->getNombreBaseDatos(),
+                'user' => $conexion->getUsuario(),
+                'password' => $conexion->getClave(),
+                'host' => $conexion->getIp(),
+                'driver' => $conexion->getIdMotor()->getCodigo(),
+                'port' => $conexion->getPuerto()
+            );
         }
+
+        $this->driver = $datos['driver'];
+
+        // Construir el Conector genérico
+        $config = new DBAL\Configuration();
+
+        $connectionParams = array(
+            'dbname' => $datos['dbname'],
+            'user' => $datos['user'],
+            'password' => $datos['password'],
+            'host' => $datos['host'],
+            'driver' => $datos['driver']
+        );
+        if ($datos['port'] != '' and $datos['driver'] != 'pdo_sqlite')
+            $connectionParams['port'] = $datos['port'];
+
+        $conn = DBAL\DriverManager::getConnection($connectionParams, $config);
+
 
         return $conn;
     }
@@ -420,23 +406,20 @@ class OrigenDatoController extends Controller
         $resultado['mensaje'] = $this->get('translator')->trans('_error_conexion_');
         if ($conexion != false){
             try {
-                if ($this->driver == 'pdo_dblib') {
-                    $sentenciaSQL = str_ireplace('SELECT', 'SELECT TOP 20 ', $sentenciaSQL);
-                    $query = mssql_query($sentenciaSQL, $conn);
-                    if (mssql_num_rows($query) > 0) {
-                        while ($row = mssql_fetch_assoc($query))
-                            $resultado['datos'][] = $row;
-                        //$resultado['nombre_campos'] = array_keys($resultado['datos'][0]);
-                    }
-                } else {
-                    $query = $conn->query($sentenciaSQL);
 
-                    $i = 0; $datos = array();
-                    while ($row = $query->fetch() and $i++ < 20) {
-                        $datos[] = $row;
-                    }
-                    $resultado['datos'] = $datos;
+                if ($this->driver == 'sqlsrv') {
+                    $sql_ = 'SELECT TOP 20 * FROM (' . $sentenciaSQL . ') cons';
+                } else {
+                    $sql_ = ' SELECT * FROM (' . $sentenciaSQL . ' ) A LIMIT 20';
                 }
+                $query = $conn->query($sql_);
+
+                $datos = array();
+                while ( $row = $query->fetch() ) {
+                    $datos[] = $row;
+                }
+                $resultado['datos'] = $datos;
+
 
                 if (count($resultado['datos']) > 0){
                     $resultado['nombre_campos'] = array_keys($resultado['datos'][0]);

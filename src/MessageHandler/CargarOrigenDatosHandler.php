@@ -293,20 +293,18 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
                                 $orden :
                                 'SELECT * FROM (' . $sql . ')  sqlOriginal ' .
                                 'WHERE ROWNUM >= ' . $i * $tamanio . ' AND ROWNUM < ' . ($tamanio * ($i + 1));
-                        } elseif ($cnx->getIdMotor()->getCodigo() == 'pdo_dblib') {
-                            $sql_aux = ( $esLecturaIncremental) ?
-                                "SELECT * FROM ( $sql )  sqlOriginal 
+                        } elseif ($cnx->getIdMotor()->getCodigo() == 'sqlsrv') {
+
+                            $sql_aux = "SELECT FROM ( $sql )  sqlOriginal 
                                     WHERE 1 = 1
                                     $condicion_carga_incremental
-                                    $orden " : $sql;
+                                    $orden";
                         } else {
-                            $sql_aux = ($esLecturaIncremental) ?
-                                "SELECT * FROM ( $sql) sqlOriginal 
+                            $sql_aux = "SELECT * FROM ( $sql) sqlOriginal 
                                         WHERE 1 = 1
                                         $condicion_carga_incremental
                                         $orden
-                                        LIMIT " . $tamanio . ' OFFSET ' . $i * $tamanio :
-                                $sql . ' LIMIT ' . $tamanio . ' OFFSET ' . $i * $tamanio;
+                                        LIMIT " . $tamanio . ' OFFSET ' . $i * $tamanio ;
                             ;
                         }
 
