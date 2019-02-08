@@ -100,12 +100,21 @@ class OrigenDatosAdminController extends Controller
         ));
     }
 
-    public function batchActionLoadDataIsRelevant(array $selectedIds, Request $request = null)
+
+    public function batchActionLoadDataIsRelevant(array $selectedIds, $allEntitiesSelected, Request $request = null)
     {
         $em = $this->getDoctrine()->getManager();
         $parameterBag = $request->request;
 
-        if (!$parameterBag->get('all_elements')) {
+        //if ( !$parameterBag->get('all_elements')) {
+        if ( $allEntitiesSelected ) {
+            $origenes = $em->getRepository(OrigenDatos::class)->findAll();
+            foreach ($origenes as $origen) {
+                $configurado = $em->getRepository(OrigenDatos::class)->estaConfigurado($origen);
+                if (!$configurado)
+                    return $origen->getNombre() . ': ' . $this->get('translator')->trans('origen_no_configurado');
+            }
+        } else {
             $selecciones = $selectedIds;
             // Verificar que los orígenes esten configurados
             foreach ($selecciones as $id_origen) {
@@ -114,43 +123,35 @@ class OrigenDatosAdminController extends Controller
                 if (!$configurado)
                     return $origenDato->getNombre() . ': ' . $this->get('translator')->trans('origen_no_configurado');
             }
-        } else {
-            $origenes = $em->getRepository(OrigenDatos::class)->findAll();
-            foreach ($origenes as $origen) {
-                $configurado = $em->getRepository(OrigenDatos::class)->estaConfigurado($origen);
-                if (!$configurado)
-                    return $origen->getNombre() . ': ' . $this->get('translator')->trans('origen_no_configurado');
-            }
         }
 
         return true;
     }
 
-    public function batchActionLoadData($idx = null, Request $request)
+    public function batchActionLoadData(ProxyQueryInterface $selectedModelQuery, Request $request)
     {
         $almacenamiento = $this->get('almacenamiento_datos');
 
         $bus = $this->get('message_bus');
 
+
         //Mardar a la cola de carga de datos cada origen seleccionado
         $parameterBag = $request->request;
+
         $em = $this->getDoctrine()->getManager();
 
         $fecha = new \DateTime("now");
         $ahora = $fecha;
 
         if (!$parameterBag->get('all_elements')){
-            $selecciones = (is_array ($idx)) ? $idx : $parameterBag->get('idx');
+            $selecciones = $selectedModelQuery->execute();
         }
         else{
             $selecciones = $em->getRepository(OrigenDatos::class)->findAll();
         }
 
-        foreach ($selecciones as $origen) {
-            if (!$parameterBag->get('all_elements'))
-                $origenDato = $em->find(OrigenDatos::class, $origen);
-            else
-                $origenDato = $origen;
+        foreach ($selecciones as $origenDato) {
+
 
             // Recuperar el nombre y significado de los campos del origen de datos
             $campos_sig = array();
@@ -173,7 +174,7 @@ class OrigenDatosAdminController extends Controller
                 $phpexcel = $this->get('phpspreadsheet');
                 $em->getRepository(OrigenDatos::class)->cargarCatalogo($origenDato, $ruta, $nombre, $phpexcel);
             } else
-                $bus->dispatch(new SmsCargarOrigenDatos($origen));
+                $bus->dispatch(new SmsCargarOrigenDatos($origenDato->getId()));
         }
         $this->addFlash('sonata_flash_success', $this->get('translator')->trans('flash_batch_load_data_success'));
 
@@ -223,15 +224,15 @@ class OrigenDatosAdminController extends Controller
     {
         $id = $request->get('id');
         $origen = $this->getDoctrine()->getManager()->find(OrigenDatos::class, $id);
-        $valid = $this->batchActionLoadDataIsRelevant(array($id),$request);
-        if($valid === true)
+        //$valid = $this->batchActionLoadDataIsRelevant(array($id), false, $request);
+        //if($valid === true)
 
-            return $this->batchActionLoadData(array($id), $request);
-        else {
+        return $this->batchActionLoadData(array($id), $request);
+        /*else {
             $this->addFlash('sonata_flash_error', $origen->getNombre() . ': ' . $this->get('translator')->trans('origen_no_configurado'));
 
             return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
-        }
+        }*/
     }
 
 }
