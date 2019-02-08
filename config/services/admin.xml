@@ -254,43 +254,7 @@
             <call method="setMaxPerPage"><argument>%admin_max_per_page_number%</argument></call>
         </service>
 
-
-        <service id="sonata.admin.indicadores_desempeno" class="App\Admin\MatrizChiapas\MatrizIndicadoresDesempenoAdmin">
-            <tag name="sonata.admin" 
-                 manager_type="orm" 
-                 group="matriz_seguimiento" 
-                 label="_config_indicador_desempeno_"
-            />
-            <argument />
-            <argument>App\Entity\MatrizChiapas\MatrizIndicadoresDesempeno</argument>
-            <argument>SonataAdminBundle:CRUD</argument>
-            <call method="setMaxPerPage"><argument>%admin_max_per_page_number%</argument></call>
-        </service>
-
-        
-        <service id="sonata.admin.indicadores_rel" class="App\Admin\MatrizChiapas\MatrizIndicadoresRelAdmin">
-            <tag name="sonata.admin" 
-                 manager_type="orm" 
-                 group="matriz_seguimiento" 
-                 label="_indicador_rel_"
-            />
-            <argument />
-            <argument>App\Entity\MatrizChiapas\MatrizIndicadoresRel</argument>
-            <argument>SonataAdminBundle:CRUD</argument>
-            <call method="setMaxPerPage"><argument>%admin_max_per_page_number%</argument></call>
-        </service>
-
-        <service id="sonata.admin.matriz_seguimiento" class="App\Admin\MatrizChiapas\MatrizSeguimientoAdmin">
-            <tag name="sonata.admin" 
-                 manager_type="orm" 
-                 group="matriz_seguimiento" 
-                 label="_reporte_"
-            />
-            <argument />
-            <argument>App\Entity\MatrizChiapas\MatrizSeguimiento</argument>
-            <argument>App\Controller\MatrizChiapas\MatrizSeguimientoRESTController</argument>
-            <call method="setMaxPerPage"><argument>%admin_max_per_page_number%</argument></call>
-        </service>   
+         
         
     </services>
 </container>

@@ -1819,6 +1819,11 @@ App.controller("TableroCtrl", function(
     }
   };
 
+  $scope.quitarFiltro = function(posicion) {
+    $scope.indicadores[posicion].dimension = 0;
+    $scope.indicadores[posicion].filtros = [];
+    $scope.agregarIndicadorDimension(0, posicion);
+  };
   $scope.accion = {
     acciones: "",
     observaciones: "",

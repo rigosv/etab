@@ -412,7 +412,11 @@ class FichaTecnicaRepository extends ServiceEntityRepository {
                 $otros_filtros .= " and $fecha >= '".$desde."'::date and $fecha <= '".$hasta."'::date";
             }
             if(count($filtro_adicional["elementos"]) > 0){
-                $otros_filtros .= " and $dimension in('".$eleme."')";
+                if(array_key_exists("dimension", $filtro_adicional))
+                    $filtrodimension = $filtro_adicional["dimension"];
+                else
+                    $filtrodimension = $dimension;
+                $otros_filtros .= " and $filtrodimension in('".$eleme."')";
             }
         }
         $fecha_tendencia = '';

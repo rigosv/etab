@@ -40,7 +40,7 @@ class MatrizIndicadoresDesempenoAdmin extends Admin
                     'query_builder' => function ($repository) {
                         return $repository->createQueryBuilder('i')->addOrderBy('nombre','ASC');
                     }))
-                ->add('indicators', CollectionType::class, 
+                ->add('matrizIndicadoresRelacion', CollectionType::class, 
                 array(              
                     'label' => '_indicador_rel_',
                     'required' => true
@@ -67,7 +67,7 @@ class MatrizIndicadoresDesempenoAdmin extends Admin
                     'query_builder' => function ($repository) {
                         return $repository->createQueryBuilder('i')->orderBy('i.nombre', 'ASC');
                     }))
-                ->add('indicators', CollectionType::class, 
+                ->add('matrizIndicadoresRelacion', CollectionType::class, 
                 array(              
                     'label' => '_indicador_rel_',
                     'required' => true
@@ -122,25 +122,25 @@ class MatrizIndicadoresDesempenoAdmin extends Admin
     	return array('id', 'nombre', 'creado', 'actualizado');
     }
 
-    public function prePersist($indicators)
+    public function prePersist($matrizIndicadoresRelacion)
     {
-        $this->setIndicadors($indicators);
+        $this->setMatrizIndicadoresRelaciones($matrizIndicadoresRelacion);
     }
 
-    public function setIndicadors($MatrizIndicadoresDesempeno)
+    public function setMatrizIndicadoresRelaciones($MatrizIndicadoresDesempeno)
     {
-        $indicators = $MatrizIndicadoresDesempeno->getIndicators();
-        $MatrizIndicadoresDesempeno->removeIndicators();
-        if ($indicators != null and count($indicators) > 0) {
-            foreach ($indicators as $indicator) {
+        $matrizIndicadoresRelacion = $MatrizIndicadoresDesempeno->getMatrizIndicadorRelaciones();
+        $MatrizIndicadoresDesempeno->removeMatrizIndicadorRelaciones();
+        if ($matrizIndicadoresRelacion != null and count($matrizIndicadoresRelacion) > 0) {
+            foreach ($matrizIndicadoresRelacion as $indicator) {
                 $indicator->setDesempeno($MatrizIndicadoresDesempeno);
-                $MatrizIndicadoresDesempeno->addIndicator($indicator);
+                $MatrizIndicadoresDesempeno->addMatrizIndicadorRelacion($indicator);
             }
         }
     }
 
-    public function preUpdate($indicators)
+    public function preUpdate($matrizIndicadoresRelacion)
     {
-        $this->setIndicadors($indicators);       
+        $this->setMatrizIndicadoresRelaciones($matrizIndicadoresRelacion);       
     }
 }

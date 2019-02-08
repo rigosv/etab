@@ -2,41 +2,23 @@ $(document).ready(function () {
 
     var uniqid = $("[class=form-horizontal]").attr("action").split('=');
     var idcontrol = uniqid[1];
- 
     
 
-    $("#" + idcontrol + "_roles").attr("class", "list-group");
+    $("#" + idcontrol + "_roles").attr("class", "list-group").attr("style", "max-height:380px; overflow:auto;");
     $("#" + idcontrol + "_roles li").attr("class", "list-group-item");   
-    
-    $(".editable").html('<ul class="list-group" style="max-height:380px; overflow:auto;">' +
-        $("#" + idcontrol + "_roles").html() +
-        '</ul>' 
-    );
 
-
-    $("#" + idcontrol + "_indicadores").attr("class", "list-group");
+    $("#" + idcontrol + "_indicadores").attr("class", "list-group").attr("style", "max-height:380px; overflow:auto;");
     $("#" + idcontrol + "_indicadores li").attr("class", "list-group-item");
-    $("#sonata-ba-field-container-" + idcontrol + "_roles ").attr("style", "padding: 0px 20px 0px 15px;");
-    $("#sonata-ba-field-container-" + idcontrol + "_indicadores ").html(
-        '<div class="col-sm-12" >' +
-        '<ul class="list-group" style="max-height:400px; overflow:auto;">' +
-        $("#" + idcontrol + "_indicadores").html() +
-        '</ul>' +
-        '</div>'
-    );
-
-    $("#" + idcontrol + "_salas").attr("class", "list-group");
+    
+    $("#" + idcontrol + "_salas").attr("class", "list-group").attr("style", "max-height:380px; overflow:auto;");
     $("#" + idcontrol + "_salas li").attr("class", "list-group-item");
-    $("#sonata-ba-field-container-" + idcontrol + "_salas ").attr("style", "padding: 0px 20px 0px 15px;");
-    $("#sonata-ba-field-container-" + idcontrol + "_salas ").html(
-        '<div class="col-sm-12" >' +
-        '<ul class="list-group" style="max-height:400px; overflow:auto;">' +
-        $("#" + idcontrol + "_salas").html() +
-        '</ul>' +
-        '</div>'
-    );
 
+    $("#sonata-ba-field-container-" + idcontrol + "_salas").find("label:first").remove();
+    $("#sonata-ba-field-container-" + idcontrol + "_roles").find("label:first").remove();
+    $("#sonata-ba-field-container-" + idcontrol + "_indicadores").find("label:first").remove();
 
+    $(".sonata-ba-field-standard-natural").attr("class", "sonata-ba-field col-sm-12 sonata-ba-field-standard-natural");
+    
     $(".popover").attr(
         "style",
         "top:-100%; margin-left:100%; width:600px; display: block; z-index:9999999999;"

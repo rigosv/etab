@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * MatrizIndicadoresDesempeno
  *
  * @ORM\Table(name="matriz_indicadores_desempeno")
- * @ORM\Entity(repositoryClass="App\Entity\MatrizChiapas\MatrizIndicadoresDesempenoRepository")
+ * @ORM\Entity
  */
 class MatrizIndicadoresDesempeno
 {
@@ -56,22 +56,22 @@ class MatrizIndicadoresDesempeno
      */
     private $actualizado;
 
-	/**
-     * @ORM\ManyToMany(targetEntity="App\Entity\FichaTecnica")
-     **/
-    private $matrizIndicadoresEtab;
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="MatrizIndicadoresRel", mappedBy="matrizIndicadoresRelacion", cascade={"all"}, orphanRemoval=true)
+     *
+     */
+    private $matrizIndicadoresRelacion;
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
-     * @ORM\OneToMany(targetEntity="MatrizIndicadoresRel", mappedBy="desempeno", cascade={"all"}, orphanRemoval=true)
-     * @ORM\OrderBy({"nombre"="ASC"})
+     * @ORM\OneToMany(targetEntity="MatrizIndicadoresEtab", mappedBy="matrizIndicadoresEtab", cascade={"all"}, orphanRemoval=true)
      *
      */
-    private $indicators;
+    private $matrizIndicadoresEtab;
 
 	public function __construct()
     {
-		$this->matrizIndicadoresEtab = new \Doctrine\Common\Collections\ArrayCollection();
         $this->setCreado(new \DateTime());
         $this->setActualizado(new \DateTime());
 		
@@ -162,106 +162,8 @@ class MatrizIndicadoresDesempeno
         return $this->actualizado;
     }
 
-    /**
-     * Set matrizIndicadoresEtab
-     *
-     * @param integer $matrizIndicadoresEtab
-     * @return MatrizIndicadoresDesempeno
-     */
-    public function setMatrizIndicadoresEtab($matrizIndicadoresEtab)
-    {
-        $this->matrizIndicadoresEtab = $matrizIndicadoresEtab;
-    
-        return $this;
-    }
-
-    /**
-     * Get matrizIndicadoresEtab
-     *
-     * @return integer 
-     */
-    public function getMatrizIndicadoresEtab()
-    {
-        return $this->matrizIndicadoresEtab;
-    }
-
-	
 	public function __toString() {
         return $this->nombre ? :'';
-    }
-
-    /**
-     * Add matrizIndicadoresEtab
-     *
-     * @param App\Entity\FichaTecnica $matrizIndicadoresEtab
-     *
-     * @return MatrizIndicadoresDesempeno
-     */
-    public function addMatrizIndicadoresEtab(\App\Entity\FichaTecnica $matrizIndicadoresEtab)
-    {
-        $this->matrizIndicadoresEtab[] = $matrizIndicadoresEtab;
-
-        return $this;
-    }
-
-    /**
-     * Remove matrizIndicadoresEtab
-     *
-     * @param App\Entity\FichaTecnica $matrizIndicadoresEtab
-     */
-    public function removeMatrizIndicadoresEtab(\App\Entity\FichaTecnica $matrizIndicadoresEtab)
-    {
-        $this->matrizIndicadoresEtab->removeElement($matrizIndicadoresEtab);
-    }
-
-    /**
-     * Get indicators
-     *
-     * @return Doctrine\Common\Collections\Collection
-     */
-    public function getIndicators()
-    {
-        return $this->indicators;
-    }
-
-    /**
-     * Add alertas
-     *
-     * @param  App\Entity\MatrizChiapas\MatrizIndicadoresRel $indicators
-     * @return MatrizIndicadoresDesempeno
-     */
-    public function addIndicators(\App\Entity\MatrizChiapas\MatrizIndicadoresRel $indicators)
-    {
-        $this->addIndicator($indicators);
-    }
-
-    /**
-     * Add indicators
-     *
-     * @param App\Entity\MatrizChiapas\MatrizIndicadoresRel $indicators
-     *
-     * @return MatrizIndicadoresDesempeno
-     */
-    public function addIndicator(\App\Entity\MatrizChiapas\MatrizIndicadoresRel $indicators)
-    {
-        $this->indicators[] = $indicators;
-
-        return $this;
-    }
-
-    /**
-     * Remove indicators
-     *
-     * @param App\Entity\MatrizChiapas\MatrizIndicadoresRel $indicators
-     */
-    public function removeIndicator(\App\Entity\MatrizChiapas\MatrizIndicadoresRel $indicators)
-    {
-        $this->indicators->removeElement($indicators);
-    }
-
-    public function removeIndicators()
-    {
-        $this->indicators=array();
     }
 
     /**
@@ -309,5 +211,105 @@ class MatrizIndicadoresDesempeno
     public function getMatriz()
     {
         return $this->matriz;
+    }
+
+    /**
+     * Get matrizIndicadoresRelacion
+     *
+     * @return Doctrine\Common\Collections\Collection
+     */
+    public function getMatrizIndicadoresRelacion()
+    {
+        return $this->matrizIndicadoresRelacion;
+    }
+
+    /**
+     * Add alertas
+     *
+     * @param  App\Entity\MatrizChiapas\MatrizIndicadoresRel $matrizIndicadoresRelacion
+     * @return MatrizIndicadoresDesempeno
+     */
+    public function addMatrizIndicadoresRelacion(\App\Entity\MatrizChiapas\MatrizIndicadoresRel $matrizIndicadoresRelacion)
+    {
+        $this->addMatrizIndicadorRelacion($matrizIndicadoresRelacion);
+    }
+
+    /**
+     * Add matrizIndicadoresRelacion
+     *
+     * @param App\Entity\MatrizChiapas\MatrizIndicadoresRel $matrizIndicadoresRelacion
+     *
+     * @return MatrizIndicadoresDesempeno
+     */
+    public function addMatrizIndicadorRelacion(\App\Entity\MatrizChiapas\MatrizIndicadoresRel $matrizIndicadoresRelacion)
+    {
+        $this->matrizIndicadoresRelacion[] = $matrizIndicadoresRelacion;
+
+        return $this;
+    }
+
+    /**
+     * Remove matrizIndicadoresRelacion
+     *
+     * @param App\Entity\MatrizChiapas\MatrizIndicadoresRel $matrizIndicadoresRelacion
+     */
+    public function removeMatrizIndicadorRelacion(\App\Entity\MatrizChiapas\MatrizIndicadoresRel $matrizIndicadoresRelacion)
+    {
+        $this->matrizIndicadoresRelacion->removeElement($matrizIndicadoresRelacion);
+    }
+
+    public function removeMatrizIndicadoresRelacion()
+    {
+        $this->matrizIndicadoresRelacion=array();
+    }
+
+    /**
+     * Get matrizIndicadoresEtab
+     *
+     * @return Doctrine\Common\Collections\Collection
+     */
+    public function getMatrizIndicadoresEtab()
+    {
+        return $this->matrizIndicadoresEtab;
+    }
+
+    /**
+     * Add alertas
+     *
+     * @param  App\Entity\MatrizChiapas\MatrizIndicadoresEtab $matrizIndicadoresEtab
+     * @return MatrizIndicadoresDesempeno
+     */
+    public function addMatrizIndicadoresEtab(\App\Entity\MatrizChiapas\MatrizIndicadoresEtab $matrizIndicadoresEtab)
+    {
+        $this->addMatrizIndicadorEtab($matrizIndicadoresEtab);
+    }
+
+    /**
+     * Add matrizIndicadoresEtab
+     *
+     * @param App\Entity\MatrizChiapas\MatrizIndicadoresEtab $matrizIndicadoresEtab
+     *
+     * @return MatrizIndicadoresDesempeno
+     */
+    public function addMatrizIndicadorEtab(\App\Entity\MatrizChiapas\MatrizIndicadoresEtab $matrizIndicadoresEtab)
+    {
+        $this->matrizIndicadoresEtab[] = $matrizIndicadoresEtab;
+
+        return $this;
+    }
+
+    /**
+     * Remove matrizIndicadoresEtab
+     *
+     * @param App\Entity\MatrizChiapas\MatrizIndicadoresEtab $matrizIndicadoresEtab
+     */
+    public function removeMatrizIndicadorEtab(\App\Entity\MatrizChiapas\MatrizIndicadoresEtab $matrizIndicadoresEtab)
+    {
+        $this->matrizIndicadoresEtab->removeElement($matrizIndicadoresEtab);
+    }
+
+    public function removeMatrizIndicadoresEtab()
+    {
+        $this->matrizIndicadoresEtab=array();
     }
 }

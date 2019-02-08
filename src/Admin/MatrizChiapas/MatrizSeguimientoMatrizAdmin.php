@@ -47,7 +47,7 @@ class MatrizSeguimientoMatrizAdmin extends Admin
     {
         switch ($name) {
             case 'edit':
-                return 'CRUD/matriz-edit.html.twig';
+                return 'Matriz/configurarMatriz.html.twig';
                 break;
             default:
                 return parent::getTemplate($name);

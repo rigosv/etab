@@ -24,14 +24,14 @@ class ClasificacionTecnica
     /**
      * @var string $codigo
      *
-     * @ORM\Column(name="codigo", type="string", length=15, nullable=false)
+     * @ORM\Column(name="codigo", type="string", length=50, nullable=false)
      */
     private $codigo;
 
     /**
      * @var string $descripcion
      *
-     * @ORM\Column(name="descripcion", type="string", length=50, nullable=false)
+     * @ORM\Column(name="descripcion", type="string", length=350, nullable=false)
      */
     private $descripcion;
 

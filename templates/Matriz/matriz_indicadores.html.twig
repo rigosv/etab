@@ -1,0 +1,203 @@
+<div class="modal fade" id="modalIndicadores" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title" id="exampleModalLabel">{{ 'seleccion_indicador' | trans }}</h3>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+    
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a href="#tab_clasificacion" data-toggle="tab">
+                        <i class="glyphicon glyphicon-tasks" ></i>
+                        {{ '_clasificacion_indicadores_' | trans }} <span class="badge badge-light"><% inidcadores_clasificados.length %></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#tab_sin_clasificacion" data-toggle="tab">
+                        <i class="glyphicon glyphicon-ban-circle"></i>
+                        {{ '_no_clasificados_' | trans }} <span class="badge badge-light"><% inidcadores_no_clasificados.length %></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#tab_busqueda" data-toggle="tab">
+                        <i class="glyphicon glyphicon-search" ></i>
+                        {{ 'busqueda_libre' | trans }} <span class="badge badge-light"><% inidcadores_busqueda.length %></span>
+                    </a>
+                </li>
+                <li class="">
+                    <a href="#tab_favorito" data-toggle="tab">
+                        <i class="glyphicon glyphicon-star"></i> 
+                        {{ 'favoritos' | trans }} <span class="badge badge-light"><% inidcadores_favoritos.length %></span>
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab_clasificacion">
+                    <div class="container-fluid">
+                        <div class="col-sm-12">
+                            
+                            <div class="buscar-addon">
+                                <label for="clasificacion_uso">{{ 'clasificacion_uso' | trans }}</label>
+                                <div class="input-group" style="width:100%">
+                                    <span class="input-group-addon">
+                                        <i class="glyphicon glyphicon-search" ng-if="!cc_uso"></i>
+                                        <img src="{{ app.request.schemeAndHttpHost ~ asset('images/ajax-loader.gif') }}" style="width:20px" ng-if="cc_uso"/>                                        
+                                    </span>
+                                    <select class="form-control" id="clasificacion_uso" ng-model="clasificacion_uso" ng-change="comboDependiente('/api/v1/tablero/clasificacionTecnica', clasificaciones_tecnicas, clasificacion_uso, 'cc_tecnica')">
+                                        <option ng-repeat="item in clasificaciones_usos" value="<% item.id %>"><% item.descripcion | uppercase %></option>                                
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            
+                            <div class="buscar-addon">
+                                <label for="clasificacion_tecnica">{{ 'clasificacion_tecnica' | trans }}</label>
+                                <div class="input-group" style="width:100%">
+                                    <span class="input-group-addon">
+                                        <i class="glyphicon glyphicon-search" ng-if="!cc_tecnica"></i>
+                                        <img src="{{ app.request.schemeAndHttpHost ~ asset('images/ajax-loader.gif') }}" style="width:20px" ng-if="cc_tecnica"/>
+                                    </span>
+                                    <select class="form-control" id="clasificacion_tecnica" ng-model="clasificacion_tecnica" 
+                                    ng-change="cargarIndicadores('/api/v1/tablero/listaIndicadores?tipo=clasificados&uso=' + clasificacion_uso + '&tecnica=' + clasificacion_tecnica, inidcadores_clasificados, 'cc_cindicador')">
+                                        <option ng-repeat="item in clasificaciones_tecnicas" value="<% item.id %>"><% item.descripcion | uppercase %></option>                                
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                
+
+                        <div class="col-sm-12">
+                            <div class="buscar-addon">
+                                <div class="input-group" style="width:100%">
+                                    <span class="input-group-addon">
+                                        <i class="glyphicon glyphicon-search" ng-if="!cc_cindicador"></i>
+                                        <img src="{{ app.request.schemeAndHttpHost ~ asset('images/ajax-loader.gif') }}" style="width:20px" ng-if="cc_cindicador"/>                                        
+                                    </span>
+                                    <input type="text" id="search_1" class="form-control" ng-model="buscar_clasificado" placeholder="{{ '_buscar_' | trans }}" autocomplete="off">
+                                </div>
+                            </div>
+                            <br>
+                        </div>   
+                        
+                        <div class="col-sm-12">
+                            <div class="alert alert-info" role="alert" ng-if="inidcadores_clasificados.length == 0">
+                                {{ 'seleccione_uso_y_tecnica' | trans }}
+                            </div>
+                            <ul class="list-group" style="max-height: 40vh; min-height: 70px; overflow: auto;" ng-if="inidcadores_clasificados.length > 0">
+                                <li ng-repeat="item in inidcadores_clasificados | filter:buscar_clasificado" class="list-group-item list_indicador d-flex justify-content-between align-items-center" ng-click="agregarIndicador(item)">
+                                    <% item.nombre | uppercase %>
+                                    <span class="badge badge-primary badge-pill" ng-if="tablero_indicador[desempeno_index][item.id] > 0"><% tablero_indicador[desempeno_index][item.id] %></span>
+                                </li>
+                                
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane" id="tab_sin_clasificacion">
+                    <div class="container-fluid">
+              
+                        <div class="col-sm-12">
+                            <div class="buscar-addon">
+                                <div class="input-group" style="width:100%">
+                                    <span class="input-group-addon">
+                                        <i class="glyphicon glyphicon-search" ng-if="!cc_sin"></i>
+                                        <img src="{{ app.request.schemeAndHttpHost ~ asset('images/ajax-loader.gif') }}" style="width:20px" ng-if="cc_cindicador"/> 
+                                    </span>
+                                    
+                                    <input type="text" id="search_2" ng-model="buscar_no_clasificado" class="form-control" placeholder="{{ '_buscar_' | trans }}">
+                                </div> 
+                            </div> 
+                            <br>                                                                    
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="alert alert-info" role="alert" ng-if="inidcadores_no_clasificados.length == 0">
+                                {{ 'no_hay_sin_clasificacion' | trans }}
+                            </div>
+                            <ul class="list-group" style="max-height: 40vh; min-height: 70px; overflow: auto;" ng-if="inidcadores_no_clasificados.length > 0">
+                                <li ng-repeat="item in inidcadores_no_clasificados | filter:buscar_no_clasificado" class="list-group-item list_indicador d-flex justify-content-between align-items-center" ng-click="agregarIndicador(item)">
+                                    <% item.nombre | uppercase %>
+                                    <span class="badge badge-primary badge-pill" ng-if="tablero_indicador[desempeno_index][item.id] > 0"><% tablero_indicador[desempeno_index][item.id] %></span>
+                                </li>                                    
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="tab-pane" id="tab_busqueda">
+                    <div class="container-fluid">
+                        
+                        <div class="col-sm-12">
+                            <div class="buscar-addon">
+                                <div class="input-group" style="width:100%">
+                                    <span class="input-group-addon">
+                                        <i class="glyphicon glyphicon-search" ng-if="!cc_buscar"></i>
+                                        <img src="{{ app.request.schemeAndHttpHost ~ asset('images/ajax-loader.gif') }}" style="width:20px" ng-if="cc_buscar"/> 
+                                    </span>
+                                    
+                                    <input type="text" id="search_3" ng-model="buscar_busqueda" ng-keypress="bsucarIndicador($event)" class="form-control" placeholder=" {{ 'busqueda_libre_info' | trans }}">
+                                </div> 
+                                <br>
+                            </div>                                                                         
+                        </div>
+
+                        <div class="col-sm-12">
+                            <ul class="list-group" style="max-height: 40vh; min-height: 70px; overflow: auto;" ng-if="inidcadores_busqueda.length > 0">
+                                <li ng-repeat="item in inidcadores_busqueda" class="list-group-item list_indicador d-flex justify-content-between align-items-center" ng-click="agregarIndicador(item)">
+                                    <% item.nombre | uppercase %>
+                                    <span class="badge badge-primary badge-pill" ng-if="tablero_indicador[desempeno_index][item.id] > 0"><% tablero_indicador[desempeno_index][item.id] %></span>
+                                </li>                                    
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="tab-pane" id="tab_favorito">
+                    <div class="container-fluid">
+                        <div class="col-sm-12">
+                            <div class="buscar-addon">
+                                <div class="input-group" style="width:100%">
+                                    <span class="input-group-addon">
+                                        <i class="glyphicon glyphicon-search" ng-if="!cc_favorito"></i>
+                                        <img src="{{ app.request.schemeAndHttpHost ~ asset('images/ajax-loader.gif') }}" style="width:20px" ng-if="cc_favorito"/> 
+                                    </span>
+                                    
+                                    <input type="text" id="search_4" g-model="buscar_favorito" class="form-control" placeholder="{{ '_buscar_' | trans }}">
+                                </div> 
+                            </div>  
+                            <br>                                                                               
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="alert alert-info" role="alert" ng-if="inidcadores_favoritos.length == 0">
+                                {{ 'no_hay_favoritos' | trans }}
+                            </div>
+
+                            <ul class="list-group" style="max-height: 40vh; min-height: 70px; overflow: auto;" ng-if="inidcadores_favoritos.length > 0">
+                                <li ng-repeat="item in inidcadores_favoritos | filter:buscar_favorito" class="list-group-item list_indicador d-flex justify-content-between align-items-center" ng-click="agregarIndicador(item)">
+                                    <% item.nombre | uppercase %>
+                                    <span class="badge badge-primary badge-pill" ng-if="tablero_indicador[desempeno_index][item.id] > 0"><% tablero_indicador[desempeno_index][item.id] %></span>
+                                </li>                                    
+                            </ul>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        <!-- fin body -->        
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ '_cerrar_' | trans}}</button>
+        </div>
+        </div>
+    </div>
+</div>

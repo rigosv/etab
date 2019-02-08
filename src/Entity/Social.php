@@ -38,7 +38,7 @@ class Social
     /**
      * @var integer
      *
-     * @ORM\Column(name="tiempo_dias", type="integer", length=11)
+     * @ORM\Column(name="tiempo_dias", type="integer", length=11, nullable=true)
      */
     private $tiempo_dias;
 

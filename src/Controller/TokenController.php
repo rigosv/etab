@@ -30,22 +30,36 @@ class TokenController extends Controller
 		$sa = $em->getRepository(Boletin::class)->getRuta($sala,$token);
 
 		if (!$sa) 
-			return $this->render('IndicadoresBundle:Page:error.html.twig', array(
+			return $this->render('Page/error.html.twig', array(
 				'error' => "No existe la sala: $sala",
 				'bien' => ""));	
 		else if($sa=="Error")	
-			return $this->render('IndicadoresBundle:Page:error.html.twig', array(
+			return $this->render('Page/error.html.twig', array(
 				'error' => "El tiempo de este boletin ha expirado",
 				'bien' => ""));
 		else
 		{	
-            $sa['indicadores'] = $em->getRepository(GrupoIndicadores::class)
-                    ->getIndicadoresSala($em->getRepository(GrupoIndicadores::class)->find($sa[0]['sala']));
-        	$indicadores = $em->getRepository("IndicadoresBundle:FichaTecnica")->getIndicadoresPublicos();        
-        	return $this->render('FichaTecnicaAdmin/tablero_public.html.twig', array(
-                    'indicadores' => $indicadores,
-        			'sala' => $sa
-                ));
+            
+            $conn = $em->getConnection();
+            
+            $sql = "SELECT * FROM grupo_indicadores where id = ".$sa[0]['id'];
+            
+            $statement = $conn->prepare($sql);
+            $statement->execute();
+            $data = $statement->fetchAll();
+
+            $data1 = []; 
+            foreach ($data as $key => $value) {                    
+                $sql = "SELECT * FROM grupo_indicadores_indicador
+                where grupo_indicadores_id = ".$value["id"]." order by posicion asc; ";
+                
+                $statement = $conn->prepare($sql);
+                $statement->execute();
+                $value["indicadores"] = $statement->fetchAll();  
+                array_push($data1, $value);                   
+            } 
+
+            return $this->render('FichaTecnicaAdmin/tablero_publico.html.twig', array('data' => json_encode($data1[0])));
 		}
 		
     }

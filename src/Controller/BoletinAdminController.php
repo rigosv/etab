@@ -16,12 +16,14 @@ use App\Admin\BoletinAdmin;
 class BoletinAdminController extends Controller
 {
     protected $request;
+    protected $mailer;
 
     /**
      * @param Symfony\Bundle\FrameworkBundle\Controller\Controller
      */
-    public function __construct(RequestStack $requestStack)
+    public function __construct(RequestStack $requestStack, \Swift_Mailer $mailer)
     {
+        $this->mailer = $mailer;
         $this->request = $requestStack->getCurrentRequest();
     }
 
@@ -188,6 +190,7 @@ class BoletinAdminController extends Controller
 	
 	public function enviarAction($form)
 	{
+        $msg = '';
 		// envio de correo a los que pertenecen al grupo
 		$dato = array(array
 		(
@@ -215,15 +218,16 @@ class BoletinAdminController extends Controller
 					'apellido' => $usuario['lastname']
 				)); 
 				$documento1 = $this->get('kernel')->getRootDir().'/../public/images/logo_salud.png';
-				$documento2 = $this->get('kernel')->getRootDir().'/../public/images/boletin.fw.png';
-				$message = \Swift_Message::newInstance()
+                $documento2 = $this->get('kernel')->getRootDir().'/../public/images/boletin.fw.png';
+                
+				$message = (new \Swift_Message('Sala eTAB'))
 					->attach(\Swift_Attachment::fromPath($documento1))
 					->attach(\Swift_Attachment::fromPath($documento2))
 					->setSubject('Boletin de eTAB')
 					->setFrom('eTAB@SM2015.com.mx')
 					->setTo($usuario['email']) 
-					->setBody($this->renderView('Page:email.html.twig', array('dato' => $dato,'array' => $array)),"text/html");
-				$this->get('mailer')->send($message);
+					->setBody($this->renderView('Page/email.html.twig', array('dato' => $dato,'array' => $array)),"text/html");
+				$this->mailer->send($message);
 				$msg.="se envio boletin a: ".$usuario['username'].";  ";
 			}
 		}

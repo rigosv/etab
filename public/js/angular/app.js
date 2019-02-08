@@ -53,7 +53,7 @@ App
                 element.bind('click', function(evt) {
                     evt.preventDefault();
                     var titulo = $("#tituloReporte").html();
-                    var excelData = "<table><tr><th colspan='15'><h1>" + titulo + " (MEXICO) <h1></th></tr></table>" + '<table class="table table-bordered table-striped"> <thead> <tr> <th></th><th>Color</th> <th>Límite inferior</th> <th>Límite superior</th> <th></th> <th></th> <th></th> <th>Informacion</th> </tr> </thead> <tbody> <tr> <th></th><td style="background:red">0 - 69.99</td> <td>0</td> <td>69.99</td> <th></th> <th></th> <th></th> <th style="background:darkgray">Real</th> </tr> <tr> <th></th><td style="background:#FFCC00">70 - 84.99</td> <td>70</td> <td>84.99</td> <th></th> <th></th> <th></th> <th style="background:cornflowerblue">Planificado</th> </tr> <tr> <th></th><td style="background:green">85 - 100</td> <td>85</td> <td>100</td> <th></th> <th></th> <th></th> <th style="color:#000; font-weight:900; text-shadow: 1px 1px 1px #000;">Status</th> </tr> </tbody> </table>';
+                    var excelData = "<table><tr><th colspan='17'><h1>" + titulo + " <h1></th></tr></table>" ;
 
                     excelData += document.getElementById('exportable').innerHTML;
                     var blob = new Blob([excelData], { type: "text/comma-separated-values;charset=utf-8" });
@@ -90,17 +90,41 @@ App
                         var titulo = $("#tituloReporte").html();
 
                         var mywindow = document.getElementById('printf');
-                        mywindow.contentWindow.document.write('<html lang="es" ng-app="App">' + ' <head>' + ' <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />' + ' <meta name="charset" content="UTF-8">' + ' <meta name="viewport" content="wianioh=device-wianioh, initial-scale=1, maximum-scale=1">' + ' <meta name="apple-mobile-web-app-capable" content="yes">' + ' <title></title><link rel="stylesheet" href="' + attrs.ruta + 'css/print.css"/>' + ' <title></title><link rel="stylesheet" href="' + attrs.ruta + 'css/custom_bootstrap.min.css" media="screen"/>' + ' <meta name="viewport" content="initial-scale=1" />' + ' </head>' + ' <body ng-controller="MatrizCtrl">' + ' <h1>' + titulo + ' (MEXICO) <h1>' + data + ' <script src="' + attrs.ruta + 'js/angular/angular.js"></script>' + ' </body>' + ' </html>');
+                        mywindow.contentWindow.document.write(
+                          '<html lang="es" ng-app="App">' +
+                            " <head>" +
+                            ' <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />' +
+                            ' <meta name="charset" content="UTF-8">' +
+                            ' <meta name="viewport" content="wianioh=device-wianioh, initial-scale=1, maximum-scale=1">' +
+                            ' <meta name="apple-mobile-web-app-capable" content="yes">' +
+                            ' <title></title><link rel="stylesheet" href="' +
+                            attrs.ruta +
+                            'css/print.css"/>' +
+                            ' <title></title><link rel="stylesheet" href="' +
+                            attrs.ruta +
+                            '/bundles/sonatacore/vendor/bootstrap/dist/css/bootstrap.min.css" media="screen"/>' +
+                            ' <meta name="viewport" content="initial-scale=1" />' +
+                            " </head>" +
+                            ' <body ng-controller="MatrizCtrl">' +
+                            " <h1>" +
+                            titulo +
+                            " <h1>" +
+                            data +
+                            ' <script src="' +
+                            attrs.ruta +
+                            'js/angular/angular.js"></script>' +
+                            " </body>" +
+                            " </html>"
+                        );                        
 
-
-                        setTimeout(function() {
+                        setTimeout(function () {
                             // lanzar la sentencia imprimir
                             mywindow.contentWindow.print();
                         }, 500);
-                        setTimeout(function() {
-                            // remover el contenedor de impresion
+                        setTimeout(function () {
+                            // remover el contenedor de impresión
                             document.body.removeChild(iframe);
-                        }, 2000);
+                        }, 2000);                       
 
                     }
                     return true;

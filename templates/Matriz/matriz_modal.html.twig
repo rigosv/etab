@@ -1,0 +1,111 @@
+<div class="modal fade" id="confirmarModelo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog " >
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="exampleModalLabel">{{ '_confirmacion_' | trans }}</h4>
+                
+            </div>
+            <div class="modal-body">                    
+                {{ '_confirma_limpiar_modelo_' | trans}}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ '_cancelar_' | trans}}</button>
+                <button type="button" ng-click="limpiarModelo()" class="btn btn-primary">{{ '_aceptar_' | trans}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmarFila" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+    <div class="modal-dialog " >
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="exampleModalLabel2">{{ '_confirmacion_' | trans }}</h4>
+                
+            </div>
+            <div class="modal-body">                    
+                {{ '_confirma_fila_modelo_' | trans}}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ '_cancelar_' | trans}}</button>
+                <button type="button" ng-click="eliminarFila()" class="btn btn-primary">{{ '_aceptar_' | trans}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmarMatriz" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel3" aria-hidden="true">
+    <div class="modal-dialog " >
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="exampleModalLabel3">{{ '_confirmacion_' | trans }}</h4>
+                
+            </div>
+            <div class="modal-body">                    
+                {{ '_confirma_registro_' | trans}}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ '_cancelar_' | trans}}</button>
+                <button type="button" ng-click="eliminarMatriz()" class="btn btn-primary">{{ '_aceptar_' | trans}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="alertas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 id="myModalLabel2">{{ 'alertas' | trans }}</h4>
+            </div>
+            <div class="modal-body" style="max-height:80vh; max-width:100%; overflow:auto;">
+                <form >        
+                         
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>{{ 'javascript.limite_inf' | trans }}</th>
+                                <th>{{ 'javascript.limite_sup' | trans }}</th>
+                                <th>{{ 'color' | trans }}</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="val in dato.indicadores_desempeno[index][tipo][fila].alertas">
+                                <td><input type="number" ng-model="val.limite_inferior" string-to-number required="required" class=" form-control"></td>
+                                
+                                <td><input type="number" ng-model="val.limite_superior" string-to-number required="required" min="<% alerta.limite_inferior %>" class=" form-control" ></td>
+
+                                <td width="25%">             
+                                    <div class="dropdown" style="position: fixed;">
+                                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu<% $index %>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                            <% val.color ? val.color.color : 'Seleccione'%>
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu<% $index %>">
+                                            <li ng-repeat="color in listaColores" ng-click="val.color = color" >
+                                                <a href="javascript:void(0)" ng-click="val.color = color" ><% color.color %></a>
+                                            </li>                                        
+                                        </ul> 
+                                    </div>                                   
+                                </td>
+
+                                <td><button type="button" class="btn btn-danger"  ng-click="quitarAlerta(index, fila, $index, tipo)"><i class="fa fa-minus"></i> </button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" ng-click="agregarAlerta(index, fila, tipo)"><i class="fa fa-plus"></i> {{ '_agregar_nuevo_' | trans}}</button>
+                <button type="button" class="btn btn-danger" ng-click="limpiarAlerta(index, fila, tipo)" ><i class="fa fa-trash"></i> {{ '_limpiar_' | trans}}</button>
+                                                    
+                <button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>                        
+            </div>
+        </div>
+    </div>
+</div>

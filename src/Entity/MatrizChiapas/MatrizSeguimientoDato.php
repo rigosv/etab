@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * MatrizIndicadoresDesempeno
  *
  * @ORM\Table(name="matriz_seguimiento_dato")
- * @ORM\Entity(repositoryClass="App\Entity\MatrizChiapas\MatrizSeguimientoDatoRepository")
+ * @ORM\Entity
  */
 class MatrizSeguimientoDato
 {

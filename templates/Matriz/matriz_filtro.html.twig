@@ -1,0 +1,107 @@
+<div class="modal fade" id="modalFiltros" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+       <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 id="myModalLabel2">{{ 'javascript.dimension_opciones' | trans }}</h4>
+        </div>
+        <div class="modal-body" style="max-height:80vh; max-width:100%; overflow:auto;">
+            <form >
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label for="desde">{{ '_descender_nivel_' | trans}}</label>
+                        <div class="box-body  container-fluid" >
+                            <div class="sonata-ba-collapsed-fields">
+                                <div class="row">
+                                    <div class="">
+                                        <div class="box box-primary">
+                                            <div class="box-header">
+                                                <ol class="breadcrumb tablero_breadcrumb " ng-if="dato.indicadores_desempeno[index].indicador_etab[fila].filtros.length > 0">
+                                                    <li class="<% $index == dato.indicadores_desempeno[index].indicador_etab[fila].dimension - 1 ? 'active' : '' %>" ng-repeat="link in dato.indicadores_desempeno[index].indicador_etab[fila].filtros" >
+                                                        <span ng-if="$index == dato.indicadores_desempeno[index].indicador_etab[fila].dimension - 1"><% link.codigo | uppercase %>: <% link.valor %>  </span>
+                                                        <a  ng-click="breadcum($index, dato.indicadores_desempeno[index].indicador_etab[fila], link, index, fila)" ng-if="$index != dato.indicadores_desempeno[index].indicador_etab[fila].dimension - 1" style="cursor:pointer"><% link.codigo | uppercase %>: <% link.valor %></a>
+                                                    </li>
+                                                </ol>
+                                            </div>
+                                            <div class="box-body">
+                                                <div style="float: left; cursor:pointer; padding-right: 8px;" ng-repeat="data in dato.indicadores_desempeno[index].indicador_etab[fila].data" style="cursor:pointer" ng-click="descenderDimension(data.category, index, fila)">
+                                                    <div class="box box-success">
+                                                        <div class="box-header">
+                                                            <h5 class="box-title">
+                                                                <% data.measure %>
+                                                            </h5>
+                                                        </div>
+                                                        <div class="box-body">
+                                                            <small> <%data.category%></small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="box-footer">
+                                                <% dato.indicadores_desempeno[index].indicador_etab[fila].dimensiones[dato.indicadores_desempeno[index].indicador_etab[fila].dimension] %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="disabledSelect">{{ '_dimension_mostrar_' | trans}}</label>
+                        <select id="disabledSelect" class="form-control" ng-model="dato.indicadores_desempeno[index].indicador_etab[fila].otros_filtros.dimension_mostrar" >
+                            <option ng-repeat="(key, value) in dato.indicadores_desempeno[index].indicador_etab[fila].informacion.dimensiones" value="<% $index %>"
+                            ng-selected="dato.indicadores_desempeno[index].indicador_etab[fila].otros_filtros.dimension_mostrar == $index ? true : false"><% value.descripcion %></option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="disabledSelect">{{ '_dimension_representa_' | trans}}</label>
+                        <select id="disabledSelect" class="form-control" ng-model="dato.indicadores_desempeno[index].indicador_etab[fila].otros_filtros.representa" >
+                            <option ng-repeat="(key, value) in representaciones" value="<% value.id %>"
+                            ng-selected="dato.indicadores_desempeno[index].indicador_etab[fila].otros_filtros.representa == value.id ? true : false"><% value.descripcion %></option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label for="disabledSelect">{{ '_dimension_filtrar_' | trans}}</label>
+                        <select id="disabledSelect" class="form-control" ng-model="dato.indicadores_desempeno[index].indicador_etab[fila].dimension" ng-change="agregarIndicadorDimension(dato.indicadores_desempeno[index].indicador_etab[fila].dimension, index, fila)">
+                            <option ng-repeat="(key, value) in dato.indicadores_desempeno[index].indicador_etab[fila].informacion.dimensiones" value="<% $index %>"
+                            ng-selected="dato.indicadores_desempeno[index].indicador_etab[fila].dimension == $index ? true : false"><% value.descripcion %></option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">{{ 'javascript.filtrar_por_elemento' | trans}}</h3>
+                        </div>
+                        <div class="panel-body">
+                            <ul class="list-group">
+                                <li class="list-group-item list_indicador" ng-repeat="(key, value) in dato.indicadores_desempeno[index].indicador_etab[fila].data"  ng-click="agregarOtrosFiltros(index, fila, value.category)" 
+                                style="<% dato.indicadores_desempeno[index].indicador_etab[fila].otros_filtros.elementos.indexOf(value.category) > -1 ? 'background: #c0f4c0;' : '' %>">                                    
+                                     <% value.category %> 
+                                    <span class="badge badge-primary badge-pill " ng-if="dato.indicadores_desempeno[index].indicador_etab[fila].otros_filtros.elementos.indexOf(value.category) > -1">
+                                        <i class="glyphicon glyphicon-ok"></i>
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>               
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" ng-click="filtrarIndicador(index, fila)">{{ 'javascript.filtrar' | trans}}</button>
+            <button type="button" class="btn btn-danger" ng-click="quitarFiltro(index, fila)">{{ 'javascript.quitar_filtro' | trans}}</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>                        
+        </div>
+    </div>
+  </div>
+</div>

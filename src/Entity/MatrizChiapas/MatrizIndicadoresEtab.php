@@ -5,12 +5,12 @@ namespace App\Entity\MatrizChiapas;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * MatrizIndicadoresRel
+ * MatrizIndicadoresEtab
  *
- * @ORM\Table(name="matriz_indicadores_relacion")
+ * @ORM\Table(name="matriz_indicadores_etab")
  * @ORM\Entity
  */
-class MatrizIndicadoresRel
+class MatrizIndicadoresEtab
 {
     /**
      * @var integer $id
@@ -24,16 +24,9 @@ class MatrizIndicadoresRel
     /**
      * @var string
      *
-     * @ORM\Column(name="nombre", type="string", length=500)
+     * @ORM\Column(name="filtros", type="text", nullable=true)
      */
-    private $nombre;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="fuente", type="string", length=500, nullable=true)
-     */
-    private $fuente;
+    private $filtros;
 
     /**
      * @var \DateTime
@@ -51,7 +44,15 @@ class MatrizIndicadoresRel
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="MatrizIndicadoresDesempeno", inversedBy="matrizIndicadoresRelacion")
+     * @ORM\ManyToOne(targetEntity="App\Entity\FichaTecnica", inversedBy="ficha")
+     * @ORM\JoinColumn(name="id_ficha_tecnica", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     *
+     */
+    private $ficha;
+
+    /**
+     *
+     * @ORM\ManyToOne(targetEntity="MatrizIndicadoresDesempeno", inversedBy="desempeno")
      * @ORM\JoinColumn(name="id_desempeno", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      *
      */
@@ -80,56 +81,33 @@ class MatrizIndicadoresRel
     }
 	
     /**
-     * Set nombre
+     * Set filtros
      *
-     * @param string $nombre
-     * @return MatrizIndicadoresRel
+     * @param string $filtros
+     * @return MatrizIndicadoresEtab
      */
-    public function setNombre($nombre)
+    public function setFiltros($filtros)
     {
-        $this->nombre = $nombre;
+        $this->filtros = $filtros;
     
         return $this;
     }
 
     /**
-     * Get nombre
+     * Get filtros
      *
      * @return string 
      */
-    public function getNombre()
+    public function getFiltros()
     {
-        return $this->nombre;
-    }
-
-    /**
-     * Set fuente
-     *
-     * @param string $fuente
-     * @return MatrizIndicadoresRel
-     */
-    public function setFuente($fuente)
-    {
-        $this->fuente = $fuente;
-    
-        return $this;
-    }
-
-    /**
-     * Get fuente
-     *
-     * @return string 
-     */
-    public function getFuente()
-    {
-        return $this->fuente;
+        return $this->filtros;
     }
 
     /**
      * Set creado
      *
      * @param DateTime $creado
-     * @return MatrizIndicadoresRel
+     * @return MatrizIndicadoresEtab
      */
     public function setCreado($creado)
     {
@@ -152,7 +130,7 @@ class MatrizIndicadoresRel
      * Set actualizado
      *
      * @param DateTime $actualizado
-     * @return MatrizIndicadoresRel
+     * @return MatrizIndicadoresEtab
      */
     public function setActualizado($actualizado)
     {
@@ -172,7 +150,7 @@ class MatrizIndicadoresRel
     }
 	
 	public function __toString() {
-        return $this->nombre ? :'';
+        return $this->filtros ? :'';
     }
 
 
@@ -180,7 +158,7 @@ class MatrizIndicadoresRel
      * Set desempeno
      *
      * @param  App\Entity\MatrizChiapas\MatrizIndicadoresDesempeno $desempeno
-     * @return MatrizIndicadoresRel
+     * @return MatrizIndicadoresEtab
      */
     public function setDesempeno(\App\Entity\MatrizChiapas\MatrizIndicadoresDesempeno $desempeno = null)
     {
@@ -197,6 +175,31 @@ class MatrizIndicadoresRel
     public function getDesempeno(\App\Entity\MatrizChiapas\MatrizIndicadoresDesempeno $desempeno = null)
     {
         $this->desempeno = $desempeno;
+
+        return $this;
+    }
+
+    /**
+     * Set ficha
+     *
+     * @param  App\Entity\FichaTecnica $ficha
+     * @return MatrizIndicadoresEtab
+     */
+    public function setFicha(\App\Entity\FichaTecnica $ficha = null)
+    {
+        $this->ficha = $ficha;
+
+        return $this;
+    }
+    /**
+     * Set ficha
+     *
+     * @param  App\Entity\FichaTecnica $ficha
+     * @return MatrizIndicadoresDesempeno
+     */
+    public function getFicha(\App\Entity\FichaTecnica $ficha = null)
+    {
+        $this->ficha = $ficha;
 
         return $this;
     }

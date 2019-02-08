@@ -1,0 +1,358 @@
+{% extends 'standard_layout.html.twig' %}
+{% block javascripts %}
+    {{parent()}}
+    <script src="{{ asset('js/angular/angular.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/angularTablero/d3.js') }}"></script>
+    <script src="{{ asset('js/angularTablero/d3_nvd3.js') }}"></script>
+    <script src="{{ asset('js/angularTablero/d3_angular_nvd3.js') }}"></script>
+    <script src="{{ asset('js/angular/ui-bootstrap.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/angular/ngStorage.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/angular/moment.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/angularTablero/ngRadialGauge/src/ng-radial-gauge-dir.js') }}"></script>
+    <script src="{{ asset('js/angular/app.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/angular/matrizConfiguracion.js') }}" type="text/javascript"></script>
+
+    <script src="{{ asset('js/export_plugin/tableExport.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/export_plugin/filesaver.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/export_plugin/jquery.base64.js') }}" type="text/javascript"></script>
+    
+{% endblock javascripts %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/FichaTecnicaAdmin/tablero.css') }}">
+
+    <style>
+        td{
+            min-width: 30px;
+            min-height: 90px;
+        }
+        td.valores{
+            text-align: right;
+        }
+        td.nombre_variable{
+            vertical-align: middle !important;
+        }
+        table{
+            background-color: white;
+            border-color: black !important;
+        }
+        .sonata-ba-content{
+            overflow: auto;
+        }
+        .content-header {
+            padding: 0px;
+        }
+        .navbar2 {
+            position: relative;
+            min-height: 50px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+        }
+    </style>
+
+{% endblock %}
+
+
+{% block sonata_page_content %}
+    <div ng-app="App" ng-controller="MatrizConfiguracionCtrl" ng-init="asignarURL('{{ app.request.getSchemeAndHttpHost() }}', '{{ path('MatrizConfiguracion') }}');"> 
+        {% block sonata_page_content_header %}
+            <section class="content-header">
+                <nav class="navbar navbar-default" role="navigation" style="width: auto;">
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            <a class="navbar-brand" href="javascript:void(0)">{{ nuevo ? '_nuevo_' : '_editar_' | trans}} {{ '_matriz_seguimiento_' | trans }}</a>
+                        </div>
+                        <div class="navbar-collapse" ng-if="dato.id">
+                            <ul class="nav navbar-nav navbar-right">
+                                <li class="dropdown sonata-actions">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">{{ '_acciones_' | trans }} <b class="caret"></b></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a class="sonata-action-element" href="/admin/app/matrizchiapas-matrizseguimientomatriz/create"><i class="fa fa-plus-circle" aria-hidden="true" d></i>
+                                        {{ '_agregar_nuevo_' | trans }}
+                                        </a>
+                                    </li>
+                                    <li><a class="sonata-action-element" href="javascript:void(0)" ng-click="clonarMatriz()"><i class="fa fa-clone" aria-hidden="true" d></i>
+                                        {{ '_clonar_y_editar_' | trans }}
+                                        </a>
+                                    </li>
+                                    <li><a class="sonata-action-element" href="/admin/app/matrizchiapas-matrizseguimientomatriz/list"><i class="fa fa-list" aria-hidden="true" d></i>
+                                        {{ '_volver_listado_' | trans }}
+                                        </a>
+                                    </li>
+                                </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </section>
+        {% endblock %}
+
+        {% block sonata_admin_content %}
+        <section class="content">
+            <div id="div_carga" class='affix' style="display:<% cargando ? 'block' : 'none' %>">
+                <div id="cargador"><span class="fa fa-spin fa-cog"></span></div>
+            </div>
+            <div class="sonata-ba-form">
+                <form class="form-horizontal" role="form" >
+                    <div id="feedback_bar"></div>
+                    <div class="row" ng-init="usuarios = []; cargarSelect('{{ path('listaUsuarios') }}', usuarios); listaColores = []; cargarSelect('{{ path('listaColores') }}', listaColores);">            
+                        <div class="col-md-12">
+                            <div class="nav-tabs-custom">
+                                <!-- Nav tabs -->
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <li role="presentation" class="active"><a href="#general" aria-controls="home" role="tab" data-toggle="tab">{{ '_general_' | trans}}</a></li>
+                                    <li role="presentation"><a href="#indicador_desempeno" aria-controls="profile" role="tab" data-toggle="tab">{{ '_indicador_desempeno_' | trans}}</a></li>
+                                    <li role="presentation"><a href="#usuarios" aria-controls="messages" role="tab" data-toggle="tab">{{ 'User List' | trans}}</a></li>
+                                </ul>
+
+                                <!-- Tab panes -->
+                                <div class="tab-content">
+                                    <div role="tabpanel" class="tab-pane fade in active" id="general">
+                                        <div class="box-body  container-fluid">
+                                            <div class="sonata-ba-collapsed-fields">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="box box-primary">
+                                                            <div class="box-header">
+                                                                <h4 class="box-title">
+                                                                    {{ '_datos_generales_' | trans }}
+                                                                </h4>
+                                                            </div>
+                                                            <div class="box-body">
+                                                                <div class="sonata-ba-collapsed-fields">
+                                                                    <div class="form-group" >
+                                                                        <label class=" col-sm-3 control-label" for="nombre">
+                                                                            {{ 'nombre' | trans }}
+                                                                        </label>
+                                                                        <div class="sonata-ba-field col-sm-9 sonata-ba-field-standard-natural">
+                                                                            <input type="text" id="nombre" name="nombre" ng-model="dato.nombre" required="required" maxlength="100" class=" form-control">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group" id="sonata-ba-field-container-descripcion">
+                                                                        <label class="col-sm-3 control-label required" for="descripcion">
+                                                                            {{ '_descripcion_' | trans }}
+                                                                        </label>
+                                                                        <div class="sonata-ba-field col-sm-9 sonata-ba-field-standard-natural">
+                                                                            <textarea id="descripcion" name="descripcion" ng-model="dato.descripcion" required="required" class=" form-control">Este indicador se puede medir mensual, debe ser acumulable y se espera un crecimiento ascendente.</textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane fade in" id="indicador_desempeno">
+                                        <div class="box-body  container-fluid">
+                                            <div class="sonata-ba-collapsed-fields">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="box box-primary">
+                                                            <div class="box-header">
+                                                                <h4 class="box-title">
+                                                                    {{ '_indicador_desempeno_' | trans }}
+                                                                </h4>
+                                                            </div>
+                                                            <div class="box-body">
+                                                                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                                                    
+                                                                    <div class="panel panel-default" ng-repeat="desempeno in dato.indicadores_desempeno" ng-init="num = $index">
+                                                                        <div class="panel-heading" role="tab" >
+                                                                            <h4 class="panel-title">
+                                                                                <a role="button" data-toggle="collapse" data-parent="#accordion" id="colapsar<% $index %>" ng-click="cerrarAcordion($index)"> 
+                                                                                    <i class="fa fa-caret-<% !desempeno.abierto ? 'down' : 'up' %>" ></i>
+
+                                                                                    <% desempeno.nombre %>
+                                                                                </a>   
+                                                                                <button type="button" class="btn btn-danger" style="float: right; padding: 1px 8px;" ng-click="confirmarFila('indicadores_desempeno', 'confirmarFila', $index)"><i class="fa fa-minus"></i> </button>                                                     
+                                                                            </h4>
+                                                                        </div>
+                                                                        <div id="collapse<% $index %>" class="panel-collapse collapse <% desempeno.abierto ? 'in' : '' %>" role="tabpanel" aria-labelledby="headingOne" >
+                                                                            <div class="panel-body">
+
+                                                                                <div class="nav-tabs-custom">
+                                                                                    <div class="sonata-ba-collapsed-fields">
+                                                                                        <div class="form-inline">
+                                                                                            <div class="form-group col-sm-6" style="padding: 14px;">
+                                                                                                <label class="control-label" for="nombre">
+                                                                                                    {{ 'nombre' | trans }}
+                                                                                                </label>
+                                                                                                <input type="text" ng-model="desempeno.nombre" required="required" maxlength="100" class=" form-control" style="width:90%">
+                                                                                                
+                                                                                            </div>
+                                                                                            <div class="form-group col-sm-6" style="padding: 14px;">
+                                                                                                <label class="control-label" for="nombre">
+                                                                                                    {{ 'orden' | trans }}
+                                                                                                </label>
+                                                                                                <input type="text" ng-model="desempeno.orden" required="required" maxlength="100" class=" form-control" style="width:90%">                                                                        
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <!-- Nav tabs -->
+                                                                                    <ul class="nav nav-tabs" role="tablist">
+                                                                                        <li role="presentation" class="<% tab[num] == 1 || tab.length == 0 ? 'active' : '' %>"><a ng-click="tab[num]=1;" aria-controls="profile" role="tab" data-toggle="tab" >{{ '_indicador_etab_' | trans}}</a></li>
+                                                                                        <li role="presentation" class="<% tab[num] == 2 ? 'active' : '' %>"><a ng-click="tab[num]=2;" aria-controls="messages" role="tab" data-toggle="tab">{{ '_indicador_rel_' | trans}}</a></li>
+                                                                                    </ul>
+                                                                                    <div class="tab-content">
+                                                                                        <div role="tabpanel" class="tab-pane fade in <% tab[num] == 1 || tab.length == 0 ? 'active' : '' %>" id="indicador_etab<% $index %>">
+                                                                                            <div class="box box-info">
+                                                                                                <div class="box-header">
+                                                                                                    <h4 class="box-title">
+                                                                                                        {{ 'indicadores' | trans}}
+                                                                                                    </h4>
+                                                                                                </div>
+                                                                                                <div class="box-body" >
+                                                                                                    
+                                                                                                    <a class="btn dropdown-toggle btn-success navbar-btn" ng-click="abrirModalIndicador($index)">
+                                                                                                        <i class="glyphicon glyphicon-flag"></i> <span class="hidden-xs">{{"indicadores" | trans}}</span>
+                                                                                                    </a>
+
+                                                                                                    <table class="table table-striped">
+                                                                                                        <thead>
+                                                                                                            <tr>
+                                                                                                                <th>{{ 'nombre' | trans }}</th>
+                                                                                                                <th>{{ 'filtrar' | trans }}</th>
+                                                                                                                <th>{{ 'alertas' | trans }}</th>
+                                                                                                                <th></th>
+                                                                                                            </tr>
+                                                                                                        </thead>
+                                                                                                        <tbody>
+                                                                                                            <tr ng-repeat="indicador in desempeno.indicador_etab">
+                                                                                                                <td><strong><% indicador.nombre %></strong></td>
+                                                                                                                
+                                                                                                                <td><button type="button" class="btn btn-primary" ng-click="verFiltros(num, $index)"><i class="fa fa-filter"></i> {{ 'filtrar' | trans}}</button></td>
+
+                                                                                                                <td><button type="button" class="btn btn-info" ng-click="abrirAlerta(num, $index, 'indicador_etab')"><i class="fa fa-exclamation-circle"></i> {{ 'alertas' | trans}}</button></td>
+
+                                                                                                                <td><button type="button" class="btn btn-danger"  ng-click="confirmarFila('indicador_etab', 'confirmarFila', $index, num)"><i class="fa fa-minus"></i> </button></td>
+                                                                                                            </tr>
+                                                                                                        </tbody>
+                                                                                                    </table>
+                                                                                                        
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div role="tabpanel" class="tab-pane fade in <% tab[num] == 2 ? 'active' : '' %>" id="indicador_relacion<% $index %>">
+                                                                                             <div class="box-body  container-fluid">
+                                                                                                <div class="sonata-ba-collapsed-fields">
+                                                                                                    <div class="row">
+                                                                                                        <div class="col-md-12">
+                                                                                                            <div class="box box-success">
+                                                                                                                <div class="box-header">
+                                                                                                                    <h4 class="box-title">
+                                                                                                                        {{ '_indicador_rel_' | trans }}
+                                                                                                                    </h4>
+                                                                                                                </div>
+                                                                                                                <div class="box-body">
+                                                                                                                    <table class="table table-striped">
+                                                                                                                        <thead>
+                                                                                                                            <tr>
+                                                                                                                                <th>{{ 'nombre' | trans }}</th>
+                                                                                                                                <th>{{ '_fuente_' | trans }}</th>
+                                                                                                                                <th>{{ 'alertas' | trans }}</th>
+                                                                                                                                <th></th>
+                                                                                                                            </tr>
+                                                                                                                        </thead>
+                                                                                                                        <tbody>
+                                                                                                                            <tr ng-repeat="relacion in desempeno.indicador_relacion">
+                                                                                                                                <td><input type="text" ng-model="relacion.nombre" required="required" maxlength="100" class=" form-control" ></td>
+                                                                                                                                <td><input type="text" ng-model="relacion.fuente" required="required" maxlength="100" class=" form-control" ></td>
+                                                                                                                                <td><button type="button" class="btn btn-primary" ng-click="abrirAlerta(num, $index, 'indicador_relacion')"><i class="fa fa-exclamation-circle"></i> {{ 'alertas' | trans}}</button></td>
+                                                                                                                                <td><button type="button" class="btn btn-danger"  ng-click="confirmarFila('indicador_relacion', 'confirmarFila', $index, num)"><i class="fa fa-minus"></i> </button></td>
+                                                                                                                            </tr>
+                                                                                                                        </tbody>
+                                                                                                                    </table>
+                                                                                                                </div>
+
+                                                                                                                <div class="box-footer">
+                                                                                                                    <button type="button" class="btn btn-primary" ng-click="agregarIndicadorRelacion($index)"><i class="fa fa-plus"></i> {{ '_agregar_nuevo_' | trans}}</button>
+                                                                                                                    <button type="button" class="btn btn-danger" ng-click="confirmarModelo('indicador_relacion', 'confirmarModelo', $index)" ><i class="fa fa-trash"></i> {{ '_limpiar_' | trans}}</button>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="box-footer">
+                                                                <button type="button" class="btn btn-info" ng-click="agregarDesempeno()"><i class="fa fa-plus"></i> {{ '_agregar_nuevo_' | trans}}</button>
+                                                                <button type="button" class="btn btn-danger" ng-click="confirmarModelo('indicadores_desempeno', 'confirmarModelo')" ><i class="fa fa-trash"></i> {{ '_limpiar_' | trans}}</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>                                                                            
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane fade in" id="usuarios">
+                                        <div class="box box-primary">
+                                            <div class="box-header">
+                                                <h4 class="box-title">
+                                                    {{ '_usuario_' | trans}}
+                                                </h4>
+                                            </div>
+                                            <div class="box-body" >
+                                                <div class="sonata-ba-collapsed-fields">
+                                                    <div class="form-group" id="sonata-ba-field-container-usuario">
+                                                        <div class="sonata-ba-field col-sm-12 sonata-ba-field-standard-natural">
+                                                            <div class="">    
+                                                             
+                                                                <input type="text" ng-model="buscar_usuario" class=" form-control" placeholder="{{ '_buscar_' | trans }}">                                                          
+                                                                <ul id="usuario" class="list-group" style="max-height:43vh; overflow:auto;">
+                                                                    <li class="list-group-item" ng-repeat="usuario in usuarios | filter:buscar_usuario" ng-click="includeArray(usuario.id, dato.usuarios)" style="<% dato.usuarios.indexOf(usuario.id) > -1 ? 'background: #f8f8f8' : '' %>">
+                                                                        <strong style="cursor:default"> 
+                                                                            <i class="fa <% dato.usuarios.indexOf(usuario.id) > -1 ? 'fa-check-square' : 'fa-square-o' %>" style="font-size: 24px;color: dodgerblue;"></i> &nbsp;
+                                                                            <% usuario.firstname ? usuario.firstname + ' ' + usuario.lastname : usuario.username  %>                                                                            
+                                                                        </strong>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sonata-ba-form-actions well well-small form-actions stuck">
+                        <button type="button" class="btn btn-success" name="btn_update_and_edit" ng-click="guardar()"><i class="fa fa-save" aria-hidden="true" d></i> {{ '_guardar_' | trans }}</button>
+                        <button type="button" class="btn btn-success" name="btn_update_and_list" ng-click="guardarCerrar()"><i class="fa fa-save" d></i> <i class="fa fa-list" aria-hidden="true" d></i> {{ '_guardar_cerrar_' | trans }}</button>                        
+                        <button ng-if="dato.id" type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmarMatriz"><i class="fa fa-minus-circle" aria-hidden="true" d></i> {{ '_eliminar_' | trans }}</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    
+    {% endblock %}
+        <!-- MODAL  -->
+        {% include 'Matriz/matriz_modal.html.twig' %}
+        <!-- FIN MODAL  -->
+        
+
+        <!-- MODAL INDICADOR -->
+        {% include 'Matriz/matriz_indicadores.html.twig' %}
+        <!-- FIN MODAL INDICADOR -->
+        
+
+        <!-- MODAL FILTROS -->
+        {% include 'Matriz/matriz_filtro.html.twig' %}
+        <!-- FIN MODAL FILTROS -->
+
+    </div>
+{% endblock %}    

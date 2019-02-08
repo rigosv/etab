@@ -240,6 +240,7 @@ class FichaTecnica
      * */
     private $tiposGraficos;
 
+
     /**
      * Get id
      *
