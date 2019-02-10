@@ -65,7 +65,7 @@ Puedes ver el código de conducta para este proyecto en el siguiente archivo [CO
 ### Licencia
 ---
 
-La Documentación de Soporte y Uso del software se encuentra licenciada bajo Creative Commons IGO 3.0 Atribución-NoComercial-SinObraDerivada (CC-IGO 3.0 BY-NC-ND) [LICENCIA.md](https://gitlab.com/checherman/psm4/tree/master/ANGULAR/blob/master/LICENSE.md)
+La Documentación de Soporte y Uso del software se encuentra licenciada bajo Creative Commons IGO 3.0 Atribución-NoComercial-SinObraDerivada (CC-IGO 3.0 BY-NC-ND) [LICENCIA.md](https://github.com/rigosv/etab/blob/master/LICENSE.md)
 
   
 
