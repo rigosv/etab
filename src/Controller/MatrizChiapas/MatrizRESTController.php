@@ -790,4 +790,31 @@ class MatrizRESTController extends AbstractController {
         }      
         return $resp;
     }
+
+    /**
+     * @Route("/seperar_fila_origen_dato", name="seperar_fila_origen_dato", methods={"GET"})
+     */
+    public function seperar_fila_origen_dato(Request $request){
+        $em = $this->getDoctrine()->getManager();
+        $fav = "SELECT id_origen_dato
+                FROM public.fila_origen_dato
+                GROUP BY id_origen_dato";
+
+        $conn = $em->getConnection();
+        $fst = $conn->prepare($fav);
+        $fst->execute();
+        $origenes = $fst->fetchAll();
+
+        foreach($origenes as $origen){            
+            $id_origen = $origen['id_origen_dato'];
+            $fav = "CREATE TABLE origenes.fila_origen_dato_$id_origen AS SELECT id_origen_dato, datos, ultima_lectura, id_conexion                
+                FROM public.fila_origen_dato
+                WHERE id_origen_dato = $id_origen";
+
+            $conn = $em->getConnection();
+            $fst = $conn->prepare($fav);
+            $fst->execute();
+        }
+        return new Response( "bien");
+    }
 }

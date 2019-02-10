@@ -104,11 +104,11 @@
                     <div class="row" ng-init="usuarios = []; cargarSelect('{{ path('listaUsuarios') }}', usuarios); listaColores = []; cargarSelect('{{ path('listaColores') }}', listaColores);">            
                         <div class="col-md-12">
 
-                            <div ng-if="noPlaneacion" style="height:<% tamanoHeight %>px; overflow:auto"></div>
+                            <div ng-if="noPlaneacion" ></div>
                                 <div class="row" ng-if="!noPlaneacion">
 
                                     
-                                    <div class="colsm-12" style="height:<% tamanoHeight %>px; overflow:auto">
+                                    <div class="colsm-12" style="height: 79vh; overflow:auto">
 
                                         <div class="panel panel-default" ng-repeat="item in dato.matriz">
                                             <div class="panel-heading">

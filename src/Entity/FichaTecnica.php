@@ -35,7 +35,7 @@ class FichaTecnica
     /**
      * @var string $nombre
      *
-     * @ORM\Column(name="nombre", type="string", length=150, nullable=false)
+     * @ORM\Column(name="nombre", type="string", length=250, nullable=false)
      */
     private $nombre;
 

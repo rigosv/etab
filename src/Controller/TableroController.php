@@ -619,7 +619,7 @@ class TableroController extends AbstractController {
             //$em->flush();
 
             $d = $fichaTec->getUltimaLectura();
-            if ($d !== false)
+            if ($d)
                 $resp['ultima_lectura'] = $d->format('d/m/Y');
             $resp['resultado'] = 'ok';
         } else {
@@ -725,6 +725,13 @@ class TableroController extends AbstractController {
                         "descripcion" => $var->getDescripcion()                    
                     ));
                 }
+                
+                $grupo = "SELECT * FROM grupo_indicadores_indicador WHERE indicador_id = ".$data->getId();
+
+                $conn = $em->getConnection();
+                $fst = $conn->prepare($grupo);
+                $fst->execute();
+                $reportes = $fst->fetchAll();
 
                 $informacion = array(
                     "id" => $data->getId(),
@@ -740,10 +747,10 @@ class TableroController extends AbstractController {
                     "confiabilidad" => $data->getConfiabilidad(),
                     "updated_at" => $data->getUpdatedAt()->format('d/m/Y'),
                     "es_acumulado" => $data->getEsAcumulado(),
-                    "ultima_lectura" => $ultima_lectura->format('d/m/Y'),                    
+                    "ultima_lectura" => $ultima_lectura ? $ultima_lectura->format('d/m/Y') : '',                    
                     "meta" => $data->getMeta(),
                     "periodo" => $data->getPeriodo(),
-                    "reporte" => $data->getReporte(),
+                    "reporte" => $reportes,
                     "clasificacion_tecnica" => $clasificaciones,
                     "alertas" => $alertas,
                     "variables" => $variables,
