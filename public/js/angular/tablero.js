@@ -1010,9 +1010,9 @@ App.controller("TableroCtrl", function(
       });
     } 
     if (tipo == 'MAPA' || tipo == 'GEOLOCATION' || tipo == 'MAP') {
-      angular.forEach(data.data, function (val, key) {
+      angular.forEach($scope.indicadores[index].data, function (val, key) {
         color = "#ffffff";
-        angular.forEach(data.informacion.rangos, function (v1, k1) {
+        angular.forEach($scope.indicadores[index].informacion.rangos, function (v1, k1) {
           if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
             color = v1.color;
           }
@@ -1648,13 +1648,15 @@ App.controller("TableroCtrl", function(
                 var nombre = $scope.eliminarDiacriticos(d.properties.NAME);
                 nombre = nombre.toUpperCase();
                 var valor = $scope.indicadores[index].grafica[nombre] ? $scope.indicadores[index].grafica[nombre].value : "--";
+                var menosX = $scope.indicadores[index].full_screen ? 0 : 200;
+                var menosY = $scope.indicadores[index].full_screen ? 0 : 150;
 
                 d3.select(this).transition().duration(300).style("opacity", 1);
                 div.transition().duration(300)
                   .style("opacity", 1)
                 div.text(d.properties.NAME + ": " + valor)
-                  .style("left", (d3.event.pageX - 200) + "px")
-                  .style("top",  (d3.event.pageY - 150) + "px");
+                  .style("left", (d3.event.pageX - menosX) + "px")
+                  .style("top",  (d3.event.pageY - menosY) + "px");
               })
               .on("mouseout", function () {
                 d3.select(this)
