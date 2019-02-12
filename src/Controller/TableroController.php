@@ -567,6 +567,7 @@ class TableroController extends AbstractController {
                         $graficos_filtrados_ficha = $significado->getTiposGraficosArray();
                     }
                     $dimensiones[$significado->getCodigo()]['graficos'] = $graficos_filtrados_ficha;
+                    $dimensiones[$significado->getCodigo()]['mapa'] = $significado->getNombreMapa();
                 }
             }
             $rangos_alertas_aux = array();
@@ -977,5 +978,50 @@ class TableroController extends AbstractController {
         // devolver la respuesta en json             
         return new Response($serializer->serialize($response, "json"));
         
+    }
+
+    /**
+     * @Route("/mapa/{dimension}", name="mapa", methods={"GET"})
+     */
+    public function getMapaAction($dimension, Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        
+        //Obtener el nombre del mapa asociado a la dimension
+        $significado = $em->getRepository(SignificadoCampo::class)
+                ->findOneBy(array('codigo' => $dimension));
+
+        $mapa = $significado->getNombreMapa();
+         if ($mapa != '') {
+            try {
+                $mapa = $this->renderView('Indicador/' . $mapa . '.json.twig');
+            } catch (\Exception $e) {
+                $mapa = json_encode(array('features' => ''));
+            }
+        } else
+            $mapa = json_encode(array('features' => ''));                                     
+        
+        $headers = array('accept-ranges' => 'bytes',
+        'access-control-allow-origin' => '*',
+        'cache-control' => 'max-age=300',
+        'connection' => 'keep-alive',
+        'content-length' => '656673',
+        'content-security-policy' =>"'default-src 'none'; style-src 'unsafe-inline'; sandbox",
+        'content-type' => 'text/plain; charset=utf-8',
+        'date' => 'Mon, 11 Feb 2019 23:15:26 GMT',
+        'etag' => '"c899e3d4f3353924e495667c842f54a07090cfab"',
+        'expires' => 'Mon, 11 Feb 2019 23:20:26 GMT',
+        'source-age' => '40',
+        'strict-transport-security' => 'max-age=31536000',
+        'vary' => 'Authorization,Accept-Encoding',
+        'via' => '1.1 varnish',
+        'x-cache' => 'HIT',
+        'x-cache-hits' => '1',
+        'x-content-type-options' => 'nosniff',
+        'x-fastly-request-id' => '2d3d76de56dbc00b0c93e1ed0501e54efe8090bb',
+        'x-frame-options' => 'deny',
+        'x-geo-block-list' => '');
+        $response = new Response($mapa, 200, $headers);        
+
+        return $response;    
     }
 }

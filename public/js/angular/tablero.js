@@ -535,33 +535,8 @@ App.controller("TableroCtrl", function(
             $scope.indicadores[index].informacion = data.informacion;
             $scope.indicadores[index].ficha = data.ficha;
             $scope.indicadores[index].grafica = [];
-            var grafica = [];
-
-            grafica[0] = {
-              key: $scope.indicadores[index].dimensiones[0],
-              values: []
-            };
             
-            angular.forEach(data.data, function(val, key) {
-              color = "";
-              angular.forEach(data.informacion.rangos, function(v1, k1) {
-                if (
-                  val.measure >= v1.limite_inf &&
-                  val.measure <= v1.limite_sup
-                ) {
-                  color = v1.color;
-                }
-              });
-
-              grafica[0].values.push({
-                color: color,
-                label: val.category,
-                value: parseFloat(val.measure),
-                index: index,
-                dimension: 0
-              });
-            });
-            $scope.indicadores[index].grafica = grafica;
+            $scope.repuestaIndicador(data, $scope.indicadores[index].dimensiones[0], index);
 
           } else {
             $scope.indicadores[index].error = "Warning";
@@ -594,15 +569,20 @@ App.controller("TableroCtrl", function(
    * @param {index} index identificador de la posicion del grafico
    */
   $scope.agregarIndicadorDimension = function(dimension, index) {
-    var posicion = index;   
+    var posicion = index;  
+    var tipo = 'DISCRETEBARCHART';
+    if ($scope.indicadores[index].configuracion.tipo_grafico)
+      tipo = $scope.indicadores[index].configuracion.tipo_grafico.toUpperCase(); 
     if (
       !angular.isUndefined($scope.indicadores[index].dimensiones[dimension])
     ) {
       $scope.indicadores[index].cargando = true;
       if ($scope.indicadores[index].tendencia)
         $scope.opcionesGraficasTendencias(index, $scope.indicadores[index].configuracion.tipo_grafico, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, $scope.indicadores[index].configuracion.height);
-      else
-        $scope.opcionesGraficas(index, $scope.indicadores[index].configuracion.tipo_grafico, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, $scope.indicadores[index].configuracion.height);
+      else{
+        if (tipo != 'MAPA' && tipo != 'GEOLOCATION' && tipo != 'MAP')
+          $scope.opcionesGraficas(index, $scope.indicadores[index].configuracion.tipo_grafico, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, $scope.indicadores[index].configuracion.height);
+      }
       var json = { filtros: $scope.indicadores[index].filtros, ver_sql: false, tendencia: $scope.indicadores[index].tendencia};
       Crud.crear(
         "../api/v1/tablero/datosIndicador/" +
@@ -644,14 +624,21 @@ App.controller("TableroCtrl", function(
    */
   $scope.filtrarIndicador = function(index) {
     var dimension = $scope.indicadores[index].dimension;
+
+    var tipo = 'DISCRETEBARCHART';
+    if ($scope.indicadores[index].configuracion.tipo_grafico)
+      tipo = $scope.indicadores[index].configuracion.tipo_grafico.toUpperCase();
+
     if (
       !angular.isUndefined($scope.indicadores[index].dimensiones[dimension])
     ) {
       $scope.indicadores[index].cargando = true;
       if ($scope.indicadores[index].tendencia)
         $scope.opcionesGraficasTendencias(index, $scope.indicadores[index].configuracion.tipo_grafico, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, $scope.indicadores[index].configuracion.height);
-      else
-        $scope.opcionesGraficas(index, $scope.indicadores[index].configuracion.tipo_grafico, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, $scope.indicadores[index].configuracion.height);
+      else{
+        if (tipo != 'MAPA' && tipo != 'GEOLOCATION' && tipo != 'MAP')
+          $scope.opcionesGraficas(index, $scope.indicadores[index].configuracion.tipo_grafico, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, $scope.indicadores[index].configuracion.height);
+      }
 
       var json = {
         filtros: $scope.indicadores[index].filtros,
@@ -721,7 +708,7 @@ App.controller("TableroCtrl", function(
             values: []
           };
           angular.forEach(data.data, function(val, key) {
-            color = "";
+            color = "#ffffff";
             angular.forEach(data.informacion.rangos, function(v1, k1) {
               if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
                 color = v1.color;
@@ -735,10 +722,11 @@ App.controller("TableroCtrl", function(
               index: index,
               dimension: dimension
             });
-          });
+          });                
+
         } else if (tipo == 'PIECHART' || tipo == 'PIE' || tipo == 'PASTEL' || tipo == 'TORTA') {
           angular.forEach(data.data, function (val, key) {
-            color = "";
+            color = "#ffffff";
             angular.forEach(data.informacion.rangos, function (v1, k1) {
               if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
                 color = v1.color;
@@ -756,7 +744,7 @@ App.controller("TableroCtrl", function(
           $scope.indicadores[index].radial = true;
           
           angular.forEach(data.data, function (val, key) {
-            color = "";
+            color = "#ffffff";
             var rangos = [];
             angular.forEach(data.informacion.rangos, function (v1, k1) {
               if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
@@ -800,7 +788,7 @@ App.controller("TableroCtrl", function(
           $scope.indicadores[index].termometro = true;
           var meta = data.informacion.meta ? parseFloat(data.informacion.meta) : 100;
           angular.forEach(data.data, function (val, key) {
-            color = "";
+            color = "#ffffff";
             var rangos = [];
 
             angular.forEach(data.informacion.rangos, function (v1, k1) {
@@ -827,9 +815,30 @@ App.controller("TableroCtrl", function(
               color: color
             });
           });
-        } else if (tipo == 'MAPA' || tipo == 'GEOLOCATION') {
-          $scope.indicadores[index].mapa = true;
-        }        
+        } 
+
+        if (tipo == 'MAPA' || tipo == 'GEOLOCATION' || tipo == 'MAP') {
+          angular.forEach(data.data, function (val, key) {
+            color = "#ffffff";
+            angular.forEach(data.informacion.rangos, function (v1, k1) {
+              if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
+                color = v1.color;
+              }
+            });
+            var nombre = $scope.eliminarDiacriticos(val.category);
+            nombre = nombre.toUpperCase();
+            grafica[nombre] = {
+              color: color,
+              label: val.category,
+              value: parseFloat(val.measure),
+              index: index,
+              dimension: dimension
+            };
+          });
+          $scope.indicadores[index].grafica = grafica;
+          $scope.actualizarMapa(index);
+        } 
+
         // fin asociacion
         $scope.indicadores[index].grafica = grafica;
 
@@ -840,6 +849,9 @@ App.controller("TableroCtrl", function(
       $scope.indicadores[index].dimension--;
       $scope.indicadores[index].error = "Warning";
     }
+
+     
+
     $scope.indicadores[index].cargando = false;
     setTimeout(function() {
       $scope.indicadores[index].error = "";
@@ -857,8 +869,14 @@ App.controller("TableroCtrl", function(
    * @param {hacer} hacer bandera para detyerminar si es para fullscreen
    */
   $scope.actualizarsGrafica = function(index, hacer = true) {
-    if (hacer)
+    if (hacer){
       $scope.indicadores[index].full_screen = !$scope.indicadores[index].full_screen;
+      if (!$scope.indicadores[index].full_screen){
+        $scope.zoom[index] = undefined;
+        $scope.horizontal[index] = undefined;
+        $scope.vertical[index] = undefined;
+      }
+    }
     var tipo = 'DISCRETEBARCHART';
     if ($scope.indicadores[index].configuracion.tipo_grafico)
       tipo = $scope.indicadores[index].configuracion.tipo_grafico.toUpperCase();
@@ -876,13 +894,13 @@ App.controller("TableroCtrl", function(
       $scope.indicadores[index].tendencia = true;
       $scope.agregarIndicadorDimension(dimension, index);
     }
-    if (tipo == 'DISCRETEBARCHART' || tipo == 'BARRA' || tipo == 'BARRAS' || tipo == 'COLUMNAS' || tipo == 'COLUMNA') {      
+    if (tipo == 'DISCRETEBARCHART' || tipo == 'BARRA' || tipo == 'BARRAS' || tipo == 'COLUMNAS' || tipo == 'COLUMNA' ) {      
       grafica[0] = {
         key: $scope.indicadores[index].dimensiones[dimension],
         values: []
       };
       angular.forEach($scope.indicadores[index].data, function(val, key) {
-        color = "";
+        color = "#ffffff";
         angular.forEach($scope.indicadores[index].informacion.rangos, function(v1, k1) {
           if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
             color = v1.color;
@@ -896,10 +914,11 @@ App.controller("TableroCtrl", function(
           index: index,
           dimension: dimension
         });        
-      });
+      });      
+
     } else if (tipo == 'PIECHART' || tipo == 'PIE' || tipo == 'PASTEL' || tipo == 'TORTA') {      
       angular.forEach($scope.indicadores[index].data, function(val, key) {
-        color = "";
+        color = "#ffffff";
         angular.forEach($scope.indicadores[index].informacion.rangos, function(v1, k1) {
           if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
             color = v1.color;
@@ -917,7 +936,7 @@ App.controller("TableroCtrl", function(
       $scope.indicadores[index].radial = true;
       var data = $scope.indicadores[index];
       angular.forEach(data.data, function (val, key) {
-        color = "";
+        color = "#ffffff";
         var rangos = [];
         angular.forEach(data.informacion.rangos, function (v1, k1) {
           if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
@@ -962,7 +981,7 @@ App.controller("TableroCtrl", function(
       var data = $scope.indicadores[index];
       var meta = data.informacion.meta ? parseFloat(data.informacion.meta) : 100;
       angular.forEach(data.data, function (val, key) {
-        color = "";
+        color = "#ffffff";
         var rangos = [];
         
         angular.forEach(data.informacion.rangos, function (v1, k1) {
@@ -989,19 +1008,41 @@ App.controller("TableroCtrl", function(
           color: color
         });
       });
-    } else if (tipo == 'MAPA' || tipo == 'GEOLOCATION') {
-      $scope.indicadores[index].mapa = true;
-    }
+    } 
+    if (tipo == 'MAPA' || tipo == 'GEOLOCATION' || tipo == 'MAP') {
+      angular.forEach(data.data, function (val, key) {
+        color = "#ffffff";
+        angular.forEach(data.informacion.rangos, function (v1, k1) {
+          if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
+            color = v1.color;
+          }
+        });
+        var nombre = $scope.eliminarDiacriticos(val.category);
+        nombre = nombre.toUpperCase();
+        grafica[nombre] = {
+          color: color,
+          label: val.category,
+          value: parseFloat(val.measure),
+          index: index,
+          dimension: dimension
+        };
+      });
+    } 
+
     // fin asociacion    
     var tamano = $scope.indicadores[index].configuracion.height;
     $scope.indicadores[index].grafica = [];
     
     setTimeout(() => {
       $scope.indicadores[index].grafica = grafica;
+      if (tipo == 'MAPA' || tipo == 'GEOLOCATION' || tipo == 'MAP') {
+        $scope.actualizarMapa(index);
+      } else{
       if ($scope.indicadores[index].tendencia)
         $scope.opcionesGraficasTendencias(index, $scope.indicadores[index].configuracion.tipo_grafico, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, tamano);
       else
-        $scope.opcionesGraficas(index, $scope.indicadores[index].configuracion.tipo_grafico, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, tamano);
+        $scope.opcionesGraficas(index, $scope.indicadores[index].configuracion.tipo_grafico, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, tamano);   
+      }
       document.getElementById("update" + index).click();
     }, 200);
   };
@@ -1079,7 +1120,7 @@ App.controller("TableroCtrl", function(
       grafica[0] = { key: $scope.indicadores[index].grafica[0].key, values: [] };
 
       angular.forEach(data, function(val, key) {
-        color = "";
+        color = "#ffffff";
         angular.forEach($scope.indicadores[index].informacion.rangos, function(
           v1,
           k1
@@ -1100,7 +1141,7 @@ App.controller("TableroCtrl", function(
       });
     } else if (tipo == 'PIECHART' || tipo == 'PIE' || tipo == 'PASTEL' || tipo == 'TORTA'){
       angular.forEach(data, function (val, key) {
-        color = "";
+        color = "#ffffff";
         angular.forEach($scope.indicadores[index].informacion.rangos, function (v1, k1) {
           if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
             color = v1.color;
@@ -1118,7 +1159,7 @@ App.controller("TableroCtrl", function(
       $scope.indicadores[index].radial = true;
       var data = $scope.indicadores[index];
       angular.forEach(data.data, function (val, key) {
-        color = "";
+        color = "#ffffff";
         var rangos = [];
         angular.forEach(data.informacion.rangos, function (v1, k1) {
           if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
@@ -1163,7 +1204,7 @@ App.controller("TableroCtrl", function(
       var data = $scope.indicadores[index];
       var meta = data.informacion.meta ? parseFloat(data.informacion.meta) : 100;
       angular.forEach(data.data, function (val, key) {
-        color = "";
+        color = "#ffffff";
         var rangos = [];
 
         angular.forEach(data.informacion.rangos, function (v1, k1) {
@@ -1190,7 +1231,7 @@ App.controller("TableroCtrl", function(
           color: color
         });
       });
-    } else if (tipo == 'MAPA' || tipo == 'GEOLOCATION'){
+    } else if (tipo == 'MAPA' || tipo == 'GEOLOCATION' || tipo == 'MAP'){
       $scope.indicadores[index].mapa = true;
     }
     
@@ -1383,6 +1424,7 @@ App.controller("TableroCtrl", function(
       tipo = tipo.toUpperCase();
     else
       tipo = "DISCRETEBARCHART";
+      
     if (tipo == 'PIECHART' || tipo == 'PIE' || tipo == 'PASTEL' || tipo == 'TORTA'){
       options = {
         chart: {
@@ -1479,8 +1521,13 @@ App.controller("TableroCtrl", function(
           duration: 500          
         }
       };
+    } else if (tipo == 'MAPA' || tipo =='GEOLOCATION' || tipo == 'MAP'){
+      $scope.dibujarMapa(index, tipo, labelx, labely, tamano);
     }
-    $scope.indicadores[index].options =options
+
+    if (tipo != 'MAPA' && tipo != 'GEOLOCATION' && tipo != 'MAP'){
+      $scope.indicadores[index].options =options
+    }
   };
 
   $scope.opcionesGraficasTendencias = function (index, tipo, labelx, labely, tamano) {
@@ -1534,7 +1581,124 @@ App.controller("TableroCtrl", function(
       }
     };
   }
+  $scope.zoom = [];
+  $scope.horizontal = [];
+  $scope.vertical = [];
+  $scope.topology;
+  $scope.dibujarMapa = function(index, tipo, labelx, labely, tamano) {
+    if ($scope.indicadores[index].full_screen){
+      tamano = $window.innerHeight / 1.28;
+      $scope.zoom[index] = $scope.zoom[index] * 2; 
+      $scope.horizontal[index] = $scope.topology.transform.translate[0];
+      $scope.vertical[index] = $scope.topology.transform.translate[1] + 1;
+    }
+    
+    $scope.indicadores[index].mapa = true;
+    $("#mapa" + index).html('');
+    if($scope.indicadores[index].informacion){
+      
+      setTimeout(() => {
+        var width = $("#mapa" + index).width(), height = tamano;        
 
+        var dimension = $scope.indicadores[index].dimensiones[$scope.indicadores[index].dimension].trim();
+        var url_mapa = $scope.indicadores[index].informacion.dimensiones[dimension].mapa;
+        if (url_mapa){
+          var url = $scope.ruta + "/js/Mapas/" + url_mapa + ".json";
+          d3.json(url, function(error, topology) {
+            if (error) throw error;   
+            if (topology.transform){
+              $scope.topology = topology;
+              if (topology.transform.translate) {
+                if (angular.isUndefined($scope.zoom[index])) {
+                  $scope.zoom[index] = 9000;
+                }
+                if (angular.isUndefined($scope.horizontal[index])) {
+                  $scope.horizontal[index] = topology.transform.translate[0] + 2.7;
+                }
+                if (angular.isUndefined($scope.vertical[index])) {
+                  $scope.vertical[index] = topology.transform.translate[1];
+                }
+              }
+            }
+            var projection = d3.geo.mercator()
+              .scale($scope.zoom[index])
+              .center([$scope.horizontal[index], $scope.vertical[index]]);
+            var svg = d3.select(document.getElementById("mapa" + index)).append("svg")
+              .attr("width", width)
+              .attr("height", height);
+            var g = svg.append("g");
+
+            var div = d3.select(document.getElementById("mapa" + index)).append("div")
+              .attr("class", "tooltip")
+              .style("opacity", 0);
+
+            g.selectAll("path")
+              .data(topojson.object(topology, topology.objects.elementos).geometries)
+              .enter().append("path")
+              .attr("d", d3.geo.path().projection(projection))              
+              .style("stroke", "#333")
+              .attr('fill', function (d, i) {    
+                var nombre = $scope.eliminarDiacriticos(d.properties.NAME);
+                nombre = nombre.toUpperCase();     
+                if ($scope.indicadores[index].grafica[nombre])   
+                return $scope.indicadores[index].grafica[nombre].color;
+                else return "#FFFFFF";
+              })
+              .on("mouseover", function (d) {
+                var nombre = $scope.eliminarDiacriticos(d.properties.NAME);
+                nombre = nombre.toUpperCase();
+                var valor = $scope.indicadores[index].grafica[nombre] ? $scope.indicadores[index].grafica[nombre].value : "--";
+
+                d3.select(this).transition().duration(300).style("opacity", 1);
+                div.transition().duration(300)
+                  .style("opacity", 1)
+                div.text(d.properties.NAME + ": " + valor)
+                  .style("left", (d3.event.pageX - 200) + "px")
+                  .style("top",  (d3.event.pageY - 150) + "px");
+              })
+              .on("mouseout", function () {
+                d3.select(this)
+                  .transition().duration(300)
+                  .style("opacity", 0.8);
+                div.transition().duration(300)
+                  .style("opacity", 0);
+              }).on("click", function (d) {
+                var nombre = $scope.eliminarDiacriticos(d.properties.NAME);
+                nombre = nombre.toUpperCase();
+                var valor = $scope.indicadores[index].grafica[nombre] ? $scope.indicadores[index].grafica[nombre] : null;
+
+                if(valor){
+                  $scope.indicadores[index].dimension++;
+                  $scope.indicadores[index].filtros.push({
+                    codigo: $scope.indicadores[index].dimensiones[$scope.indicadores[index].dimension - 1].trim(),
+                    valor: valor.label
+                  });
+                  $scope.agregarIndicadorDimension($scope.indicadores[index].dimension, valor.index);
+                }
+              });
+
+
+          });
+        }
+      }, 100);
+    }
+    
+  };
+
+  $scope.actualizarMapa = function(index){
+    var dimension = $scope.indicadores[index].dimension;
+    $scope.opcionesGraficas(
+      index,
+      $scope.indicadores[index].configuracion.tipo_grafico,
+      $scope.indicadores[index].dimensiones[dimension],
+      $scope.indicadores[index].informacion.unidad_medida,
+      $scope.indicadores[index].configuracion.height
+    );
+  }
+
+  $scope.eliminarDiacriticos = function(texto) {
+    return texto.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+  }
   $scope.gaugeDimension = function (index, e){
     $scope.indicadores[index].dimension++;
     $scope.indicadores[index].filtros.push({
@@ -2055,4 +2219,8 @@ App.controller("TableroCtrl", function(
     }
     return item;
   };
+  $scope.ruta = '';
+  $scope.asignarURL = function (ruta) {
+    $scope.ruta = ruta;
+  }  
 });

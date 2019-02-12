@@ -33,6 +33,17 @@
             margin-bottom: 20px;
             border: 1px solid transparent;
         }
+        div.tooltip {   
+            position: absolute;           
+            text-align: center;                                       
+            padding: 8px;             
+            background: #4a4a44;
+            color: white;
+            font-size: 10pt;
+            border: 1px;      
+            border-radius: 8px;           
+            pointer-events: none;         
+        } 
     </style>
 
 {% endblock %}
@@ -47,6 +58,7 @@
 <script src="{{ asset('js/angularTablero/d3_nvd3.js') }}"></script> 
 <script src="{{ asset('js/angularTablero/d3_angular_nvd3.js') }}"></script>
 <script src="{{ asset('js/angularTablero/ngRadialGauge/src/ng-radial-gauge-dir.js') }}"></script> 
+<script src="{{ asset('js/topojson.v1.min.js') }}"></script>
 
 <script src="{{ asset('js/angular/ui-bootstrap.js') }}" type="text/javascript"></script>
 <script src="{{ asset('js/angular/ngStorage.js') }}" type="text/javascript"></script>
@@ -83,7 +95,7 @@
         <section class="content">
             <div class="sonata-ba-form">
                 <form class="form-horizontal" role="form" >
-                    <div class="row">            
+                    <div class="row" ng-init="asignarURL('{{ app.request.getSchemeAndHttpHost() }}')">            
                         <div class="col-sm-12" id="contenedor_tablero" >
 
                             <div id="sala" class="row" dnd-list="indicadores" dnd-drop="moverIndicador(index, item)">  
@@ -172,7 +184,7 @@
                                                 <div class="alert alert-info" role="alert" ng-if="(item.radial || item.termometro) && !item.informacion.meta">{{ '_grafico_aprecia_mejor_meta' | trans }}</div>
 
                                                 <!-- para graficos de pastel, barra y lineas -->
-                                                <nvd3 options="item.options" data="item.grafica" id="svg<% $index %>" ng-if="!item.radial && !item.termometro"></nvd3>
+                                                <nvd3 options="item.options" data="item.grafica" id="svg<% $index %>" ng-if="!item.radial && !item.termometro && !item.mapa"></nvd3>
                                                 
                                                 <!-- para el grafico de gauge lineal -->
                                                 <div class="row" ng-if="item.termometro">
@@ -192,6 +204,45 @@
                                                             <% val.label %>
                                                         </div>
                                                     </div>
+                                                </div>
+
+                                                <!-- para el grafico de mapa -->
+                                                <div class="row" ng-if="item.mapa" style="cursor:default">
+                                                    <nav class="" role="navigation" style="width: 100% !important;">
+                                                        <div class="container-fluid">
+                                                            
+                                                            <div class="navbar-collapse" style="padding: 0px">
+                                                                <ul class="nav navbar-nav navbar-right" style="padding-top: 6px;">
+                                                                                                                                        
+                                                                    <li class="sonata-actions">
+                                                                        <div class="input-group" >
+                                                                            <span class="input-group-addon" id="basic-addon1">Z:</span>
+                                                                            <input type="number" class="form-control" ng-model="zoom[$index]" placeholder="Z" style="width: 100px">
+                                                                        </div>    
+                                                                    </li>
+
+                                                                    <li class="sonata-actions">
+                                                                        <div class="input-group" >
+                                                                            <span class="input-group-addon" id="basic-addon1">H:</span>
+                                                                            <input type="number" class="form-control" ng-model="horizontal[$index]" placeholder="H" style="width: 100px">
+                                                                        </div>    
+                                                                    </li>
+
+                                                                    <li class="sonata-actions">
+                                                                        <div class="input-group" >
+                                                                            <span class="input-group-addon" id="basic-addon1">V:</span>
+                                                                            <input type="number" class="form-control" ng-model="vertical[$index]" placeholder="V" style="width: 100px">
+                                                                        </div>    
+                                                                    </li>
+                                                                    
+                                                                    <li class="sonata-actions">
+                                                                        <button type="button" class="btn btn-default" ng-click="actualizarMapa($index)";>Ok</button>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </nav>
+                                                    <div id="mapa<%$index%>"></div>
                                                 </div>
                                     
                                             </div>

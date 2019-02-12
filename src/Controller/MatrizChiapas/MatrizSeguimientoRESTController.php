@@ -78,9 +78,25 @@ class MatrizSeguimientoRESTController extends Controller {
      */
     public function matrices(){
         $em = $this->getDoctrine()->getEntityManager();
+        $where = '';
+        if ( !$this->getUser()->hasRole('ROLE_SUPER_ADMIN') ) {
+            $connection = $em->getConnection();
+            $statement = $connection->prepare("SELECT * FROM matriz_indicadores_usuario WHERE id_usuario = ".$this->getUser()->getId());
+            $statement->execute();
+            $permitido = $statement->fetchAll();
+
+            $in = [];
+            foreach($permitido as $p){
+                array_push($in, $p["id_matriz"]);
+            }
+            if(count($in) > 0){
+                $in = explode(",", $in);
+                $where = "WHERE id in($in)";
+            }
+        }
 
         $connection = $em->getConnection();
-        $statement = $connection->prepare("SELECT * FROM matriz_seguimiento_matriz ORDER BY nombre ASC");
+        $statement = $connection->prepare("SELECT * FROM matriz_seguimiento_matriz $where ORDER BY nombre ASC");
         $statement->execute();
         $matriz = $statement->fetchAll();
 
