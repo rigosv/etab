@@ -485,12 +485,12 @@ class MatrizSeguimientoRESTController extends Controller {
                         $almacenamiento->crearIndicador($fichaTec, $otros_filtros["dimension"], $filtrar);                        
 
                         $ci++;
-                        $etab[$i] = array('id'=>$indrs["id"], 'nombre'=>$indrs["nombre"], 'fuente' => ' eTAB');
+                        $etab[$i] = array('id'=>$indrs["id_ficha_tecnica"], 'nombre'=>$indrs["nombre"], 'fuente' => ' eTAB');
 
                         $connection = $em->getConnection();
                         $statement = $connection->prepare("SELECT msd.mes, msd.planificado, msd.real FROM matriz_seguimiento ms 
                             LEFT JOIN matriz_seguimiento_dato msd ON msd.id_matriz = ms.id   
-                            WHERE ms.anio = '$anio' and ms.etab = true and ms.id_desempeno = '".$value->id_desempeno."' and indicador = '".$indrs["id"]."'");
+                            WHERE ms.anio = '$anio' and ms.etab = true and ms.id_desempeno = '".$value->id_desempeno."' and indicador = '".$indrs["id_ficha_tecnica"]."'");
                         $statement->execute();
                         $meses = $statement->fetchAll();
                         $ttm = 0; $representa = 0; $id_siguiente = 0;
@@ -740,14 +740,14 @@ class MatrizSeguimientoRESTController extends Controller {
                                                
                         $statement = $connection->prepare("SELECT msd.mes, msd.planificado, msd.real, ms.meta FROM matriz_seguimiento ms 
                             LEFT JOIN matriz_seguimiento_dato msd ON msd.id_matriz = ms.id   
-                            WHERE ms.anio = '$anio' and ms.etab = true and ms.id_desempeno = '".$value->id_desempeno."' and indicador = '".$indrs["id"]."'");
+                            WHERE ms.anio = '$anio' and ms.etab = true and ms.id_desempeno = '".$value->id_desempeno."' and indicador = '".$indrs["id_ficha_tecnica"]."'");
                         $statement->execute();
                         $meses = $statement->fetchAll();
                         $meta = '';
                         if(isset($meses[0]))
                             $meta = $meses[0]["meta"];
 
-                        $etab[$i] = array('id'=>$indrs["id"], 'nombre'=>$indrs["nombre"],  'fuente' => ' eTAB', 'meta' => $meta);
+                        $etab[$i] = array('id'=>$indrs["id_ficha_tecnica"], 'nombre'=>$indrs["nombre"],  'fuente' => ' eTAB', 'meta' => $meta);
                         $etab[$i]["alertas"] = $alertas;
                         $representa = 0; $id_siguiente = 0;
                         foreach ($meses as $km => $vm) {
