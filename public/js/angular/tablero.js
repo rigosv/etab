@@ -1036,7 +1036,7 @@ App.controller("TableroCtrl", function(
     setTimeout(() => {
       $scope.indicadores[index].grafica = grafica;
       if (tipo == 'MAPA' || tipo == 'GEOLOCATION' || tipo == 'MAP') {
-        $scope.actualizarMapa(index);
+        $scope.dibujarMapa(index, true);
       } else{
       if ($scope.indicadores[index].tendencia)
         $scope.opcionesGraficasTendencias(index, $scope.indicadores[index].configuracion.tipo_grafico, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, tamano);
@@ -1522,7 +1522,7 @@ App.controller("TableroCtrl", function(
         }
       };
     } else if (tipo == 'MAPA' || tipo =='GEOLOCATION' || tipo == 'MAP'){
-      $scope.dibujarMapa(index, tipo, labelx, labely, tamano);
+      $scope.dibujarMapa(index, true);
     }
 
     if (tipo != 'MAPA' && tipo != 'GEOLOCATION' && tipo != 'MAP'){
@@ -1585,12 +1585,15 @@ App.controller("TableroCtrl", function(
   $scope.horizontal = [];
   $scope.vertical = [];
   $scope.topology;
-  $scope.dibujarMapa = function(index, tipo, labelx, labely, tamano) {
+  $scope.dibujarMapa = function(index, hacer = true) {
+    var tamano = $scope.indicadores[index].configuracion.height;
     if ($scope.indicadores[index].full_screen){
       tamano = $window.innerHeight / 1.28;
-      $scope.zoom[index] = $scope.zoom[index] * 2; 
-      $scope.horizontal[index] = $scope.topology.transform.translate[0];
-      $scope.vertical[index] = $scope.topology.transform.translate[1] + 1;
+      if(hacer){
+        $scope.zoom[index] = $scope.zoom[index] * 2; 
+        $scope.horizontal[index] = $scope.topology.transform.translate[0];
+        $scope.vertical[index] = $scope.topology.transform.translate[1] + 1;
+      }
     }
     
     $scope.indicadores[index].mapa = true;
@@ -1688,14 +1691,7 @@ App.controller("TableroCtrl", function(
   };
 
   $scope.actualizarMapa = function(index){
-    var dimension = $scope.indicadores[index].dimension;
-    $scope.opcionesGraficas(
-      index,
-      $scope.indicadores[index].configuracion.tipo_grafico,
-      $scope.indicadores[index].dimensiones[dimension],
-      $scope.indicadores[index].informacion.unidad_medida,
-      $scope.indicadores[index].configuracion.height
-    );
+    $scope.dibujarMapa(index, false);
   }
 
   $scope.eliminarDiacriticos = function(texto) {
