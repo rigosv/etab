@@ -605,3 +605,5 @@ _captura_datos_: 'Captura de datos'
 _dimension_mostrar_: 'Dimensión para mostrar'
 _dimension_filtrar_: 'Dimensión para filtrar'
 _dimension_representa_: 'Esto corresponde a'
+_acciones_poscarga_help_: 'Sentencia SQL que se ejecutará al finalizar la carga de datos. Puede separar varias sentencias por punto y coma'
+_acciones_poscarga_: Acciones poscarga

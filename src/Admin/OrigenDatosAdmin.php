@@ -43,7 +43,12 @@ class OrigenDatosAdmin extends Admin
                 ->tab(('datos_generales'), array('collapsed' => false))
                     ->with('', array('class' => 'col-md-12'))
                         ->add('nombre', null, array('label' => ('nombre'), 'attr' => ['data-idorigen' => $idOrigen] ))
-                        ->add('descripcion', null, array('label' => ('descripcion'), 'required' => false))                        
+                        ->add('descripcion', null, array('label' => ('descripcion'), 'required' => false))
+                        ->add('accionesPoscarga', null, array(
+                            'label' => '_acciones_poscarga_',
+                            'required' => false,
+                            'help' => '_acciones_poscarga_help_'
+                        ))
                     ->end()
                 ->end()
         ;

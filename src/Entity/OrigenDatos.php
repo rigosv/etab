@@ -214,6 +214,14 @@ class OrigenDatos
      *
      */
     private $ventanaLimiteSuperior;
+
+
+    /**
+     * @var string $accionesPoscarga
+     *
+     * @ORM\Column(name="acciones_poscarga", type="text", nullable=true)
+     */
+    private $accionesPoscarga;
     
 
     /**
@@ -884,6 +892,22 @@ class OrigenDatos
     public function setFormatoValorCorte($formatoValorCorte)
     {
         $this->formatoValorCorte = $formatoValorCorte;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAccionesPoscarga(): ?string
+    {
+        return $this->accionesPoscarga;
+    }
+
+    /**
+     * @param string $accionesPoscarga
+     */
+    public function setAccionesPoscarga(string $accionesPoscarga): void
+    {
+        $this->accionesPoscarga = $accionesPoscarga;
     }
 
 }
