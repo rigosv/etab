@@ -500,7 +500,7 @@ class MatrizRESTController extends AbstractController {
 
                     // indicadores de desempeño
                     $connection = $em->getConnection();
-                    $statement = $connection->prepare("SELECT * FROM matriz_indicadores_desempeno WHERE  id_matriz = '".$data->getId()."'");
+                    $statement = $connection->prepare("SELECT * FROM matriz_indicadores_desempeno WHERE  id_matriz = '".$data->getId()."' ORDER BY orden ASC");
                     $statement->execute();
                     $desempenos = $statement->fetchAll();
                    
@@ -782,7 +782,7 @@ class MatrizRESTController extends AbstractController {
             //$em->flush();
 
             $d = $fichaTec->getUltimaLectura();
-            if ($d !== false)
+            if ($d)
                 $resp['ultima_lectura'] = $d->format('d/m/Y');
             $resp['resultado'] = 'ok';
         } else {
