@@ -175,7 +175,8 @@ class OrigenDatosAdmin extends Admin
                 ->add('ultimaActualizacion', null, array('label' => ('_ultima_actualizacion_')))
                 ->add('_action', 'actions', array(
                     'actions' => array(
-                        'load_data' => array('template' => 'OrigenDatosAdmin/list__action_load_data.html.twig')
+                        'load_data' => array('template' => 'OrigenDatosAdmin/list__action_load_data.html.twig'),
+                        'poscarga_action' => array('template' => 'OrigenDatosAdmin/list__action_poscarga.html.twig')
                     )
                 ))
         ;
@@ -288,6 +289,7 @@ class OrigenDatosAdmin extends Admin
     protected function configureRoutes(RouteCollection $collection)
     {
         $collection->add('merge_save', 'merge/save');
+        $collection->add('poscarga', $this->getRouterIdParameter() . '/poscarga');
     }
 
 }

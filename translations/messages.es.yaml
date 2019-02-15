@@ -607,3 +607,7 @@ _dimension_filtrar_: 'Dimensión para filtrar'
 _dimension_representa_: 'Esto corresponde a'
 _acciones_poscarga_help_: 'Sentencia SQL que se ejecutará al finalizar la carga de datos. Puede separar varias sentencias por punto y coma'
 _acciones_poscarga_: Acciones poscarga
+action_poscarga: Acciones poscarga
+action_poscarga_title: Ejecutar acciones poscarga
+_accion_: Acción
+_registros_afectados_: Registros afectados

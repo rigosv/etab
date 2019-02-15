@@ -7,6 +7,7 @@ use Sonata\AdminBundle\Controller\CRUDController as Controller;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 use App\Entity\OrigenDatos;
 
@@ -233,6 +234,33 @@ class OrigenDatosAdminController extends Controller
 
             return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
         }*/
+    }
+
+    public function poscargaAction(OrigenDatos $origen, Request $request, RegistryInterface $registry)
+    {
+        $cnx = $registry->getManager('etab_datos')->getConnection();
+        $resul = [];
+
+        if ($origen->getAccionesPoscarga() != null ){
+            $acciones = explode( ';', $origen->getAccionesPoscarga());
+            $error = false;
+            foreach ( $acciones as $a ) {
+                if ( !$error and trim($a) != '') {
+                    //Quitar las líneas de comentario
+                    try{
+                        $q = $cnx->query($a);
+                        $r = $q->rowCount();
+                    }catch ( \Exception $e ){
+                        $r = $e->getMessage();
+                    }
+                    $resul[] = ['accion' => nl2br($a), 'resultado' => $r];
+                }
+            }
+        }
+
+        return $this->renderWithExtraParams('OrigenDatosAdmin/poscarga.html.twig', array(
+            'resultado' => $resul
+        ));
     }
 
 }
