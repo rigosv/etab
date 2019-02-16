@@ -185,14 +185,14 @@ class FichaTecnicaRepository extends ServiceEntityRepository {
             
             if ($oper == 'SUM'){
                 $sql .= "SELECT  $campos, $oper(calculo::numeric) AS  $tabla $campos_calculados
-                            INTO  $tabla" . "_var
+                            INTO  TEMP $tabla" . "_var
                             FROM $tabla
                             WHERE  (calculo::numeric) > 0
                             GROUP BY $campos $campos_calculados_nombre                
                                 ;";
             } else {
                 $sql .= "SELECT  $campos, $oper(calculo::numeric) AS  $tabla $campos_calculados
-                INTO  $tabla" . "_var
+                INTO  TEMP $tabla" . "_var
                 FROM $tabla
                 GROUP BY $campos $campos_calculados_nombre
                     HAVING  $oper(calculo::numeric) > 0
