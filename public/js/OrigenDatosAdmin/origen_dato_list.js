@@ -5,4 +5,11 @@ $(document).ready(function(){
             $.notify(resp.mensaje, resp.estado);
         })
     })
+
+    $('.btn-poscarga').on('click', function () {
+
+        $.get($(this).data('url'), function (resp) {
+            $.notify(resp.mensaje, resp.estado);
+        })
+    })
 });

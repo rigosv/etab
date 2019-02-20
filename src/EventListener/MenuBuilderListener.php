@@ -48,78 +48,80 @@ class MenuBuilderListener
         
         $menu = $event->getMenu();
 
-        //Construir menú de varios niveles
-        foreach ($menu->getChildren() as $item){
-            // Uso el punto en el nombre del grupo para separar en dos partes,
-            // representan los niveles de anidamiento
-            $nName = explode('.', $item->getLabel());
+        if ( $usuario != 'anon.' ) {
+            //Construir menú de varios niveles
+            foreach ($menu->getChildren() as $item) {
+                // Uso el punto en el nombre del grupo para separar en dos partes,
+                // representan los niveles de anidamiento
+                $nName = explode('.', $item->getLabel());
 
-            if ( count($nName) == 2){
-                // La segunda parte será la nueva etiqueta
-                $item->setLabel($nName[1]);
-                //Quitar el menú de la raíz
-                $menu->removeChild($item);
-                // Se ingresará el item en el grupo dado por la primera parte
-                $menu[$nName[0]]->addChild($item);
+                if (count($nName) == 2) {
+                    // La segunda parte será la nueva etiqueta
+                    $item->setLabel($nName[1]);
+                    //Quitar el menú de la raíz
+                    $menu->removeChild($item);
+                    // Se ingresará el item en el grupo dado por la primera parte
+                    $menu[$nName[0]]->addChild($item);
+                }
             }
-        }
 
 
-        if ( $usuario->hasRole('ROLE_SUPER_ADMIN') or $usuario->hasRole('ROLE_USER_TABLERO') ) {
+            if ($usuario->hasRole('ROLE_SUPER_ADMIN') or $usuario->hasRole('ROLE_USER_TABLERO')) {
 
-            $this->agregarSiNoExiste('indicadores', $menu);
+                $this->agregarSiNoExiste('indicadores', $menu);
 
-            $menu['indicadores']->addChild('indicador_tablero', [
-                'label' => '_tablero_',
-                'route' => 'indicadores_tablero'
-            ])/*->setExtras([
-                'icon' => '<i class="fa fa-bar-chart"></i>',
-            ])*/
-            ;
-        }
+                $menu['indicadores']->addChild('indicador_tablero', [
+                    'label' => '_tablero_',
+                    'route' => 'indicadores_tablero'
+                ])/*->setExtras([
+                    'icon' => '<i class="fa fa-bar-chart"></i>',
+                ])*/
+                ;
+            }
 
-        if ( $usuario->hasRole('ROLE_SUPER_ADMIN') or $usuario->hasRole('ROLE_USER_PIVOT_TABLE') ) {
+            if ($usuario->hasRole('ROLE_SUPER_ADMIN') or $usuario->hasRole('ROLE_USER_PIVOT_TABLE')) {
 
-            $this->agregarSiNoExiste('indicadores', $menu);
+                $this->agregarSiNoExiste('indicadores', $menu);
 
-            $menu['indicadores']->addChild('tabla_pivote', [
-                'label' => '_tabla_pivote_',
-                //'route' => 'tablero_pivotTable',
-                'route' => 'pivotTable'
-            ])/*->setExtras([
-                'icon' => '<i class="fa fa-bar-chart"></i>',
-            ])*/
-            ;
-        }
+                $menu['indicadores']->addChild('tabla_pivote', [
+                    'label' => '_tabla_pivote_',
+                    //'route' => 'tablero_pivotTable',
+                    'route' => 'pivotTable'
+                ])/*->setExtras([
+                    'icon' => '<i class="fa fa-bar-chart"></i>',
+                ])*/
+                ;
+            }
 
-        if ( $usuario->hasRole('ROLE_SUPER_ADMIN') or $usuario->hasRole('ROLE_MATRIZ_SEGUIMIENTO_ADMIN') ) {
+            if ($usuario->hasRole('ROLE_SUPER_ADMIN') or $usuario->hasRole('ROLE_MATRIZ_SEGUIMIENTO_ADMIN')) {
 
-            $this->agregarSiNoExiste('matriz_seguimiento', $menu);
+                $this->agregarSiNoExiste('matriz_seguimiento', $menu);
 
-            $menu['matriz_seguimiento']->addChild('_config_matriz_anio_', [
-                'label' => '_config_matriz_anio_',
-                'route' => 'matrizPlaneacion'
-            ]);
-        }
+                $menu['matriz_seguimiento']->addChild('_config_matriz_anio_', [
+                    'label' => '_config_matriz_anio_',
+                    'route' => 'matrizPlaneacion'
+                ]);
+            }
 
-        if ( $usuario->hasRole('ROLE_SUPER_ADMIN') or $usuario->hasRole('ROLE_MATRIZ_SEGUIMIENTO_USER')  or $usuario->hasRole('ROLE_MATRIZ_SEGUIMIENTO_ADMIN')  or $usuario->hasRole('ROLE_MATRIZ_SEGUIMIENTO_USER_CAPTURA') ) {
+            if ($usuario->hasRole('ROLE_SUPER_ADMIN') or $usuario->hasRole('ROLE_MATRIZ_SEGUIMIENTO_USER') or $usuario->hasRole('ROLE_MATRIZ_SEGUIMIENTO_ADMIN') or $usuario->hasRole('ROLE_MATRIZ_SEGUIMIENTO_USER_CAPTURA')) {
 
-            $this->agregarSiNoExiste('matriz_seguimiento', $menu);
+                $this->agregarSiNoExiste('matriz_seguimiento', $menu);
 
-            $menu['matriz_seguimiento']->addChild('_capturar_matriz_', [
-                'label' => '_capturar_matriz_',
-                'route' => 'matrizReal'
-            ]);
-        }
+                $menu['matriz_seguimiento']->addChild('_capturar_matriz_', [
+                    'label' => '_capturar_matriz_',
+                    'route' => 'matrizReal'
+                ]);
+            }
 
-        if ( $usuario->hasRole('ROLE_SUPER_ADMIN') or $usuario->hasRole('ROLE_MATRIZ_SEGUIMIENTO_USER_REPORTE') ) {
+            if ($usuario->hasRole('ROLE_SUPER_ADMIN') or $usuario->hasRole('ROLE_MATRIZ_SEGUIMIENTO_USER_REPORTE')) {
 
-            $this->agregarSiNoExiste('matriz_seguimiento', $menu);
+                $this->agregarSiNoExiste('matriz_seguimiento', $menu);
 
-            $menu['matriz_seguimiento']->addChild('_reporte_', [
-                'label' => '_reporte_',
-                'route' => 'matrizReporte'
-            ]);
+                $menu['matriz_seguimiento']->addChild('_reporte_', [
+                    'label' => '_reporte_',
+                    'route' => 'matrizReporte'
+                ]);
+            }
         }
     }
 

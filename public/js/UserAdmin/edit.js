@@ -42,8 +42,8 @@ $(document).ready(function() {
         '</div>'
     );*/
 
-    $("#" + idcontrol + "_groups").attr("class", "list-group").attr("style", "max-height:380px; overflow:auto;");
-    $("#" + idcontrol + "_groups li").attr("class", "list-group-item");
+    //$("#" + idcontrol + "_groups").attr("class", "list-group").attr("style", "max-height:380px; overflow:auto;");
+    //$("#" + idcontrol + "_groups li").attr("class", "list-group-item");
 
     $("#sonata-ba-field-container-" + idcontrol + "_groups").find("label:first").remove();
     $("#sonata-ba-field-container-" + idcontrol + "_salas").find("label:first").remove();
@@ -93,9 +93,9 @@ $(document).ready(function() {
     });
 
     function fixNombresRoles(control){
-        $(control).html($(control).html().replace('ROLE_SONATA_USER_ADMIN_', ''));
+        /*$(control).html($(control).html().replace('ROLE_SONATA_USER_ADMIN_', ''));
         $(control).html($(control).html().replace('ROLE_SONATA_ADMIN_', ''));
         $(control).html($(control).html().replace('ROLE_SONATA_', ''));
-        $(control).html($(control).html().replace('ROLE_', ''));
+        $(control).html($(control).html().replace('ROLE_', ''));*/
     }
 });

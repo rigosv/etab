@@ -1,0 +1,20 @@
+{% extends 'standard_layout.html.twig' %}
+
+{% block sonata_admin_content %}
+
+    {% if resultado|length > 0 %}
+        <TABLE CLASS="table table-striped table-bordered">
+            <thead>
+                <TR><TD>{{ '_accion_'|trans }}</TD><Td>{{ '_registros_afectados_'|trans }}</Td></TR>
+            </thead>
+            <tbody>
+                {% for r in resultado %}
+                    <tr>
+                        <td>{{ r.accion|raw}}</td>
+                        <td>{{ r.resultado }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </TABLE>
+    {% endif %}
+{% endblock %}

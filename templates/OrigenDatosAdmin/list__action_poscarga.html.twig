@@ -1,0 +1,8 @@
+
+{% if admin.hasRoute('poscarga') and object.accionesPoscarga != null%}
+    <a href="{{ admin.generateObjectUrl('poscarga', object) }}" class="btn btn-sm btn-default edit_link"
+       title="{{ 'action_poscarga_title'|trans }}">
+        <i class="fa fa-flash" aria-hidden="true"></i>
+        {{ admin.trans('action_poscarga')}}
+    </a>
+{%  endif %}
