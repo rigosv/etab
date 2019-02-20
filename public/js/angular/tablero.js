@@ -708,7 +708,7 @@ App.controller("TableroCtrl", function(
             values: []
           };
           angular.forEach(data.data, function(val, key) {
-            color = "#ffffff";
+            color = "";
             angular.forEach(data.informacion.rangos, function(v1, k1) {
               if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
                 color = v1.color;
@@ -726,7 +726,7 @@ App.controller("TableroCtrl", function(
 
         } else if (tipo == 'PIECHART' || tipo == 'PIE' || tipo == 'PASTEL' || tipo == 'TORTA') {
           angular.forEach(data.data, function (val, key) {
-            color = "#ffffff";
+            color = "";
             angular.forEach(data.informacion.rangos, function (v1, k1) {
               if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
                 color = v1.color;
@@ -744,7 +744,7 @@ App.controller("TableroCtrl", function(
           $scope.indicadores[index].radial = true;
           
           angular.forEach(data.data, function (val, key) {
-            color = "#ffffff";
+            color = "";
             var rangos = [];
             angular.forEach(data.informacion.rangos, function (v1, k1) {
               if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
@@ -788,7 +788,7 @@ App.controller("TableroCtrl", function(
           $scope.indicadores[index].termometro = true;
           var meta = data.informacion.meta ? parseFloat(data.informacion.meta) : 100;
           angular.forEach(data.data, function (val, key) {
-            color = "#ffffff";
+            color = "";
             var rangos = [];
 
             angular.forEach(data.informacion.rangos, function (v1, k1) {
@@ -819,7 +819,7 @@ App.controller("TableroCtrl", function(
 
         if (tipo == 'MAPA' || tipo == 'GEOLOCATION' || tipo == 'MAP') {
           angular.forEach(data.data, function (val, key) {
-            color = "#ffffff";
+            color = "";
             angular.forEach(data.informacion.rangos, function (v1, k1) {
               if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
                 color = v1.color;
@@ -900,7 +900,7 @@ App.controller("TableroCtrl", function(
         values: []
       };
       angular.forEach($scope.indicadores[index].data, function(val, key) {
-        color = "#ffffff";
+        color = "";
         angular.forEach($scope.indicadores[index].informacion.rangos, function(v1, k1) {
           if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
             color = v1.color;
@@ -918,7 +918,7 @@ App.controller("TableroCtrl", function(
 
     } else if (tipo == 'PIECHART' || tipo == 'PIE' || tipo == 'PASTEL' || tipo == 'TORTA') {      
       angular.forEach($scope.indicadores[index].data, function(val, key) {
-        color = "#ffffff";
+        color = "";
         angular.forEach($scope.indicadores[index].informacion.rangos, function(v1, k1) {
           if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
             color = v1.color;
@@ -936,7 +936,7 @@ App.controller("TableroCtrl", function(
       $scope.indicadores[index].radial = true;
       var data = $scope.indicadores[index];
       angular.forEach(data.data, function (val, key) {
-        color = "#ffffff";
+        color = "";
         var rangos = [];
         angular.forEach(data.informacion.rangos, function (v1, k1) {
           if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
@@ -981,7 +981,7 @@ App.controller("TableroCtrl", function(
       var data = $scope.indicadores[index];
       var meta = data.informacion.meta ? parseFloat(data.informacion.meta) : 100;
       angular.forEach(data.data, function (val, key) {
-        color = "#ffffff";
+        color = "";
         var rangos = [];
         
         angular.forEach(data.informacion.rangos, function (v1, k1) {
@@ -1011,7 +1011,7 @@ App.controller("TableroCtrl", function(
     } 
     if (tipo == 'MAPA' || tipo == 'GEOLOCATION' || tipo == 'MAP') {
       angular.forEach($scope.indicadores[index].data, function (val, key) {
-        color = "#ffffff";
+        color = "";
         angular.forEach($scope.indicadores[index].informacion.rangos, function (v1, k1) {
           if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
             color = v1.color;
@@ -1120,7 +1120,7 @@ App.controller("TableroCtrl", function(
       grafica[0] = { key: $scope.indicadores[index].grafica[0].key, values: [] };
 
       angular.forEach(data, function(val, key) {
-        color = "#ffffff";
+        color = "";
         angular.forEach($scope.indicadores[index].informacion.rangos, function(
           v1,
           k1
@@ -1141,7 +1141,7 @@ App.controller("TableroCtrl", function(
       });
     } else if (tipo == 'PIECHART' || tipo == 'PIE' || tipo == 'PASTEL' || tipo == 'TORTA'){
       angular.forEach(data, function (val, key) {
-        color = "#ffffff";
+        color = "";
         angular.forEach($scope.indicadores[index].informacion.rangos, function (v1, k1) {
           if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
             color = v1.color;
@@ -1159,7 +1159,7 @@ App.controller("TableroCtrl", function(
       $scope.indicadores[index].radial = true;
       var data = $scope.indicadores[index];
       angular.forEach(data.data, function (val, key) {
-        color = "#ffffff";
+        color = "";
         var rangos = [];
         angular.forEach(data.informacion.rangos, function (v1, k1) {
           if (val.measure >= v1.limite_inf && val.measure <= v1.limite_sup) {
@@ -1204,7 +1204,7 @@ App.controller("TableroCtrl", function(
       var data = $scope.indicadores[index];
       var meta = data.informacion.meta ? parseFloat(data.informacion.meta) : 100;
       angular.forEach(data.data, function (val, key) {
-        color = "#ffffff";
+        color = "";
         var rangos = [];
 
         angular.forEach(data.informacion.rangos, function (v1, k1) {
