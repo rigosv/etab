@@ -90,7 +90,7 @@ class MatrizSeguimientoRESTController extends Controller {
                 array_push($in, $p["id_matriz"]);
             }
             if(count($in) > 0){
-                $in = explode(",", $in);
+                $in = implode(",", $in);
                 $where = "WHERE id in($in)";
             }
         }
