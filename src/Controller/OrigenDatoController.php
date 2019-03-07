@@ -70,8 +70,7 @@ class OrigenDatoController extends AbstractController
                     $conexion = $cnxObj->getNombreConexion();
 
                     if ($this->driver == 'sqlsrv') {
-                        $datos = $cnx->executeQuery('SELECT TOP 1 (' . $sql . ') cons')->fetchAll();
-                        dump($datos); exit;
+
                         $sql_ = 'SELECT TOP 20 * FROM (' . $sql . ') cons';
                     } else {
                         $sql_ = ' SELECT * FROM (' . $sql . ' ) A LIMIT 20';
