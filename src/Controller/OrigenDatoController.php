@@ -70,8 +70,7 @@ class OrigenDatoController extends AbstractController
                     $conexion = $cnxObj->getNombreConexion();
 
                     if ($this->driver == 'sqlsrv') {
-                        $datos = $cnx->executeQuery('SELECT TOP 1 (' . $sql . ') cons')->fetchAll();
-                        dump($datos); exit;
+
                         $sql_ = 'SELECT TOP 20 * FROM (' . $sql . ') cons';
                     } else {
                         $sql_ = ' SELECT * FROM (' . $sql . ' ) A LIMIT 20';
@@ -164,7 +163,7 @@ class OrigenDatoController extends AbstractController
     /**
      * @Route("/origen_dato/{id}/leer", name="origen_dato_leer", options={"expose"=true})
      */
-    public function leerOrigenAction(OrigenDatos $origenDato, Request $request, Util $util)
+    public function leerOrigenAction(OrigenDatos $origenDato, Request $request, Util $util, TranslatorInterface $translator)
     {
         $resultado = array('estado' => 'ok',
             'mensaje' => '',
@@ -213,14 +212,14 @@ class OrigenDatoController extends AbstractController
                 $conexiones = $origenDato->getConexiones();
 
                 if (count($conexiones) == 0) {
-                    $resultado['mensaje'] = $this->get('translator')->trans('sentencia_error') . ': ' . $this->get('translator')->trans('_no_conexion_configurada_');
+                    $resultado['mensaje'] = $translator->trans('sentencia_error') . ': ' . $translator->trans('_no_conexion_configurada_');
                     $resultado['estado'] = 'error';
                 } else {
                     $jj = 0;
                     $resultado['estado'] = 'error';
                     while ($jj < count($conexiones) and $resultado['estado'] != 'ok')
                     {
-                        $resultado = $this->getDatosMuestra($conexiones[$jj++], $sentenciaSQL, $request);
+                        $resultado = $this->getDatosMuestra($conexiones[$jj++], $sentenciaSQL, $request, $translator);
                     }
 
                 }
@@ -292,7 +291,7 @@ class OrigenDatoController extends AbstractController
                 try {
                     $em->flush();
                 } catch (\Exception $e) {
-                    $resultado = array('estado' => 'error', 'mensaje' => '<div class="alert alert-error"> ' . $this->get('translator')->trans('camio_no_realizado') . '</div>');
+                    $resultado = array('estado' => 'error', 'mensaje' => '<div class="alert alert-error"> ' . $translator->trans('camio_no_realizado') . '</div>');
                 }
                 $resultado['nombre_campos'] = $nombres_id;
             }
@@ -329,7 +328,7 @@ class OrigenDatoController extends AbstractController
     /**
      * @Route("/configurar/campo", name="configurar_campo", options={"expose"=true})
      */
-    public function configurarCampoAction(Request $request, Util $util)
+    public function configurarCampoAction(Request $request, Util $util, TranslatorInterface $translator)
     {
         $resultado = array('estado' => 'success', 'mensaje' => '');
 
@@ -351,27 +350,27 @@ class OrigenDatoController extends AbstractController
                         break;
                 }
             }
-            $mensaje = $campo->getNombre() . ': ' . $this->get('translator')->trans('tipo_campo_cambiado_a') . ' ' . $tipo_campo->getDescripcion();
+            $mensaje = $campo->getNombre() . ': ' . $translator->trans('tipo_campo_cambiado_a') . ' ' . $tipo_campo->getDescripcion();
             $campo->setTipoCampo($tipo_campo);
         } elseif ($tipo_cambio == 'significado_variable') {
             $significado_variable = $em->find(SignificadoCampo::class, $valor);
-            $mensaje = $campo->getNombre() . ': ' . $this->get('translator')->trans('significado_campo_cambiado_a') . ' ' . $significado_variable->getDescripcion();
+            $mensaje = $campo->getNombre() . ': ' . $translator->trans('significado_campo_cambiado_a') . ' ' . $significado_variable->getDescripcion();
             $campo->setSignificado($significado_variable);
         } else {
             $diccionario = $em->find(Diccionario::class, $valor);
-            $mensaje = $campo->getNombre() . ': ' . $this->get('translator')->trans('_diccionario_aplicado_') . ' ' . $diccionario->getDescripcion();
+            $mensaje = $campo->getNombre() . ': ' . $translator->trans('_diccionario_aplicado_') . ' ' . $diccionario->getDescripcion();
             $campo->setDiccionario($diccionario);
         }
 
         if ($valido) {
             $resultado['mensaje'] = $mensaje;
         } else {
-            $resultado = array('estado' => 'error', 'mensaje' => $this->get('translator')->trans('_tipo_no_corresponde_con_datos_'));
+            $resultado = array('estado' => 'error', 'mensaje' => $translator->trans('_tipo_no_corresponde_con_datos_'));
         }
         try {
             $em->flush();
         } catch (\Exception $e) {
-            $resultado = array('estado' => 'error', 'mensaje' => $this->get('translator')->trans('cambio_no_realizado'));
+            $resultado = array('estado' => 'error', 'mensaje' => $translator->trans('cambio_no_realizado'));
         }
 
         return new Response(json_encode($resultado));
@@ -380,9 +379,9 @@ class OrigenDatoController extends AbstractController
     /**
      * @Route("/origen_dato/get_campos/{id}", name="origen_dato_get_campos", options={"expose"=true})
      */
-    public function getCamposAction(OrigenDatos $origen)
+    public function getCamposAction(OrigenDatos $origen, TranslatorInterface $translator)
     {
-        $resp = '<h6>' . $this->get('translator')->trans('_campos_utilizables_en_campos_calculados_') . '</h6>
+        $resp = '<h6>' . $translator->trans('_campos_utilizables_en_campos_calculados_') . '</h6>
                 <UL class="campos_disponibles">';
         if ($origen->getEsFusionado() or $origen->getEsPivote()) {
             $campos = explode(',', str_replace(array(' ', "'"), '', $origen->getCamposFusionados()));
@@ -399,11 +398,11 @@ class OrigenDatoController extends AbstractController
         return new Response($resp . '</UL>');
     }
 
-    public function getDatosMuestra($conexion, $sentenciaSQL, $request) {
+    public function getDatosMuestra($conexion, $sentenciaSQL, $request, TranslatorInterface $translator) {
         $conn = $this->getConexionGenerica('consulta_sql', $conexion, $request);
         $resultado = array();
         $resultado['estado'] = 'error';
-        $resultado['mensaje'] = $this->get('translator')->trans('_error_conexion_');
+        $resultado['mensaje'] = $translator->trans('_error_conexion_');
         if ($conexion != false){
             try {
 
@@ -425,17 +424,17 @@ class OrigenDatoController extends AbstractController
                     $resultado['nombre_campos'] = array_keys($resultado['datos'][0]);
 
                     $resultado['estado'] = 'ok';
-                    $resultado['mensaje'] = '<span style="color: green">' . $this->get('translator')->trans('sentencia_success');
+                    $resultado['mensaje'] = '<span style="color: green">' . $translator->trans('sentencia_success');
                 } else {
                     $resultado['estado'] = 'error';
-                    $resultado['mensaje'] = $this->get('translator')->trans('_no_datos_');
+                    $resultado['mensaje'] = $translator->trans('_no_datos_');
                 }
             } catch (\PDOException $e) {
-                $resultado['mensaje'] = $this->get('translator')->trans('sentencia_error') . ' 1: ' . $e->getMessage();
+                $resultado['mensaje'] = $translator->trans('sentencia_error') . ' 1: ' . $e->getMessage();
             } catch (DBAL\DBALException $e) {
-                $resultado['mensaje'] = $this->get('translator')->trans('sentencia_error') . ' 2: ' . $e->getMessage();
+                $resultado['mensaje'] = $translator->trans('sentencia_error') . ' 2: ' . $e->getMessage();
             } catch (\Exception $e) {
-                $resultado['mensaje'] = $this->get('translator')->trans('sentencia_error') . ' 3: ' . $e->getMessage();
+                $resultado['mensaje'] = $translator->trans('sentencia_error') . ' 3: ' . $e->getMessage();
             }
         }
 

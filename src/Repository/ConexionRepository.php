@@ -33,8 +33,8 @@ class ConexionRepository extends EntityRepository {
                 $connectionParams['port'] = $conexion->getPuerto();
                 $cadena .= ';port='.$conexion->getPuerto();
             }
-            $dbh = new \PDO($cadena, $conexion->getUsuario(), $conexion->getClave());
-            $connectionParams['pdo'] = $dbh;
+            //$dbh = new \PDO($cadena, $conexion->getUsuario(), $conexion->getClave());
+            //$connectionParams['pdo'] = $dbh;
 
             $conn = DBAL\DriverManager::getConnection($connectionParams, $config);
             $conn->connect();

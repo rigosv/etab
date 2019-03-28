@@ -295,7 +295,7 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
                                 'WHERE ROWNUM >= ' . $i * $tamanio . ' AND ROWNUM < ' . ($tamanio * ($i + 1));
                         } elseif ($cnx->getIdMotor()->getCodigo() == 'sqlsrv') {
 
-                            $sql_aux = "SELECT FROM ( $sql )  sqlOriginal 
+                            $sql_aux = "SELECT * FROM ( $sql )  sqlOriginal 
                                     WHERE 1 = 1
                                     $condicion_carga_incremental
                                     $orden";
