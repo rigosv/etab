@@ -140,7 +140,12 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
                 $scope.color[id][k] = "white";
             }
             if (inde[k].real != null && inde[k].planificado != null && inde[k].real != '' && inde[k].planificado != '') {
-                $scope.statusx[id][k] = inde[k].real / inde[k].planificado * 100;                
+                if (inde[k].planificado == 0){
+                    $scope.statusx[id][k] = inde[k].real;
+                }else{
+                    $scope.statusx[id][k] = inde[k].real / inde[k].planificado * 100;                
+                }
+                
             } else {
                 $scope.statusx[id][k] = -1;
             }
