@@ -127,7 +127,7 @@
                                                                             {{ 'nombre' | trans }}
                                                                         </label>
                                                                         <div class="sonata-ba-field col-sm-9 sonata-ba-field-standard-natural">
-                                                                            <input type="text" id="nombre" name="nombre" ng-model="dato.nombre" required="required" maxlength="100" class=" form-control">
+                                                                            <input type="text" id="nombre" name="nombre" ng-model="dato.nombre" required="required" maxlength="500" class=" form-control">
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group" id="sonata-ba-field-container-descripcion">
@@ -181,14 +181,14 @@
                                                                                                 <label class="control-label" for="nombre">
                                                                                                     {{ 'nombre' | trans }}
                                                                                                 </label>
-                                                                                                <input type="text" ng-model="desempeno.nombre" required="required" maxlength="100" class=" form-control" style="width:90%">
+                                                                                                <input type="text" ng-model="desempeno.nombre" required="required" maxlength="500" class=" form-control" style="width:90%">
                                                                                                 
                                                                                             </div>
                                                                                             <div class="form-group col-sm-6" style="padding: 14px;">
                                                                                                 <label class="control-label" for="nombre">
                                                                                                     {{ 'orden' | trans }}
                                                                                                 </label>
-                                                                                                <input type="text" ng-model="desempeno.orden" required="required" maxlength="100" class=" form-control" style="width:90%">                                                                        
+                                                                                                <input type="text" ng-model="desempeno.orden" required="required" maxlength="500" class=" form-control" style="width:90%">                                                                        
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
@@ -259,8 +259,8 @@
                                                                                                                         </thead>
                                                                                                                         <tbody>
                                                                                                                             <tr ng-repeat="relacion in desempeno.indicador_relacion">
-                                                                                                                                <td><input type="text" ng-model="relacion.nombre" required="required" maxlength="100" class=" form-control" ></td>
-                                                                                                                                <td><input type="text" ng-model="relacion.fuente" required="required" maxlength="100" class=" form-control" ></td>
+                                                                                                                                <td><input type="text" ng-model="relacion.nombre" required="required" maxlength="500" class=" form-control" ></td>
+                                                                                                                                <td><input type="text" ng-model="relacion.fuente" required="required" maxlength="500" class=" form-control" ></td>
                                                                                                                                 <td><button type="button" class="btn btn-primary" ng-click="abrirAlerta(num, $index, 'indicador_relacion')"><i class="fa fa-exclamation-circle"></i> {{ 'alertas' | trans}}</button></td>
                                                                                                                                 <td><button type="button" class="btn btn-danger"  ng-click="confirmarFila('indicador_relacion', 'confirmarFila', $index, num)"><i class="fa fa-minus"></i> </button></td>
                                                                                                                             </tr>
