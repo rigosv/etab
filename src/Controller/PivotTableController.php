@@ -24,7 +24,7 @@ class PivotTableController extends AbstractController {
     /**
      * @return Response
      *
-     * @Route("/", name="pivotTable")
+     * @Route("/index", name="pivotTable")
      */
 
     public function PivotTableAction() {

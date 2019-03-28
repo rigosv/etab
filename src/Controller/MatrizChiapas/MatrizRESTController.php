@@ -647,7 +647,7 @@ class MatrizRESTController extends AbstractController {
         $normalizers = array(new ObjectNormalizer());
 
         $serializer = new Serializer($normalizers, $encoders);
-        try{
+        //try{
             // validar que ningun dato est vacio
             if(isset($id) &&  $id != ''){
                 // iniciar el manager de doctrine
@@ -656,6 +656,67 @@ class MatrizRESTController extends AbstractController {
                 $data = $em->getRepository(MatrizSeguimientoMatriz::class)->find($id);
                 // si existe el modulo
                 if($data){
+                    $connection = $em->getConnection();
+                    // usuarios asignados                    
+                    $statement = $connection->prepare("DELETE  FROM matriz_indicadores_usuario WHERE  id_matriz = '".$data->getId()."'");
+                    $statement->execute();
+                    $usuarios = $statement->fetchAll();
+
+                    // desemepño                
+                    $statement = $connection->prepare("SELECT * FROM matriz_indicadores_desempeno WHERE  id_matriz = '".$data->getId()."'");
+                    $statement->execute();
+                    $desempenos = $statement->fetchAll();
+                   
+                    $indicadores_desempeno = [];
+                    foreach($desempenos as $desempeno){
+                        // relaciones asignadas
+                        $statement = $connection->prepare("SELECT * FROM matriz_indicadores_relacion WHERE  id_desempeno = '".$desempeno["id"]."'");
+                        $statement->execute();
+                        $relaciones = $statement->fetchAll();
+
+                        foreach($relaciones as $relacion){
+                            $statement = $connection->prepare("DELETE FROM matriz_indicadores_relacion_alertas WHERE  matriz_indicador_relacion_id = '".$relacion["id"]."'");
+                            $statement->execute();
+                            $alertas = $statement->fetchAll();
+                        }
+                        $statement = $connection->prepare("DELETE FROM matriz_indicadores_relacion WHERE  id_desempeno = '".$desempeno["id"]."'");
+                        $statement->execute();
+                        $relaciones = $statement->fetchAll();
+
+                        // etab asignadas
+                        $statement = $connection->prepare("SELECT * FROM matriz_indicadores_etab WHERE  id_desempeno = '".$desempeno["id"]."'");
+                        $statement->execute();
+                        $etab = $statement->fetchAll();
+
+                        foreach($etab as $key => $item){                                                            
+                            $statement = $connection->prepare("DELETE FROM matriz_indicadores_etab_alertas WHERE  matriz_indicador_etab_id = '".$item["id"]."'");
+                            $statement->execute();
+                            $alertas = $statement->fetchAll();                            
+                        }
+
+                        $statement = $connection->prepare("DELETE FROM matriz_indicadores_etab WHERE  id_desempeno = '".$desempeno["id"]."'");
+                        $statement->execute();
+                        $etab = $statement->fetchAll();
+
+                        // datos
+                        $statement = $connection->prepare("SELECT * FROM matriz_seguimiento WHERE  id_desempeno = '".$desempeno["id"]."'");
+                        $statement->execute();
+                        $etab = $statement->fetchAll();
+
+                        foreach($etab as $key => $item){                                                            
+                            $statement = $connection->prepare("DELETE FROM matriz_seguimiento_dato WHERE  id_matriz = '".$item["id"]."'");
+                            $statement->execute();
+                            $alertas = $statement->fetchAll();                            
+                        }
+
+                        $statement = $connection->prepare("DELETE FROM matriz_seguimiento WHERE  id_desempeno = '".$desempeno["id"]."'");
+                        $statement->execute();
+                        $etab = $statement->fetchAll();
+                    }                    
+                    $statement = $connection->prepare("DELETE FROM matriz_indicadores_desempeno WHERE  id_matriz = '".$data->getId()."'");
+                    $statement->execute();
+                    $desempenos = $statement->fetchAll();                    
+
                     $em->remove($data);
                     // ejecutar el contenido de la memoria
                     $em->flush();
@@ -663,7 +724,7 @@ class MatrizRESTController extends AbstractController {
                     $response = [
                         'status' => 200,
                         'messages' => "Ok",
-                        'data' => $data,
+                        'data' => [],
                     ];                    
                 } else{ // devolver el mensaje en caso de que el modulo no sea correcto
                     $response = [
@@ -680,14 +741,14 @@ class MatrizRESTController extends AbstractController {
                 ];            
             }
             // devolver la respuesta en json 
-        }catch(\Exception $e){
+        /*}catch(\Exception $e){
             $response = [
                 'status' => 500,
                 'messages' => $e->getMessage(),
                 'data' => [],
             ];    
             
-        }
+        }*/
         // devolver la respuesta en json       
         return new Response($serializer->serialize($response, "json"));
     }

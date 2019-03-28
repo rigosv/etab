@@ -250,7 +250,7 @@
             />
             <argument />
             <argument>App\Entity\MatrizChiapas\MatrizSeguimientoMatriz</argument>
-            <argument>SonataAdminBundle:CRUD</argument>
+            <argument>App\Controller\MatrizChiapas\MatrizSeguimientoMatrizAdminController</argument>
             <call method="setMaxPerPage"><argument>%admin_max_per_page_number%</argument></call>
         </service>
 

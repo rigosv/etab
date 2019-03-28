@@ -632,29 +632,31 @@ App.controller("MatrizConfiguracionCtrl", function (
   }
 
   $scope.cargarMatriz = function () {
-    $scope.cargando = true;
-    Crud.ver($scope.ruta, $scope.dato.id, function (data) {  
-      $scope.cargando = false;    
-      if (data.status == 200) {
-        $scope.intento3 = 0;        
-        $scope.dato = data.data;
-        $scope.imprimir_mensaje(data.messages, "success");        
-      }
-      else {
-        $scope.imprimir_mensaje(data.messages, "warning");
-      }
-    }, function (e) {
-      setTimeout(function () {
-        if ($scope.intento3 < 2) {
-          $scope.cargarMatriz(ruta);
-          $scope.intento3++;
+    if ($scope.dato.id){
+      $scope.cargando = true;
+      Crud.ver($scope.ruta, $scope.dato.id, function (data) {  
+        $scope.cargando = false;    
+        if (data.status == 200) {
+          $scope.intento3 = 0;        
+          $scope.dato = data.data;
+          $scope.imprimir_mensaje(data.messages, "success");        
         }
         else {
-          $scope.cargando = false;
-          console.log(e);
+          $scope.imprimir_mensaje(data.messages, "warning");
         }
-      }, 200);
-    });
+      }, function (e) {
+        setTimeout(function () {
+          if ($scope.intento3 < 2) {
+            $scope.cargarMatriz(ruta);
+            $scope.intento3++;
+          }
+          else {
+            $scope.cargando = false;
+            console.log(e);
+          }
+        }, 200);
+      });
+    }
   };
 
   $scope.eliminarMatriz = function(){

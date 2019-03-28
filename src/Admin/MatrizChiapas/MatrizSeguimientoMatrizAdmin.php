@@ -55,4 +55,9 @@ class MatrizSeguimientoMatrizAdmin extends Admin
         }
     }
 
+    public function getBatchActions()
+    {
+        $actions = parent::getBatchActions();        
+        return $actions;
+    }
 }
