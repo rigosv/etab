@@ -1,2 +1,2 @@
-#grid_form_routes:
-#    resource: "@GridFormBundle/Resources/config/routes.yaml"
+grid_form_routes:
+    resource: "@GridFormBundle/Resources/config/routes.yaml"

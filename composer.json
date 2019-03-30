@@ -2,10 +2,36 @@
     "type": "project",
     "name": "minsal/etab",
     "license": "GPLv3",
+  "repositories": [
+    {
+      "type": "path",
+      "url": "../grid-form-bundle",
+      "options": {
+        "symlink": true
+      }
+    },
+    {
+      "type": "path",
+      "url": "../calidad-bundle",
+      "options": {
+        "symlink": true
+      }
+    },
+    {
+      "type": "path",
+      "url": "../costos-bundle",
+      "options": {
+        "symlink": true
+      }
+    }
+  ],
     "require": {
         "php": "^7.1.3",
         "ext-ctype": "*",
         "ext-iconv": "*",
+      "minsal/calidad-bundle": "*",
+      "minsal/costos-bundle": "*",
+      "minsal/grid-form-bundle": "*",
         "enqueue/messenger-adapter": "^0.2.0",
         "enqueue/redis": "^0.9.1",
         "friendsofsymfony/jsrouting-bundle": "^2.2",

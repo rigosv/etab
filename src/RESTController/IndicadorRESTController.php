@@ -140,7 +140,15 @@ class IndicadorRESTController extends Controller {
         
         $parte = $request->get('parte');
         $porcion = ( $parte == null ) ? 0 : ($parte - 1);
-        
+
+        $alertas_ = $fichaTec->getAlertas();
+        $alertas = [];
+        foreach ( $alertas_ as $a ){
+            $alertas[] = ['li'=>$a->getLimiteInferior(),
+                            'ls'=>$a->getLimiteSuperior(),
+                            'color' => $a->getColor()->getCodigo()
+                            ];
+        }
         
         if ($fichaTec->getUpdatedAt() != '' and $fichaTec->getUltimaLectura() != '' and $fichaTec->getUltimaLectura() < $fichaTec->getUpdatedAt()) {
             // Buscar la petición en la caché de Redis
@@ -157,7 +165,8 @@ class IndicadorRESTController extends Controller {
         $almacenamiento->crearIndicador($fichaTec);
         $resp = $almacenamiento->getDatosIndicador($fichaTec, $porcion * $this->tamanio, $this->tamanio);
         $respX['datos'] = $resp;
-
+        $respX['alertas'] = $alertas;
+        $respX['alertas'] = $fichaTec->getFormula();
         $respX['total_partes'] = ceil($totalRegistros / $this->tamanio );
         
         $redis->set('indicador_'.$fichaTec->getId().'_tamanio_', $respX['total_partes']);

@@ -1,2 +1,2 @@
-#calidad_routes:
-#    resource: "@CalidadBundle/Resources/config/routes.yaml"
+calidad_routes:
+    resource: "@CalidadBundle/Resources/config/routes.yaml"

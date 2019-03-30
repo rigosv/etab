@@ -35,12 +35,6 @@ class PivotTableController extends AbstractController {
 
         $formularios = array();
 
-        /*
-        if ($usuario->hasRole('ROLE_SUPER_ADMIN') or $usuario->hasRole('ROLE_USER_CAPTURA_DATOS')) {
-            //Recuperar los formularios
-            $formularios = $em->getRepository('GridFormBundle:Formulario')->findBy(array('areaCosteo'=>'almacen_datos'));
-        }*/
-
         $MINSALCalidadBundle = ['habilitado' => false, 'estandares'=> ['pna' => [], 'hosp'=> []] ];
 
         if (array_key_exists('CalidadBundle' , $this->getParameter('kernel.bundles'))

@@ -1,2 +1,2 @@
-#costos_routes:
-#    resource: "@CostosBundle/Resources/config/routes.yaml"
+costos_routes:
+    resource: "@CostosBundle/Resources/config/routes.yaml"

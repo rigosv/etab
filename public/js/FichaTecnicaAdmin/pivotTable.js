@@ -1,5 +1,7 @@
 var idIndicadorActivo;
 var esCalidad = false;
+var xaggregatorName = "Suma";
+var heatmapX = {};
 
 $(document).ready(function() {
     var datos_ = '';
@@ -108,11 +110,15 @@ $(document).ready(function() {
         var nombre_indicador = $(this).html();
 
         $.getJSON(Routing.generate('get_datos_indicador', {id: id_indicador}), function(mps) {
-            datos = [];
+            var datos = [];
+            var alertas = [];
 
             tipoElemento = 'indicador';
             identificadorElemento = id_indicador;
-            var datos = datos.concat(mps.datos);
+            datos = datos.concat(mps.datos);
+            alertas = alertas.concat(mps.alertas);
+
+
 
             $('#marco-sala').attr('data-content', nombre_indicador);
             $('#myTab a:first').tab('show');
@@ -233,6 +239,7 @@ $(document).ready(function() {
                 renderers: renderers,
                 dataClass: dataClass,
                 menuLimit: 500,
+                aggregatorName: xaggregatorName,
                 unusedAttrsVertical: false,
                 onRefresh: arreglarValores0,
                 rendererOptions: {
@@ -261,8 +268,10 @@ $(document).ready(function() {
             $("#output").pivotUI(datos, {
                 renderers: renderers,
                 dataClass: dataClass,
+                aggregatorName: xaggregatorName,
                 menuLimit: 500,
                 unusedAttrsVertical: false,
+                heatmap: heatmapX,
                 onRefresh: onChangeTable,
                 rendererOptions: {
                     arrowCollapsed: "[+] ",
