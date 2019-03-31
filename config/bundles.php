@@ -35,7 +35,4 @@ return [
     Lexik\Bundle\JWTAuthenticationBundle\LexikJWTAuthenticationBundle::class => ['all' => true],
     Nelmio\CorsBundle\NelmioCorsBundle::class => ['all' => true],
     jonasarts\Bundle\TCPDFBundle\TCPDFBundle::class => ['all' => true],
-    \MINSAL\Bundle\CostosBundle\CostosBundle::class => ['all' => true],
-    \MINSAL\Bundle\CalidadBundle\CalidadBundle::class => ['all' => true],
-    \MINSAL\Bundle\GridFormBundle\GridFormBundle::class => ['all' => true],
 ];
