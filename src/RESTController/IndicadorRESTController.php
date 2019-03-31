@@ -137,7 +137,7 @@ class IndicadorRESTController extends Controller {
         $redis = new Predis\Client();
         
         $em = $this->getDoctrine()->getManager();
-        
+
         $parte = $request->get('parte');
         $porcion = ( $parte == null ) ? 0 : ($parte - 1);
 
@@ -150,7 +150,7 @@ class IndicadorRESTController extends Controller {
                             ];
         }
         
-        if ($fichaTec->getUpdatedAt() != '' and $fichaTec->getUltimaLectura() != '' and $fichaTec->getUltimaLectura() < $fichaTec->getUpdatedAt()) {
+        if (1==2 and $fichaTec->getUpdatedAt() != '' and $fichaTec->getUltimaLectura() != '' and $fichaTec->getUltimaLectura() < $fichaTec->getUpdatedAt()) {
             // Buscar la petición en la caché de Redis
             
             $respj = $redis->get('indicador_'.$fichaTec->getId().'_parte_'.$porcion);
@@ -166,7 +166,8 @@ class IndicadorRESTController extends Controller {
         $resp = $almacenamiento->getDatosIndicador($fichaTec, $porcion * $this->tamanio, $this->tamanio);
         $respX['datos'] = $resp;
         $respX['alertas'] = $alertas;
-        $respX['alertas'] = $fichaTec->getFormula();
+
+        $respX['formula'] = $fichaTec->getFormula();
         $respX['total_partes'] = ceil($totalRegistros / $this->tamanio );
         
         $redis->set('indicador_'.$fichaTec->getId().'_tamanio_', $respX['total_partes']);
