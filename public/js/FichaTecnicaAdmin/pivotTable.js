@@ -1,6 +1,7 @@
 var idIndicadorActivo;
 var esCalidad = false;
 var xaggregatorName = "Suma";
+var heatmapX = {};
 
 $(document).ready(function() {
     var datos_ = '';
@@ -110,10 +111,14 @@ $(document).ready(function() {
 
         $.getJSON(Routing.generate('get_datos_indicador', {id: id_indicador}), function(mps) {
             var datos = [];
+            var alertas = [];
 
             tipoElemento = 'indicador';
             identificadorElemento = id_indicador;
             datos = datos.concat(mps.datos);
+            alertas = alertas.concat(mps.alertas);
+
+
 
             $('#marco-sala').attr('data-content', nombre_indicador);
             $('#myTab a:first').tab('show');
@@ -126,12 +131,12 @@ $(document).ready(function() {
                         datos = datos.concat(mpsx.datos);
                         cargadas++;
                         if (cargadas == mps.total_partes){
-                            cargarTablaDinamica(datos, mps.alertas, mps.formula);
+                            cargarTablaDinamica(datos);
                         }
                     });
                 }
             } else {
-                cargarTablaDinamica(datos, mps.alertas, mps.formula);
+                cargarTablaDinamica(datos);
             }
             cargarDescripcionAtributos(id_indicador);
         });
@@ -141,7 +146,6 @@ $(document).ready(function() {
         esCalidad = false;
         var codigo = $(this).attr('data-id');
         var nombre_elemento = $(this).html();
-        xaggregatorName = "Suma";
 
         $.getJSON(Routing.generate('get_datos_costeo', {codigo: codigo}), function(mps) {
             datos_ = mps;
@@ -157,7 +161,6 @@ $(document).ready(function() {
         esCalidad = false;
         var codigo = $(this).attr('data-id');
         var nombre_elemento = $(this).html();
-        xaggregatorName = "Suma";
 
         $.getJSON(Routing.generate('get_datos_formulario_captura', {codigo: codigo}), function(mps) {
             if (mps.estado == 'error'){
@@ -178,8 +181,6 @@ $(document).ready(function() {
         esCalidad = true;
         var nombre_elemento = $(this).html();
         var idFrm = $(this).attr('data-id');
-        xaggregatorName = "Suma";
-
         $.getJSON(Routing.generate('get_datos_evaluacion_calidad', {id: idFrm}), function(mps) {
             datos_ = mps;
             tipoElemento = 'calidad';
@@ -193,8 +194,6 @@ $(document).ready(function() {
 
     $('A.log_actividad_item').click(function() {
         esCalidad = false;
-        xaggregatorName = "Suma";
-
         $.getJSON(Routing.generate('get_log_actividad'), function(mps) {
             datos_ = mps;
             tipoElemento = 'log_actividad';
@@ -215,12 +214,10 @@ $(document).ready(function() {
         })
     }
 
-    function cargarTablaDinamica(datos, alertas = [], formula = ''){
-
+    function cargarTablaDinamica(datos){
         var renderers = $.extend($.pivotUtilities.renderers, $.pivotUtilities.subtotal_renderers,
             $.pivotUtilities.plotly_renderers);
         var dataClass = $.pivotUtilities.SubtotalPivotData;
-
 
         var configPlotly = {
             displayModeBar: true,
@@ -268,62 +265,19 @@ $(document).ready(function() {
                 }
             }, true, 'es');
         } else {
-            var factor, xvals='';
-
-            if ( formula != '' ){
-                var factorF = formula.toLowerCase().replace(/[{}]/g, '__').split('*');
-
-                factor = ( factorF.length > 1 && ( factorF[1] == 100 || factorF[1] == 1000 ) ) ? factorF[1] : 1;
-
-                var operandos = factorF[0].split('/');
-                if ( operandos.length > 1 ){
-                    xaggregatorName = 'Cociente';
-                    xvals =  [operandos[0], operandos[1]];
-                } else {
-                    xaggregatorName = 'Suma';
-                    xvals =  [operandos[0]];
-                }
-            }
-
             $("#output").pivotUI(datos, {
                 renderers: renderers,
                 dataClass: dataClass,
-                vals: xvals,
                 aggregatorName: xaggregatorName,
                 menuLimit: 500,
                 unusedAttrsVertical: false,
+                heatmap: heatmapX,
                 onRefresh: onChangeTable,
                 rendererOptions: {
                     arrowCollapsed: "[+] ",
                     arrowExpanded: "[-] ",
                     collapseRowsAt: 0,
                     plotlyConfig : configPlotly,
-                    heatmap: {
-                        colorScaleGenerator : function(values) {
-                            if ( alertas.length == 0){
-                                var max, min;
-                                min = Math.min.apply(Math, values);
-                                max = Math.max.apply(Math, values);
-                                return function(x) {
-                                    var nonRed;
-                                    nonRed = 255 - Math.round(255 * (x - min) / (max - min));
-                                    return "rgb(255," + nonRed + "," + nonRed + ")";
-                                };
-                            } else {
-                                return function (x) {
-                                    var rango, i;
-                                    for (i in alertas) {
-                                        rango = alertas[i];
-
-                                        if (x*factor >= rango.li && x*factor <= rango.ls) {
-                                            return rango.color;
-                                        }
-                                    }
-                                    return "white";
-                                };
-                            }
-                        }
-                    },
                 }
             }, true, 'es');
         }
