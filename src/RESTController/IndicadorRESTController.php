@@ -150,7 +150,7 @@ class IndicadorRESTController extends Controller {
             ];
         }
 
-        if (1==2 and $fichaTec->getUpdatedAt() != '' and $fichaTec->getUltimaLectura() != '' and $fichaTec->getUltimaLectura() < $fichaTec->getUpdatedAt()) {
+        if ($fichaTec->getUpdatedAt() != '' and $fichaTec->getUltimaLectura() != '' and $fichaTec->getUltimaLectura() < $fichaTec->getUpdatedAt()) {
             // Buscar la petición en la caché de Redis
 
             $respj = $redis->get('indicador_'.$fichaTec->getId().'_parte_'.$porcion);
