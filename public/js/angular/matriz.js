@@ -65,7 +65,17 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
             if (data.status == 200) {
                 $scope.intento = 0;
                 $scope.dato.matriz = data.data;
-                if (angular.isUndefined($scope.dato.matriz[0].indicadores_etab['enero']) || angular.isUndefined($scope.dato.matriz[0].indicadores_relacion['enero'])){
+                var cambiar_mes = false;
+                if ($scope.dato.matriz[0].indicadores_etab.length > 0){
+                    if (angular.isUndefined($scope.dato.matriz[0].indicadores_etab[0]['enero']))
+                    cambiar_mes = true;
+                }
+                if ($scope.dato.matriz[0].indicadores_relacion.length > 0) {
+                    if (angular.isUndefined($scope.dato.matriz[0].indicadores_relacion[0]['enero']))
+                        cambiar_mes = true;
+                }
+                
+                if (cambiar_mes){
                     $scope.meses = [
                       "january",
                       "february",
