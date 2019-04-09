@@ -453,7 +453,8 @@ App.controller("TableroCtrl", function(
           $scope.abrio_sala = true;
           $scope.sala.id = data.data;
           $scope.cargarSalas();
-          alert($("#guardar_sala_ok").html());
+          $("#modalGuardarSala").modal("hide");
+          alert($("#guardar_sala_ok").html());          
         } else {
           alert($("#guardar_sala_error").html());
         }
@@ -846,7 +847,8 @@ App.controller("TableroCtrl", function(
         $scope.indicadores[index].grafica = data.data;
       }
     } else {
-      $scope.indicadores[index].dimension--;
+      $scope.indicadores[index].dimension--;    
+      delete $scope.indicadores[index].filtros[$scope.indicadores[index].filtros.length - 1];        
       $scope.indicadores[index].error = "Warning";
     }
 
@@ -1258,7 +1260,7 @@ App.controller("TableroCtrl", function(
       "../api/v1/tablero/datosIndicador/" +
         $scope.indicadores[index].id +
         "/" +
-        $scope.indicadores[index].dimensiones[dimension],
+        $scope.indicadores[index].dimensiones[dimension].trim(),
       json,
       "application/json",
       function(data) {
@@ -1451,11 +1453,15 @@ App.controller("TableroCtrl", function(
           callback: function (chart) {            
             chart.pie.dispatch.on("elementClick", function (e) {
               $scope.indicadores[index].dimension++;
-              $scope.indicadores[index].filtros.push({
-                codigo: $scope.indicadores[index].dimensiones[$scope.indicadores[index].dimension - 1].trim(),
-                valor: e.data.key
-              });
-              $scope.agregarIndicadorDimension($scope.indicadores[index].dimension, e.data.index);
+              if ($scope.indicadores[index].dimension < $scope.indicadores[index].dimensiones.length){
+                $scope.indicadores[index].filtros.push({
+                  codigo: $scope.indicadores[index].dimensiones[$scope.indicadores[index].dimension - 1].trim(),
+                  valor: e.data.key
+                });
+                $scope.agregarIndicadorDimension($scope.indicadores[index].dimension, e.data.index);
+              }else{
+                $scope.finDimension(index);
+              }
             });
           } 
         }
@@ -1485,11 +1491,15 @@ App.controller("TableroCtrl", function(
         options.chart.callback = function (chart) {
           chart.discretebar.dispatch.on("elementClick", function (e) {           
             $scope.indicadores[index].dimension++;
-            $scope.indicadores[index].filtros.push({
-              codigo: $scope.indicadores[index].dimensiones[$scope.indicadores[index].dimension - 1].trim(),
-              valor: e.data.label
-            });
-            $scope.agregarIndicadorDimension($scope.indicadores[index].dimension,e.data.index);
+            if ($scope.indicadores[index].dimension < $scope.indicadores[index].dimensiones.length) {
+              $scope.indicadores[index].filtros.push({
+                codigo: $scope.indicadores[index].dimensiones[$scope.indicadores[index].dimension - 1].trim(),
+                valor: e.data.label
+              });
+              $scope.agregarIndicadorDimension($scope.indicadores[index].dimension,e.data.index);
+            }else{
+              $scope.finDimension(index);
+            }
           });
         }
       }
@@ -1529,6 +1539,13 @@ App.controller("TableroCtrl", function(
       $scope.indicadores[index].options =options
     }
   };
+
+  $scope.finDimension = function(index){
+    $scope.indicadores[index].error = "Success";
+    setTimeout(function() {
+      $scope.indicadores[index].error = "";
+    }, 3000);
+  }
 
   $scope.opcionesGraficasTendencias = function (index, tipo, labelx, labely, tamano) {
     if($scope.indicadores[index].full_screen)
@@ -1600,7 +1617,7 @@ App.controller("TableroCtrl", function(
     $("#mapa" + index).html('');
     if($scope.indicadores[index].informacion){
       
-      setTimeout(() => {
+      setTimeout(function() {
         var width = $("#mapa" + index).width(), height = tamano;        
 
         var dimension = $scope.indicadores[index].dimensiones[$scope.indicadores[index].dimension].trim();
@@ -1913,10 +1930,10 @@ App.controller("TableroCtrl", function(
 
     var mywindow = document.getElementById("printf");
     mywindow.contentWindow.document.write(html);
-    setTimeout(() => {
+    setTimeout(function() {
       mywindow.contentWindow.print();
     }, 500);
-    setTimeout(() => {
+    setTimeout(function() {
       document.body.removeChild(iframe);
     }, 2000);
   };
@@ -2204,14 +2221,14 @@ App.controller("TableroCtrl", function(
     if(item.index < index)
       index--;
     if (!angular.isUndefined(index)) {      
-      setTimeout(() => {       
-        var tamanio = $scope.indicadores[index].configuracion.height;        
+      setTimeout(function() {
+        var tamanio = $scope.indicadores[index].configuracion.height;
         $scope.indicadores[index].configuracion.height = 100;
         $scope.actualizarsGrafica(index, false);
-        setTimeout(() => {
+        setTimeout(function() {
           $scope.indicadores[index].configuracion.height = tamanio;
           $scope.actualizarsGrafica(index, false);
-        }, 100);  
+        }, 100);
       }, 100);  
         
     }

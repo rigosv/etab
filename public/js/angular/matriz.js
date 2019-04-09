@@ -65,6 +65,22 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
             if (data.status == 200) {
                 $scope.intento = 0;
                 $scope.dato.matriz = data.data;
+                if (angular.isUndefined($scope.dato.matriz[0].indicadores_etab['enero'])){
+                    $scope.meses = [
+                      "january",
+                      "february",
+                      "march",
+                      "april",
+                      "may",
+                      "june",
+                      "july",
+                      "august",
+                      "september",
+                      "october",
+                      "noviembre",
+                      "december"
+                    ];
+                }
                 $scope.noPlaneacion = false;
                 $scope.imprimir_mensaje(data.mensaje, 'success');
             } else {

@@ -178,10 +178,14 @@
                                         <div class="panel-body">
 
                                             <div class="container-fluid" style="<% item.full_screen ? 'overflow: auto; max-height:78vh' : '' %>">
-                                                <div class="alert alert-warning" role="alert" ng-if="item.error == 'Warning'">{{ '_indicador_warning' | trans }}</div>
-                                                <div class="alert alert-danger" role="alert" ng-if="item.error == 'Error'">{{ '_indicador_error' | trans }}</div>
-                                                <div class="alert alert-success" role="alert" ng-if="item.error == 'Success'">{{ '_indicador_dimension_fin' | trans }}</div>
-                                                <div class="alert alert-info" role="alert" ng-if="(item.radial || item.termometro) && !item.informacion.meta">{{ '_grafico_aprecia_mejor_meta' | trans }}</div>
+                                                <div class="alert alert-warning" role="alert" ng-if="item.error == 'Warning'">
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ '_indicador_warning' | trans }}</div>
+                                                <div class="alert alert-danger" role="alert" ng-if="item.error == 'Error'">
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ '_indicador_error' | trans }}</div>
+                                                <div class="alert alert-success" role="alert" ng-if="item.error == 'Success'">
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ '_indicador_dimension_fin' | trans }}</div>
+                                                <div class="alert alert-info" role="alert" ng-if="(item.radial || item.termometro) && !item.informacion.meta">
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ '_grafico_aprecia_mejor_meta' | trans }}</div>
 
                                                 <!-- para graficos de pastel, barra y lineas -->
                                                 <nvd3 options="item.options" data="item.grafica" id="svg<% $index %>" ng-if="!item.radial && !item.termometro && !item.mapa"></nvd3>

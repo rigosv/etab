@@ -393,11 +393,18 @@ App.controller("MatrizConfiguracionCtrl", function (
 
   $scope.descenderDimension = function(valor, index, fila){
     $scope.dato.indicadores_desempeno[index].indicador_etab[fila].dimension++;
-    $scope.dato.indicadores_desempeno[index].indicador_etab[fila].filtros.push({
-      codigo: $scope.dato.indicadores_desempeno[index].indicador_etab[fila].dimensiones[$scope.dato.indicadores_desempeno[index].indicador_etab[fila].dimension - 1].trim(),
-      valor: valor
-    });
-    $scope.agregarIndicadorDimension($scope.dato.indicadores_desempeno[index].indicador_etab[fila].dimension, index, fila);
+    if ($scope.dato.indicadores_desempeno[index].indicador_etab[fila].dimension < $scope.dato.indicadores_desempeno[index].indicador_etab[fila].dimensiones.length) {
+      $scope.dato.indicadores_desempeno[index].indicador_etab[fila].filtros.push({
+        codigo: $scope.dato.indicadores_desempeno[index].indicador_etab[fila].dimensiones[$scope.dato.indicadores_desempeno[index].indicador_etab[fila].dimension - 1].trim(),
+        valor: valor
+      });
+      $scope.agregarIndicadorDimension($scope.dato.indicadores_desempeno[index].indicador_etab[fila].dimension, index, fila);
+    }else{
+      $scope.dato.indicadores_desempeno[index].indicador_etab[fila].error = "Success";
+      setTimeout(function() {
+        $scope.dato.indicadores_desempeno[index].indicador_etab[fila].error = "";
+      }, 3000);
+    }
   }
 
   /**
@@ -584,7 +591,8 @@ App.controller("MatrizConfiguracionCtrl", function (
   };
 
   $scope.crearMatriz = function () {
-    var datos = $scope.dato;    
+    var datos = $scope.dato;  
+    datos.tipo_operacion = $scope.tipo_operacion;  
     $scope.cargando = true;
     Crud.crear($scope.ruta, $.param(datos), 'application/x-www-form-urlencoded;charset=utf-8;', function (data) {      
       if (data.status == 200 || data.status == 201) {        

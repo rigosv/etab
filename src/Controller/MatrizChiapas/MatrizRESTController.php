@@ -42,12 +42,16 @@ class MatrizRESTController extends AbstractController {
         try{ 
             $datos = (object) $request->query->all();
 
-            $stm = $em->getRepository(User::class)
+           /* $stm = $em->getRepository(User::class)
                         ->createQueryBuilder('ct')
-                        ->orderBy('ct.lastname','ASC')
-                        ->orderBy('ct.username','ASC');
+                        ->orderBy('ct.firstname ','ASC')
+                        ->orderBy('ct.lastname','ASC');
            
-            $data = $stm->getQuery()->getArrayResult();
+            $data = $stm->getQuery()->getArrayResult();*/
+            $connection = $em->getConnection();
+            $statement = $connection->prepare("SELECT id, username, firstname, lastname, email  FROM fos_user_user order by firstname, lastname ");
+            $statement->execute();
+            $data = $statement->fetchAll();
 
             $total = count($data);
 
@@ -220,8 +224,14 @@ class MatrizRESTController extends AbstractController {
 
     private function formulario($data, $datos, $em, $tipo){
         try{
-            if(property_exists($datos, 'nombre'))
-                $data->setNombre($datos->nombre);
+            if(property_exists($datos, 'nombre')){
+                $ad = "";
+                if(property_exists($datos, 'tipo_operacion'))
+                    if($datos->tipo_operacion == "clonar")
+                    $ad = " Cloned";
+                
+                $data->setNombre($datos->nombre.$ad);
+            }
             
             if(property_exists($datos, 'descripcion'))
                 $data->setDescripcion($datos->descripcion);            

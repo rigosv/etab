@@ -8,6 +8,9 @@
         <div class="modal-body" style="max-height:80vh; max-width:100%; overflow:auto;">
             <form >
                 <div class="col-sm-12">
+                    <div class="alert alert-success" role="alert" ng-if="dato.indicadores_desempeno[index].indicador_etab[fila].error == 'Success'">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    {{ '_indicador_dimension_fin' | trans }}</div>
                     <div class="form-group">
                         <label for="desde">{{ '_descender_nivel_' | trans}}</label>
                         <div class="box-body  container-fluid" >
