@@ -65,7 +65,7 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
             if (data.status == 200) {
                 $scope.intento = 0;
                 $scope.dato.matriz = data.data;
-                if (angular.isUndefined($scope.dato.matriz[0].indicadores_etab['enero'])){
+                if (angular.isUndefined($scope.dato.matriz[0].indicadores_etab['enero']) && angular.isUndefined($scope.dato.matriz[0].indicadores_relacion['enero'])){
                     $scope.meses = [
                       "january",
                       "february",
