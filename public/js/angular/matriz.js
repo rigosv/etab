@@ -66,14 +66,22 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
                 $scope.intento = 0;
                 $scope.dato.matriz = data.data;
                 var cambiar_mes = false;
-                if ($scope.dato.matriz[0].indicadores_etab.length > 0){
-                    if (angular.isUndefined($scope.dato.matriz[0].indicadores_etab[0]['enero']))
-                    cambiar_mes = true;
-                }
-                if ($scope.dato.matriz[0].indicadores_relacion.length > 0) {
-                    if (angular.isUndefined($scope.dato.matriz[0].indicadores_relacion[0]['enero']))
-                        cambiar_mes = true;
-                }
+                angular.forEach($scope.dato.matriz, function (v1, k1) {
+                    if (v1.indicadores_etab.length > 0) {
+                        angular.forEach(v1.indicadores_etab, function (v2, k2) {
+                            if (!angular.isUndefined(v2['january']) || !angular.isUndefined(v2['june']) || !angular.isUndefined(v2['december']))
+                                cambiar_mes = true;
+                        })
+                        
+                    }
+                    if (v1.indicadores_relacion.length > 0 && !cambiar_mes) {
+                        angular.forEach(v1.indicadores_relacion, function (v2, k2) {
+                            if (!angular.isUndefined(v2['january']) || !angular.isUndefined(v2['june']) || !angular.isUndefined(v2['december']))
+                                cambiar_mes = true;
+                        })                        
+                    }
+                });
+                
                 
                 if (cambiar_mes){
                     $scope.meses = [
@@ -90,7 +98,7 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
                       "noviembre",
                       "december"
                     ];
-                }
+                } console.log($scope.meses);
                 $scope.noPlaneacion = false;
                 $scope.imprimir_mensaje(data.mensaje, 'success');
             } else {
