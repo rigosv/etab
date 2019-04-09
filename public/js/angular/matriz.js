@@ -95,10 +95,10 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
                       "august",
                       "september",
                       "october",
-                      "noviembre",
+                      "november",
                       "december"
                     ];
-                } console.log($scope.meses);
+                } 
                 $scope.noPlaneacion = false;
                 $scope.imprimir_mensaje(data.mensaje, 'success');
             } else {
