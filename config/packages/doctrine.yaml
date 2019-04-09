@@ -12,7 +12,7 @@ doctrine:
             default:
                 # configure these for your database server
                 driver: 'pdo_pgsql'
-                server_version: '9.5'
+                server_version: '10.6'
                 url: '%env(resolve:DATABASE_URL)%'
                 charset: utf8
                 mapping_types:
@@ -22,7 +22,7 @@ doctrine:
             etab_datos:
                 # configure these for your database server
                 driver: 'pdo_pgsql'
-                server_version: '9.5'
+                server_version: '10.6'
                 url: '%env(resolve:DATABASE_ETAB_DATOS_URL)%'
                 charset: utf8
                 mapping_types:

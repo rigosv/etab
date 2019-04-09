@@ -15,8 +15,8 @@ use App\Entity\FichaTecnica;
 use App\AlmacenamientoDatos\AlmacenamientoProxy;
 
 class IndicadorRESTController extends Controller {
-    
-    protected $tamanio = 50000; 
+
+    protected $tamanio = 50000;
 
     /**
      * @param integer $fichaTec
@@ -28,17 +28,17 @@ class IndicadorRESTController extends Controller {
         $response = new Response();
         $redis = new Predis\Client();
         $t = $this->get('translator');
-        
+
         $filtro = $request->get('filtro');
         $verSql = ($request->get('ver_sql') == 'true') ? true : false;
         $verAnalisisDescriptivo = ($request->get('analisis_descriptivo') == 'true') ? true : false;
         $hash = md5($filtro.$verSql);
-        
+
         // verifica que la respuesta no se ha modificado para la petición dada
         if ($fichaTec->getUpdatedAt() != '' and $fichaTec->getUltimaLectura() != '' and $fichaTec->getUltimaLectura() < $fichaTec->getUpdatedAt()
-                and $verAnalisisDescriptivo == false ) {
+            and $verAnalisisDescriptivo == false ) {
             // Buscar la petición en la caché de Redis
-            $respj = $redis->get('indicador_'.$fichaTec->getId().'_'.$dimension.$hash);            
+            $respj = $redis->get('indicador_'.$fichaTec->getId().'_'.$dimension.$hash);
             if ($respj != null){
                 $dat = json_decode($respj);
                 if ( count($dat->datos) > 0){
@@ -68,17 +68,17 @@ class IndicadorRESTController extends Controller {
         $resp['datos'] = $almacenamiento->calcularIndicador($fichaTec, $dimension, $filtros, $verSql);
 
         $respj = json_encode($resp);
-        
+
         if ( is_array($resp['datos']) ){
             $redis->set('indicador_'.$fichaTec->getId().'_'.$dimension.$hash, $respj);
         }
-        
+
         if ($verAnalisisDescriptivo){
-            $sql = $resp['datos'];            
+            $sql = $resp['datos'];
             $dimensionObj = $em->getRepository(SignificadoCampo::class)->findOneBy(array('codigo'=>$dimension));
 
             $datos = array_pop($almacenamiento->getAnalisisDescriptivo($sql));
-            
+
             $tabla = "
                 <TABLE CLASS= 'table table-striped'>
                     <THEAD>
@@ -96,7 +96,7 @@ class IndicadorRESTController extends Controller {
                     <TBODY>
                         ";
             //foreach ($datos AS $d){
-                $tabla .= "
+            $tabla .= "
                         <TR>
                             
                             <TD>$datos[promedio]</TD>
@@ -116,14 +116,14 @@ class IndicadorRESTController extends Controller {
             $resp['datos'] = $tabla;
             $respj = json_encode($resp);
         }
-        
-        
+
+
 
         $response->setContent($respj);
         return $response;
-        
+
     }
-    
+
     /**
      * Obtener los datos del indicador sin aplicar la fórmula ni filtros
      * @param integer $fichaTec
@@ -132,75 +132,85 @@ class IndicadorRESTController extends Controller {
      * @Rest\View
      */
     public function getDatosIndicadorAction(FichaTecnica $fichaTec, Request $request, AlmacenamientoProxy $almacenamiento) {
-        $response = new Response();        
-                
+        $response = new Response();
+
         $redis = new Predis\Client();
-        
+
         $em = $this->getDoctrine()->getManager();
-        
+
         $parte = $request->get('parte');
         $porcion = ( $parte == null ) ? 0 : ($parte - 1);
-        
-        
+
+        $alertas_ = $fichaTec->getAlertas();
+        $alertas = [];
+        foreach ( $alertas_ as $a ){
+            $alertas[] = ['li'=>$a->getLimiteInferior(),
+                'ls'=>$a->getLimiteSuperior(),
+                'color' => $a->getColor()->getCodigo()
+            ];
+        }
+
         if ($fichaTec->getUpdatedAt() != '' and $fichaTec->getUltimaLectura() != '' and $fichaTec->getUltimaLectura() < $fichaTec->getUpdatedAt()) {
             // Buscar la petición en la caché de Redis
-            
+
             $respj = $redis->get('indicador_'.$fichaTec->getId().'_parte_'.$porcion);
             if ($respj != null){
                 $resp = '{"datos": '. $respj.', "total_partes": "'. $redis->get('indicador_'.$fichaTec->getId().'_tamanio_') . '"}';
                 $response->setContent($resp);
                 return $response;
             }
-        } 
-        
+        }
+
         $totalRegistros = $almacenamiento->totalRegistrosIndicador($fichaTec);
         $almacenamiento->crearIndicador($fichaTec);
         $resp = $almacenamiento->getDatosIndicador($fichaTec, $porcion * $this->tamanio, $this->tamanio);
         $respX['datos'] = $resp;
+        $respX['alertas'] = $alertas;
 
+        $respX['formula'] = $fichaTec->getFormula();
         $respX['total_partes'] = ceil($totalRegistros / $this->tamanio );
-        
+
         $redis->set('indicador_'.$fichaTec->getId().'_tamanio_', $respX['total_partes']);
         $redis->set('indicador_'.$fichaTec->getId().'_parte_'.$porcion, json_encode($resp));
 
         $response->setContent(json_encode($respX));
         return $response;
-        
+
     }
-    
+
     /**
      * @Get("/rest-service/indicadores", options={"expose"=true})
      * @Rest\View
      */
     public function getIndicadoresAction() {
-        
+
         $response = new Response();
         $em = $this->getDoctrine()->getManager();
 
         $resp = array();
-        
+
 
         //Recuperar todos los indicadores disponibles
         $indicadores = $em->getRepository(FichaTecnica::class)->findBy(array(), array('nombre' => 'ASC'));
-        
+
         foreach($indicadores as $ind){
             $indicador = array();
-            
+
             $indicador['id'] = $ind->getId();
             $indicador['nombre'] = $ind->getNombre();
             $indicador['unidadMedida'] = $ind->getUnidadMedida();
             $indicador['formula'] = $ind->getFormula();
-            
+
             $variables = array();
             foreach($ind->getVariables() as $var){
                 $variables[] = array('iniciales'=>$var->getIniciales(), 'nombre'=>$var->getNombre());
             }
             $indicador['variables'] = $variables;
-                        
+
             $indicador['dimensiones'] = $ind->getCamposIndicador();
-            
+
             $resp[] = $indicador;
-        }        
+        }
 
         $response->setContent(json_encode($resp));
 
