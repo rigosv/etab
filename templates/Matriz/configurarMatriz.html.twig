@@ -315,7 +315,7 @@
                                                                     <li class="list-group-item" ng-repeat="usuario in usuarios | filter:buscar_usuario" ng-click="includeArray(usuario.id, dato.usuarios)" style="<% dato.usuarios.indexOf(usuario.id) > -1 ? 'background: #f8f8f8' : '' %>">
                                                                         <strong style="cursor:default"> 
                                                                             <i class="fa <% dato.usuarios.indexOf(usuario.id) > -1 ? 'fa-check-square' : 'fa-square-o' %>" style="font-size: 24px;color: dodgerblue;"></i> &nbsp;
-                                                                            <% usuario.firstname ? usuario.firstname + ' ' + usuario.lastname : usuario.username  %>                                                                            
+                                                                            <% usuario.firstname + ' ' + usuario.lastname  %>  (<% usuario.username  %> )
                                                                         </strong>
                                                                     </li>
                                                                 </ul>

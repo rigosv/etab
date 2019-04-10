@@ -65,6 +65,40 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
             if (data.status == 200) {
                 $scope.intento = 0;
                 $scope.dato.matriz = data.data;
+                var cambiar_mes = false;
+                angular.forEach($scope.dato.matriz, function (v1, k1) {
+                    if (v1.indicadores_etab.length > 0) {
+                        angular.forEach(v1.indicadores_etab, function (v2, k2) {
+                            if (!angular.isUndefined(v2['january']) || !angular.isUndefined(v2['june']) || !angular.isUndefined(v2['december']))
+                                cambiar_mes = true;
+                        })
+                        
+                    }
+                    if (v1.indicadores_relacion.length > 0 && !cambiar_mes) {
+                        angular.forEach(v1.indicadores_relacion, function (v2, k2) {
+                            if (!angular.isUndefined(v2['january']) || !angular.isUndefined(v2['june']) || !angular.isUndefined(v2['december']))
+                                cambiar_mes = true;
+                        })                        
+                    }
+                });
+                
+                
+                if (cambiar_mes){
+                    $scope.meses = [
+                      "january",
+                      "february",
+                      "march",
+                      "april",
+                      "may",
+                      "june",
+                      "july",
+                      "august",
+                      "september",
+                      "october",
+                      "november",
+                      "december"
+                    ];
+                } 
                 $scope.noPlaneacion = false;
                 $scope.imprimir_mensaje(data.mensaje, 'success');
             } else {
