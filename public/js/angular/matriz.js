@@ -1,3 +1,10 @@
+/**
+ * @ngdoc object
+ * @name Matriz.MatrizCtrl
+ * @description
+ * Controlador general que maneja la matriz de seguimiento, planificacion, real y reporte
+ */
+
 App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $filter, Crud) {
     $scope.matriz = 1;
     $scope.today = function() {
@@ -56,6 +63,17 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
     $scope.intento = 0;
     $scope.noPlaneacion = false;
     $scope.meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+
+    /**
+     * @ngdoc method
+     * @name Matriz.MatrizCtrl#cargarCatalogo
+     * @methodOf Matriz.MatrizCtrl
+     *
+     * @description
+     * funcion que carga datos de una URL de la API y la almacena en un modelo angular especifico
+     * @param {url} url URL en la api para la peticion
+     * @param {modelo} modelo modelo donde se carga el resultado
+     */
     $scope.cargarCatalogo = function(url, modelo) {
         $scope.cargando = true;
         $scope.dato.matriz = [];
@@ -115,6 +133,18 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
             }
         });
     };
+
+    /**
+     * @ngdoc method
+     * @name Matriz.MatrizCtrl#cargarSelect
+     * @methodOf Matriz.MatrizCtrl
+     *
+     * @description
+     * funcion que carga datos de una URL de la API y la almacena en un modelo angular especifico
+     * @param {url} url URL en la api para la peticion
+     * @param {modelo} modelo modelo donde se carga el resultado
+     * @param {callback} callback funcion a ejecutar after event
+     */
     $scope.cargarSelect = function(url, modelo, callback) {
         $scope.cargando = true;
         Crud.lista(url, function(data) {
@@ -136,11 +166,32 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
             }, 200);
         });
     };
+
+    /**
+     * @ngdoc method
+     * @name Matriz.MatrizCtrl#crearPlaneacion
+     * @methodOf Matriz.MatrizCtrl
+     *
+     * @description
+     * funcion que crea el fromulario para configurar los datos de la planeacion
+     * @param {url} url URL en la api para la peticion
+     * @param {anio} anio anio a crear
+     */
     $scope.crearPlaneacion = function(url, anio) {
         var anio = $filter('date')(anio, "yyyy");
         $scope.cargarCatalogo(url + "?anio=" + anio + "&matrix=" + $scope.matriz, $scope.dato.matriz);
     }
 
+    /**
+     * @ngdoc method
+     * @name Matriz.MatrizCtrl#guardarPlaneacion
+     * @methodOf Matriz.MatrizCtrl
+     *
+     * @description
+     * funcion que guarda los datos de la planeacion configurada
+     * @param {url} url URL en la api para la peticion
+     * @param {anio} anio anio a cargar la información
+     */
     $scope.guardarPlaneacion = function(url, anio) {
         var datos = $scope.dato;
         var anio = $filter('date')(anio, "yyyy");
@@ -162,6 +213,18 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
     $scope.color = [];
     $scope.statusx = [];
     $scope.acumular = [];
+
+    /**
+     * @ngdoc method
+     * @name Matriz.MatrizCtrl#valorAbsoluto
+     * @methodOf Matriz.MatrizCtrl
+     *
+     * @description
+     * funcion que obtiene el valor absoluto de la comparativa de lo real contra lo planeado
+     * @param {inde} inde indicador 
+     * @param {id} id del indicador
+     * @param {k} k bandera para el mes
+     */
     $scope.valorAbsoluto = function(inde, id, k) {
         if (!angular.isUndefined(inde[k])) {
             if (angular.isUndefined($scope.statusx[id])) {
@@ -198,6 +261,18 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
     $scope.temporal = [];
     var temporal = [];
     var temporalK = [];
+
+    /**
+     * @ngdoc method
+     * @name Matriz.MatrizCtrl#acumularAbsoluto
+     * @methodOf Matriz.MatrizCtrl
+     *
+     * @description
+     * funcion que acumula los valores absolutos
+     * @param {ind} ind indicador
+     * @param {index} identificador de la posicion 
+     * @param {id} id bandera para la posicion
+     */
     $scope.acumularAbsoluto = function(ind, index, id) {
         var indTemp = {};
         indTemp.fuente = ind.fuente;
@@ -246,6 +321,17 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
         }
     }
 
+    /**
+     * @ngdoc method
+     * @name Matriz.MatrizCtrl#imprimir_mensaje
+     * @methodOf Matriz.MatrizCtrl
+     *
+     * @description
+     * funcion que mustra los mensajes de las respuestas a la api
+     * @param {mensaje} mensaje contiene el texto a mostrar
+     * @param {tipo} tipo pinta el  color del mensaje
+     * @param {id} id selecciona en que elemento se imprimira
+     */
     $scope.imprimir_mensaje = function(mensaje, tipo, id) {
         id = angular.isUndefined(id) ? "#feedback_bar" : "#result_factura_test" + ", #" + id;
 

@@ -1,0 +1,37 @@
+<h1><code ng:non-bindable="">Crud</code>
+<div><span class="hint">service in module <code ng:non-bindable="">App</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="app-service-page app-service-crud-page"><p>Factory que se encarga de las peticiones a la api, este servicio se utiliza en los controladores</p>
+</div></div>
+<h2 id="usage">Usage</h2>
+<div class="usage"><pre class="prettyprint linenums">Crud($http);</pre>
+<h4 id="usage_parameters">Parameters</h4><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>$http</td><td><a href="" class="label type-hint type-hint-object">$http</a></td><td><div class="app-service-page app-service-crud-page"><p>Carga los metodos http</p>
+</div></td></tr></tbody></table></div>
+<h2 id="example">Example</h2>
+<div class="example"><div class="app-service-page app-service-crud-page"><h4 id="example_source">Source</h4>
+<div source-edit="App" source-edit-deps="angular.js" source-edit-html="index.html-0" source-edit-css="" source-edit-js="" source-edit-json="" source-edit-unit="" source-edit-scenario=""></div>
+<div class="tabbable"><div class="tab-pane" title="index.html">
+<pre class="prettyprint linenums" ng-set-text="index.html-0" ng-html-wrap-loaded="App angular.js"></pre>
+<script type="text/ng-template" id="index.html-0">
+     <script>
+      App.controller("TableroCtrl", function(Crud){
+        Crud.lista(
+          url,
+          function(data) {
+            exito;
+          },
+          function(e) {
+            error;
+          }
+        );
+      });
+     </script>
+ </script>
+</div>
+</div><h4 id="example_demo">Demo</h4>
+<div class="well doc-example-live animate-container" ng-embed-app="App" ng-set-html="index.html-0" ng-eval-javascript=""></div>
+</div></div>
+</div>
