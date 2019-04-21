@@ -120,7 +120,7 @@ class PivotTableController extends AbstractController {
     }
 
     /**
-     * @Route("/obtener_estado/", name="pivotable_obtener_estado", options={"expose"=true})
+     * @Route("/obtener_estado/", name="pivotable_obtener_estado_defecto", options={"expose"=true})
      */
     public function obtenerEstadoAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -128,11 +128,23 @@ class PivotTableController extends AbstractController {
 
         $tipoElemento = $request->get('tipoElemento');
         $idElemento = $request->get('id');
-        $usuario = $this->get('security.token_storage')->getToken()->getUser();
+        $idEscenario = $request->get('idEscenario');
 
-        $conf = $em->getRepository(FichaTecnica::class)->getConfPivoTable($tipoElemento, $idElemento, $usuario->getId());
-        //$conf = str_replace('\\\\', '', $conf['configuracion']);
-        $response->setContent($conf['configuracion']);
+        if ( $idEscenario == 0 ) {
+            $escenario = $em->getRepository(ConfiguracionPivotTable::class)->findOneBy([
+                'tipoElemento' => $tipoElemento,
+                'idElemento' => $idElemento,
+                'porDefecto' => true
+            ]);
+        } else {
+            $escenario = $em->find(ConfiguracionPivotTable::class, $idEscenario);
+        }
+
+        $response->setContent('');
+        if ( $escenario ) {
+            $response->setContent( json_encode( $escenario->getConfiguracion() ) );
+        }
+
         return $response;
     }
 
