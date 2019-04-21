@@ -296,13 +296,14 @@ $(document).ready(function() {
                 var cfgRows = [];
                 var cfgCols = [];
                 var cfgAggregatorName = '';
-                var cfgRendererName = '';
+                var cfgRendererName = 'Table';
                 var cfgExclusions = {};
                 var cfgInclusions = {};
                 var cfgRowOrder = 'key_a_to_z';
                 var cfgColOrder = 'key_a_to_z';
 
-                if (resp !== ''){
+                if (resp !== '{}'){
+                    alert(1);
                     let conf = JSON.parse(resp);
                     cfgVals = conf.vals;
                     cfgRows = conf.rows;

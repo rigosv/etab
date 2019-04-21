@@ -140,7 +140,7 @@ class PivotTableController extends AbstractController {
             $escenario = $em->find(ConfiguracionPivotTable::class, $idEscenario);
         }
 
-        $response->setContent('');
+        $response->setContent(json_encode('{}'));
         if ( $escenario ) {
             $response->setContent( json_encode( $escenario->getConfiguracion() ) );
         }
