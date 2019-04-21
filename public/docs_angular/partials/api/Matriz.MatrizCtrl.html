@@ -1,0 +1,65 @@
+<h1><code ng:non-bindable="">MatrizCtrl</code>
+<div><span class="hint">service in module <code ng:non-bindable="">Matriz</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="matriz-matrizctrl-page"><p>Controlador general que maneja la matriz de seguimiento, planificacion, real y reporte</p>
+</div></div>
+<div class="member method"><h2 id="methods">Methods</h2>
+<ul class="methods"><li><h3 id="methods_imprimir_mensaje">imprimir_mensaje(mensaje, tipo, id)</h3>
+<div class="imprimir_mensaje"><div class="matriz-matrizconfiguracionctrl-imprimir-mensaje-page"><p>funcion que mustra los mensajes de las respuestas a la api</p>
+</div><h5 id="methods_imprimir_mensaje_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>mensaje</td><td><a href="" class="label type-hint type-hint-mensaje">mensaje</a></td><td><div class="matriz-matrizconfiguracionctrl-imprimir-mensaje-page"><p>contiene el texto a mostrar</p>
+</div></td></tr><tr><td>tipo</td><td><a href="" class="label type-hint type-hint-tipo">tipo</a></td><td><div class="matriz-matrizconfiguracionctrl-imprimir-mensaje-page"><p>pinta el  color del mensaje</p>
+</div></td></tr><tr><td>id</td><td><a href="" class="label type-hint type-hint-id">id</a></td><td><div class="matriz-matrizconfiguracionctrl-imprimir-mensaje-page"><p>selecciona en que elemento se imprimira</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_acumularabsoluto">acumularAbsoluto(ind, identificador, id)</h3>
+<div class="acumularabsoluto"><div class="matriz-matrizctrl-acumularabsoluto-page"><p>funcion que acumula los valores absolutos</p>
+</div><h5 id="methods_acumularabsoluto_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>ind</td><td><a href="" class="label type-hint type-hint-ind">ind</a></td><td><div class="matriz-matrizctrl-acumularabsoluto-page"><p>indicador</p>
+</div></td></tr><tr><td>identificador</td><td><a href="" class="label type-hint type-hint-index">index</a></td><td><div class="matriz-matrizctrl-acumularabsoluto-page"><p>de la posicion</p>
+</div></td></tr><tr><td>id</td><td><a href="" class="label type-hint type-hint-id">id</a></td><td><div class="matriz-matrizctrl-acumularabsoluto-page"><p>bandera para la posicion</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_cargarcatalogo">cargarCatalogo(url, modelo)</h3>
+<div class="cargarcatalogo"><div class="matriz-matrizctrl-cargarcatalogo-page"><p>funcion que carga datos de una URL de la API y la almacena en un modelo angular especifico</p>
+</div><h5 id="methods_cargarcatalogo_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>url</td><td><a href="" class="label type-hint type-hint-url">url</a></td><td><div class="matriz-matrizctrl-cargarcatalogo-page"><p>URL en la api para la peticion</p>
+</div></td></tr><tr><td>modelo</td><td><a href="" class="label type-hint type-hint-modelo">modelo</a></td><td><div class="matriz-matrizctrl-cargarcatalogo-page"><p>modelo donde se carga el resultado</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_cargarselect">cargarSelect(url, modelo, callback)</h3>
+<div class="cargarselect"><div class="matriz-matrizctrl-cargarselect-page"><p>funcion que carga datos de una URL de la API y la almacena en un modelo angular especifico</p>
+</div><h5 id="methods_cargarselect_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>url</td><td><a href="" class="label type-hint type-hint-url">url</a></td><td><div class="matriz-matrizctrl-cargarselect-page"><p>URL en la api para la peticion</p>
+</div></td></tr><tr><td>modelo</td><td><a href="" class="label type-hint type-hint-modelo">modelo</a></td><td><div class="matriz-matrizctrl-cargarselect-page"><p>modelo donde se carga el resultado</p>
+</div></td></tr><tr><td>callback</td><td><a href="" class="label type-hint type-hint-callback">callback</a></td><td><div class="matriz-matrizctrl-cargarselect-page"><p>funcion a ejecutar after event</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_crearplaneacion">crearPlaneacion(url, anio)</h3>
+<div class="crearplaneacion"><div class="matriz-matrizctrl-crearplaneacion-page"><p>funcion que crea el fromulario para configurar los datos de la planeacion</p>
+</div><h5 id="methods_crearplaneacion_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>url</td><td><a href="" class="label type-hint type-hint-url">url</a></td><td><div class="matriz-matrizctrl-crearplaneacion-page"><p>URL en la api para la peticion</p>
+</div></td></tr><tr><td>anio</td><td><a href="" class="label type-hint type-hint-anio">anio</a></td><td><div class="matriz-matrizctrl-crearplaneacion-page"><p>anio a crear</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_guardarplaneacion">guardarPlaneacion(url, anio)</h3>
+<div class="guardarplaneacion"><div class="matriz-matrizctrl-guardarplaneacion-page"><p>funcion que guarda los datos de la planeacion configurada</p>
+</div><h5 id="methods_guardarplaneacion_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>url</td><td><a href="" class="label type-hint type-hint-url">url</a></td><td><div class="matriz-matrizctrl-guardarplaneacion-page"><p>URL en la api para la peticion</p>
+</div></td></tr><tr><td>anio</td><td><a href="" class="label type-hint type-hint-anio">anio</a></td><td><div class="matriz-matrizctrl-guardarplaneacion-page"><p>anio a cargar la información</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_imprimir_mensaje">imprimir_mensaje(mensaje, tipo, id)</h3>
+<div class="imprimir_mensaje"><div class="matriz-matrizctrl-imprimir-mensaje-page"><p>funcion que mustra los mensajes de las respuestas a la api</p>
+</div><h5 id="methods_imprimir_mensaje_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>mensaje</td><td><a href="" class="label type-hint type-hint-mensaje">mensaje</a></td><td><div class="matriz-matrizctrl-imprimir-mensaje-page"><p>contiene el texto a mostrar</p>
+</div></td></tr><tr><td>tipo</td><td><a href="" class="label type-hint type-hint-tipo">tipo</a></td><td><div class="matriz-matrizctrl-imprimir-mensaje-page"><p>pinta el  color del mensaje</p>
+</div></td></tr><tr><td>id</td><td><a href="" class="label type-hint type-hint-id">id</a></td><td><div class="matriz-matrizctrl-imprimir-mensaje-page"><p>selecciona en que elemento se imprimira</p>
+</div></td></tr></tbody></table></div>
+</li>
+<li><h3 id="methods_valorabsoluto">valorAbsoluto(inde, id, k)</h3>
+<div class="valorabsoluto"><div class="matriz-matrizctrl-valorabsoluto-page"><p>funcion que obtiene el valor absoluto de la comparativa de lo real contra lo planeado</p>
+</div><h5 id="methods_valorabsoluto_parameters">Parameters</h5><table class="variables-matrix table table-bordered table-striped"><thead><tr><th>Param</th><th>Type</th><th>Details</th></tr></thead><tbody><tr><td>inde</td><td><a href="" class="label type-hint type-hint-inde">inde</a></td><td><div class="matriz-matrizctrl-valorabsoluto-page"><p>indicador</p>
+</div></td></tr><tr><td>id</td><td><a href="" class="label type-hint type-hint-id">id</a></td><td><div class="matriz-matrizctrl-valorabsoluto-page"><p>del indicador</p>
+</div></td></tr><tr><td>k</td><td><a href="" class="label type-hint type-hint-k">k</a></td><td><div class="matriz-matrizctrl-valorabsoluto-page"><p>bandera para el mes</p>
+</div></td></tr></tbody></table></div>
+</li>
+</ul>
+</div>
+</div>

@@ -1,0 +1,44 @@
+<h1><code ng:non-bindable="">exportarTabla</code>
+<div><span class="hint">service in module <code ng:non-bindable="">App</code>
+</span>
+</div>
+</h1>
+<div><h2 id="description">Description</h2>
+<div class="description"><div class="app-service-page app-service-exportartabla-page"><p>Directive que permite la exportacion de una tabla a xls mediante un elemento que tenga el id exportable</p>
+</div></div>
+<h2 id="example">Example</h2>
+<div class="example"><div class="app-service-page app-service-exportartabla-page"><h4 id="example_source">Source</h4>
+<div source-edit="App" source-edit-deps="angular.js" source-edit-html="index.html-1" source-edit-css="" source-edit-js="" source-edit-json="" source-edit-unit="" source-edit-scenario=""></div>
+<div class="tabbable"><div class="tab-pane" title="index.html">
+<pre class="prettyprint linenums" ng-set-text="index.html-1" ng-html-wrap-loaded="App angular.js"></pre>
+<script type="text/ng-template" id="index.html-1">
+   <button type="button" class="btn btn-primary" exportar-tabla>
+       <i class="glyphicon glyphicon-file"></i> Exportar a xls
+   </button>
+   <hr>
+   <h4 id="tituloReporte" id="example_titulo-del-reporte">Titulo del reporte</h4>
+   <hr>
+   <div id="exportable">
+       <table class="table">
+           <thead>
+               <tr>
+                   <th>Titulo 1</th>
+                   <th>Titulo 2</th>
+                   <th>Titulo 3</th>
+               </tr>
+           </thead>
+           <tbody>
+             <tr>
+               <td>Ejemplo uno</td>
+               <td>Ejemplo dos</td>
+               <td>Ejemplo tres</td>
+             </tr>
+           </tbody>
+       </table>
+   </div>
+ </script>
+</div>
+</div><h4 id="example_demo">Demo</h4>
+<div class="well doc-example-live animate-container" ng-embed-app="App" ng-set-html="index.html-1" ng-eval-javascript=""></div>
+</div></div>
+</div>

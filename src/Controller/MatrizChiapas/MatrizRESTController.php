@@ -12,6 +12,10 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use Swagger\Annotations as SWG;
+
 use App\AlmacenamientoDatos\AlmacenamientoProxy;
 
 use App\Entity\FichaTecnica;
@@ -31,10 +35,33 @@ use App\Entity\MatrizChiapas\MatrizIndicadoresUsuario;
  * @Route("/api/v1/matriz")
  */
 class MatrizRESTController extends AbstractController {
-
     /**
+     * Lista de usuarios
+     *
+     * Esta funcion devuelve la lista de usuarios disponibles
+     *
      * @Route("/listaUsuarios", name="listaUsuarios", methods={"GET"})
+     * 
+     * @SWG\Response(
+     *     response=200,
+     *     description="Regresa la lista de usuarios",
+     *     @SWG\Schema(
+     *         type="object",
+     *         example={
+     *                   "hello": "world" 
+     *              }
+     *     )
+     * )
+     * @SWG\Parameter(
+     *     name="request",
+     *     in="path",
+     *     type="string",
+     *     description="Array de valores"
+     * )
+     * @SWG\Tag(name="User")     
      */
+
+    
     public function listaUsuarios(Request $request){
        
         // iniciar el manager de doctrine
@@ -84,6 +111,10 @@ class MatrizRESTController extends AbstractController {
     }
     
     /**
+     * Lista de usuarios
+     *
+     * Esta funcion devuelve la lista de usuarios disponibles
+     *
      * @Route("/listaColores", name="listaColores", methods={"GET"})
      */
     public function listaColores(Request $request){
@@ -136,6 +167,10 @@ class MatrizRESTController extends AbstractController {
     }
 
      /**
+     * Lista de usuarios
+     *
+     * Esta funcion devuelve la lista de usuarios disponibles
+     *
      * @Route("/MatrizConfiguracion", name="MatrizConfiguracion", methods={"GET"})
      */
     public function index(Request $request){
@@ -175,6 +210,10 @@ class MatrizRESTController extends AbstractController {
     }
 
     /**
+     * Lista de usuarios
+     *
+     * Esta funcion devuelve la lista de usuarios disponibles
+     *
      * @Route("/MatrizConfiguracion/{id}", name="MatrizConfiguracion_update", methods={"PUT"})
      */
     public function update($id, Request $request){
@@ -483,6 +522,10 @@ class MatrizRESTController extends AbstractController {
     }
 
     /**
+     * Lista de usuarios
+     *
+     * Esta funcion devuelve la lista de usuarios disponibles
+     *
      * @Route("/MatrizConfiguracion/{id}", name="MatrizConfiguracion_show", methods={"GET"})
      */
     public function show($id, Request $request, AlmacenamientoProxy $almacenamiento){
@@ -649,6 +692,10 @@ class MatrizRESTController extends AbstractController {
     }
 
     /**
+     * Lista de usuarios
+     *
+     * Esta funcion devuelve la lista de usuarios disponibles
+     *
      * @Route("/MatrizConfiguracion/{id}", name="MatrizConfiguracion_destroy", methods={"DELETE"})
      */
     public function destroy($id, Request $request){
@@ -863,6 +910,10 @@ class MatrizRESTController extends AbstractController {
     }
 
     /**
+     * Lista de usuarios
+     *
+     * Esta funcion devuelve la lista de usuarios disponibles
+     *
      * @Route("/seperar_fila_origen_dato", name="seperar_fila_origen_dato", methods={"GET"})
      */
     public function seperar_fila_origen_dato(Request $request){

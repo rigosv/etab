@@ -47,7 +47,7 @@ App.controller("TableroCtrl", function(
    * @methodOf Tablero.TableroCtrl
    *
    * @description
-   * funcion que cargra datos de una URL de la API y la almacena en un modelo angular especifico
+   * funcion que carga datos de una URL de la API y la almacena en un modelo angular especifico
    * @param {url} url URL en la api para la peticion
    * @param {modelo} modelo modelo donde se carga el resultado
    * @param {cargando} cargando bandera para mostrar la animacion cargando
@@ -566,7 +566,7 @@ App.controller("TableroCtrl", function(
    * @description
    * funcion que cargar el inidcador con la dimension y los filtros especificados
    * @param {filtro} filtro filtros del indicador
-   * @param {dimension} dimension
+   * @param {dimension} dimension del indicador
    * @param {index} index identificador de la posicion del grafico
    */
   $scope.agregarIndicadorDimension = function(dimension, index) {
@@ -1057,7 +1057,7 @@ App.controller("TableroCtrl", function(
    * @description
    * funcion que ordena los datos del gráfico
    * @param {index} index que identifica el area de gráfico
-   * @param {ordenar_por} ordenar_por
+   * @param {ordenar_por} ordenar por elemento
    * @param {ordenmodo_ordenar_por} modo_orden (asc, desc)
    */
   $scope.ordenarArreglo = function(index, ordenar_por, modo_orden) {

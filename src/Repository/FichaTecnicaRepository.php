@@ -437,7 +437,7 @@ class FichaTecnicaRepository extends ServiceEntityRepository {
                     $anio = $key1;
                 }
             }
-            $fecha_tendencia = ", to_date(CONCAT(A.$anio, '-', lpad(A.$mes, 2, '0')), 'YYYY-MM') AS fecha, A.$anio AS anio, lpad(A.$mes, 2, '0') AS mes";
+            $fecha_tendencia = ", to_date(CONCAT(A.$anio, '-', lpad(CAST (A.$mes AS VARCHAR), 2, '0')), 'YYYY-MM') AS fecha, A.$anio AS anio, lpad(CAST (A.$mes AS VARCHAR), 2, '0') AS mes";
             $grupo_tendencia = ", A.$anio, A.$mes";
             $orden_tendencia = ", fecha";
         }
