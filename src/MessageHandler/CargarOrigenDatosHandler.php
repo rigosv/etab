@@ -294,8 +294,9 @@ class CargarOrigenDatosHandler implements MessageHandlerInterface
                                 'SELECT * FROM (' . $sql . ')  sqlOriginal ' .
                                 'WHERE ROWNUM >= ' . $i * $tamanio . ' AND ROWNUM < ' . ($tamanio * ($i + 1));
                         } elseif ($cnx->getIdMotor()->getCodigo() == 'sqlsrv') {
-
-                            $sql_aux = "SELECT * FROM ( $sql )  sqlOriginal 
+                            $tamanio = 500;
+                            $sql_ = str_replace(['{xOFFSET}', '{xFETCH}'], [$i * $tamanio + 1, $tamanio * ($i + 1)], $sql);
+                            $sql_aux = "SELECT * FROM ( $sql_ )  sqlOriginal 
                                     WHERE 1 = 1
                                     $condicion_carga_incremental
                                     $orden";

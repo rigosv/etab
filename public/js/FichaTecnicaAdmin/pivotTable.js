@@ -1,6 +1,7 @@
 var idIndicadorActivo;
 var esCalidad = false;
 var xaggregatorName = "Suma";
+var escenarioActivo = null;
 
 $(document).ready(function() {
     var datos_ = '';
@@ -53,14 +54,54 @@ $(document).ready(function() {
     });
 
     $('#guardarConf').click(function (){
+
+        idIndicadorActivo = 274;
+        if (idIndicadorActivo != null){
+            $.get(Routing.generate('pivotable_get_escenarios',
+                {id: idIndicadorActivo}),
+                function(resp) {
+                    $('#myModal2').find('.modal-body').html(resp);
+                    $('#btnGuardarConf').click(function(){
+                        guardarEscenario();
+                    });
+
+
+                    if ( escenarioActivo != null ){
+                        $('#myModal2').find('#nombre').val(escenarioActivo.nombre);
+                        $('#myModal2').find('#default').attr('checked', (escenarioActivo.pordefecto ==  true));
+                    }
+                    $('#myModal2').modal('show');
+                });
+        }
+    });
+
+    function guardarEscenario(){
+
         configuracion_guardada = configuracion;
         var conf = JSON.stringify(configuracion_guardada, undefined, 2);
-        $.post(Routing.generate('pivotable_guardar_estado',
-            {tipoElemento: tipoElemento, id:identificadorElemento, configuracion: conf}),
-            function(datos) {
 
-            }, 'json');
-    });
+        var nombre = $('#myModal2').find('#nombre').val();
+        var defaultEscenario = ( $('#myModal2').find('#default') != undefined ) ? $('#myModal2').find('#default').is(':checked') : null;
+
+        if (nombre != '') {
+            $.post(Routing.generate('pivotable_guardar_estado'),
+                {tipoElemento: tipoElemento, 'id': idIndicadorActivo, 'nombre': nombre, 'pordefecto': defaultEscenario, 'configuracion': conf},
+                function (datos) {
+
+                    if ( datos.estado == 'success' ){
+                        $.notify(datos.mensaje, 'success');
+                        $('#myModal2').modal('hide');
+                        escenarioActivo = {tipoElemento: tipoElemento, 'id': idIndicadorActivo, 'nombre': nombre, 'pordefecto': defaultEscenario};
+                        $('#nombre-escenario').html(nombre);
+                        $('#div-nombre-escenario').show();
+                    } else {
+                        $('#myModal2').find('#btnGuardarConf').notify(datos.mensaje, {className: "error" });
+                    }
+                }, 'json');
+        } else {
+            $('#myModal2').find('#nombre').notify(trans.campo_requerido, {className: "error" });
+        }
+    }
 
     $('#cargarConf').click(function (){
 
@@ -105,6 +146,8 @@ $(document).ready(function() {
 
     $('A.indicador').click(function() {
         esCalidad = false;
+        escenarioActivo = null;
+        $('#div-nombre-escenario').hide();
         var id_indicador = $(this).attr('data-id');
         var nombre_indicador = $(this).html();
 
@@ -139,6 +182,8 @@ $(document).ready(function() {
 
     $('A.elemento_costeo').click(function() {
         esCalidad = false;
+        escenarioActivo = null;
+        $('#div-nombre-escenario').hide();
         var codigo = $(this).attr('data-id');
         var nombre_elemento = $(this).html();
         xaggregatorName = "Suma";
@@ -155,6 +200,8 @@ $(document).ready(function() {
 
     $('A.formulario_captura_datos').click(function() {
         esCalidad = false;
+        escenarioActivo = null;
+        $('#div-nombre-escenario').hide();
         var codigo = $(this).attr('data-id');
         var nombre_elemento = $(this).html();
         xaggregatorName = "Suma";
@@ -176,6 +223,8 @@ $(document).ready(function() {
 
     $('A.calidad_datos_item').click(function() {
         esCalidad = true;
+        escenarioActivo = null;
+        $('#div-nombre-escenario').hide();
         var nombre_elemento = $(this).html();
         var idFrm = $(this).attr('data-id');
         xaggregatorName = "Suma";
@@ -193,6 +242,8 @@ $(document).ready(function() {
 
     $('A.log_actividad_item').click(function() {
         esCalidad = false;
+        escenarioActivo = null;
+        $('#div-nombre-escenario').hide();
         xaggregatorName = "Suma";
 
         $.getJSON(Routing.generate('get_log_actividad'), function(mps) {
