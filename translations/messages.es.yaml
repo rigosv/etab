@@ -618,3 +618,6 @@ _nombre_: Nombre
 _no_puede_sobreescribir_configuracion_escenario_otro_usuario_: No puede sobreescribir el escenario creado por otro usuario
 _escenario_guardado_correctamente_: Escenario guardado correctamente
 _escenario_: Escenario
+_escenarios_propios_: Escenarios propios
+_escenarios_otros_: Escenarios creados por otros usuarios
+_no_escenarios_creados: No hay escenarios creados

@@ -120,7 +120,7 @@ class PivotTableController extends AbstractController {
     }
 
     /**
-     * @Route("/obtener_estado/", name="pivotable_obtener_estado_defecto", options={"expose"=true})
+     * @Route("/obtener_estado/", name="pivotable_obtener_estado", options={"expose"=true})
      */
     public function obtenerEstadoAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -150,13 +150,44 @@ class PivotTableController extends AbstractController {
 
 
     /**
-     * @Route("/get_escenarios/{id}", name="pivotable_get_escenarios", options={"expose"=true})
+     * @Route("/guardar_escenario_frm", name="pivotable_guardar_escenario_frm", options={"expose"=true})
      */
-    public function getEscenarios(FichaTecnica $indicador, Request $request) {
+    public function guardarEscenarioFrm( Request $request ) {
         $em = $this->getDoctrine()->getManager();
 
+        $tipoElemento = $request->get('tipoElemento');
+        $idElemento = $request->get('id');
+
         return $this->render('PivotTable/guardar_escenario.html.twig', [
-            'indicador' => $indicador
+            'indicador' => $idElemento
+        ]);
+    }
+
+    /**
+     * @Route("/get_escenarios/{idElemento}/tipo/{tipoElemento}", name="pivotable_get_escenarios", options={"expose"=true})
+     */
+    public function getEscenarios($idElemento, $tipoElemento, Request $request) {
+        $em = $this->getDoctrine()->getManager();
+
+        $usuario = $this->get('security.token_storage')->getToken()->getUser();
+
+        $escenarios = $em->getRepository(ConfiguracionPivotTable::class)->findBy([
+            'tipoElemento' => $tipoElemento,
+            'idElemento' => $idElemento,
+        ], ['nombre' => 'ASC']);
+
+        $datos = ['propios'=>[], 'otros'=>[]];
+
+        foreach ( $escenarios as $e ) {
+            if ( $e->getUsuario()->getId() == $usuario->getId() ){
+                $datos['propios'][] = ['id' => $e->getId(), 'nombre' => $e->getNombre()];
+            } else {
+                $datos['otros'][] = ['id' => $e->getId(), 'nombre' => $e->getNombre()];
+            }
+        }
+
+        return $this->render('PivotTable/listado_escenarios.html.twig', [
+            'datos' => $datos
         ]);
     }
 

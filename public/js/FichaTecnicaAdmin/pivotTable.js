@@ -2,6 +2,8 @@ var idIndicadorActivo;
 var esCalidad = false;
 var xaggregatorName = "Suma";
 var escenarioActivo = null;
+var alertas = [];
+var formula = '';
 
 $(document).ready(function() {
     var datos_ = '';
@@ -56,8 +58,8 @@ $(document).ready(function() {
     $('#guardarConf').click(function (){
 
         if (idIndicadorActivo != null){
-            $.get(Routing.generate('pivotable_get_escenarios',
-                {id: idIndicadorActivo}),
+            $.get(Routing.generate('pivotable_guardar_escenario_frm'),
+                {id: idIndicadorActivo, tipoElemento: tipoElemento},
                 function(resp) {
                     $('#myModal2').find('.modal-body').html(resp);
                     $('#btnGuardarConf').click(function(){
@@ -103,28 +105,20 @@ $(document).ready(function() {
     }
 
     $('#cargarConf').click(function (){
+        $.post(Routing.generate('pivotable_get_escenarios',
+            {tipoElemento: tipoElemento, idElemento:identificadorElemento}),
+            function(resp) {
+                $('#myModal2').find('.modal-body').html(resp);
+                $('#myModal2').modal('show');
 
-        var renderers = $.extend($.pivotUtilities.renderers,
-            $.pivotUtilities.gchart_renderers);
-        if (configuracion_guardada == ''){
-            $.post(Routing.generate('pivotable_obtener_estado',
-                {tipoElemento: tipoElemento, id:identificadorElemento}),
-                function(conf) {
-                    if (conf === ''){
-                        alert('No existe una configuración guardada');
-                    }else {
-                        configuracion_guardada = conf;
-                        configuracion_guardada["renderers"] = renderers;
-                        configuracion_guardada["onRefresh"] = onChangeTable;
-                        $("#output").pivotUI(datos_, configuracion_guardada , true, 'es');
-                    }
-                }, 'json');
-        } else{
-            configuracion_guardada["renderers"] = renderers;
-            configuracion_guardada["onRefresh"] = onChangeTable;
-            $("#output").pivotUI(datos_, configuracion_guardada , true, 'es');
-        }
+                $('.escenario').click(function(){
+                    var idEscenario = $(this).data('id');
+                    $('#nombre-escenario').html($(this).html());
+                    $('#div-nombre-escenario').show();
+                    cargarTablaDinamica(datos_, alertas, formula, idEscenario);
 
+                });
+            }, 'html');
     });
 
     $('#ver_ficha').click(function() {
@@ -146,6 +140,8 @@ $(document).ready(function() {
     $('A.indicador').click(function() {
         esCalidad = false;
         escenarioActivo = null;
+        alertas = [];
+        formula = '';
         $('#div-nombre-escenario').hide();
         var id_indicador = $(this).attr('data-id');
         var nombre_indicador = $(this).html();
@@ -175,6 +171,8 @@ $(document).ready(function() {
             } else {
                 cargarTablaDinamica(datos, mps.alertas, mps.formula);
             }
+            alertas = mps.alertas;
+            formula = mps.formula;
             cargarDescripcionAtributos(id_indicador);
         });
     });
@@ -182,6 +180,8 @@ $(document).ready(function() {
     $('A.elemento_costeo').click(function() {
         esCalidad = false;
         escenarioActivo = null;
+        alertas = [];
+        formula = '';
         $('#div-nombre-escenario').hide();
         var codigo = $(this).attr('data-id');
         var nombre_elemento = $(this).html();
@@ -200,6 +200,8 @@ $(document).ready(function() {
     $('A.formulario_captura_datos').click(function() {
         esCalidad = false;
         escenarioActivo = null;
+        alertas = [];
+        formula = '';
         $('#div-nombre-escenario').hide();
         var codigo = $(this).attr('data-id');
         var nombre_elemento = $(this).html();
@@ -223,6 +225,8 @@ $(document).ready(function() {
     $('A.calidad_datos_item').click(function() {
         esCalidad = true;
         escenarioActivo = null;
+        alertas = [];
+        formula = '';
         $('#div-nombre-escenario').hide();
         var nombre_elemento = $(this).html();
         var idFrm = $(this).attr('data-id');
@@ -242,6 +246,8 @@ $(document).ready(function() {
     $('A.log_actividad_item').click(function() {
         esCalidad = false;
         escenarioActivo = null;
+        alertas = [];
+        formula = '';
         $('#div-nombre-escenario').hide();
         xaggregatorName = "Suma";
 
@@ -267,6 +273,7 @@ $(document).ready(function() {
 
     function cargarTablaDinamica(datos, alertas = [], formula = '', idEscenario = 0){
 
+        datos_ = datos;
         var renderers = $.extend($.pivotUtilities.renderers, $.pivotUtilities.subtotal_renderers,
             $.pivotUtilities.plotly_renderers);
         var dataClass = $.pivotUtilities.SubtotalPivotData;
@@ -288,7 +295,7 @@ $(document).ready(function() {
         };
 
         //Verificar si tiene escenario por defecto
-        $.post(Routing.generate('pivotable_obtener_estado_defecto',
+        $.post(Routing.generate('pivotable_obtener_estado',
             {'tipoElemento': tipoElemento, 'id':identificadorElemento, 'idEscenario': idEscenario}),
             function(resp) {
 
@@ -303,7 +310,6 @@ $(document).ready(function() {
                 var cfgColOrder = 'key_a_to_z';
 
                 if (resp !== '{}'){
-                    alert(1);
                     let conf = JSON.parse(resp);
                     cfgVals = conf.vals;
                     cfgRows = conf.rows;
