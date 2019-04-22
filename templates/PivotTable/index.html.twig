@@ -17,118 +17,95 @@
     <script src="{{ asset('js/plotly/plotly-latest.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/plotly/plotly-locale-es-latest.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/pivotTable/plotly_renderers.min.js') }}" type="text/javascript"></script>
-    {#
-    <script src="{{ asset('js/c3/c3.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('js/pivotTable/c3_renderers.min.js') }}" type="text/javascript"></script>
-    #}
+
     <script src="{{ asset('js/rasterizeHTML.allinone.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/pivotTable/subtotal.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('vendor/table2excel/jquery.table2excel.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/jquery.searchFilter.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/notify.min.js') }}" type="text/javascript"></script>
-    
+
     {% include (['messages_js.html.twig']|join) %}
 {% endblock %}
 
 {% block content %}
-<div id="div_carga" class='affix'>
-    <img id="cargador" src="{{ asset('images/ajax-loader.gif') }}"/>
-</div>
-<div class="marco-sala" id="marco-sala">    
-    <ul class="nav nav-tabs" id="myTab">
-        <li ><a href="#tab1">{{'_tabla_pivote_'|trans}}</a></li>    
-        <li class="active"><a href="#listado_indicadores">{{"indicadores"|trans}}</a></li>
-
-        {#
-        {% if is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_USER_COSTOS') %}
-            <li ><a href="#listado_costeo">{{"_costeo_"|trans}}</a></li>
-        {% endif %}
-
-
-        {% if is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_USER_CAPTURA_DATOS') %}
-            <li ><a href="#listado_captura_datos">{{"_captura_datos_"|trans}}</a></li>
-        {% endif %}
-        #}
-
-        {% if MINSALCalidadBundle.habilitado and ( is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_USER_TABLERO_CALIDAD') ) %}
-            <li ><a href="#calidad_datos">{{"_evaluacion_calidad_"|trans([], 'MINSALCalidadBundle')}}</a></li>
-        {% endif %}
-
-        {% if is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_USER_LOG_ACTIVIDAD') %}
-            <li ><a href="#log_actividad">{{"_bitacora_actividad_"|trans}}</a></li>
-        {% endif %}
-    </ul>
-
-    <div id='nombre_sala2' ></div>
-    <div class="tab-content">                
-        <div class="content tab-pane" id="tab1" >
-            <button id='export' class="btn btn-success" title="{{'_exportar_tabla_datos_'|trans}}"><span class="glyphicon glyphicon-list-alt"></span></button>
-            {#<button id='export_grp' class="btn btn-success" title="{{'_exportar_grafico_'|trans}}"><span class="glyphicon glyphicon-picture"></span> </button>#}
-            <button id='ver_ficha' class="btn btn-success" title="{{'ver_ficha_tecnica'|trans}}"><span class="glyphicon glyphicon-briefcase"></span> </button>  
-            <button id='guardarConf' class="btn btn-success" title="{{'_guardar_estado_'|trans}}"><span class="glyphicon glyphicon-save"></span> </button>  
-            <button id='cargarConf' class="btn btn-success" title="{{'_cargar_estado_'|trans}}"><span class="glyphicon glyphicon-log-in"></span> </button>  
-            <div id="output" ></div>
-        </div>
-        {% include 'PivotTable/listado_indicadores.html.twig'%}
-
-        {# Módulo de costos #}
-        {#
-        {% if is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_USER_COSTOS') %}
-            {% include 'FichaTecnicaAdmin/listado_origenes_costos.html.twig'%}
-        {% endif %}
-
-        {# Módulo de captura de datos #}
-        {#
-        {% if is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_USER_CAPTURA_DATOS') %}
-            {% include 'FichaTecnicaAdmin/captura_datos.html.twig'%}
-        {% endif %}
-        #}
-
-        {# Módulo de calidad #}
-        {% if MINSALCalidadBundle.habilitado and  ( is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_USER_TABLERO_CALIDAD') ) %}
-            {% include 'PivotTable/calidad_datos.html.twig' with {'bundleCalidad': MINSALCalidadBundle} %}
-        {% endif %}
-
-        {% if is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_USER_LOG_ACTIVIDAD') %}
-            {% include 'PivotTable/log_actividad.html.twig'%}
-        {% endif %}
+    <div id="div_carga" class='affix'>
+        <img id="cargador" src="{{ asset('images/ajax-loader.gif') }}"/>
     </div>
-</div>
-<div id="myModal2" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel2"></h3>
-            </div>
+    <div class="marco-sala" id="marco-sala">
+        <ul class="nav nav-tabs" id="myTab">
+            <li ><a href="#tab1">{{'_tabla_pivote_'|trans}}</a></li>
+            <li class="active"><a href="#listado_indicadores">{{"indicadores"|trans}}</a></li>
 
-            <div class="modal-body">
-                <span class='info' id='sql'></span>
-            </div>
+            {% if MINSALCalidadBundle.habilitado and ( is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_USER_TABLERO_CALIDAD') ) %}
+                <li ><a href="#calidad_datos">{{"_evaluacion_calidad_"|trans([], 'MINSALCalidadBundle')}}</a></li>
+            {% endif %}
 
-            <div class="modal-footer">
-                <button class="btn btn-info" data-dismiss="modal" aria-hidden="true">{{'_cerrar_'|trans}}</button>
+            {% if is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_USER_LOG_ACTIVIDAD') %}
+                <li ><a href="#log_actividad">{{"_bitacora_actividad_"|trans}}</a></li>
+            {% endif %}
+        </ul>
+
+        <div id='nombre_sala2' ></div>
+        <div class="tab-content">
+            <div class="content tab-pane" id="tab1" >
+                <button id='export' class="btn btn-success" title="{{'_exportar_tabla_datos_'|trans}}"><span class="glyphicon glyphicon-list-alt"></span></button>
+                {#<button id='export_grp' class="btn btn-success" title="{{'_exportar_grafico_'|trans}}"><span class="glyphicon glyphicon-picture"></span> </button>#}
+                <button id='ver_ficha' class="btn btn-success" title="{{'ver_ficha_tecnica'|trans}}"><span class="glyphicon glyphicon-briefcase"></span> </button>
+                <button id='guardarConf' class="btn btn-success" title="{{'_guardar_estado_'|trans}}"><span class="glyphicon glyphicon-save"></span> </button>
+                <button id='cargarConf' class="btn btn-success" title="{{'_cargar_estado_'|trans}}"><span class="glyphicon glyphicon-log-in"></span> </button>
+                <div style="display: none" id="div-nombre-escenario">
+                    <h3>{{ '_escenario_'|trans }}: <span id="nombre-escenario"></span></h3>
+                </div>
+                <div id="output" ></div>
+            </div>
+            {% include 'PivotTable/listado_indicadores.html.twig'%}
+
+            {# Módulo de calidad #}
+            {% if MINSALCalidadBundle.habilitado and  ( is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_USER_TABLERO_CALIDAD') ) %}
+                {% include 'PivotTable/calidad_datos.html.twig' with {'bundleCalidad': MINSALCalidadBundle} %}
+            {% endif %}
+
+            {% if is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_USER_LOG_ACTIVIDAD') %}
+                {% include 'PivotTable/log_actividad.html.twig'%}
+            {% endif %}
+        </div>
+    </div>
+    <div id="myModal2" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="myModalLabel2">{{ '_gestion_escenarios_'|trans }}</h3>
+                </div>
+
+                <div class="modal-body">
+                    <span class='info' id='sql'></span>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{'_cerrar_'|trans}}</button>
+                    <button type="button" class="btn btn-primary" id="btnGuardarConf">{{ '_guardar_cambios_'|trans }}</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div id="fichaTecnica" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="fichaTecnicaTitle" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content span12">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="fichaTecnicaTitle"></h3>
-            </div>
+    <div id="fichaTecnica" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="fichaTecnicaTitle" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content span12">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3 id="fichaTecnicaTitle"></h3>
+                </div>
 
-            <div class="modal-body">
-                <span class='info' id='fichaTecnicaContent'></span>
-            </div>
+                <div class="modal-body">
+                    <span class='info' id='fichaTecnicaContent'></span>
+                </div>
 
-            <div class="modal-footer">
-                <button class="btn btn-info" data-dismiss="modal" aria-hidden="true">{{'_cerrar_'|trans}}</button>
+                <div class="modal-footer">
+                    <button class="btn btn-info" data-dismiss="modal" aria-hidden="true">{{'_cerrar_'|trans}}</button>
+                </div>
             </div>
         </div>
     </div>
-</div>            
-<a id="dlink"  style="display:none;"></a>
+    <a id="dlink"  style="display:none;"></a>
 {% endblock %}

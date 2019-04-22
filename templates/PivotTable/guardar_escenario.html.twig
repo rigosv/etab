@@ -1,0 +1,20 @@
+    <h3>{{ '_crear_escenario_'|trans }}</h3>
+    <form>
+    <div class="form-group">
+        <label for="nombre">{{ '_nombre_' |trans}}</label>
+        <input type="text" class="form-control" id="nombre" >
+    </div>
+    {% if is_granted('ROLE_SUPER_ADMIN') %}
+        <div class="form-group">
+            <div class="col-sm-offset-1 col-sm-10">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" id="default"> {{ '_escenario_por_defecto_'|trans }}
+                    </label>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    </form>
+
+

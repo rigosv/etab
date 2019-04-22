@@ -45,7 +45,7 @@ class CouchbaseOrigenDatos implements OrigenDatosInterface
         foreach ($datos as $fila) {
             $nueva_fila = array();
             foreach ($fila as $k => $v) {
-                $v_ = preg_replace("/[\r\n|\n|\r]+/", " ", $v);
+                $v_ = preg_replace("/[\r\n|\n|\r|\t]+/", " ", $v);
                 $nueva_fila[$campos_sig[$util->slug($k)]] = trim(mb_check_encoding($v_, 'UTF-8') ? $v_ : mb_convert_encoding($v_, 'UTF-8'));
             }
 

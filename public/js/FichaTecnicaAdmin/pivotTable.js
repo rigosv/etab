@@ -1,6 +1,9 @@
 var idIndicadorActivo;
 var esCalidad = false;
 var xaggregatorName = "Suma";
+var escenarioActivo = null;
+var alertas = [];
+var formula = '';
 
 $(document).ready(function() {
     var datos_ = '';
@@ -53,38 +56,74 @@ $(document).ready(function() {
     });
 
     $('#guardarConf').click(function (){
-        configuracion_guardada = configuracion;
-        var conf = JSON.stringify(configuracion_guardada, undefined, 2);
-        $.post(Routing.generate('pivotable_guardar_estado',
-            {tipoElemento: tipoElemento, id:identificadorElemento, configuracion: conf}),
-            function(datos) {
 
-            }, 'json');
+        if (idIndicadorActivo != null){
+            $.get(Routing.generate('pivotable_guardar_escenario_frm'),
+                {id: idIndicadorActivo, tipoElemento: tipoElemento},
+                function(resp) {
+                    $('#myModal2').find('.modal-body').html(resp);
+                    $('#myModal2').find('#btnGuardarConf').show();
+                    $('#btnGuardarConf').click(function(){
+                        guardarEscenario();
+                    });
+
+
+                    if ( escenarioActivo != null ){
+                        $('#myModal2').find('#nombre').val(escenarioActivo.nombre);
+                        $('#myModal2').find('#default').attr('checked', (escenarioActivo.pordefecto ==  true));
+                    }
+                    $('#myModal2').modal('show');
+                });
+        }
     });
 
-    $('#cargarConf').click(function (){
+    function guardarEscenario(){
 
-        var renderers = $.extend($.pivotUtilities.renderers,
-            $.pivotUtilities.gchart_renderers);
-        if (configuracion_guardada == ''){
-            $.post(Routing.generate('pivotable_obtener_estado',
-                {tipoElemento: tipoElemento, id:identificadorElemento}),
-                function(conf) {
-                    if (conf === ''){
-                        alert('No existe una configuración guardada');
-                    }else {
-                        configuracion_guardada = conf;
-                        configuracion_guardada["renderers"] = renderers;
-                        configuracion_guardada["onRefresh"] = onChangeTable;
-                        $("#output").pivotUI(datos_, configuracion_guardada , true, 'es');
+        configuracion_guardada = configuracion;
+        var conf = JSON.stringify(configuracion_guardada, undefined, 2);
+
+        var nombre = $('#myModal2').find('#nombre').val();
+
+        var defaultEscenario = ( $('#myModal2').find('#default') != undefined ) ? $('#myModal2').find('#default').is(':checked') : null;
+
+        if (nombre != '') {
+            $.post(Routing.generate('pivotable_guardar_estado'),
+                {tipoElemento: tipoElemento, 'id': idIndicadorActivo, 'nombre': nombre, 'pordefecto': defaultEscenario, 'configuracion': conf},
+                function (datos) {
+
+                    if ( datos.estado == 'success' ){
+                        $.notify(datos.mensaje, 'success');
+                        $('#myModal2').modal('hide');
+                        escenarioActivo = {tipoElemento: tipoElemento, 'id': idIndicadorActivo, 'nombre': nombre, 'pordefecto': defaultEscenario};
+                        $('#nombre-escenario').html(nombre);
+                        $('#div-nombre-escenario').show();
+                    } else {
+                        $('#myModal2').find('#btnGuardarConf').notify(datos.mensaje, {className: "error" });
                     }
                 }, 'json');
-        } else{
-            configuracion_guardada["renderers"] = renderers;
-            configuracion_guardada["onRefresh"] = onChangeTable;
-            $("#output").pivotUI(datos_, configuracion_guardada , true, 'es');
+        } else {
+            $('#myModal2').find('#nombre').notify(trans.campo_requerido, {className: "error" });
         }
+    }
 
+    $('#cargarConf').click(function (){
+        $.post(Routing.generate('pivotable_get_escenarios',
+            {tipoElemento: tipoElemento, idElemento:identificadorElemento}),
+            function(resp) {
+                $('#myModal2').find('.modal-body').html(resp);
+                $('#myModal2').find('#btnGuardarConf').hide();
+                $('#myModal2').modal('show');
+
+                $('[data-toggle="popover"]').popover()
+
+                $('.escenario').click(function(){
+                    var idEscenario = $(this).data('id');
+                    $('#nombre-escenario').html($(this).html());
+                    $('#div-nombre-escenario').show();
+                    cargarTablaDinamica(datos_, alertas, formula, idEscenario);
+
+                });
+            }, 'html');
     });
 
     $('#ver_ficha').click(function() {
@@ -105,6 +144,10 @@ $(document).ready(function() {
 
     $('A.indicador').click(function() {
         esCalidad = false;
+        escenarioActivo = null;
+        alertas = [];
+        formula = '';
+        $('#div-nombre-escenario').hide();
         var id_indicador = $(this).attr('data-id');
         var nombre_indicador = $(this).html();
 
@@ -133,12 +176,18 @@ $(document).ready(function() {
             } else {
                 cargarTablaDinamica(datos, mps.alertas, mps.formula);
             }
+            alertas = mps.alertas;
+            formula = mps.formula;
             cargarDescripcionAtributos(id_indicador);
         });
     });
 
     $('A.elemento_costeo').click(function() {
         esCalidad = false;
+        escenarioActivo = null;
+        alertas = [];
+        formula = '';
+        $('#div-nombre-escenario').hide();
         var codigo = $(this).attr('data-id');
         var nombre_elemento = $(this).html();
         xaggregatorName = "Suma";
@@ -155,6 +204,10 @@ $(document).ready(function() {
 
     $('A.formulario_captura_datos').click(function() {
         esCalidad = false;
+        escenarioActivo = null;
+        alertas = [];
+        formula = '';
+        $('#div-nombre-escenario').hide();
         var codigo = $(this).attr('data-id');
         var nombre_elemento = $(this).html();
         xaggregatorName = "Suma";
@@ -176,6 +229,10 @@ $(document).ready(function() {
 
     $('A.calidad_datos_item').click(function() {
         esCalidad = true;
+        escenarioActivo = null;
+        alertas = [];
+        formula = '';
+        $('#div-nombre-escenario').hide();
         var nombre_elemento = $(this).html();
         var idFrm = $(this).attr('data-id');
         xaggregatorName = "Suma";
@@ -193,6 +250,10 @@ $(document).ready(function() {
 
     $('A.log_actividad_item').click(function() {
         esCalidad = false;
+        escenarioActivo = null;
+        alertas = [];
+        formula = '';
+        $('#div-nombre-escenario').hide();
         xaggregatorName = "Suma";
 
         $.getJSON(Routing.generate('get_log_actividad'), function(mps) {
@@ -215,8 +276,9 @@ $(document).ready(function() {
         })
     }
 
-    function cargarTablaDinamica(datos, alertas = [], formula = ''){
+    function cargarTablaDinamica(datos, alertas = [], formula = '', idEscenario = 0){
 
+        datos_ = datos;
         var renderers = $.extend($.pivotUtilities.renderers, $.pivotUtilities.subtotal_renderers,
             $.pivotUtilities.plotly_renderers);
         var dataClass = $.pivotUtilities.SubtotalPivotData;
@@ -237,96 +299,147 @@ $(document).ready(function() {
             }
         };
 
-        if (esCalidad){
-            $("#output").pivotUI(datos, {
-                renderers: renderers,
-                dataClass: dataClass,
-                menuLimit: 500,
-                aggregatorName: xaggregatorName,
-                unusedAttrsVertical: false,
-                onRefresh: arreglarValores0,
-                rendererOptions: {
-                    arrowCollapsed: "[+] ",
-                    arrowExpanded: "[-] ",
-                    collapseRowsAt: 0,
-                    plotlyConfig : configPlotly,
-                    heatmap: {
-                        colorScaleGenerator : function(values) {
-                            var max, min;
-                            min = Math.min.apply(Math, values);
-                            max = Math.max.apply(Math, values);
-                            return function(x) {
-                                if (x < 59.9)
-                                    return "#D73925";
-                                else if (x < 79.9)
-                                    return "#ffa500";
-                                else
-                                    return "#008D4C";
-                            };
-                        }
-                    }
+        //Verificar si tiene escenario por defecto
+        $.post(Routing.generate('pivotable_obtener_estado',
+            {'tipoElemento': tipoElemento, 'id':identificadorElemento, 'idEscenario': idEscenario}),
+            function(resp) {
+
+                var cfgVals = [];
+                var cfgRows = [];
+                var cfgCols = [];
+                var cfgAggregatorName = '';
+                var cfgRendererName = 'Table';
+                var cfgExclusions = {};
+                var cfgInclusions = {};
+                var cfgRowOrder = 'key_a_to_z';
+                var cfgColOrder = 'key_a_to_z';
+
+                if (resp !== '{}'){
+                    let conf = JSON.parse(resp);
+                    cfgVals = conf.vals;
+                    cfgRows = conf.rows;
+                    cfgCols = conf.cols;
+                    cfgAggregatorName = conf.aggregatorName;
+                    cfgRendererName = conf.rendererName;
+                    cfgExclusions = conf.exclusions;
+                    cfgInclusions = conf.inclusions;
+                    cfgRowOrder = conf.rowOrder;
+                    cfgColOrder = conf.colOrder;
                 }
-            }, true, 'es');
-        } else {
-            var factor, xvals='';
 
-            if ( formula != '' ){
-                var factorF = formula.toLowerCase().replace(/[{}]/g, '__').split('*');
+                if (esCalidad){
 
-                factor = ( factorF.length > 1 && ( factorF[1] == 100 || factorF[1] == 1000 ) ) ? factorF[1] : 1;
-
-                var operandos = factorF[0].split('/');
-                if ( operandos.length > 1 ){
-                    xaggregatorName = 'Cociente';
-                    xvals =  [operandos[0], operandos[1]];
-                } else {
-                    xaggregatorName = 'Suma';
-                    xvals =  [operandos[0]];
-                }
-            }
-
-            $("#output").pivotUI(datos, {
-                renderers: renderers,
-                dataClass: dataClass,
-                vals: xvals,
-                aggregatorName: xaggregatorName,
-                menuLimit: 500,
-                unusedAttrsVertical: false,
-                onRefresh: onChangeTable,
-                rendererOptions: {
-                    arrowCollapsed: "[+] ",
-                    arrowExpanded: "[-] ",
-                    collapseRowsAt: 0,
-                    plotlyConfig : configPlotly,
-                    heatmap: {
-                        colorScaleGenerator : function(values) {
-                            if ( alertas.length == 0){
-                                var max, min;
-                                min = Math.min.apply(Math, values);
-                                max = Math.max.apply(Math, values);
-                                return function(x) {
-                                    var nonRed;
-                                    nonRed = 255 - Math.round(255 * (x - min) / (max - min));
-                                    return "rgb(255," + nonRed + "," + nonRed + ")";
-                                };
-                            } else {
-                                return function (x) {
-                                    var rango, i;
-                                    for (i in alertas) {
-                                        rango = alertas[i];
-
-                                        if (x*factor >= rango.li && x*factor <= rango.ls) {
-                                            return rango.color;
-                                        }
-                                    }
-                                    return "white";
-                                };
+                    $("#output").pivotUI(datos, {
+                        renderers: renderers,
+                        dataClass: dataClass,
+                        menuLimit: 500,
+                        aggregatorName: ( cfgAggregatorName == '') ? xaggregatorName : cfgAggregatorName,
+                        vals : cfgVals,
+                        rows: cfgRows,
+                        cols: cfgCols,
+                        aggregatorName: cfgAggregatorName,
+                        rendererName: cfgRendererName,
+                        exclusions: cfgExclusions,
+                        inclusions: cfgInclusions,
+                        rowOrder: cfgRowOrder,
+                        colOrder: cfgColOrder,
+                        unusedAttrsVertical: false,
+                        onRefresh: arreglarValores0,
+                        rendererOptions: {
+                            arrowCollapsed: "[+] ",
+                            arrowExpanded: "[-] ",
+                            collapseRowsAt: 0,
+                            plotlyConfig : configPlotly,
+                            heatmap: {
+                                colorScaleGenerator : function(values) {
+                                    var max, min;
+                                    min = Math.min.apply(Math, values);
+                                    max = Math.max.apply(Math, values);
+                                    return function(x) {
+                                        if (x < 59.9)
+                                            return "#D73925";
+                                        else if (x < 79.9)
+                                            return "#ffa500";
+                                        else
+                                            return "#008D4C";
+                                    };
+                                }
                             }
                         }
-                    },
+                    }, true, 'es');
+                } else {
+
+                    var factor, xvals='';
+
+                    if ( formula != '' ){
+                        var factorF = formula.toLowerCase().replace(/[{}]/g, '__').split('*');
+
+                        factor = ( factorF.length > 1 && ( factorF[1] == 100 || factorF[1] == 1000 ) ) ? factorF[1] : 1;
+
+                        var operandos = factorF[0].split('/');
+                        if ( operandos.length > 1 ){
+                            xaggregatorName = 'Cociente';
+                            xvals =  [operandos[0], operandos[1]];
+                        } else {
+                            xaggregatorName = 'Suma';
+                            xvals =  [operandos[0]];
+                        }
+                    }
+
+                    $("#output").pivotUI(datos, {
+                        renderers: renderers,
+                        dataClass: dataClass,
+                        aggregatorName: ( cfgAggregatorName == '') ? xaggregatorName : cfgAggregatorName,
+                        vals : ( cfgVals == [] ) ? xvals : cfgVals,
+                        rows: cfgRows,
+                        cols: cfgCols,
+                        rendererName: cfgRendererName,
+                        exclusions: cfgExclusions,
+                        inclusions: cfgInclusions,
+                        rowOrder: cfgRowOrder,
+                        colOrder: cfgColOrder,
+                        menuLimit: 500,
+                        unusedAttrsVertical: false,
+                        onRefresh: onChangeTable,
+                        rendererOptions: {
+                            arrowCollapsed: "[+] ",
+                            arrowExpanded: "[-] ",
+                            collapseRowsAt: 0,
+                            plotlyConfig : configPlotly,
+                            heatmap: {
+                                colorScaleGenerator : function(values) {
+                                    if ( alertas.length == 0){
+                                        var max, min;
+                                        min = Math.min.apply(Math, values);
+                                        max = Math.max.apply(Math, values);
+                                        return function(x) {
+                                            var nonRed;
+                                            nonRed = 255 - Math.round(255 * (x - min) / (max - min));
+                                            return "rgb(255," + nonRed + "," + nonRed + ")";
+                                        };
+                                    } else {
+                                        return function (x) {
+                                            var rango, i;
+                                            for (i in alertas) {
+                                                rango = alertas[i];
+
+                                                if (x*factor >= rango.li && x*factor <= rango.ls) {
+                                                    return rango.color;
+                                                }
+                                            }
+                                            return "white";
+                                        };
+                                    }
+                                }
+                            },
+                        }
+                    }, true, 'es');
                 }
-            }, true, 'es');
-        }
+
+
+            }, 'json');
+
+
 
     }
 
@@ -361,4 +474,14 @@ $(document).ready(function() {
         $('.pvtTotal[data-value="0"]').html('0.00');
         $('.pvtTotalLabel').html('Totales');
     };
+
+
 });
+
+function borrarEscenario(id) {
+    $.get(Routing.generate('borrar_escenario',
+        {'id': id}),
+        function(resp) {
+            $('#myModal2').modal('hide');
+        });
+}

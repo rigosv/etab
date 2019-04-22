@@ -611,3 +611,16 @@ action_poscarga: Acciones poscarga
 action_poscarga_title: Ejecutar acciones poscarga
 _accion_: Acción
 _registros_afectados_: Registros afectados
+_gestion_escenarios_: Gestión de escenarios
+_crear_escenario_: Crear nuevo escenario
+_escenario_por_defecto_: Escenario por defecto
+_nombre_: Nombre
+_no_puede_sobreescribir_configuracion_escenario_otro_usuario_: No puede sobreescribir el escenario creado por otro usuario
+_escenario_guardado_correctamente_: Escenario guardado correctamente
+_escenario_: Escenario
+_escenarios_propios_: Escenarios propios
+_escenarios_otros_: Escenarios creados por otros usuarios
+_no_escenarios_creados: No hay escenarios creados
+_confirmar_borrado_?: ¿Confirmar borrado?
+_si_: Sí
+_no_: No
