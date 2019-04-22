@@ -1,5 +1,4 @@
 <div class="panel panel-primary">
-        <!-- Default panel contents -->
         <div class="panel-heading">{{ '_escenarios_propios_'|trans }}</div>
         {% if datos.propios|length == 0 %}
                 <div class="panel-body">
@@ -12,7 +11,20 @@
                         <TR>
                                 <TD><button type="button" class="list-group-item escenario" data-id="{{ e.id }}">{{ e.nombre }}</button></TD>
                                 <TD style="width: 10%">
-                                        <button type="button" class="btn btn-danger escenario-borrar" data-id="{{ e.id }}" title="{{ '_borrar_'|trans }}">
+                                        <button type="button" class="btn btn-danger"
+                                                data-id="{{ e.id }}"
+                                                title="{{ '_borrar_'|trans }}"
+                                                data-container="body"
+                                                data-toggle="popover"
+                                                data-placement="left"
+                                                data-html = true
+                                                data-trigger="focus"
+                                                data-content="{{ '_confirmar_borrado_?'|trans }} <BR/><button
+                                                        data-id='{{ e.id }}'
+                                                        onclick='borrarEscenario({{ e.id }})'
+                                                        class= 'btn btn-danger escenario-borrar' >{{ '_si_'|trans }}</button>
+                                                        <button class= 'btn btn-default'>{{ '_no_'|trans }}</button>"
+                                        >
                                                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                                         </button>
                                 </TD>
@@ -22,7 +34,6 @@
 </div>
 
 <div class="panel panel-info">
-        <!-- Default panel contents -->
         <div class="panel-heading">{{ '_escenarios_otros_'|trans }}</div>
         {% if datos.otros|length == 0 %}
                 <div class="panel-body">

@@ -621,3 +621,6 @@ _escenario_: Escenario
 _escenarios_propios_: Escenarios propios
 _escenarios_otros_: Escenarios creados por otros usuarios
 _no_escenarios_creados: No hay escenarios creados
+_confirmar_borrado_?: ¿Confirmar borrado?
+_si_: Sí
+_no_: No

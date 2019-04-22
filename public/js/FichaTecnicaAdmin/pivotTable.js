@@ -62,6 +62,7 @@ $(document).ready(function() {
                 {id: idIndicadorActivo, tipoElemento: tipoElemento},
                 function(resp) {
                     $('#myModal2').find('.modal-body').html(resp);
+                    $('#myModal2').find('#btnGuardarConf').show();
                     $('#btnGuardarConf').click(function(){
                         guardarEscenario();
                     });
@@ -82,6 +83,7 @@ $(document).ready(function() {
         var conf = JSON.stringify(configuracion_guardada, undefined, 2);
 
         var nombre = $('#myModal2').find('#nombre').val();
+
         var defaultEscenario = ( $('#myModal2').find('#default') != undefined ) ? $('#myModal2').find('#default').is(':checked') : null;
 
         if (nombre != '') {
@@ -109,7 +111,10 @@ $(document).ready(function() {
             {tipoElemento: tipoElemento, idElemento:identificadorElemento}),
             function(resp) {
                 $('#myModal2').find('.modal-body').html(resp);
+                $('#myModal2').find('#btnGuardarConf').hide();
                 $('#myModal2').modal('show');
+
+                $('[data-toggle="popover"]').popover()
 
                 $('.escenario').click(function(){
                     var idEscenario = $(this).data('id');
@@ -469,4 +474,14 @@ $(document).ready(function() {
         $('.pvtTotal[data-value="0"]').html('0.00');
         $('.pvtTotalLabel').html('Totales');
     };
+
+
 });
+
+function borrarEscenario(id) {
+    $.get(Routing.generate('borrar_escenario',
+        {'id': id}),
+        function(resp) {
+            $('#myModal2').modal('hide');
+        });
+}

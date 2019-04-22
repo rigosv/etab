@@ -229,6 +229,7 @@ class PivotTableController extends AbstractController {
         $response->setContent(json_encode($datos));
         return $response;
     }
+
     /**
      * @Route("/pivotable/reporte-expediente-h/", name="get_reporte_expedientes_evaluacion_calidad_h", options={"expose"=true})
      */
@@ -242,5 +243,16 @@ class PivotTableController extends AbstractController {
         return $response;
     }
 
+    /**
+     * @Route("/pivotable/escenario/{id}/borrar", name="borrar_escenario", options={"expose"=true})
+     */
+    public function borrarEscenario(ConfiguracionPivotTable $escenario) {
+        $em = $this->getDoctrine()->getManager();
 
+        $em->remove($escenario);
+
+        $em->flush();
+
+        return new Response('');
+    }
 }
