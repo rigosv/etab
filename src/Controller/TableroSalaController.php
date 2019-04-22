@@ -13,6 +13,10 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use Swagger\Annotations as SWG;
+
 use App\Entity\Social;
 use App\Entity\FichaTecnica;
 use App\Entity\GrupoIndicadores;
@@ -30,6 +34,18 @@ class TableroSalaController extends AbstractController
 {
     /**
      * @Route("/salaAccion/{id}", name="salaAccion_index", methods={"GET"})
+     * 
+     * @SWG\Get(
+     *      tags={"Tablero Social"},
+     *      summary="Lista de acciones",
+     *      description="Lista de las acciones del indicador",
+     *      produces={"application/json"},
+     *      @SWG\Parameter(parameter="id_in_path", name="id", description="id de la sala", required=true, type="integer", in="path")
+     * ),
+     * @SWG\Response(
+     *     response=200,
+     *     description="Regresa objecto actualizado"     
+     *  ),
      */
     public function salaAccionesLista(GrupoIndicadores $sala)
     {        
@@ -65,6 +81,36 @@ class TableroSalaController extends AbstractController
     
     /**
      * @Route("/salaAccion/{id}", name="salaAccion", methods={"POST"})
+     * 
+     * @SWG\Post(
+     *      tags={"Tablero Social"},
+     *      summary="Guardar acciones",
+     *      description="Guarda las acciones descritas para la sala",
+     *      produces={"application/json"},  
+     *      @SWG\Parameter(parameter="ficha_in_path", name="id", description="id de la sala", required=true, type="string", in="path"),
+     *      @SWG\Parameter(
+     *          name="body",
+     *          in="body",
+     *          description="JSON con los filtros",
+     *          type="object",
+     *          format="application/json",
+     *          @SWG\Schema(
+     *              type="object",
+     *              @SWG\Property(property="acciones", type="string", example="Ejemplo"),
+     *              @SWG\Property(property="observaciones", type="string", example="algo de la sala"),
+     *              @SWG\Property(property="responsables", type="string", example="Algun usuario")
+     *          )
+     *      )
+     * ),
+     * @SWG\Response(
+     *     response=200,
+     *     description="Regresa objecto actualizado"     
+     *  ),
+     * 
+     *  @SWG\Response(
+     *     response=500,
+     *     description="Regresa un error ocurrido en el servidor"     
+     *  ),
      */
     public function guardarAccion(GrupoIndicadores $sala, Request $request ) {
         $em = $this->getDoctrine()->getManager();
@@ -124,6 +170,18 @@ class TableroSalaController extends AbstractController
 
     /**
      * @Route("/usuariosSala/{idSala}", name="usuariosSala", methods={"GET"})
+     * 
+     * @SWG\Get(
+     *      tags={"Tablero Social"},
+     *      summary="Lista de usuarios sala",
+     *      description="Lista los usuarios que pertenecen a una sala",
+     *      produces={"application/json"},
+     *      @SWG\Parameter(parameter="id_in_path", name="idSala", description="id de la sala", required=true, type="integer", in="path")
+     * ),
+     * @SWG\Response(
+     *     response=200,
+     *     description="Regresa objecto actualizado"     
+     *  ),
      */
     public function usuariosSala($idSala) {
         $em = $this->getDoctrine()->getManager();
@@ -169,6 +227,18 @@ class TableroSalaController extends AbstractController
 
     /**
      * @Route("/comentarioSala/{idSala}", name="comentarioSala_index", methods={"GET"})
+     * 
+     * @SWG\Get(
+     *      tags={"Tablero Social"},
+     *      summary="Comentarios de sala",
+     *      description="Lista los comentarios de una sala",
+     *      produces={"application/json"},
+     *      @SWG\Parameter(parameter="id_in_path", name="idSala", description="id de la sala", required=true, type="integer", in="path")
+     * ),
+     * @SWG\Response(
+     *     response=200,
+     *     description="Regresa objecto actualizado"     
+     *  ),
      */
     public function comentarioSala($idSala, Request $request) {
         $session = new Session();
@@ -239,6 +309,41 @@ class TableroSalaController extends AbstractController
 
     /**
      * @Route("/comentarioSala/{sala}", name="comentarioSala", methods={"POST"})
+     * 
+     * @SWG\Post(
+     *      tags={"Tablero Social"},
+     *      summary="Guardar comentarios",
+     *      description="Guarda los comengtarios para la sala y las envia al correo de las personas compartidas",
+     *      produces={"application/json"},  
+     *      @SWG\Parameter(parameter="ficha_in_path", name="sala", description="id de la sala", required=true, type="string", in="path"),
+     *      @SWG\Parameter(
+     *          name="body",
+     *          in="body",
+     *          description="JSON con los filtros",
+     *          type="object",
+     *          format="application/json",
+     *          @SWG\Schema(
+     *              type="object",
+     *              @SWG\Property(property="comentarios", type="string", example="Ejemplo de comentarios"),
+     *              @SWG\Property(property="es_permanente", type="boolean", example=true),
+     *              @SWG\Property(property="tiempo_dias", type="string", example="2"),
+     *              @SWG\Property(property="usuarios_sin_cuenta", type="array", 
+     *                  @SWG\Items(example="ramirez.esquinca@gmail.com")
+     *              ),@SWG\Property(property="usuarios_con_cuenta", type="array", 
+     *                  @SWG\Items(example="1")
+     *              )
+     *          )
+     *      )
+     * ),
+     * @SWG\Response(
+     *     response=200,
+     *     description="Regresa objecto actualizado"     
+     *  ),
+     * 
+     *  @SWG\Response(
+     *     response=500,
+     *     description="Regresa un error ocurrido en el servidor"     
+     *  ),
      */
     public function comentarioSalaGuardar(GrupoIndicadores $sala, Request $request, \Swift_Mailer $mailer) {        
         $session = new Session();
@@ -405,7 +510,21 @@ class TableroSalaController extends AbstractController
     }
 
     /**
-     * @Route("/html_pdf", name="html_pdf", options={"expose"=true})
+     * @Route("/html_pdf", name="html_pdf", methods={"GET"})
+     * 
+     * @SWG\Get(
+     *      tags={"Tablero Social"},
+     *      summary="Exportar a PDF",
+     *      description="Exporta a pdf el contenido de un html",
+     *      produces={"application/json"},
+     *      @SWG\Parameter(parameter="b_in_path", name="html", required=true, type="string", in="path"),
+     *      @SWG\Parameter(parameter="h_in_path", name="header", required=true, type="string", in="path"),
+     *      @SWG\Parameter(parameter="f_in_path", name="footer", required=true, type="string", in="path")
+     * ),
+     * @SWG\Response(
+     *     response=200,
+     *     description="PDF"     
+     *  ),
      */
     public function setHTML(Request $request, \jonasarts\Bundle\TCPDFBundle\TCPDF\TCPDF $pdf){ 
         $datos = $request; 

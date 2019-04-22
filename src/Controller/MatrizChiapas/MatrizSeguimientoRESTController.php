@@ -9,6 +9,10 @@ use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\Annotations\Get;
 
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use Swagger\Annotations as SWG;
+
 use App\AlmacenamientoDatos\AlmacenamientoProxy;
 
 use App\Entity\FichaTecnica;
@@ -30,6 +34,7 @@ use App\Entity\MatrizChiapas\MatrizSeguimientoDato;
 
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Translation\Loader\ArrayLoader;
+
 
 class MatrizSeguimientoRESTController extends Controller {
 
@@ -69,12 +74,40 @@ class MatrizSeguimientoRESTController extends Controller {
     {        
         return $this->render('Matriz/reporte.html.twig', array('admin_pool'    => $this->container->get('sonata.admin.pool')));
     }
-
     public function listAction(){
         return $this->render('Matriz/reporte.html.twig', array('admin_pool'    => $this->container->get('sonata.admin.pool')));
     }
+
+
     /**
-     * @Route("/matriz/matriz", name="matriz_matriz", options={"expose"=true})
+     * @Route("/api/v1/matriz/matriz", name="matriz_matriz", methods={"GET"})
+     * 
+     * @SWG\Get(
+     *      tags={"Matriz"},
+     *      summary="Lista de matrices",
+     *      description="Lista las matrices diponibles para el usuario logueado",
+     *      consumes={"application/json"},
+     *      produces={"application/json"},
+     * ),
+     * @SWG\Response(
+     *     response=200,
+     *     description="Regresa objecto actualizado"     
+     *  ),
+     * 
+     * @SWG\Response(
+     *     response=400,
+     *     description="No se envio los parametros necesarios"     
+     *  ),
+     * 
+     * @SWG\Response(
+     *     response=404,
+     *     description="El elemento no existe"     
+     *  ),
+     * 
+     *  @SWG\Response(
+     *     response=500,
+     *     description="Regresa un error ocurrido en el servidor"     
+     *  ),
      */
     public function matrices(){
         $em = $this->getDoctrine()->getEntityManager();
@@ -111,7 +144,36 @@ class MatrizSeguimientoRESTController extends Controller {
         return $response;
     }
     /**
-     * @Route("/matriz/planeacion", name="matriz_planeacion", options={"expose"=true})
+     * @Route("/api/v1/matriz/planeacion", name="matriz_planeacion", methods={"GET"})
+     * 
+     * @SWG\Get(
+     *      tags={"Matriz"},
+     *      summary="Planeacion",
+     *      description="Devuelve los datos de la planeacion de la matriz y el año seleccionado",
+     *      consumes={"application/json"},
+     *      produces={"application/json"},
+     *      @SWG\Parameter(parameter="a_in_path", name="anio", type="integer", in="query"),
+     *      @SWG\Parameter(parameter="m_in_path", name="matrix", type="integer", in="query")
+     * ),
+     * @SWG\Response(
+     *     response=200,
+     *     description="Regresa objecto"     
+     *  ),
+     * 
+     * @SWG\Response(
+     *     response=400,
+     *     description="No se envio los parametros necesarios"     
+     *  ),
+     * 
+     * @SWG\Response(
+     *     response=404,
+     *     description="El elemento no existe"     
+     *  ),
+     * 
+     *  @SWG\Response(
+     *     response=500,
+     *     description="Regresa un error ocurrido en el servidor"     
+     *  ),
      */
     public function planeacion(Request $request){
         $response = new Response();
@@ -241,7 +303,36 @@ class MatrizSeguimientoRESTController extends Controller {
     }
 
     /**
-     * @Route("/matriz/planeacion/crear", name="matriz_planeacion_crear", options={"expose"=true})
+     * @Route("/api/v1/matriz/planeacion/crear", name="matriz_planeacion_crear", methods={"GET"})
+     * 
+     * @SWG\Get(
+     *      tags={"Matriz"},
+     *      summary="Planeacion crear",
+     *      description="Crea el formulario para crear la planeacion de una matriz en el año seleccionado",
+     *      consumes={"application/json"},
+     *      produces={"application/json"},
+     *      @SWG\Parameter(parameter="a_in_path", name="anio", type="integer", in="query"),
+     *      @SWG\Parameter(parameter="m_in_path", name="matrix", type="integer", in="query")
+     * ),
+     * @SWG\Response(
+     *     response=200,
+     *     description="Regresa objecto"     
+     *  ),
+     * 
+     * @SWG\Response(
+     *     response=400,
+     *     description="No se envio los parametros necesarios"     
+     *  ),
+     * 
+     * @SWG\Response(
+     *     response=404,
+     *     description="El elemento no existe"     
+     *  ),
+     * 
+     *  @SWG\Response(
+     *     response=500,
+     *     description="Regresa un error ocurrido en el servidor"     
+     *  ),
      */
     public function planeacionCrear(Request $request){
         $response = new Response();
@@ -291,7 +382,86 @@ class MatrizSeguimientoRESTController extends Controller {
     }
 
     /**
-     * @Route("/matriz/planeacion/guardar", name="matriz_planeacion_guardar", options={"expose"=true})
+     * @Route("/api/v1/matriz/planeacion/guardar", name="matriz_planeacion_guardar", methods={"POST"})
+     * 
+     * @SWG\Post(
+     *      tags={"Matriz"},
+     *      summary="Guardar planeacion",
+     *      description="Guarda los valores de la planeacion de una matriz en el año seleccionado",
+     *      produces={"application/json"},  
+     *      @SWG\Parameter(
+     *          name="body",
+     *          in="body",
+     *          description="JSON con los filtros",
+     *          type="object",
+     *          format="application/json",
+     *          @SWG\Schema(
+     *              type="object",
+     *              @SWG\Property(property="anio", type="string", example="2017"),
+     *              @SWG\Property(property="matrix", type="string", example="19"),
+     *              @SWG\Property(property="matriz", type="array", 
+     *                  @SWG\Items(
+     *                      @SWG\Property(property="id", type="string", example="19"),
+     *                      @SWG\Property(property="nombre", type="string", example="uno"),
+     *                      @SWG\Property(property="indicadores_relacion", type="array",
+     *                          @SWG\Items(
+     *                              @SWG\Property(property="id", type="string", example="17"),
+     *                              @SWG\Property(property="nombre", type="string", example="ind 1"),
+     *                              @SWG\Property(property="fuente", type="string", example="fuente 1"),
+     *                              @SWG\Property(property="meta", type="string", example="1700"),
+     *                              @SWG\Property(property="enero", type="string", example="100"),
+     *                              @SWG\Property(property="febrero", type="string", example="123"),
+     *                              @SWG\Property(property="marzo", type="string", example="170"),
+     *                              @SWG\Property(property="abril", type="string", example="175"),
+     *                              @SWG\Property(property="mayo", type="string", example="179"),
+     *                              @SWG\Property(property="junio", type="string", example="179"),
+     *                              @SWG\Property(property="julio", type="string", example="179"),
+     *                              @SWG\Property(property="agosto", type="string", example="189"),
+     *                              @SWG\Property(property="septiembre", type="string", example="187"),
+     *                              @SWG\Property(property="octubre", type="string", example="180"),
+     *                              @SWG\Property(property="noviembre", type="string", example="177"),
+     *                              @SWG\Property(property="diciembre", type="string", example="165")
+     *                          )
+     *                      ),
+     *                      @SWG\Property(property="indicadores_etab", type="array",
+     *                          @SWG\Items(
+     *                              @SWG\Property(property="id", type="string", example="50"),
+     *                              @SWG\Property(property="nombre", type="string", example="ind 1"),
+     *                              @SWG\Property(property="fuente", type="string", example="fuente 1"),
+     *                              @SWG\Property(property="meta", type="string", example="1700"),
+     *                              @SWG\Property(property="enero", type="string", example="100"),
+     *                              @SWG\Property(property="febrero", type="string", example="123"),
+     *                              @SWG\Property(property="marzo", type="string", example="170"),
+     *                              @SWG\Property(property="abril", type="string", example="175"),
+     *                              @SWG\Property(property="mayo", type="string", example="179"),
+     *                              @SWG\Property(property="junio", type="string", example="179"),
+     *                              @SWG\Property(property="julio", type="string", example="179"),
+     *                              @SWG\Property(property="agosto", type="string", example="189"),
+     *                              @SWG\Property(property="septiembre", type="string", example="187"),
+     *                              @SWG\Property(property="octubre", type="string", example="180"),
+     *                              @SWG\Property(property="noviembre", type="string", example="177"),
+     *                              @SWG\Property(property="diciembre", type="string", example="165")
+     *                          )
+     *                      )
+     *                  )
+     *              )
+     *          )
+     *      )
+     * ),
+     * @SWG\Response(
+     *     response=200,
+     *     description="Regresa objecto"     
+     *  ),
+     * 
+     * @SWG\Response(
+     *     response=404,
+     *     description="El elemento no existe"     
+     *  ),
+     * 
+     *  @SWG\Response(
+     *     response=500,
+     *     description="Regresa un error ocurrido en el servidor"     
+     *  ),
      */
     public function planeacionGuardar(Request $request){
         $response = new Response();
@@ -403,7 +573,36 @@ class MatrizSeguimientoRESTController extends Controller {
     //REAL
 
     /**
-     * @Route("/matriz/real", name="matriz_real", options={"expose"=true})
+     * @Route("/api/v1/matriz/real", name="matriz_real", methods={"GET"})
+     * 
+     * @SWG\Get(
+     *      tags={"Matriz"},
+     *      summary="Real",
+     *      description="Devuelve los datos de la captura real de la matriz y el año seleccionado",
+     *      consumes={"application/json"},
+     *      produces={"application/json"},
+     *      @SWG\Parameter(parameter="a_in_path", name="anio", type="integer", in="query"),
+     *      @SWG\Parameter(parameter="m_in_path", name="matrix", type="integer", in="query")
+     * ),
+     * @SWG\Response(
+     *     response=200,
+     *     description="Regresa objecto"     
+     *  ),
+     * 
+     * @SWG\Response(
+     *     response=400,
+     *     description="No se envio los parametros necesarios"     
+     *  ),
+     * 
+     * @SWG\Response(
+     *     response=404,
+     *     description="El elemento no existe"     
+     *  ),
+     * 
+     *  @SWG\Response(
+     *     response=500,
+     *     description="Regresa un error ocurrido en el servidor"     
+     *  ),
      */
     public function real(Request $request, AlmacenamientoProxy $almacenamiento){
         $response = new Response();
@@ -541,7 +740,85 @@ class MatrizSeguimientoRESTController extends Controller {
     }
 
     /**
-     * @Route("/matriz/real/guardar", name="matriz_real_guardar", options={"expose"=true})
+     * @Route("/api/v1/matriz/real/guardar", name="matriz_real_guardar", methods={"POST"})
+     * 
+     * @SWG\Post(
+     *      tags={"Matriz"},
+     *      summary="Guardar real",
+     *      description="Guarda los valores de la captura real de una matriz en el año seleccionado",
+     *      produces={"application/json"},  
+     *      @SWG\Parameter(
+     *          name="body",
+     *          in="body",
+     *          description="JSON con los filtros",
+     *          type="object",
+     *          format="application/json",
+     *          @SWG\Schema(
+     *              type="object",
+     *              @SWG\Property(property="anio", type="string", example="2017"),
+     *              @SWG\Property(property="matrix", type="string", example="19"),
+     *              @SWG\Property(property="matriz", type="array", 
+     *                  @SWG\Items(
+     *                      @SWG\Property(property="id", type="string", example="19"),
+     *                      @SWG\Property(property="nombre", type="string", example="uno"),
+     *                      @SWG\Property(property="indicadores_relacion", type="array",
+     *                          @SWG\Items(
+     *                              @SWG\Property(property="id", type="string", example="17"),
+     *                              @SWG\Property(property="nombre", type="string", example="ind 1"),
+     *                              @SWG\Property(property="meta", type="string", example="1700"),
+     *                              @SWG\Property(property="enero", type="string", example="100"),
+     *                              @SWG\Property(property="febrero", type="string", example="123"),
+     *                              @SWG\Property(property="marzo", type="string", example="170"),
+     *                              @SWG\Property(property="abril", type="string", example="175"),
+     *                              @SWG\Property(property="mayo", type="string", example="179"),
+     *                              @SWG\Property(property="junio", type="string", example="179"),
+     *                              @SWG\Property(property="julio", type="string", example="179"),
+     *                              @SWG\Property(property="agosto", type="string", example="189"),
+     *                              @SWG\Property(property="septiembre", type="string", example="187"),
+     *                              @SWG\Property(property="octubre", type="string", example="180"),
+     *                              @SWG\Property(property="noviembre", type="string", example="177"),
+     *                              @SWG\Property(property="diciembre", type="string", example="165")
+     *                          )
+     *                      ),
+     *                      @SWG\Property(property="indicadores_etab", type="array",
+     *                          @SWG\Items(
+     *                              @SWG\Property(property="id", type="string", example="50"),
+     *                              @SWG\Property(property="nombre", type="string", example="ind 1"),
+     *                              @SWG\Property(property="fuente", type="string", example="fuente 1"),
+     *                              @SWG\Property(property="meta", type="string", example="1700"),
+     *                              @SWG\Property(property="enero", type="string", example="100"),
+     *                              @SWG\Property(property="febrero", type="string", example="123"),
+     *                              @SWG\Property(property="marzo", type="string", example="170"),
+     *                              @SWG\Property(property="abril", type="string", example="175"),
+     *                              @SWG\Property(property="mayo", type="string", example="179"),
+     *                              @SWG\Property(property="junio", type="string", example="179"),
+     *                              @SWG\Property(property="julio", type="string", example="179"),
+     *                              @SWG\Property(property="agosto", type="string", example="189"),
+     *                              @SWG\Property(property="septiembre", type="string", example="187"),
+     *                              @SWG\Property(property="octubre", type="string", example="180"),
+     *                              @SWG\Property(property="noviembre", type="string", example="177"),
+     *                              @SWG\Property(property="diciembre", type="string", example="165")
+     *                          )
+     *                      )
+     *                  )
+     *              )
+     *          )
+     *      )
+     * ),
+     * @SWG\Response(
+     *     response=200,
+     *     description="Regresa objecto"     
+     *  ),
+     * 
+     * @SWG\Response(
+     *     response=404,
+     *     description="El elemento no existe"     
+     *  ),
+     * 
+     *  @SWG\Response(
+     *     response=500,
+     *     description="Regresa un error ocurrido en el servidor"     
+     *  ),
      */
     public function realGuardar(Request $request){
         $response = new Response();
@@ -640,7 +917,36 @@ class MatrizSeguimientoRESTController extends Controller {
     //REPORTE
 
     /**
-     * @Route("/matriz/reporte", name="matriz_reporte", options={"expose"=true})
+     * @Route("/api/v1/matriz/reporte", name="matriz_reporte", methods={"GET"})
+     * 
+     * @SWG\Get(
+     *      tags={"Matriz"},
+     *      summary="Reporte",
+     *      description="Devuelve los datos de la captura real y de planeacion para generar el reporte de la matriz y el año seleccionado",
+     *      consumes={"application/json"},
+     *      produces={"application/json"},
+     *      @SWG\Parameter(parameter="a_in_path", name="anio", type="integer", in="query"),
+     *      @SWG\Parameter(parameter="m_in_path", name="matrix", type="integer", in="query")
+     * ),
+     * @SWG\Response(
+     *     response=200,
+     *     description="Regresa objecto"     
+     *  ),
+     * 
+     * @SWG\Response(
+     *     response=400,
+     *     description="No se envio los parametros necesarios"     
+     *  ),
+     * 
+     * @SWG\Response(
+     *     response=404,
+     *     description="El elemento no existe"     
+     *  ),
+     * 
+     *  @SWG\Response(
+     *     response=500,
+     *     description="Regresa un error ocurrido en el servidor"     
+     *  ),
      */
     public function reporte(Request $request, AlmacenamientoProxy $almacenamiento){
         $response = new Response();
@@ -651,8 +957,10 @@ class MatrizSeguimientoRESTController extends Controller {
         $em = $this->getDoctrine()->getEntityManager();
 
         $connection = $em->getConnection();
-        $statement = $connection->prepare("SELECT distinct(ms.id_desempeno), mid.orden FROM matriz_seguimiento ms 
-            LEFT JOIN matriz_indicadores_desempeno mid ON mid.id = ms.id_desempeno WHERE anio = '$anio'  and id_matriz = '$matrix' ORDER BY mid.orden ASC");
+        $statement = $connection->prepare("SELECT distinct(ms.id_desempeno), mid.orden 
+            FROM matriz_seguimiento ms 
+            LEFT JOIN matriz_indicadores_desempeno mid ON mid.id = ms.id_desempeno 
+            WHERE ms.anio = '$anio'  and mid.id_matriz = '$matrix' ORDER BY mid.orden ASC");
         $statement->execute();
         $matriz = $statement->fetchAll();
 
@@ -672,7 +980,8 @@ class MatrizSeguimientoRESTController extends Controller {
                     $relaciones = $em->getRepository(MatrizIndicadoresRel::class)->findBy(array('desempeno' => $ind->getId()), array('id' => 'ASC'));
                     foreach($relaciones as $indrs){   
                                             
-                        $statement = $connection->prepare("SELECT msd.mes, msd.planificado, msd.real, ms.meta FROM matriz_seguimiento ms 
+                        $statement = $connection->prepare("SELECT msd.mes, msd.planificado, msd.real, ms.meta 
+                            FROM matriz_seguimiento ms 
                             LEFT JOIN matriz_seguimiento_dato msd ON msd.id_matriz = ms.id   
                             WHERE ms.anio = '$anio' and ms.etab = false and ms.id_desempeno = '".$value->id_desempeno."' and indicador = '".$indrs->getId()."'");
                         $statement->execute();
@@ -801,7 +1110,36 @@ class MatrizSeguimientoRESTController extends Controller {
 
 
     /**
-     * @Route("/matriz/configuracion", name="matriz_configuracion", options={"expose"=true})
+     * @Route("/api/v1/matriz/configuracion", name="matriz_configuracion", methods={"GET"})
+     * 
+     * @SWG\Get(
+     *      tags={"Matriz"},
+     *      summary="Configuracion",
+     *      description="Devuelve los de la matriz y en el año seleccionado",
+     *      consumes={"application/json"},
+     *      produces={"application/json"},
+     *      @SWG\Parameter(parameter="a_in_path", name="anio", type="integer", in="query"),
+     *      @SWG\Parameter(parameter="m_in_path", name="matrix", type="integer", in="query")
+     * ),
+     * @SWG\Response(
+     *     response=200,
+     *     description="Regresa objecto"     
+     *  ),
+     * 
+     * @SWG\Response(
+     *     response=400,
+     *     description="No se envio los parametros necesarios"     
+     *  ),
+     * 
+     * @SWG\Response(
+     *     response=404,
+     *     description="El elemento no existe"     
+     *  ),
+     * 
+     *  @SWG\Response(
+     *     response=500,
+     *     description="Regresa un error ocurrido en el servidor"     
+     *  ),
      */
     public function matrizConfiguracion(Request $request){
         $response = new Response();
