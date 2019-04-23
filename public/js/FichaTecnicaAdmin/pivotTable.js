@@ -182,25 +182,6 @@ $(document).ready(function() {
         });
     });
 
-    $('A.elemento_costeo').click(function() {
-        esCalidad = false;
-        escenarioActivo = null;
-        alertas = [];
-        formula = '';
-        $('#div-nombre-escenario').hide();
-        var codigo = $(this).attr('data-id');
-        var nombre_elemento = $(this).html();
-        xaggregatorName = "Suma";
-
-        $.getJSON(Routing.generate('get_datos_costeo', {codigo: codigo}), function(mps) {
-            datos_ = mps;
-            tipoElemento = 'costeo';
-            identificadorElemento = codigo;
-            cargarTablaDinamica(mps);
-            $('#marco-sala').attr('data-content', nombre_elemento);
-            $('#myTab a:first').tab('show');
-        });
-    });
 
     $('A.formulario_captura_datos').click(function() {
         esCalidad = false;
