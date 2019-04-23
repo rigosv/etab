@@ -240,7 +240,7 @@ $(document).ready(function() {
         $.getJSON(Routing.generate('get_datos_evaluacion_calidad', {id: idFrm}), function(mps) {
             datos_ = mps;
             tipoElemento = 'calidad';
-            identificadorElemento = 'calidad';
+            identificadorElemento = idFrm;
             cargarTablaDinamica(mps);
 
             $('#marco-sala').attr('data-content', nombre_elemento);
