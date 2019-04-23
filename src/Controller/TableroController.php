@@ -12,6 +12,10 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use Swagger\Annotations as SWG;
+
 use App\AlmacenamientoDatos\AlmacenamientoProxy;
 
 use App\Entity\FichaTecnica;
@@ -34,6 +38,27 @@ class TableroController extends AbstractController {
 
     /**
      * @Route("/clasificacionUso", name="clasificacionUso_index", methods={"GET"})
+     * 
+     * @SWG\Get(
+     *      tags={"Tablero"},
+     *      summary="Clasificacion uso",
+     *      description="Lista de clasificaciones uso",
+     *      produces={"application/json"}
+     * ),
+     * @SWG\Response(
+     *     response=200,
+     *     description="Regresa objecto"     
+     *  ),
+     * 
+     * @SWG\Response(
+     *     response=404,
+     *     description="El elemento no existe"     
+     *  ),
+     * 
+     *  @SWG\Response(
+     *     response=500,
+     *     description="Regresa un error ocurrido en el servidor"     
+     *  ),
      */
     public function clasificacionUso(Request $request){
        
@@ -98,6 +123,28 @@ class TableroController extends AbstractController {
 
     /**
      * @Route("/clasificacionTecnica", name="clasificacionTecnica_index", methods={"GET"})
+     * 
+     * @SWG\Get(
+     *      tags={"Tablero"},
+     *      summary="Clasificacion tecnica",
+     *      description="Lista de clasificaciones tecnicas, filtrado por clasificacion uso",
+     *      produces={"application/json"},
+     *      @SWG\Parameter(parameter="id_in_path", name="id", description="id clasificacion uso", required=true, type="string", in="query")
+     * ),
+     * @SWG\Response(
+     *     response=200,
+     *     description="Regresa objecto"     
+     *  ),
+     * 
+     * @SWG\Response(
+     *     response=404,
+     *     description="El elemento no existe"     
+     *  ),
+     * 
+     *  @SWG\Response(
+     *     response=500,
+     *     description="Regresa un error ocurrido en el servidor"     
+     *  ),
      */
     public function clasificacionTecnica(Request $request){
        
@@ -163,6 +210,28 @@ class TableroController extends AbstractController {
 
     /**
      * @Route("/listaIndicadores", name="listaIndicadores_index", methods={"GET"})
+     * 
+     * @SWG\Get(
+     *      tags={"Tablero"},
+     *      summary="Lista de indicadores clasificados",
+     *      description="Lista indicadores clasificados que pueden ser, favoritos, no_clasificados, clasificados",
+     *      produces={"application/json"},  
+     *      @SWG\Parameter(parameter="tipo_in_path", name="tipo", description="favoritos, no_clasificados, clasificados", required=true, type="string", in="query")
+     * ),
+     * @SWG\Response(
+     *     response=200,
+     *     description="Regresa objecto"     
+     *  ),
+     * 
+     * @SWG\Response(
+     *     response=404,
+     *     description="El elemento no existe"     
+     *  ),
+     * 
+     *  @SWG\Response(
+     *     response=500,
+     *     description="Regresa un error ocurrido en el servidor"     
+     *  ),
      */
     public function listaIndicadores(Request $request){
        
@@ -313,6 +382,27 @@ class TableroController extends AbstractController {
 
     /**
      * @Route("/listaSalas", name="listaSalas_index", methods={"GET"})
+     * 
+     * @SWG\Get(
+     *      tags={"Tablero"},
+     *      summary="Lista de salas",
+     *      description="Lista indicadores salas permitidas para el usuario",
+     *      produces={"application/json"},  
+     * ),
+     * @SWG\Response(
+     *     response=200,
+     *     description="Regresa objecto"     
+     *  ),
+     * 
+     * @SWG\Response(
+     *     response=404,
+     *     description="El elemento no existe"     
+     *  ),
+     * 
+     *  @SWG\Response(
+     *     response=500,
+     *     description="Regresa un error ocurrido en el servidor"     
+     *  ),
      */
     public function listaSalas(Request $request){
        
@@ -438,6 +528,42 @@ class TableroController extends AbstractController {
 
     /**
      * @Route("/datosIndicador/{id}/{dimension}", name="datosIndicador_index", methods={"POST"})
+     * 
+     * @SWG\Post(
+     *      tags={"Tablero"},
+     *      summary="Lista de indicadores clasificados",
+     *      description="Lista indicadores clasificados que pueden ser, favoritos, no_clasificados, clasificados",
+     *      produces={"application/json"},  
+     *      @SWG\Parameter(parameter="ficha_in_path", name="id", description="id de la ficha tecnica", required=true, type="string", in="path"),
+     *      @SWG\Parameter(parameter="dimension_in_path", name="dimension", description="Dimension a mostrar los datos", required=true, type="string", in="path"),
+     *      @SWG\Parameter(
+     *          name="body",
+     *          in="body",
+     *          description="JSON con los filtros",
+     *          type="object",
+     *          format="application/json",
+     *          @SWG\Schema(
+     *              type="object",
+     *              @SWG\Property(property="filtros", type="string", example="", description="Objecto con los filtros"),
+     *              @SWG\Property(property="tendencia", type="boolen", example=false, description="Bandera para mostrar tendencia"),
+     *              @SWG\Property(property="ver_sql", type="boolean", example=false, description="Bandera para mostrar el sql")
+     *          )
+     *      )
+     * ),
+     * @SWG\Response(
+     *     response=200,
+     *     description="Regresa objecto"     
+     *  ),
+     * 
+     * @SWG\Response(
+     *     response=404,
+     *     description="El elemento no existe"     
+     *  ),
+     * 
+     *  @SWG\Response(
+     *     response=500,
+     *     description="Regresa un error ocurrido en el servidor"     
+     *  ),
      */
     public function datosIndicador(FichaTecnica $fichaTec, $dimension, Request $request, AlmacenamientoProxy $almacenamiento){
        
@@ -632,6 +758,28 @@ class TableroController extends AbstractController {
 
     /**
      * @Route("/indicadorFavorito", name="indicadorFavorito", methods={"POST"})
+     * 
+     * @SWG\Post(
+     *      tags={"Tablero"},
+     *      summary="Favoritos",
+     *      description="Agrega o quita un indicador a la lista de favoritos",
+     *      produces={"application/json"},  
+     *      @SWG\Parameter(
+     *          name="body",
+     *          in="body",
+     *          description="JSON con el id a agregar",
+     *          type="object",
+     *          format="application/json",
+     *          @SWG\Schema(
+     *              type="object",
+     *              @SWG\Property(property="id", type="string", example="142", description="Id del indicador")
+     *          )
+     *      )
+     * ),
+     * @SWG\Response(
+     *     response=200,
+     *     description="Regresa objecto"     
+     *  ),
      */
     public function indicadorFavorito(Request $request) {
         $em = $this->getDoctrine()->getManager();
@@ -664,6 +812,28 @@ class TableroController extends AbstractController {
 
     /**
      * @Route("/fichaIndicador/{id}", name="fichaIndicador_index", methods={"GET"})
+     * 
+     * @SWG\Get(
+     *      tags={"Tablero"},
+     *      summary="Ficha indicador",
+     *      description="Muestra la ficha tecnica del indicador",
+     *      produces={"application/json"},  
+     *      @SWG\Parameter(parameter="ficha_in_path", name="id", description="id de la ficha tecnica", required=true, type="string", in="path")      
+     * ),
+     * @SWG\Response(
+     *     response=200,
+     *     description="Regresa objecto"     
+     *  ),
+     * 
+     * @SWG\Response(
+     *     response=404,
+     *     description="El elemento no existe"     
+     *  ),
+     * 
+     *  @SWG\Response(
+     *     response=500,
+     *     description="Regresa un error ocurrido en el servidor"     
+     *  ),
      */
     public function fichaIndicador($id, $respuesta = false){
         try{
@@ -794,6 +964,38 @@ class TableroController extends AbstractController {
 
     /**
      * @Route("/borrarSala", name="borrarSala_index", methods={"POST"})
+     * 
+     * @SWG\Post(
+     *      tags={"Tablero"},
+     *      summary="Borrar sala",
+     *      description="Borra la sala seleccionada",
+     *      produces={"application/json"},  
+     *      @SWG\Parameter(
+     *          name="body",
+     *          in="body",
+     *          description="JSON con el id a borrar",
+     *          type="object",
+     *          format="application/json",
+     *          @SWG\Schema(
+     *              type="object",
+     *              @SWG\Property(property="id", type="string", example="353", description="Objecto con los filtros")
+     *          )
+     *      )
+     * ),
+     * @SWG\Response(
+     *     response=200,
+     *     description="Regresa objecto"     
+     *  ),
+     * 
+     * @SWG\Response(
+     *     response=404,
+     *     description="El elemento no existe"     
+     *  ),
+     * 
+     *  @SWG\Response(
+     *     response=500,
+     *     description="Regresa un error ocurrido en el servidor"     
+     *  ),
      */
     public function borrarSala(Request $request)
     {
@@ -854,6 +1056,93 @@ class TableroController extends AbstractController {
 
     /**
      * @Route("/guardarSala", name="guardarSala_index", methods={"POST"})
+     * 
+     * @SWG\Post(
+     *      tags={"Tablero"},
+     *      summary="Guardar sala",
+     *      description="Agrupa los indicadores por sala y los guarda",
+     *      produces={"application/json"},  
+     *      @SWG\Parameter(
+     *          name="body",
+     *          in="body",
+     *          description="JSON con los filtros",
+     *          type="object",
+     *          format="application/json",
+     *          @SWG\Schema(
+     *              type="object",
+     *              @SWG\Property(property="sala", type="object", 
+     *                  @SWG\Property(property="id", type="string", example=""),
+     *                  @SWG\Property(property="nombre", type="string", example="Sala 1"),
+     *              ),
+     *              @SWG\Property(property="indicadores", type="array", 
+     *                  @SWG\Items(
+     *                      @SWG\Property(property="id", type="string", example="318"),
+     *                      @SWG\Property(property="posicion", type="string", example="1"),
+     *                      @SWG\Property(property="dimension", type="string", example="0"),
+     *                      @SWG\Property(property="configuracion", type="object", 
+     *                          @SWG\Property(property="height", type="string", example="280"),
+     *                          @SWG\Property(property="maximo", type="string", example=""),
+     *                          @SWG\Property(property="maximo_manual", type="string", example=""),
+     *                          @SWG\Property(property="orden_x", type="string", example=""),
+     *                          @SWG\Property(property="orden_y", type="string", example=""),
+     *                          @SWG\Property(property="tipo_grafico", type="string", example="columnas"),
+     *                          @SWG\Property(property="width", type="string", example="col-sm-4")
+     *                      ),
+     *                      @SWG\Property(
+     *                          property="dimensiones",
+     *                          type="array",
+     *                          @SWG\Items(example="anio")
+     *                      ),
+     *                      @SWG\Property(
+     *                           property="filtros",
+     *                           type="array",
+     *                           @SWG\Items(
+     *                               @SWG\Property(
+     *                                   property="codigo",
+     *                                   type="string",
+     *                                   example="anio"
+     *                               ),@SWG\Property(
+     *                                   property="etiqueta",
+     *                                   type="string",
+     *                                   example="Año"
+     *                               ),@SWG\Property(
+     *                                   property="valor",
+     *                                   type="string",
+     *                                   example="2016"
+     *                               )
+     *                           )
+     *                      ),
+     *                      @SWG\Property(
+     *                           property="otros_filtros",
+     *                           type="object",
+     *                           @SWG\Property(
+     *                               property="desde",
+     *                               type="string",
+     *                               example=""
+     *                           ),@SWG\Property(
+     *                               property="hasta",
+     *                               type="string",
+     *                               example=""
+     *                           ),@SWG\Property(
+     *                               property="elementos",
+     *                               type="array",
+     *                               @SWG\Items(example="")
+     *                           )
+     *                      ),
+     *                  )
+     *              ),              
+     *          )
+     *      )
+     * ),
+     * @SWG\Response(
+     *     response=200,
+     *     description="Regresa objecto"     
+     *  ),
+     * 
+     *  @SWG\Response(
+     *     response=500,
+     *     description="Regresa un error ocurrido en el servidor"     
+     *  ),
      */
     public function guardarSala(Request $request)
     {

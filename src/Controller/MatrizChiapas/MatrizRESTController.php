@@ -36,29 +36,30 @@ use App\Entity\MatrizChiapas\MatrizIndicadoresUsuario;
  */
 class MatrizRESTController extends AbstractController {
     /**
-     * Lista de usuarios
-     *
-     * Esta funcion devuelve la lista de usuarios disponibles
      *
      * @Route("/listaUsuarios", name="listaUsuarios", methods={"GET"})
      * 
-     * @SWG\Response(
-     *     response=200,
-     *     description="Regresa la lista de usuarios",
-     *     @SWG\Schema(
-     *         type="object",
-     *         example={
-     *                   "hello": "world" 
-     *              }
-     *     )
-     * )
-     * @SWG\Parameter(
-     *     name="request",
-     *     in="path",
-     *     type="string",
-     *     description="Array de valores"
-     * )
-     * @SWG\Tag(name="User")     
+     * @SWG\Get(
+     *      tags={"Configuración de la matriz"},
+     *      summary="Lista de usuarios",
+     *      description="Esta funcion devuelve la lista de usuarios disponibles, se utiliza en el modulo de configuracion de la matriz para dar permisos a usuarios por matriz",  
+     *      produces={"application/json"},
+     *      @SWG\Response(
+     *          response=200,
+     *          description="Regresa la lista de colores"     
+     *      ),
+     * 
+     *      @SWG\Response(
+     *          response=404,
+     *          description="Regresa un array vacio por no encontrar datos"     
+     *      ),
+     * 
+     *      @SWG\Response(
+     *          response=500,
+     *          description="Regresa un error ocurrido en el servidor"     
+     *      )
+     *  )
+     *   
      */
 
     
@@ -111,12 +112,30 @@ class MatrizRESTController extends AbstractController {
     }
     
     /**
-     * Lista de usuarios
-     *
-     * Esta funcion devuelve la lista de usuarios disponibles
-     *
      * @Route("/listaColores", name="listaColores", methods={"GET"})
-     */
+     * 
+     * @SWG\Get(
+     *      tags={"Configuración de la matriz"},
+     *      summary="Lista de colores",
+     *      description="Esta funcion devuelve la lista de colores disponibles, se usa en la configuracion de la matriz para asignar las alertas a los inidcadores",  
+     *      produces={"application/json"},    
+     *      @SWG\Response(
+     *          response=200,
+     *          description="Regresa la lista de colores"     
+     *      ),
+     * 
+     *      @SWG\Response(
+     *          response=404,
+     *          description="Regresa un array vacio por no encontrar datos"     
+     *      ),
+     * 
+     *      @SWG\Response(
+     *          response=500,
+     *          description="Regresa un error ocurrido en el servidor"     
+     *      )
+     *  )
+     * 
+     */    
     public function listaColores(Request $request){
        
         // iniciar el manager de doctrine
@@ -166,18 +185,181 @@ class MatrizRESTController extends AbstractController {
 
     }
 
-     /**
-     * Lista de usuarios
-     *
-     * Esta funcion devuelve la lista de usuarios disponibles
-     *
+    /**     
      * @Route("/MatrizConfiguracion", name="MatrizConfiguracion", methods={"GET"})
      */
     public function index(Request $request){
     }
 
-    /**
+    /**          
+     * 
      * @Route("/MatrizConfiguracion", name="MatrizConfiguracion_store", methods={"POST"})
+     * 
+     * @SWG\Post(
+     *      tags={"Configuración de la matriz"},
+     *      summary="Agregar una configuracion",
+     *      description="Esta funcion crea una nueva configuración de una matriz con los datos rellenados por el usuario en el formulario de administración",
+     *      consumes={"application/json"},
+     *      produces={"application/json"},
+     *      @SWG\Parameter(
+     *          name="body",
+     *          in="body",
+     *          description="JSON con la configuracion",
+     *          type="object",
+     *          format="application/json",
+     *          @SWG\Schema(
+     *              type="object",
+     *              @SWG\Property(property="nombre", type="string", example="matriz 1"),
+     *              @SWG\Property(property="descripcion", type="string", example="ejemplo de matriz"),
+     *              @SWG\Property(property="indicadores_desempeno", type="object", 
+     *                  @SWG\Property(
+     *                  property="indicadores_desempeno",
+     *                   type="object",
+     *                          @SWG\Property(
+     *                              property="nombre",
+     *                              type="object",
+     *                              example="desemepno"
+     *                          ),
+     *                          @SWG\Property(
+     *                              property="orden",
+     *                              type="object",
+     *                              example="1"
+     *                          ),
+     *                          @SWG\Property(
+     *                              property="indicador_etab",
+     *                              type="array",
+     *                              @SWG\Items(
+     *                                  @SWG\Property(
+     *                                      property="nombre",
+     *                                      type="string",
+     *                                      example="indicador etab 1"
+     *                                  ),@SWG\Property(
+     *                                      property="dimensiones",
+     *                                      type="array",
+     *                                      @SWG\Items(example="anio")
+     *                                  ),@SWG\Property(
+     *                                      property="dimension",
+     *                                      type="integer",
+     *                                      example="0"
+     *                                  ),@SWG\Property(
+     *                                      property="otros_filtros",
+     *                                      type="object",
+     *                                      @SWG\Property(
+     *                                          property="desde",
+     *                                          type="string",
+     *                                          example=""
+     *                                      ),@SWG\Property(
+     *                                          property="hasta",
+     *                                          type="string",
+     *                                          example=""
+     *                                      ),@SWG\Property(
+     *                                          property="dimension_mostrar",
+     *                                          type="string",
+     *                                          example="0"
+     *                                      ),@SWG\Property(
+     *                                          property="representa",
+     *                                          type="string",
+     *                                          example="1"
+     *                                      ),
+     *                                  ),
+     *                                  @SWG\Property(
+     *                                      property="alertas",
+     *                                      type="array",
+     *                                      @SWG\Items(
+     *                                          @SWG\Property(
+     *                                              property="limite_inferior",
+     *                                              type="float",
+     *                                              example="0"
+     *                                          ),
+     *                                          @SWG\Property(
+     *                                              property="limite_superior",
+     *                                              type="float",
+     *                                              example="90"
+     *                                          ),
+     *                                          @SWG\Property(
+     *                                              property="color",
+     *                                              type="object",
+     *                                              @SWG\Property(
+     *                                                  property="id",
+     *                                                  type="string",
+     *                                                  example="1"
+     *                                              ),@SWG\Property(
+     *                                                  property="codigo",
+     *                                                  type="string",
+     *                                                  example="green"
+     *                                              ),@SWG\Property(
+     *                                                  property="color",
+     *                                                  type="string",
+     *                                                  example="Verde"
+     *                                              ),
+     *                                          ),
+     *                                      ),
+     *                                  ),
+     *                              )
+     *                          ),@SWG\Property(
+     *                              property="indicador_relacion",
+     *                              type="array",
+     *                              @SWG\Items(
+     *                                  @SWG\Property(
+     *                                      property="nombre",
+     *                                      type="string",
+     *                                      example="indicador relacion 1"
+     *                                  ),@SWG\Property(
+     *                                      property="fuente",
+     *                                      type="string",
+     *                                      example="fuente de datos1"
+     *                                  ),
+     *                                  @SWG\Property(
+     *                                      property="alertas",
+     *                                      type="array",
+     *                                      @SWG\Items(
+     *                                          @SWG\Property(
+     *                                              property="limite_inferior",
+     *                                              type="float",
+     *                                              example="0"
+     *                                          ),
+     *                                          @SWG\Property(
+     *                                              property="limite_superior",
+     *                                              type="float",
+     *                                              example="90"
+     *                                          ),
+     *                                          @SWG\Property(
+     *                                              property="color",
+     *                                              type="object",
+     *                                              @SWG\Property(
+     *                                                  property="id",
+     *                                                  type="string",
+     *                                                  example="1"
+     *                                              ),@SWG\Property(
+     *                                                  property="codigo",
+     *                                                  type="string",
+     *                                                  example="green"
+     *                                              ),@SWG\Property(
+     *                                                  property="color",
+     *                                                  type="string",
+     *                                                  example="Verde"
+     *                                              ),
+     *                                          ),
+     *                                      ),
+     *                                  ),
+     *                              )
+     *                          )
+     *                      )
+     *                  )
+     *              )
+     *          )     
+     *      )
+     *  ),
+     *  @SWG\Response(
+     *     response=201,
+     *     description="Regresa objecto creado"     
+     *  ),
+     * 
+     *  @SWG\Response(
+     *     response=500,
+     *     description="Regresa un error ocurrido en el servidor"     
+     *  ),     
+     * 
      */
     public function store(Request $request){
         // iniciar para la repuesta en formato json
@@ -210,11 +392,184 @@ class MatrizRESTController extends AbstractController {
     }
 
     /**
-     * Lista de usuarios
-     *
-     * Esta funcion devuelve la lista de usuarios disponibles
      *
      * @Route("/MatrizConfiguracion/{id}", name="MatrizConfiguracion_update", methods={"PUT"})
+     * 
+     * @SWG\Put(
+     *      tags={"Configuración de la matriz"},
+     *      summary="Actualizar una configuracion",
+     *      description="Esta funcion actualiza una configuración de una matriz con los datos rellenados por el usuario en el formulario de administración",
+     *      consumes={"application/json"},
+     *      produces={"application/json"},
+     *      @SWG\Parameter(parameter="id_in_path", name="id", type="integer", in="path"),
+     *      @SWG\Parameter(
+     *          name="body",
+     *          in="body",
+     *          description="JSON con la configuracion",
+     *          type="object",
+     *          format="application/json",
+     *          @SWG\Schema(
+     *              type="object",
+     *              @SWG\Property(property="nombre", type="string", example="matriz 1"),
+     *              @SWG\Property(property="descripcion", type="string", example="ejemplo de matriz"),
+     *              @SWG\Property(property="indicadores_desempeno", type="object", 
+     *                  @SWG\Property(
+     *                  property="indicadores_desempeno",
+     *                   type="object",
+     *                          @SWG\Property(
+     *                              property="nombre",
+     *                              type="object",
+     *                              example="desemepno"
+     *                          ),
+     *                          @SWG\Property(
+     *                              property="orden",
+     *                              type="object",
+     *                              example="1"
+     *                          ),
+     *                          @SWG\Property(
+     *                              property="indicador_etab",
+     *                              type="array",
+     *                              @SWG\Items(
+     *                                  @SWG\Property(
+     *                                      property="nombre",
+     *                                      type="string",
+     *                                      example="indicador etab 1"
+     *                                  ),@SWG\Property(
+     *                                      property="dimensiones",
+     *                                      type="array",
+     *                                      @SWG\Items(example="anio")
+     *                                  ),@SWG\Property(
+     *                                      property="dimension",
+     *                                      type="integer",
+     *                                      example="0"
+     *                                  ),@SWG\Property(
+     *                                      property="otros_filtros",
+     *                                      type="object",
+     *                                      @SWG\Property(
+     *                                          property="desde",
+     *                                          type="string",
+     *                                          example=""
+     *                                      ),@SWG\Property(
+     *                                          property="hasta",
+     *                                          type="string",
+     *                                          example=""
+     *                                      ),@SWG\Property(
+     *                                          property="dimension_mostrar",
+     *                                          type="string",
+     *                                          example="0"
+     *                                      ),@SWG\Property(
+     *                                          property="representa",
+     *                                          type="string",
+     *                                          example="1"
+     *                                      ),
+     *                                  ),
+     *                                  @SWG\Property(
+     *                                      property="alertas",
+     *                                      type="array",
+     *                                      @SWG\Items(
+     *                                          @SWG\Property(
+     *                                              property="limite_inferior",
+     *                                              type="float",
+     *                                              example="0"
+     *                                          ),
+     *                                          @SWG\Property(
+     *                                              property="limite_superior",
+     *                                              type="float",
+     *                                              example="90"
+     *                                          ),
+     *                                          @SWG\Property(
+     *                                              property="color",
+     *                                              type="object",
+     *                                              @SWG\Property(
+     *                                                  property="id",
+     *                                                  type="string",
+     *                                                  example="1"
+     *                                              ),@SWG\Property(
+     *                                                  property="codigo",
+     *                                                  type="string",
+     *                                                  example="green"
+     *                                              ),@SWG\Property(
+     *                                                  property="color",
+     *                                                  type="string",
+     *                                                  example="Verde"
+     *                                              ),
+     *                                          ),
+     *                                      ),
+     *                                  ),
+     *                              )
+     *                          ),@SWG\Property(
+     *                              property="indicador_relacion",
+     *                              type="array",
+     *                              @SWG\Items(
+     *                                  @SWG\Property(
+     *                                      property="nombre",
+     *                                      type="string",
+     *                                      example="indicador relacion 1"
+     *                                  ),@SWG\Property(
+     *                                      property="fuente",
+     *                                      type="string",
+     *                                      example="fuente de datos1"
+     *                                  ),
+     *                                  @SWG\Property(
+     *                                      property="alertas",
+     *                                      type="array",
+     *                                      @SWG\Items(
+     *                                          @SWG\Property(
+     *                                              property="limite_inferior",
+     *                                              type="float",
+     *                                              example="0"
+     *                                          ),
+     *                                          @SWG\Property(
+     *                                              property="limite_superior",
+     *                                              type="float",
+     *                                              example="90"
+     *                                          ),
+     *                                          @SWG\Property(
+     *                                              property="color",
+     *                                              type="object",
+     *                                              @SWG\Property(
+     *                                                  property="id",
+     *                                                  type="string",
+     *                                                  example="1"
+     *                                              ),@SWG\Property(
+     *                                                  property="codigo",
+     *                                                  type="string",
+     *                                                  example="green"
+     *                                              ),@SWG\Property(
+     *                                                  property="color",
+     *                                                  type="string",
+     *                                                  example="Verde"
+     *                                              ),
+     *                                          ),
+     *                                      ),
+     *                                  ),
+     *                              )
+     *                          )
+     *                      )
+     *                  )
+     *              )
+     *          )     
+     *      )
+     * ),
+     * @SWG\Response(
+     *     response=200,
+     *     description="Regresa objecto"     
+     *  ),
+     * 
+     * @SWG\Response(
+     *     response=400,
+     *     description="No se envio los parametros necesarios"     
+     *  ),
+     * 
+     * @SWG\Response(
+     *     response=404,
+     *     description="El elemento no existe"     
+     *  ),
+     * 
+     *  @SWG\Response(
+     *     response=500,
+     *     description="Regresa un error ocurrido en el servidor"     
+     *  ),   
      */
     public function update($id, Request $request){
         // iniciar para la repuesta en formato json
@@ -264,10 +619,13 @@ class MatrizRESTController extends AbstractController {
     private function formulario($data, $datos, $em, $tipo){
         try{
             if(property_exists($datos, 'nombre')){
-                $ad = "";
-                if(property_exists($datos, 'tipo_operacion'))
-                    if($datos->tipo_operacion == "clonar")
-                    $ad = " Cloned";
+                $ad = ""; $clonar = false;
+                if(property_exists($datos, 'tipo_operacion')){
+                    if($datos->tipo_operacion == "clonar"){
+                        $ad = " Cloned";
+                        $clonar = true;
+                    }
+                }
                 
                 $data->setNombre($datos->nombre.$ad);
             }
@@ -285,7 +643,8 @@ class MatrizRESTController extends AbstractController {
                 foreach($datos->indicadores_desempeno as $clave => $valor){ 
                     if(is_array($valor)) {
                         $valor = (object) $valor;
-                    }
+                    }                    
+
                     if(property_exists($valor, 'id') && $tipo == 2){
                         $desempeno = $em->getRepository(MatrizIndicadoresDesempeno::class)->find($valor->id);
                     } else{
@@ -300,14 +659,14 @@ class MatrizRESTController extends AbstractController {
                     if(property_exists($valor, 'orden'))
                         $desempeno->setOrden($valor->orden);
                         
-
                     $em->persist($desempeno); 
 
-                    $em->flush();
+                    $em->flush();                    
 
                     array_push($existe_desemepno ,$desempeno->getId());
 
-                    // guardar los indicadores no etab
+                    // guardar los indicadores no etab   
+                    $relacion_clonado = [];                 
                     if(property_exists($valor, "indicador_relacion")){
                         $existe_relacion = array();     
                         foreach($valor->indicador_relacion as $clave1 => $valor1){ 
@@ -328,11 +687,11 @@ class MatrizRESTController extends AbstractController {
                             if(property_exists($valor1, 'fuente'))
                                 $relacion->setFuente($valor1->fuente);
                                 
-
                             $em->persist($relacion); 
 
                             $em->flush();
-
+                            if(property_exists($valor1, 'id'))
+                                $relacion_clonado[$valor1->id] = $relacion->getId(); 
                             array_push($existe_relacion ,$relacion->getId());
 
                             // guardar las alertas
@@ -383,11 +742,11 @@ class MatrizRESTController extends AbstractController {
                             $sql = "DELETE FROM matriz_indicadores_relacion  WHERE id not in($existe_relacion) and id_desempeno = ".$desempeno->getId();
                             $statement = $em->getConnection()->prepare($sql);
                             $statement->execute();   
-                        }
-                        
+                        }                        
                     }
 
                     // guardar los indicadores etab
+                    $etab_clonado = [];
                     if(property_exists($valor, "indicador_etab")){
                         $existe_etab = array();     
                         foreach($valor->indicador_etab as $clave1 => $valor1){ 
@@ -424,6 +783,8 @@ class MatrizRESTController extends AbstractController {
 
                             $em->flush();
 
+                            if(property_exists($valor1, 'id'))
+                                $etab_clonado[$valor1->id] = $etab->getId(); 
                             array_push($existe_etab ,$etab->getId());
 
                             // guardar las alertas
@@ -474,8 +835,57 @@ class MatrizRESTController extends AbstractController {
                             $sql = "DELETE FROM matriz_indicadores_etab  WHERE id not in($existe_etab) and id_desempeno = ".$desempeno->getId();
                             $statement = $em->getConnection()->prepare($sql);
                             $statement->execute();   
+                        }                        
+                    }
+
+                    // clonar los indicadores de desempeño
+                    if($clonar){ 
+                        $indiorigi = [];                        
+                        $sql0 = "SELECT ((SELECT MAX(id) FROM matriz_seguimiento) + ROW_NUMBER () OVER (ORDER BY id ASC)) as id, ".$desempeno->getId()." as id_desempeno, 
+                        anio, case when etab then 1 else 0 end as etab, meta, indicador, now() as creado, now() as actualizado  
+                        FROM matriz_seguimiento 
+                        WHERE id_desempeno = '$valor->id' group by id, anio, etab, meta, indicador";
+
+                        $statement = $em->getConnection()->prepare($sql0);
+                        $statement->execute();  
+                        $variable = $statement->fetchAll();
+
+                        foreach ($variable as $k1 => $v1) { 
+                            $indiclone = $v1["etab"] == 1 ? $etab_clonado[$v1["indicador"]] : $relacion_clonado[$v1["indicador"]];
+                            $indiorigi[$indiclone] = $v1["indicador"];
+                            $v1_etab = $v1["etab"] == 1 ? 1 : 0;
+                            $vvv = $v1["id"].",".$v1["id_desempeno"].",".$v1["anio"].",CAST (".$v1_etab." AS BOOLEAN),".$v1["meta"].",".$indiclone.",now(), now()";
+                            
+                            $sql1 = "INSERT INTO matriz_seguimiento VALUES ($vvv)";
+
+                            $statement = $em->getConnection()->prepare($sql1);
+                            $statement->execute(); 
                         }
-                        
+
+                        $sql2 = "SELECT * FROM matriz_seguimiento 
+                        WHERE id_desempeno = '".$desempeno->getId()."'";
+
+                        $statement = $em->getConnection()->prepare($sql2);
+                        $statement->execute();
+                        $variable = $statement->fetchAll();
+
+                        foreach ($variable as $k1 => $v1) {
+                            
+                            $sql3 = "SELECT id FROM matriz_seguimiento 
+                            WHERE id_desempeno = '$valor->id' and indicador = '".$indiorigi[$v1["indicador"]]."' and anio = '".$v1["anio"]."' and meta = '".$v1["meta"]."'";
+
+                            $statement = $em->getConnection()->prepare($sql3);
+                            $statement->execute();
+                            $indicator = $statement->fetchAll();
+
+                            $sql4 = "INSERT INTO matriz_seguimiento_dato
+                            SELECT ((SELECT MAX(id) FROM matriz_seguimiento_dato) + ROW_NUMBER () OVER (ORDER BY id ASC)) as id, ".$v1["id"].", mes, planificado, real, now(), now()  
+                            FROM matriz_seguimiento_dato 
+                            WHERE id_matriz = '".$indicator[0]["id"]."' group by id, id_matriz, mes, planificado, real";
+
+                            $statement = $em->getConnection()->prepare($sql4);
+                            $statement->execute();
+                        }
                     }
                 }
                 
@@ -485,8 +895,7 @@ class MatrizRESTController extends AbstractController {
                     $sql = "DELETE FROM matriz_indicadores_desempeno  WHERE id not in($existe_desemepno) and id_matriz = ".$data->getId();
                     $statement = $em->getConnection()->prepare($sql);
                     $statement->execute();   
-                }
-                
+                }                
             }
             if(property_exists($datos, "usuarios")){
                 $sql = "DELETE FROM matriz_indicadores_usuario  WHERE id_matriz = ".$data->getId();
@@ -521,12 +930,39 @@ class MatrizRESTController extends AbstractController {
         return $response; 
     }
 
+
+
     /**
-     * Lista de usuarios
-     *
-     * Esta funcion devuelve la lista de usuarios disponibles
      *
      * @Route("/MatrizConfiguracion/{id}", name="MatrizConfiguracion_show", methods={"GET"})
+     * 
+     * @SWG\Get(
+     *      tags={"Configuración de la matriz"},
+     *      summary="Mostrar datos de una configuracion",
+     *      description="Esta funcion muestra el datos de una configuración de una matriz",
+     *      consumes={"application/json"},
+     *      produces={"application/json"},
+     *      @SWG\Parameter(parameter="id_in_path", name="id", type="integer", in="path")
+     * ),
+     * @SWG\Response(
+     *     response=200,
+     *     description="Regresa objecto"     
+     *  ),
+     * 
+     * @SWG\Response(
+     *     response=400,
+     *     description="No se envio los parametros necesarios"     
+     *  ),
+     * 
+     * @SWG\Response(
+     *     response=404,
+     *     description="El elemento no existe"     
+     *  ),
+     * 
+     *  @SWG\Response(
+     *     response=500,
+     *     description="Regresa un error ocurrido en el servidor"     
+     *  ),   
      */
     public function show($id, Request $request, AlmacenamientoProxy $almacenamiento){
         // iniciar para la repuesta en formato json
@@ -692,19 +1128,44 @@ class MatrizRESTController extends AbstractController {
     }
 
     /**
-     * Lista de usuarios
-     *
-     * Esta funcion devuelve la lista de usuarios disponibles
-     *
      * @Route("/MatrizConfiguracion/{id}", name="MatrizConfiguracion_destroy", methods={"DELETE"})
+     * 
+     * @SWG\Delete(
+     *      tags={"Configuración de la matriz"},
+     *      summary="Eliminar una configuracion",
+     *      description="Esta funcion elimina los datos de una configuración de una matriz",
+     *      consumes={"application/json"},
+     *      produces={"application/json"},
+     *      @SWG\Parameter(parameter="id_in_path", name="id", type="integer", in="path")
+     * ),
+     * @SWG\Response(
+     *     response=200,
+     *     description="Regresa objecto"     
+     *  ),
+     * 
+     * @SWG\Response(
+     *     response=400,
+     *     description="No se envio los parametros necesarios"     
+     *  ),
+     * 
+     * @SWG\Response(
+     *     response=404,
+     *     description="El elemento no existe"     
+     *  ),
+     * 
+     *  @SWG\Response(
+     *     response=500,
+     *     description="Regresa un error ocurrido en el servidor"     
+     *  ),   
      */
+     
     public function destroy($id, Request $request){
         // iniciar para la repuesta en formato json
         $encoders = array(new JsonEncoder());
         $normalizers = array(new ObjectNormalizer());
 
         $serializer = new Serializer($normalizers, $encoders);
-        //try{
+        try{
             // validar que ningun dato est vacio
             if(isset($id) &&  $id != ''){
                 // iniciar el manager de doctrine
@@ -797,15 +1258,13 @@ class MatrizRESTController extends AbstractController {
                     'data' => [],
                 ];            
             }
-            // devolver la respuesta en json 
-        /*}catch(\Exception $e){
+        }catch(\Exception $e){
             $response = [
                 'status' => 500,
                 'messages' => $e->getMessage(),
                 'data' => [],
             ];    
-            
-        }*/
+        }
         // devolver la respuesta en json       
         return new Response($serializer->serialize($response, "json"));
     }
@@ -908,14 +1367,7 @@ class MatrizRESTController extends AbstractController {
         }      
         return $resp;
     }
-
-    /**
-     * Lista de usuarios
-     *
-     * Esta funcion devuelve la lista de usuarios disponibles
-     *
-     * @Route("/seperar_fila_origen_dato", name="seperar_fila_origen_dato", methods={"GET"})
-     */
+    
     public function seperar_fila_origen_dato(Request $request){
         $em = $this->getDoctrine()->getManager();
         $fav = "SELECT id_origen_dato

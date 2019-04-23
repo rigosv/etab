@@ -170,5 +170,6 @@ class TokenController extends Controller
         $refererUri = $this->container->get('router')->generate('_inicio');
 		return new RedirectResponse($refererUri);
     }
+
 }
 ?>

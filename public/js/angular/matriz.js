@@ -6,7 +6,7 @@
  */
 
 App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $filter, Crud) {
-    $scope.matriz = 1;
+    $scope.matriz = null;
     $scope.today = function() {
         $scope.anio = new Date();
     };
@@ -55,7 +55,7 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
     $scope.$watch(function() {
         return $scope.anio;
     }, function(value) {
-        var anio = $filter('date')(value, "yyyy");
+        var anio = $filter('date')(value, "yyyy");    
         $scope.cargarCatalogo($scope.ruta + "?anio=" + anio + "&matrix=" + $scope.matriz, $scope.dato.matriz);
         $scope.intento = 0;
     });
@@ -78,60 +78,64 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
         $scope.cargando = true;
         $scope.dato.matriz = [];
         $scope.statusx = [];
-        Crud.lista(url, function(data) {
+        var anio = $filter('date')($scope.anio, "yyyy");
+        if ($scope.matriz && anio != '')
+        {
+            Crud.lista(url, function(data) {
 
-            if (data.status == 200) {
-                $scope.intento = 0;
-                $scope.dato.matriz = data.data;
-                var cambiar_mes = false;
-                angular.forEach($scope.dato.matriz, function (v1, k1) {
-                    if (v1.indicadores_etab.length > 0) {
-                        angular.forEach(v1.indicadores_etab, function (v2, k2) {
-                            if (!angular.isUndefined(v2['january']) || !angular.isUndefined(v2['june']) || !angular.isUndefined(v2['december']))
-                                cambiar_mes = true;
-                        })
-                        
-                    }
-                    if (v1.indicadores_relacion.length > 0 && !cambiar_mes) {
-                        angular.forEach(v1.indicadores_relacion, function (v2, k2) {
-                            if (!angular.isUndefined(v2['january']) || !angular.isUndefined(v2['june']) || !angular.isUndefined(v2['december']))
-                                cambiar_mes = true;
-                        })                        
-                    }
-                });
-                
-                
-                if (cambiar_mes){
-                    $scope.meses = [
-                      "january",
-                      "february",
-                      "march",
-                      "april",
-                      "may",
-                      "june",
-                      "july",
-                      "august",
-                      "september",
-                      "october",
-                      "november",
-                      "december"
-                    ];
-                } 
-                $scope.noPlaneacion = false;
-                $scope.imprimir_mensaje(data.mensaje, 'success');
-            } else {
-                $scope.noPlaneacion = true;
-                $scope.imprimir_mensaje(data.mensaje, 'danger');
-            }
-            $scope.cargando = false;
-        }, function(e) {
-            if ($scope.intento < 1) {
-                $scope.cargarCatalogo(url, modelo);
-                $scope.intento++;
-            } else {
+                if (data.status == 200) {
+                    $scope.intento = 0;
+                    $scope.dato.matriz = data.data;
+                    var cambiar_mes = false;
+                    angular.forEach($scope.dato.matriz, function (v1, k1) {
+                        if (v1.indicadores_etab.length > 0) {
+                            angular.forEach(v1.indicadores_etab, function (v2, k2) {
+                                if (!angular.isUndefined(v2['january']) || !angular.isUndefined(v2['june']) || !angular.isUndefined(v2['december']))
+                                    cambiar_mes = true;
+                            })
+                            
+                        }
+                        if (v1.indicadores_relacion.length > 0 && !cambiar_mes) {
+                            angular.forEach(v1.indicadores_relacion, function (v2, k2) {
+                                if (!angular.isUndefined(v2['january']) || !angular.isUndefined(v2['june']) || !angular.isUndefined(v2['december']))
+                                    cambiar_mes = true;
+                            })                        
+                        }
+                    });
+                    
+                    
+                    if (cambiar_mes){
+                        $scope.meses = [
+                        "january",
+                        "february",
+                        "march",
+                        "april",
+                        "may",
+                        "june",
+                        "july",
+                        "august",
+                        "september",
+                        "october",
+                        "november",
+                        "december"
+                        ];
+                    } 
+                    $scope.noPlaneacion = false;
+                    $scope.imprimir_mensaje(data.mensaje, 'success');
+                } else {
+                    $scope.noPlaneacion = true;
+                    $scope.imprimir_mensaje(data.mensaje, 'danger');
+                }
                 $scope.cargando = false;
-            }
-        });
+            }, function(e) {
+                if ($scope.intento < 1) {
+                    $scope.cargarCatalogo(url, modelo);
+                    $scope.intento++;
+                } else {
+                    $scope.cargando = false;
+                }
+            });
+        }
     };
 
     /**
@@ -154,6 +158,11 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
                 angular.forEach(data.data, function(value, key) {
                     modelo.push(value);
                 });
+                if (url.search('matriz/matriz') > -1){
+                    $scope.matriz = data.data[0].id;
+                    var anio = $filter('date')($scope.anio, "yyyy");
+                    $scope.cargarCatalogo($scope.ruta + "?anio=" + anio + "&matrix=" + $scope.matriz, $scope.dato.matriz);
+                }
             } 
             $scope.cargando = false;
         }, function(e) {
