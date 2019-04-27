@@ -240,7 +240,7 @@ $(document).ready(function() {
         $.getJSON(Routing.generate('get_log_actividad'), function(mps) {
             datos_ = mps;
             tipoElemento = 'log_actividad';
-            identificadorElemento = 'log_actividad';
+            identificadorElemento = '1';
             cargarTablaDinamica(mps);
 
             $('#marco-sala').attr('data-content', 'Bitácora de actividad');

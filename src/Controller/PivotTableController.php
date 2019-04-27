@@ -198,6 +198,16 @@ class PivotTableController extends AbstractController {
         $em = $this->getDoctrine()->getManager();
         $response = new Response();
 
+        if ( $id == '1000000' ){
+            $id = 'general_pna';
+        } elseif ( $id == '1000001' ) {
+            $id = 'expedientes_pna';
+        } elseif ( $id == '1000002' ) {
+            $id = 'general_hosp';
+        } elseif ( $id == '1000003' ) {
+            $id = 'expedientes_hosp';
+        }
+
         $datos = $em->getRepository(Estandar::class)->getDatosCalidad($id);
 
         $response->setContent(json_encode($datos));
