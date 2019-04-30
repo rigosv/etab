@@ -31,6 +31,7 @@ Manual de la api para la implementación del cliente del tablero y matriz de seg
 
 Ejemplo : [http://etabv2.saludchiapas.gob.mx/api/doc](http://etabv2.saludchiapas.gob.mx/api/doc)
 
+
 Manual del cliente angular, na vez instalado el etab dirigirce a el nombre de dominio asignado y agregar "/docs_angular/index.html" a la dirección URL para acceder al manual.
 
 Ejemplo: [http://etabv2.saludchiapas.gob.mx/docs_angular/index.html](http://etabv2.saludchiapas.gob.mx/docs_angular/index.html)
@@ -44,6 +45,7 @@ Markdown : [Fuente](https://github.com/rigosv/etab/blob/master/public/manuales/e
 Ejemplo Website: [http://etabv2.saludchiapas.gob.mx/manuales/etab_matriz/Output/website/book/index.html](http://etabv2.saludchiapas.gob.mx/manuales/etab_matriz/Output/website/book/index.html)
 
 Ejemplo Book: [http://etabv2.saludchiapas.gob.mx/manuales/etab_matriz/Output/web/book.html](http://etabv2.saludchiapas.gob.mx/manuales/etab_matriz/Output/web/book.html)
+
 
 
 Manual para tablero.
