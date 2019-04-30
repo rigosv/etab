@@ -1,0 +1,389 @@
+<html >
+	<head>
+		<title>eTAB </title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="charset" content="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<!-- Latest compiled and minified CSS -->
+		  
+			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+			<link rel="stylesheet" href="./css/styles.css" />  
+			<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+				
+					<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+			<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+			<!-- Latest compiled and minified JavaScript -->
+			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+			<script charset="utf-8">
+			$(document).ready(function () {
+			  $("body").on("click",".btn-main-menu",function(e) {
+				e.preventDefault();
+				$("#wrapper").toggleClass("toggled");
+			  });
+			  $(".btn-datagrid-row-mostrar-opciones").on('click', function(e){
+				e.preventDefault();
+
+				$(this).toggleClass('btn-primary');
+				$(this).parent().find('.btn-group').eq(0).toggleClass('hidden-xs');
+			  });
+			});
+			</script>
+		
+		<link rel="shortcut icon" href="./images/etab.png" />
+	</head>
+	<body>
+	
+
+	<nav class="navbar navbar-default navbar-fixed-top top-bar">
+    <div class="container-fluid">
+      <div class="navbar-header" style="margin-right:20pt;width: 208px;">
+		<a href="./index.html" class="navbar-brand"><img alt="Home" src="./images/etab.png" style="top:0px; margin-top:-5px; height:34px; float:left; ">eTAB</a>
+      </div>
+      <ul class="nav navbar-nav">
+		<li class="">
+		  <a>Manual de usuario <i class="fa fa-caret-right"></i></a>
+		</li>
+		<li class="active">
+		  <a href=""></a>
+		</li>
+	  </ul>
+      <ul class="nav navbar-nav navbar-right">
+        				<li><a  href="./index.html">&larr; Anterior </a></li>
+			
+							<li><a href="./capitulo-1.html">Siguiente &rarr; </a></li>
+			      </ul>
+    </div>
+  </nav>
+
+	<div id="wrapper" class="" >
+	
+		
+<!-- Sidebar -->
+    <aside id="sidebar-wrapper">
+      <ul class="sidebar-nav nav">
+        
+        <li>
+          <a href="index.html"><i class="fa fa-dashboard"></i> Dashboard</a>
+        </li>
+															
+				<li class="">
+					<a href="./capitulo-1.html" ><i class="fa fa-book"></i> Tablero </a>				  
+					<ul id="chunk_toc" class='nav collapse submenu in'  aria-expanded="true">		
+						
+												
+													
+					</ul>
+					
+				</li>
+		 
+				  
+        
+      </ul>
+	  
+    </aside>
+<!-- /#sidebar-wrapper -->
+		
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-12">
+            <br>
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h1 class="panel-title"><i class="fa fa-bookmark"></i> <span>2.1</span>  </h1>
+              </div>
+              <div class="panel-body" >
+                
+				
+    <h1 id=""> </h1>
+    <h2 id="indicador-2">2.1 Indicador</h2>
+
+<p><br/></p>
+
+<p style="text-align: justify;">
+Al cargar un indicador y se muestra de manera gráfica la información se activan las isguinetes opciones.
+</p>
+
+<div class="figure" id="figure-2-1">
+    <img src="images/tablero-9.png" alt="" />
+
+</div>
+
+
+<p><br/></p>
+
+<blockquote>
+  <p><strong>Gráfico</strong></p>
+  
+  <ul>
+  <li>1.- Nombre del indicador</li>
+  <li>2.- Cerrar el grafico (Quitar el gráfico de la lista).</li>
+  <li>3.- Opciones y acciones</li>
+  <li>4.- Gráfico pintado segun las opciones</li>
+  </ul>
+</blockquote>
+
+<p><br/></p>
+
+<h3 id="opciones-y-acciones">2.1.1 Opciones y acciones</h3>
+
+<p><br/></p>
+
+<p style="text-align: justify;">
+El grafico tiene las opciones y acciones siguientes
+</p>
+
+<p style="text-align: justify;">
+<strong>Favoritos:</strong> se agrega o se quita de la lista de favoritos al hacer clic
+</p>
+
+<p style="text-align: justify;">
+<strong>Opciones del grafico:</strong> Abre una ventana para mostrar las opciones pra el grafico
+</p>
+
+<div class="figure" id="figure-2-2">
+    <img src="images/tablero-10.png" alt="" />
+
+</div>
+
+
+<p><br/></p>
+
+<blockquote>
+  <p><strong>Opciones</strong></p>
+  
+  <ul>
+  <li>1.- Ordenar por el eje x</li>
+  <li>2.- Ordenar por el eje y (Solo puede seleccionar uno x o y)</li>
+  <li>3.- Tipo de grafico a mostrar con la información (Se configura en la ficha tecnica)</li>
+  <li>4.- El tablero esta dividido en 12 columnas aca se inidca cuantas columnas ocupa el grafico</li>
+  <li>5.- Tamaño del alto del grafico en pixel</li>
+  <li>6.- Cerrar ventana</li>
+  </ul>
+</blockquote>
+
+<p style="text-align: justify;">
+<strong>Filtros:</strong> Abre una ventana para mostrar las opciones de filtrado
+</p>
+
+<div class="figure" id="figure-2-3">
+    <img src="images/tablero-11.png" alt="" />
+
+</div>
+
+
+<p><br/></p>
+
+<blockquote>
+  <p><strong>Filtro</strong></p>
+  
+  <ul>
+  <li>1.- Dimensiones disponibles del indicador</li>
+  <li>2.- Filtro por rangos de fechas</li>
+  <li>3.- Filtro por elementos de la dimension (Multiselect para hacer comparativas)</li>
+  <li>4.- Aplicar los filtros configurados</li>
+  <li>5.- Quitar los filtros</li>
+  <li>6.- Cerrar ventana</li>
+  </ul>
+</blockquote>
+
+<p style="text-align: justify;">
+<strong>Exportar:</strong> Por cada gráfico se cuenta con 2 opciones de exportacion, imagen en formato png y svg
+</p>
+
+<div class="figure" id="figure-2-4">
+    <img src="images/tablero-12.png" alt="" />
+
+</div>
+
+
+<p><br/></p>
+
+<blockquote>
+  <p><strong>Exportar a SVG</strong></p>
+  
+  <ul>
+  <li>1.- Seleccionar la opcion "Exportar a SVG"</li>
+  <li>2.- Al hacer click aparece un cuadro de dialogo del Sistema operativo para escoger la ubicacion y el nombre</li>
+  <li>3.- Acciones para guardar o cancelar</li>
+  </ul>
+</blockquote>
+
+<p><br/>
+<div class="figure" id="figure-2-5">
+    <img src="images/tablero-13.png" alt="" />
+
+</div>
+
+<br/></p>
+
+<blockquote>
+  <p><strong>Exportar a PNG</strong></p>
+  
+  <ul>
+  <li>1.- Seleccionar la opcion "Exportar a PNG"</li>
+  <li>2.- Al hacer click aparece un cuadro de dialogo del Sistema operativo para escoger la ubicacion y el nombre</li>
+  <li>3.- Acciones para guardar o cancelar</li>
+  </ul>
+</blockquote>
+
+<p style="text-align: justify;">
+<strong>Informacion:</strong> En estas opciones se tienen la informacion del inidcador para consultar la tabla de datos y la fichja tecnica
+</p>
+
+<div class="figure" id="figure-2-6">
+    <img src="images/tablero-14.png" alt="" />
+
+</div>
+
+
+<p><br/></p>
+
+<blockquote>
+  <p><strong>Ver ficha técnica</strong></p>
+  
+  <ul>
+  <li>1.- Seleccionar la opcion "Ver ficha Técnica"</li>
+  <li>2.- Se abre una ventana con el titulo ficha tecnica</li>
+  <li>3.- Descripcion de los datos y campos de la ficha del inidcador</li>
+  <li>4.- Opción para exportra la ficha a hoja de excel</li>
+  <li>5.- Opción para exportra la ficha a pdf</li>
+  <li>6.- Cerrar la ventana</li>
+  </ul>
+</blockquote>
+
+<p><br/>
+<div class="figure" id="figure-2-7">
+    <img src="images/tablero-15.png" alt="" />
+
+</div>
+
+<br/></p>
+
+<blockquote>
+  <p><strong>Alertas del indicador</strong></p>
+  
+  <ul>
+  <li>1.- Seleccionar la opcion "Alertas de indicador"</li>
+  <li>2.- Se abre una ventana con el titulo del indicador</li>
+  <li>3.- Descripcion los colores y los limites para cada color</li>
+  <li>4.- Cerrar la ventana</li>
+  </ul>
+</blockquote>
+
+<p><br/>
+<div class="figure" id="figure-2-8">
+    <img src="images/tablero-16.png" alt="" />
+
+</div>
+
+<br/></p>
+
+<blockquote>
+  <p><strong>Tabla de datos</strong></p>
+  
+  <ul>
+  <li>1.- Seleccionar la opcion "Tabla de datos"</li>
+  <li>2.- Se abre una ventana con el titulo del indicador</li>
+  <li>3.- Tabla con los valores que tiene el indicador</li>
+  <li>4.- Opción para exportra la ficha a hoja de excel</li>
+  <li>5.- Opción para exportra la ficha a pdf</li>
+  <li>6.- Opción para exportra la ficha a csv</li>
+  <li>7.- Cerrar la ventana</li>
+  </ul>
+</blockquote>
+
+<p><br/>
+<div class="figure" id="figure-2-9">
+    <img src="images/tablero-17.png" alt="" />
+
+</div>
+
+<br/></p>
+
+<blockquote>
+  <p><strong>Ver SQL</strong></p>
+  
+  <ul>
+  <li>1.- Seleccionar la opcion "Ver SQL"</li>
+  <li>2.- Se abre una ventana con el titulo del indicador</li>
+  <li>3.- SQL generado para obtener los datos de la base de datos</li>
+  <li>4.- Cerrar la ventana</li>
+  </ul>
+</blockquote>
+
+<p style="text-align: justify;">
+<strong>Actaulizar:</strong> Esta acción vuevle a cargar el grafico desde su forma original sin filtros y en la primera dimensión configurada
+</p>
+
+<div class="figure" id="figure-2-10">
+    <img src="images/tablero-18.png" alt="" />
+
+</div>
+
+<br/></p>
+
+<p style="text-align: justify;">
+<strong>Pantalla completa:</strong> Esta acción estira el area del gráfico a los tamaños de la pantalla para apreciar mejor los limites de cada valor pintado, si se le vuelve a dar clia en la forma ampliada regresa a asu forma original
+</p>
+
+<div class="figure" id="figure-2-11">
+    <img src="images/tablero-19.png" alt="" />
+
+</div>
+
+<br/></p>
+
+<p style="text-align: justify;">
+<strong>Icono tendencia:</strong> Si el gráfico se puede expresar a travez del tiempo es decir que los datos tengan mes y año entonces se puede graficar en forma de tendencia con esta opción
+</p>
+
+<div class="figure" id="figure-2-12">
+    <img src="images/tablero-20.png" alt="" />
+
+</div>
+
+<br/></p>
+
+<p style="text-align: justify;">
+<strong>Si esta activado la tendencia:</strong> El boton cambia para poder reestablecer
+</p>
+
+<div class="figure" id="figure-2-13">
+    <img src="images/tablero-21.png" alt="" />
+
+</div>
+
+<br/></p>
+
+
+	
+			
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer class="app-footer">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-xs-4"><img src="./images/logo1.png"  height="30px" alt="" /></div>
+            <div class="col-xs-4">
+              <p class="hidden-xs">
+                Tablero de control electronico | ETAB
+              </p>
+            </div>
+            <div class="col-xs-4" align="right"><img src="./images/logo2.png"  height="30px" alt="" /></div>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <!-- /#page-content-wrapper -->
+
+  </div>
+</body>
+</html>

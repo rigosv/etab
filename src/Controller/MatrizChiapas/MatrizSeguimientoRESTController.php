@@ -664,22 +664,25 @@ class MatrizSeguimientoRESTController extends Controller {
                     foreach($etabes as $indrs){   
                         $fichaTec = $fichaRepository->find($indrs["id_ficha_tecnica"]);
                         $filtros = json_decode($indrs["filtros"]); 
-                        
-                        $otros_filtros = (array) $filtros->otros_filtros;
-                        if(!array_key_exists("elementos", $otros_filtros)){
-                            $otros_filtros["elementos"] = [];
+                        if($filtros){
+                            $otros_filtros = (array) $filtros->otros_filtros;
+                            if(!array_key_exists("elementos", $otros_filtros)){
+                                $otros_filtros["elementos"] = [];
+                            }
+                            $keyanio = ""; 
+                            foreach($filtros->dimensiones as $dim){
+                                $vdim = strtoupper(trim($dim));
+                                if($vdim == 'ANIO' || $vdim == 'ANIOS' || $vdim == 'YEAR' || $vdim == 'YEARS' || $vdim == 'ID_ANIO' || $vdim == 'ANIO_ID' ){
+                                    $keyanio = trim($dim);
+                                }                            
+                            }
+                            // agregar la dimension para el filtro en otros  
+                            if($otros_filtros["dimension_mostrar"] != "")                                                                          
+                                $dimension = trim($filtros->dimensiones[$otros_filtros["dimension_mostrar"]]);
+                            else
+                                $dimension = "MES";
+                            $otros_filtros["dimension"] = trim($filtros->dimensiones[$filtros->dimension]);
                         }
-                        $keyanio = ""; 
-                        foreach($filtros->dimensiones as $dim){
-                            $vdim = strtoupper(trim($dim));
-                            if($vdim == 'ANIO' || $vdim == 'ANIOS' || $vdim == 'YEAR' || $vdim == 'YEARS' || $vdim == 'ID_ANIO' || $vdim == 'ANIO_ID' ){
-                                $keyanio = trim($dim);
-                            }                            
-                        }
-                        // agregar la dimension para el filtro en otros                                                                            
-                        $dimension = trim($filtros->dimensiones[$otros_filtros["dimension_mostrar"]]);
-                        $otros_filtros["dimension"] = trim($filtros->dimensiones[$filtros->dimension]);
-
                         $filtrar = [$keyanio => $anio]; 
                         $almacenamiento->crearIndicador($fichaTec, $otros_filtros["dimension"], $filtrar);                        
 
@@ -1028,21 +1031,25 @@ class MatrizSeguimientoRESTController extends Controller {
 
                         $fichaTec = $fichaRepository->find($indrs["id_ficha_tecnica"]);
                         $filtros = json_decode($indrs["filtros"]); 
-                        
-                        $otros_filtros = (array) $filtros->otros_filtros;
-                        if(!array_key_exists("elementos", $otros_filtros)){
-                            $otros_filtros["elementos"] = [];
+                        if($filtros){
+                            $otros_filtros = (array) $filtros->otros_filtros;
+                            if(!array_key_exists("elementos", $otros_filtros)){
+                                $otros_filtros["elementos"] = [];
+                            }
+                            $keyanio = ""; 
+                            foreach($filtros->dimensiones as $dim){
+                                $vdim = strtoupper(trim($dim));
+                                if($vdim == 'ANIO' || $vdim == 'ANIOS' || $vdim == 'YEAR' || $vdim == 'YEARS' || $vdim == 'ID_ANIO' || $vdim == 'ANIO_ID' ){
+                                    $keyanio = trim($dim);
+                                }                            
+                            }
+                            // agregar la dimension para el filtro en otros 
+                            if($otros_filtros["dimension_mostrar"] != '')                                                                           
+                                $dimension = trim($filtros->dimensiones[$otros_filtros["dimension_mostrar"]]);
+                            else
+                                $dimension = "MES";
+                            $otros_filtros["dimension"] = trim($filtros->dimensiones[$filtros->dimension]);
                         }
-                        $keyanio = ""; 
-                        foreach($filtros->dimensiones as $dim){
-                            $vdim = strtoupper(trim($dim));
-                            if($vdim == 'ANIO' || $vdim == 'ANIOS' || $vdim == 'YEAR' || $vdim == 'YEARS' || $vdim == 'ID_ANIO' || $vdim == 'ANIO_ID' ){
-                                $keyanio = trim($dim);
-                            }                            
-                        }
-                        // agregar la dimension para el filtro en otros                                                                            
-                        $dimension = trim($filtros->dimensiones[$otros_filtros["dimension_mostrar"]]);
-                        $otros_filtros["dimension"] = trim($filtros->dimensiones[$filtros->dimension]);
 
                         $filtrar = [$keyanio => $anio]; 
                         $almacenamiento->crearIndicador($fichaTec, $otros_filtros["dimension"], $filtrar);   

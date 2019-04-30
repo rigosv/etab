@@ -1,0 +1,317 @@
+<html >
+	<head>
+		<title>eTAB </title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="charset" content="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<!-- Latest compiled and minified CSS -->
+		  
+			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+			<link rel="stylesheet" href="./css/styles.css" />  
+			<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+				
+					<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+			<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+			<!-- Latest compiled and minified JavaScript -->
+			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+			<script charset="utf-8">
+			$(document).ready(function () {
+			  $("body").on("click",".btn-main-menu",function(e) {
+				e.preventDefault();
+				$("#wrapper").toggleClass("toggled");
+			  });
+			  $(".btn-datagrid-row-mostrar-opciones").on('click', function(e){
+				e.preventDefault();
+
+				$(this).toggleClass('btn-primary');
+				$(this).parent().find('.btn-group').eq(0).toggleClass('hidden-xs');
+			  });
+			});
+			</script>
+		
+		<link rel="shortcut icon" href="./images/etab.png" />
+	</head>
+	<body>
+	
+
+	<nav class="navbar navbar-default navbar-fixed-top top-bar">
+    <div class="container-fluid">
+      <div class="navbar-header" style="margin-right:20pt;width: 208px;">
+		<a href="./index.html" class="navbar-brand"><img alt="Home" src="./images/etab.png" style="top:0px; margin-top:-5px; height:34px; float:left; ">eTAB</a>
+      </div>
+      <ul class="nav navbar-nav">
+		<li class="">
+		  <a>Manual de usuario <i class="fa fa-caret-right"></i></a>
+		</li>
+		<li class="active">
+		  <a href="">Planeación</a>
+		</li>
+	  </ul>
+      <ul class="nav navbar-nav navbar-right">
+        				<li><a  href="./capitulo-1.html">&larr; Anterior </a></li>
+			
+							<li><a href="./capitulo-3.html">Siguiente &rarr; </a></li>
+			      </ul>
+    </div>
+  </nav>
+
+	<div id="wrapper" class="" >
+	
+		
+<!-- Sidebar -->
+    <aside id="sidebar-wrapper">
+      <ul class="sidebar-nav nav">
+        
+        <li>
+          <a href="index.html"><i class="fa fa-dashboard"></i> Dashboard</a>
+        </li>
+															
+				<li class="">
+					<a href="./capitulo-1.html" ><i class="fa fa-book"></i> Matriz Configuración </a>				  
+					<ul id="chunk_toc" class='nav collapse submenu in'  aria-expanded="true">		
+						
+												
+													
+					</ul>
+					
+				</li>
+													
+				<li class="active">
+					<a href="./capitulo-2.html" ><i class="fa fa-book"></i> Planeación </a>				  
+					<ul id="chunk_toc" class='nav collapse submenu in'  aria-expanded="true">		
+						
+																																												<li><a href="./capitulo-2.html#elementos-generales"><i class="fa fa-file"></i> Elementos generales</a></li>
+																															<li><a href="./capitulo-2.html#crear-planeacion"><i class="fa fa-file"></i> Crear planeacion</a></li>
+																						
+												
+													
+					</ul>
+					
+				</li>
+													
+				<li class="">
+					<a href="./capitulo-3.html" ><i class="fa fa-book"></i> Formulario de captura </a>				  
+					<ul id="chunk_toc" class='nav collapse submenu in'  aria-expanded="true">		
+						
+												
+													
+					</ul>
+					
+				</li>
+													
+				<li class="">
+					<a href="./capitulo-4.html" ><i class="fa fa-book"></i> Reporte </a>				  
+					<ul id="chunk_toc" class='nav collapse submenu in'  aria-expanded="true">		
+						
+												
+													
+					</ul>
+					
+				</li>
+		 
+				  
+        
+      </ul>
+	  
+    </aside>
+<!-- /#sidebar-wrapper -->
+		
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-12">
+            <br>
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h1 class="panel-title"><i class="fa fa-bookmark"></i> <span>Capítulo 2</span>  </h1>
+              </div>
+              <div class="panel-body" >
+                
+				
+    <h1 id="planeacion"> Planeación</h1>
+    <p><br/></p>
+
+<p style="text-align: justify;">
+La planeación, es el objetivo o meta que deseamos alcanzar al medir el indicador.
+</p>
+
+<div class="figure" id="figure-2-1">
+    <img src="images/planeacion.png" alt="" />
+
+</div>
+
+
+<p><br/></p>
+
+<h2 id="elementos-generales">2.1 Elementos generales</h2>
+
+<p><br/></p>
+
+<p style="text-align: justify;">
+El siguiente formulario contiene todos los campos y opciones para crear la planeacion de la matriz de seguimiento.
+a continuacion se describen las acciones generales:
+</p>
+
+<div class="figure" id="figure-2-2">
+    <img src="images/planeacion-1.png" alt="" />
+
+</div>
+
+
+<p><br/></p>
+
+<blockquote>
+  <p><strong>Formulario de planeación</strong></p>
+  
+  <ul>
+  <li>1.- Titulo del modulo (el año cambia segun sea el caso)</li>
+  <li>2.- Acciones (Seleccionar la matriz, seleccionar año y boton actualizar)</li>
+  <li>3.- Indicador de desempeño</li>
+  <li>4.- Area con un indicador sin fuente etab para hacer la planeación en el tiempo </li>
+  <li>5.- Area con un indicador con fuente etab y otro sin fuente etab para hacer la planeación en el tiempo </li>
+  <li>6.- Boton para guardar los cambios</li>
+  </ul>
+</blockquote>
+
+<p><br/></p>
+
+<h2 id="crear-planeacion">2.2 Crear planeacion</h2>
+
+<p><br/></p>
+
+<p style="text-align: justify;">
+Para crear la planeacion primero se tiene que seleccionar una matriz de la lista
+</p>
+
+<div class="figure" id="figure-2-3">
+    <img src="images/planeacion-2.png" alt="" />
+
+</div>
+
+
+<p><br/></p>
+
+<p style="text-align: justify;">
+Despues se tiene que seleccionar el año a incluir, en esta acción aparecera el formulario si ya tiene datos o en su defecto un boton para crear la planeación
+</p>
+
+<div class="figure" id="figure-2-4">
+    <img src="images/planeacion-3.png" alt="" />
+
+</div>
+
+
+<p><br/></p>
+
+<p style="text-align: justify;">
+Si la matriz seleccionada en el año estipulado no contiene datos aparecera un mensaje de esta manera, y abajo un boton para crear el formulario para planear
+</p>
+
+<div class="figure" id="figure-2-5">
+    <img src="images/planeacion-4.png" alt="" />
+
+</div>
+
+
+<p><br/></p>
+
+<blockquote>
+  <p><strong>Nueva planeación</strong></p>
+  
+  <ul>
+  <li>1.- Mensaje que indica que en este año no se tiene datos</li>
+  <li>2.- Boton para crear el formulario para iniciar la planeación</li>
+  </ul>
+</blockquote>
+
+<p><br/></p>
+
+<p style="text-align: justify;">
+Si la matriz en el año ya tiene datos aparecera el formulario con el mensaje siguiente y con los valores anteriormente guardado.
+</p>
+
+<div class="figure" id="figure-2-6">
+    <img src="images/planeacion-5.png" alt="" />
+
+</div>
+
+
+<p><br/></p>
+
+<blockquote>
+  <p><strong>Planeación</strong></p>
+  
+  <ul>
+  <li>1.- Mensaje que indica que se cargo los datos</li>
+  <li>2.- Nombre del indicador de desemepño</li>
+  <li>3.- Campo para escribir la planeacion</li>
+  <li>4.- Guardar los cambios</li>
+  </ul>
+</blockquote>
+
+<p><br/></p>
+
+<p style="text-align: justify;">
+Si se usa una medición diferente a la mensual es necesario escribir solo datos donde corresponda, por ejemplo si es trimestral escribir en el mes 3 de cada trimestre marzo, junio, septiembre y diciembre
+</p>
+
+<div class="figure" id="figure-2-7">
+    <img src="images/planeacion-6.png" alt="" />
+
+</div>
+
+
+<p><br/></p>
+
+<p style="text-align: justify;">
+Despues de agregar todos los datos por indicador se procede a guardar en las acciones principales
+</p>
+
+<div class="figure" id="figure-2-8">
+    <img src="images/planeacion-7.png" alt="" />
+
+</div>
+
+<br/></p>
+
+<p style="text-align: justify;">
+Si todo esta bien mostrara un mensaje como el siguiente, si cocurre un error se mostrara el mensaje con otro color
+</p>
+
+<div class="figure" id="figure-2-9">
+    <img src="images/planeacion-8.png" alt="" />
+
+</div>
+
+
+
+	
+			
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer class="app-footer">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-xs-4"><img src="./images/logo1.png"  height="30px" alt="" /></div>
+            <div class="col-xs-4">
+              <p class="hidden-xs">
+                Tablero de Control Electronico | ETAB
+              </p>
+            </div>
+            <div class="col-xs-4" align="right"><img src="./images/logo2.png"  height="30px" alt="" /></div>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <!-- /#page-content-wrapper -->
+
+  </div>
+</body>
+</html>

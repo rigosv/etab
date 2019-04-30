@@ -29,12 +29,26 @@ Describir la instalacion aqui:
 
 Manual de la api para la implementación del cliente del tablero y matriz de seguimiento, una vez instalado el etab dirigirce a el nombre de dominio asignado y agregar "/api/doc" a la dirección URL para acceder al manual.
 
-ejemplo : [http://etabv2.saludchiapas.gob.mx/api/doc](http://etabv2.saludchiapas.gob.mx/api/doc)
+Ejemplo : [http://etabv2.saludchiapas.gob.mx/api/doc](http://etabv2.saludchiapas.gob.mx/api/doc)
 
 Manual del cliente angular, na vez instalado el etab dirigirce a el nombre de dominio asignado y agregar "/docs_angular/index.html" a la dirección URL para acceder al manual.
 
-ejemplo: [http://etabv2.saludchiapas.gob.mx/docs_angular/index.html](http://etabv2.saludchiapas.gob.mx/docs_angular/index.html)
+Ejemplo: [http://etabv2.saludchiapas.gob.mx/docs_angular/index.html](http://etabv2.saludchiapas.gob.mx/docs_angular/index.html)
 
+### Manuales de usuario:
+
+Manual para matriz de seguimiento.
+
+Markdown : [Fuente](https://github.com/rigosv/etab/blob/master/public/manuales/etab_matriz/)
+Ejemplo Website: [http://etabv2.saludchiapas.gob.mx/manuales/etab_matriz/Output/website/book/index.html](http://etabv2.saludchiapas.gob.mx/manuales/etab_matriz/Output/website/book/index.html)
+Ejemplo Book: [http://etabv2.saludchiapas.gob.mx/manuales/etab_matriz/Output/web/book.html](http://etabv2.saludchiapas.gob.mx/manuales/etab_matriz/Output/web/book.html)
+
+
+Manual para tablero.
+
+Markdown : [Fuente](https://github.com/rigosv/etab/blob/master/public/manuales/etab_tablero/)
+Ejemplo Website: [http://etabv2.saludchiapas.gob.mx/manuales/etab_tablero/Output/website/book/index.html](http://etabv2.saludchiapas.gob.mx/manuales/etab_tablero/Output/website/book/index.html)
+Ejemplo Book: [http://etabv2.saludchiapas.gob.mx/manuales/etab_tablero/Output/web/book.html](http://etabv2.saludchiapas.gob.mx/manuales/etab_tablero/Output/web/book.html)
 
 ### Autor/es
   

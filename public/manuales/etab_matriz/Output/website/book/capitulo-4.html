@@ -1,0 +1,332 @@
+<html >
+	<head>
+		<title>eTAB </title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="charset" content="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<!-- Latest compiled and minified CSS -->
+		  
+			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+			<link rel="stylesheet" href="./css/styles.css" />  
+			<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+				
+					<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+			<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+			<!-- Latest compiled and minified JavaScript -->
+			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+			<script charset="utf-8">
+			$(document).ready(function () {
+			  $("body").on("click",".btn-main-menu",function(e) {
+				e.preventDefault();
+				$("#wrapper").toggleClass("toggled");
+			  });
+			  $(".btn-datagrid-row-mostrar-opciones").on('click', function(e){
+				e.preventDefault();
+
+				$(this).toggleClass('btn-primary');
+				$(this).parent().find('.btn-group').eq(0).toggleClass('hidden-xs');
+			  });
+			});
+			</script>
+		
+		<link rel="shortcut icon" href="./images/etab.png" />
+	</head>
+	<body>
+	
+
+	<nav class="navbar navbar-default navbar-fixed-top top-bar">
+    <div class="container-fluid">
+      <div class="navbar-header" style="margin-right:20pt;width: 208px;">
+		<a href="./index.html" class="navbar-brand"><img alt="Home" src="./images/etab.png" style="top:0px; margin-top:-5px; height:34px; float:left; ">eTAB</a>
+      </div>
+      <ul class="nav navbar-nav">
+		<li class="">
+		  <a>Manual de usuario <i class="fa fa-caret-right"></i></a>
+		</li>
+		<li class="active">
+		  <a href="">Reporte</a>
+		</li>
+	  </ul>
+      <ul class="nav navbar-nav navbar-right">
+        				<li><a  href="./capitulo-3.html">&larr; Anterior </a></li>
+			
+							<li><a class="disabled">Siguiente </a></li>
+			      </ul>
+    </div>
+  </nav>
+
+	<div id="wrapper" class="" >
+	
+		
+<!-- Sidebar -->
+    <aside id="sidebar-wrapper">
+      <ul class="sidebar-nav nav">
+        
+        <li>
+          <a href="index.html"><i class="fa fa-dashboard"></i> Dashboard</a>
+        </li>
+															
+				<li class="">
+					<a href="./capitulo-1.html" ><i class="fa fa-book"></i> Matriz Configuración </a>				  
+					<ul id="chunk_toc" class='nav collapse submenu in'  aria-expanded="true">		
+						
+												
+													
+					</ul>
+					
+				</li>
+													
+				<li class="">
+					<a href="./capitulo-2.html" ><i class="fa fa-book"></i> Planeación </a>				  
+					<ul id="chunk_toc" class='nav collapse submenu in'  aria-expanded="true">		
+						
+												
+													
+					</ul>
+					
+				</li>
+													
+				<li class="">
+					<a href="./capitulo-3.html" ><i class="fa fa-book"></i> Formulario de captura </a>				  
+					<ul id="chunk_toc" class='nav collapse submenu in'  aria-expanded="true">		
+						
+												
+													
+					</ul>
+					
+				</li>
+													
+				<li class="active">
+					<a href="./capitulo-4.html" ><i class="fa fa-book"></i> Reporte </a>				  
+					<ul id="chunk_toc" class='nav collapse submenu in'  aria-expanded="true">		
+						
+																																												<li><a href="./capitulo-4.html#elementos-generales-3"><i class="fa fa-file"></i> Elementos generales</a></li>
+																															<li><a href="./capitulo-4.html#cargar-un-reporte"><i class="fa fa-file"></i> Cargar un reporte</a></li>
+																															<li><a href="./capitulo-4.html#exportar-a-pdf"><i class="fa fa-file"></i> Exportar a PDF</a></li>
+																															<li><a href="./capitulo-4.html#exportar-a-excel"><i class="fa fa-file"></i> Exportar a EXCEL</a></li>
+																						
+												
+													
+					</ul>
+					
+				</li>
+		 
+				  
+        
+      </ul>
+	  
+    </aside>
+<!-- /#sidebar-wrapper -->
+		
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-12">
+            <br>
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h1 class="panel-title"><i class="fa fa-bookmark"></i> <span>Capítulo 4</span>  </h1>
+              </div>
+              <div class="panel-body" >
+                
+				
+    <h1 id="reporte"> Reporte</h1>
+    <p><br/></p>
+
+<p style="text-align: justify;">
+El reporte es el comparativo de la planeacion contra la captura, esto nos genera un mapa de calor segun la configuracion de las alertas por cada indicador.
+</p>
+
+<div class="figure" id="figure-4-1">
+    <img src="images/reporte.png" alt="" />
+
+</div>
+
+
+<p><br/></p>
+
+<h2 id="elementos-generales-3">4.1 Elementos generales</h2>
+
+<p><br/></p>
+
+<p style="text-align: justify;">
+El siguiente reporte contiene la planeacion y los datos capturados por cada inidcador del grupo de desempeño.
+a continuacion se describen las acciones generales:
+</p>
+
+<div class="figure" id="figure-4-2">
+    <img src="images/reporte-1.png" alt="" />
+
+</div>
+
+
+<p><br/></p>
+
+<blockquote>
+  <p><strong>Reporte</strong></p>
+  
+  <ul>
+  <li>1.- Titulo del modulo (el año cambia segun sea el caso)</li>
+  <li>2.- Acciones (Mostrar planeacion, mostrar real, seleccionar la matriz, seleccionar año y boton actualizar)</li>
+  <li>3.- Indicador de desempeño</li>
+  <li>4.- Area con un indicador sin fuente etab </li>
+  <li>5.- Area con un indicador con fuente etab y otro sin fuente etab </li>
+  <li>6.- Botonoes de exportacion</li>
+  </ul>
+</blockquote>
+
+<p><br/></p>
+
+<h2 id="cargar-un-reporte">4.2 Cargar un reporte</h2>
+
+<p><br/></p>
+
+<p style="text-align: justify;">
+Para cargar un reporte primero se tiene que seleccionar una matriz de la lista
+</p>
+
+<div class="figure" id="figure-4-3">
+    <img src="images/planeacion-2.png" alt="" />
+
+</div>
+
+
+<p><br/></p>
+
+<p style="text-align: justify;">
+Despues se tiene que seleccionar el año a incluir, en esta acción aparecera el reporte, si la accion no se ejecuta intentar con dar clic al boton actualizar a un lado
+</p>
+
+<div class="figure" id="figure-4-4">
+    <img src="images/planeacion-3.png" alt="" />
+
+</div>
+
+
+<p><br/></p>
+
+<p style="text-align: justify;">
+Si la matriz seleccionada en el año estipulado no contiene datos aparecera un mensaje de esta manera, sin ninguna accion posible.
+</p>
+
+<div class="figure" id="figure-4-5">
+    <img src="images/reporte-2.png" alt="" />
+
+</div>
+
+
+<p><br/></p>
+
+<p style="text-align: justify;">
+El reporte se puede mostrar la planecación y la captura para saber de donde se tomo el valor, esto activando las casillas "mostrar/ocultar"
+</p>
+
+<div class="figure" id="figure-4-6">
+    <img src="images/reporte-3.png" alt="" />
+
+</div>
+
+
+<p><br/></p>
+
+<h2 id="exportar-a-pdf">4.3 Exportar a PDF</h2>
+
+<p><br/></p>
+
+<p style="text-align: justify;">
+El reporte se puede exportar a PDF haciendo clic en el boton imprimir, en esta acción se toma tal cual este el reporte con o sin las casillas activadas "mostrar/ocultar"
+</p>
+
+<div class="figure" id="figure-4-7">
+    <img src="images/reporte-4.png" alt="" />
+
+</div>
+
+
+<p style="text-align: justify;">
+Despues del clic aparecera una ventana con el documento a imprimir se puede guardar cambiando las opciones de destino
+</p>
+
+<div class="figure" id="figure-4-8">
+    <img src="images/reporte-5.png" alt="" />
+
+</div>
+
+
+<p><br/></p>
+
+<h2 id="exportar-a-excel">4.4 Exportar a EXCEL</h2>
+
+<p><br/></p>
+
+<p style="text-align: justify;">
+El reporte se puede exportar a EXCEL haciendo clic en el boton exportar, en esta acción se toma tal cual este el reporte con o sin las casillas activadas "mostrar/ocultar"
+</p>
+
+<div class="figure" id="figure-4-9">
+    <img src="images/reporte-6.png" alt="" />
+
+</div>
+
+
+<p style="text-align: justify;">
+Despues del clic aparecera una ventana para seleccioanr el lugar donde se guardara el archivo exportado en excel, depues de seleccionar el destino hacer clic al boton guardar de la ventana
+</p>
+
+<div class="figure" id="figure-4-10">
+    <img src="images/reporte-7.png" alt="" />
+
+</div>
+
+
+<p style="text-align: justify;">
+Para abrir el archivo generado el programa excel nos mostrara un mensaje como el siguiente hacer clicn en si
+</p>
+
+<div class="figure" id="figure-4-11">
+    <img src="images/reporte-8.png" alt="" />
+
+</div>
+
+
+<p style="text-align: justify;">
+Nuestro reporte esta exportado a excel
+</p>
+
+<div class="figure" id="figure-4-12">
+    <img src="images/reporte-9.png" alt="" />
+
+</div>
+
+
+
+	
+			
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer class="app-footer">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-xs-4"><img src="./images/logo1.png"  height="30px" alt="" /></div>
+            <div class="col-xs-4">
+              <p class="hidden-xs">
+                Tablero de Control Electronico | ETAB
+              </p>
+            </div>
+            <div class="col-xs-4" align="right"><img src="./images/logo2.png"  height="30px" alt="" /></div>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <!-- /#page-content-wrapper -->
+
+  </div>
+</body>
+</html>
