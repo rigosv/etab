@@ -40,14 +40,18 @@ Ejemplo: [http://etabv2.saludchiapas.gob.mx/docs_angular/index.html](http://etab
 Manual para matriz de seguimiento.
 
 Markdown : [Fuente](https://github.com/rigosv/etab/blob/master/public/manuales/etab_matriz/)
+
 Ejemplo Website: [http://etabv2.saludchiapas.gob.mx/manuales/etab_matriz/Output/website/book/index.html](http://etabv2.saludchiapas.gob.mx/manuales/etab_matriz/Output/website/book/index.html)
+
 Ejemplo Book: [http://etabv2.saludchiapas.gob.mx/manuales/etab_matriz/Output/web/book.html](http://etabv2.saludchiapas.gob.mx/manuales/etab_matriz/Output/web/book.html)
 
 
 Manual para tablero.
 
 Markdown : [Fuente](https://github.com/rigosv/etab/blob/master/public/manuales/etab_tablero/)
+
 Ejemplo Website: [http://etabv2.saludchiapas.gob.mx/manuales/etab_tablero/Output/website/book/index.html](http://etabv2.saludchiapas.gob.mx/manuales/etab_tablero/Output/website/book/index.html)
+
 Ejemplo Book: [http://etabv2.saludchiapas.gob.mx/manuales/etab_tablero/Output/web/book.html](http://etabv2.saludchiapas.gob.mx/manuales/etab_tablero/Output/web/book.html)
 
 ### Autor/es
