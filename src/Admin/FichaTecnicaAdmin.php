@@ -312,7 +312,7 @@ class FichaTecnicaAdmin extends Admin
     {
         $alertas = $fichaTecnica->getAlertas();
         $fichaTecnica->removeAlertas();
-        if (count($alertas) > 0) {
+        if ($alertas != null and count($alertas) > 0) {
             foreach ($alertas as $alerta) {
                 $alerta->setIndicador($fichaTecnica);
                 $fichaTecnica->addAlerta($alerta);
