@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="author" content="eTAB" />
+    <meta name="date" content="07/05/2019"/>
+    <meta name="generator" content="easybook 5.0-DEV"/>
+
+    <title>Tabla Pivote | Manual de Usuario</title>
+
+    <link rel="stylesheet" href="./css/easybook.css" />
+
+</head>
+
+<body class="item chapter">
+<div class="container">
+<div class="menu">
+    <div class="row">
+        <h1 class="span9"><a href="./index.html">Manual de Usuario</a></h1>
+        <p class="span3">
+                        <a href="./capitulo-2.html"><span>&larr;</span> Anterior</a>
+            
+                        <a href="./lista-de-figuras.html">Siguiente <span>&rarr;</span></a>
+                    </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span9">
+        <h1 id="tabla-pivote"><span>Capítulo 4</span> Tabla Pivote</h1>
+        <p>La función básica de la tabla pivote es convertir un conjunto de datos en una tabla resumen. Se puede manipular 
+la tabla resumen utilizando su interfaz de usuario que permite arrastrar y soltar los campos en la disposición 
+deseada y convirtiéndola en una tabla pivote, muy similar a la que se encuentra en las hojas de cálculo.
+Además se puede utilizar gráficos para representar los datos en la tabla, generando un gráfico pivote.
+Para acceder a la tabla dinámica se hace a través del menú <strong>Indicadores --> Tabla dinámica</strong>.</p>
+
+<h2 id="descripcion-de-la-interfaz-de-usuario">4.1 Descripción de la interfáz de usuario</h2>
+
+<p>Se dispone de dos pestañas principales, una donde se elige el indicador, cuyos datos se desean cargar a la tabla 
+pivote, y la sección que nos permitirá ver y manipular esta tabla.</p>
+
+<h3 id="cargar-un-indicador">4.1.1 Cargar un indicador</h3>
+
+<p>Para elegir un indicador se selecciona la pestaña <strong>Indicadores</strong>, la cual contiene un listado agrupado según una clasificación.
+Se puede cambiar la clasificación por la que nos interese y podemos utilizar la casilla de búsqueda para filtrar el listado.
+<div class="figure" id="figure-4-1">
+    <img src="images/pivot-cargar_indicador.gif" alt="Tabla pivote" />
+
+    <p class="caption"><strong>Figura 4.1</strong> Tabla pivote</p>
+</div>
+
+
+<p>La siguiente figura muestra la interfaz inicial de la tabla pivote</p>
+
+<div class="figure" id="figure-4-2">
+    <img src="images/pivot_table1.png" alt="Tabla pivote" />
+
+    <p class="caption"><strong>Figura 4.2</strong> Tabla pivote</p>
+</div>
+
+
+<h3 id="disposicion-de-campos">4.1.2 Disposición de campos</h3>
+
+<p>El siguiente punto es arrastrar los atributos deseados y soltarlos en las áreas filas y columnas, según se requiera.</p>
+
+<div class="figure" id="figure-4-3">
+    <img src="images/pivot_disposicion_campos.gif" alt="Disposición de campos" />
+
+    <p class="caption"><strong>Figura 4.3</strong> Disposición de campos</p>
+</div>
+
+
+<h3 id="funcion-de-agregacion">4.1.3 Función de agregación</h3>
+
+<p>De acuerdo al tipo de análisis que se quiera realizar debemos elegir la función de agregación adecuada.
+Entre algunas de las funciones de agregación tenemos:</p>
+
+<ul>
+<li>Contar</li>
+<li>Suma</li>
+<li>Suma entera</li>
+<li>Promedio: Realiza la función de promedio aritmético</li>
+<li>Cociente: Utiliza dos atributos para su cálculo y se devuelve el cociente de ellos.</li>
+<li>Proporción del total: Cada celda se calcula como porcentaje tomando como 100% el total general.</li>
+<li>Proporción de filas: Cada celda se calcula como porcentaje tomando como 100% el total de la fila.</li>
+<li>Proporción de columnas: Cada celda se calcula como porcentaje tomando como 100% el total de la columna. </li>
+</ul>
+
+<p>Si elegimos una función de agregación diferente a contar debemos especificar sobre qué atributo(s) se calculará la función. 
+Los atributos cuyo nombre tiene dos guiones bajos al principio y final, como <code>__total_controles_puerpuerales__</code> son las variables de la fórmula de cálculo
+definida en la ficha técnica.</p>
+
+<div class="figure" id="figure-4-4">
+    <img src="images/pivot_funcion_agregacion.gif" alt="Función e agregación" />
+
+    <p class="caption"><strong>Figura 4.4</strong> Función e agregación</p>
+</div>
+
+
+<h3 id="tipo-de-resultado">4.1.4 Tipo de resultado</h3>
+
+<p>Establece la visualización que le daremos a los datos. Algunas opciones disponibles son:</p>
+
+<h4 id="tabla">4.1.4.1 Tabla</h4>
+
+<p>Visualización por defecto, una tabla con datos del resultado de la aplicación de la función de agregación</p>
+
+<h4 id="table-barchart">4.1.4.2 Table Barchart</h4>
+
+<p>Muestra la tabla con datos pero además muestra una barra según el valor de cada casilla. 
+<div class="figure" id="figure-4-5">
+    <img src="images/pivot_table-barchart.gif" alt="Table barchart" />
+
+    <p class="caption"><strong>Figura 4.5</strong> Table barchart</p>
+</div>
+
+
+<h4 id="heatmap">4.1.4.3 Heatmap</h4>
+
+<p>El mapa de calor utiliza por defecto el color rojo para los valores más altos y degradando hasta llegar a blanco para los valores más bajos.
+Si el indicador tiene rangos de alertas definidos, se utilizarán esos en lugar de los colores por defecto.</p>
+
+<p>Las variaciones <strong>Row Heatmap</strong> y <strong>Col Heatmap</strong> utiliza la misma lógica pero sobre cada columna o fila para identificar los valores mayores y menores.
+<div class="figure" id="figure-4-6">
+    <img src="images/pivot_heatmap.gif" alt="Heatmap" />
+
+    <p class="caption"><strong>Figura 4.6</strong> Heatmap</p>
+</div>
+
+
+<h4 id="table-with-subtotal-table-with-subtotal-bar-chart">4.1.4.4 Table With Subtotal/ Table With Subtotal Bar Chart</h4>
+
+<p>Para utilizar estas visualizaciones, es necesario que se disponga de dos o más variables en la zona de columnas o en la zona de filas. 
+De esta forma hará cálculos de subtotales para la variable que agrupe a otra. Por ejemplo si mostramos la tabla para Año y trimistre; 
+se mostrará el resultado por cada trimestre, pero además mostrará el total al corte de cada año. El campo de nivel mayor (año en este ejemplo)
+mostrará controles para contraer [-] o expandir [+] la información de los trimestres. 
+<div class="figure" id="figure-4-7">
+    <img src="images/pivot_table_subtotal.gif" alt="Table With Subtotal" />
+
+    <p class="caption"><strong>Figura 4.7</strong> Table With Subtotal</p>
+</div>
+
+
+<div class="figure" id="figure-4-8">
+    <img src="images/pivot_table5.png" alt="Filtro de atributos" />
+
+    <p class="caption"><strong>Figura 4.8</strong> Filtro de atributos</p>
+</div>
+
+
+<p>Por defecto se utiliza una tabla como tipo de resultado y contar como función de agregación. 
+Además cada atributo puede ser filtrado a través dando clic en el triángulo al lado del nombre de cada atributo, 
+la interfaz para filtrar será similar a la mostrada a la imagen:</p>
+
+<div class="figure" id="figure-4-9">
+    <img src="images/pivot_table5.png" alt="Filtro de atributos" />
+
+    <p class="caption"><strong>Figura 4.9</strong> Filtro de atributos</p>
+</div>
+
+
+<p>Algunos de los tipos de resultado que se puede usar:</p>
+
+<ul>
+<li>Tabla</li>
+<li>Tabla con gráfico de barra</li>
+<li>Gráfico de línea</li>
+<li>Gráfico de barra</li>
+<li>Gráfico de área</li>
+</ul>
+
+<p>Una tabla pivote después de cierta manipulación podría quedar de la siguiente forma:</p>
+
+<div class="figure" id="figure-4-10">
+    <img src="images/pivot_table2.png" alt="Tabla pivote" />
+
+    <p class="caption"><strong>Figura 4.10</strong> Tabla pivote</p>
+</div>
+
+
+<p>Al utilizar un gráfico pivote se mostraría un resultado similar al de la siguiente imagen:</p>
+
+<div class="figure" id="figure-4-11">
+    <img src="images/pivot_table3.png" alt="Gráfico de una tabla pivote" />
+
+    <p class="caption"><strong>Figura 4.11</strong> Gráfico de una tabla pivote</p>
+</div>
+
+
+<p>Si presionamos doble clic sobre cualquier zona del gráfico, se abrirá un cuadro
+de diálogo con un editor de gráficos, en el cual podemos elegir más tipos de gráficos
+y configurarlo según nuestra conveniencia (título, colores, tipos de letras, etc.)</p>
+
+<div class="figure" id="figure-4-12">
+    <img src="images/pivot_table4.png" alt="Editor del gráfico" />
+
+    <p class="caption"><strong>Figura 4.12</strong> Editor del gráfico</p>
+</div>
+
+
+    </div>
+
+    <div class="span3">
+        <div class="item local_toc">
+            <h3>Índice de contenidos</h3>
+
+            <ul class="unstyled">
+                                                <li class="level-1">
+                        <span></span>
+                        <a class="internal" href="./capitulo-4.html#tabla-pivote">Tabla Pivote</a>
+                    </li>
+                                    <li class="level-2">
+                        <span>4.1</span>
+                        <a class="internal" href="./capitulo-4.html#descripcion-de-la-interfaz-de-usuario">Descripción de la interfáz de usuario</a>
+                    </li>
+                                        </ul>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+</html>

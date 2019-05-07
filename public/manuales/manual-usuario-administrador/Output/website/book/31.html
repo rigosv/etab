@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="author" content="eTAB" />
+    <meta name="date" content="07/05/2019"/>
+    <meta name="generator" content="easybook 5.0-DEV"/>
+
+    <title>  Manual del Administrador</title>
+
+    <link rel="stylesheet" href="./css/easybook.css" />
+
+</head>
+
+<body class="item chapter">
+<div class="container">
+<div class="menu">
+    <div class="row">
+        <h1 class="span9"><a href="./index.html">Manual del Administrador</a></h1>
+        <p class="span3">
+                        <a href="./index.html"><span>&larr;</span> Anterior</a>
+            
+                        <a href="./introduccion.html">Siguiente <span>&rarr;</span></a>
+                    </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span9">
+        <h1 id=""><span>3.1</span> </h1>
+        <p>u# Gestión de usuarios y grupos
+Para la gestión de los usuario y grupos se utiliza la opción del menú <strong>Usuarios y grupos</strong>. Esta opción del menú aparecerá disponible solo para los usuarios con el perfil de administrador.</p>
+
+<h2 id="usuarios">3.1 Usuarios</h2>
+
+<p>Al seleccionar la opción <strong>Usuarios</strong> del menú Usuarios y grupos, se podrá realizar el mantenimiento de la información 
+de cada usuario, primero aparecerá el listado de usuarios y se podrá seleccionar al dar clic en el nombre.</p>
+
+<p>Al elegir un usuario podemos modificar su información, la cual está clasificada en 3 Fichas:</p>
+
+<ol>
+<li>Usuario</li>
+<li>Seguridad</li>
+<li>Indicadores y Salas</li>
+</ol>
+
+<h3 id="usuario">3.1.1 Usuario</h3>
+
+<p>La ficha usuario está dividida en dos secciones:
+- Perfil: Donde se ingresan los datos del usuario
+- General: Datos de identificación de ingreso al sistema</p>
+
+<div class="figure" id="figure-3-1">
+    <img src="images/usuario1.gif" alt="Usuario" />
+
+    <p class="caption"><strong>Figura 3.1</strong> Usuario</p>
+</div>
+
+
+<h3 id="seguridad">3.1.2 Seguridad</h3>
+
+<p>Esta ficha consta de dos secciones: Grupos y Roles.
+En está opción se pueden especificar los roles/permisos del usuario , los cuales se corresponden con cada opción del menú más la acción que se puede realizar.
+Por ejemplo: RESPONSABLE_DATO_CREATE le dará permiso para crear un elemento de la opción del menú Responsable Datos</p>
+
+<div class="figure" id="figure-3-2">
+    <img src="images/usuario_seguridad.gif" alt="Usuario - Administración" />
+
+    <p class="caption"><strong>Figura 3.2</strong> Usuario - Administración</p>
+</div>
+
+
+<div class="table" id="table-3-1">
+
+    <table>
+<thead>
+<tr>
+  <th>Atributo</th>
+  <th>Significado previsto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>VIEW</td>
+  <td>Cuando le es permitido a alguien ver el objeto.</td>
+</tr>
+<tr>
+  <td>EXPORT</td>
+  <td>Tiene disponibles las opciones de exportar el listado de objetos</td>
+</tr>
+<tr>
+  <td>EDIT</td>
+  <td>Cuando le es permitido a alguien hacer cambios al objeto.</td>
+</tr>
+<tr>
+  <td>CREATE</td>
+  <td>Cuando a alguien se le permite crear el objeto.</td>
+</tr>
+<tr>
+  <td>DELETE</td>
+  <td>Cuando a alguien se le permite eliminar el objeto.</td>
+</tr>
+<tr>
+  <td>OPERATOR</td>
+  <td>Cuando le es permitido a alguien realizar todas las acciones anteriores.</td>
+</tr>
+<tr>
+  <td>MASTER</td>
+  <td>Cuando le es permitido a alguien realizar todas las acciones anteriores, y además tiene permitido conceder cualquiera de los permisos anteriores a otros.</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<p>Además se dispone de roles generales.
+<div class="table" id="table-3-2">
+
+    <table>
+<thead>
+<tr>
+  <th>Rol</th>
+  <th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>ROLE_USER</td>
+  <td>Rol de usuario normal</td>
+</tr>
+<tr>
+  <td>ROLE_SONATA_ADMIN</td>
+  <td>Rol de administrador, tendrá acceso a todas las opciones</td>
+</tr>
+<tr>
+  <td>ROLE_USER_TABLERO</td>
+  <td>Activa la opción de Tablero del menú Ficha Técnica</td>
+</tr>
+<tr>
+  <td>ROLE_USER_CUBOS</td>
+  <td>Activa la opción Cubos OLAP del menú Ficha Técnica</td>
+</tr>
+</tbody>
+</table>
+</div>
+</p>
+
+<h3 id="indicadores-y-salas">3.1.3 Indicadores y Salas</h3>
+
+<p>Por medio de esta opción se le asignan los indicadores y salas que tendrá disponibles el usuario en el trablero
+<div class="figure" id="figure-3-3">
+    <img src="images/usuario_indicadores_salas.gif" alt="Usuario - Indicadores y Salas" />
+
+    <p class="caption"><strong>Figura 3.3</strong> Usuario - Indicadores y Salas</p>
+</div>
+
+
+    </div>
+
+    <div class="span3">
+        <div class="item local_toc">
+            <h3>Índice de contenidos</h3>
+
+            <ul class="unstyled">
+                                                <li class="level-2">
+                        <span>3.1</span>
+                        <a class="internal" href="./capitulo-3.html#usuarios">Usuarios</a>
+                    </li>
+                                        </ul>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+</html>

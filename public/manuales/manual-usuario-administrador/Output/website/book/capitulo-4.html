@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="author" content="eTAB" />
+    <meta name="date" content="07/05/2019"/>
+    <meta name="generator" content="easybook 5.0-DEV"/>
+
+    <title>Catálogos | Manual del Administrador</title>
+
+    <link rel="stylesheet" href="./css/easybook.css" />
+
+</head>
+
+<body class="item chapter">
+<div class="container">
+<div class="menu">
+    <div class="row">
+        <h1 class="span9"><a href="./index.html">Manual del Administrador</a></h1>
+        <p class="span3">
+                        <a href="./capitulo-2.html"><span>&larr;</span> Anterior</a>
+            
+                        <a href="./lista-de-figuras.html">Siguiente <span>&rarr;</span></a>
+                    </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span9">
+        <h1 id="catalogos"><span>Capítulo 4</span> Catálogos</h1>
+        <p>Las siguientes opciones están ubicadas en el menú principal <strong>Catálogos</strong></p>
+
+<h2 id="fuente-de-datos">4.1 Fuente de datos</h2>
+
+<div class="figure" id="figure-4-1">
+    <img src="images/fuente_datos.png" alt="Fuente de datos" />
+
+    <p class="caption"><strong>Figura 4.1</strong> Fuente de datos</p>
+</div>
+
+
+<ul>
+<li><strong>Contacto:</strong> Nombre de la persona que proporciona datos.</li>
+<li><strong>Establecimiento:</strong> Organismo al que pertenece el contacto.</li>
+<li><strong>Correo electrónico:</strong> Correo electrónico oficial del contacto.</li>
+<li><strong>Número telefónico:</strong> Número telefónico del contacto.</li>
+<li><strong>Cargo:</strong> Cargo que ocupa el contacto dentro del organismo al que pertenece.</li>
+</ul>
+
+<h2 id="responsable-de-datos">4.2 Responsable de datos</h2>
+
+<div class="figure" id="figure-4-2">
+    <img src="images/responsable_datos.png" alt="Responsable de datos" />
+
+    <p class="caption"><strong>Figura 4.2</strong> Responsable de datos</p>
+</div>
+
+- <strong>Contacto:</strong> Nombre de la persona que es reponsable de los datos y la calidad de estos (Podría ser el mismo que en Fuente de datos).
+- <strong>Establecimiento:</strong> Organismo al que pertenece el contacto.
+- <strong>Correo electrónico:</strong> Correo electrónico oficial del contacto.
+- <strong>Número telefónico:</strong> Número telefónico del contacto.
+- <strong>Cargo:</strong> Cargo que ocupa el contacto dentro del organismo al que pertenece.</p>
+
+<h2 id="responsable-indicador">4.3 Responsable indicador</h2>
+
+<div class="figure" id="figure-4-3">
+    <img src="images/responsable_indicador.png" alt="Responsable de indicador" />
+
+    <p class="caption"><strong>Figura 4.3</strong> Responsable de indicador</p>
+</div>
+
+- <strong>Contacto:</strong> Nombre de la persona que es reponsable de hacer el seguimiento y control del indicador.
+- <strong>Establecimiento:</strong> Organismo al que pertenece el contacto.
+- <strong>Correo electrónico:</strong> Correo electrónico oficial del contacto.
+- <strong>Número telefónico:</strong> Número telefónico del contacto.
+- <strong>Cargo:</strong> Cargo que ocupa el contacto dentro del organismo al que pertenece.</p>
+
+<h2 id="clasificacion-segun-uso">4.4 Clasificación según uso</h2>
+
+<div class="figure" id="figure-4-4">
+    <img src="images/clasificacion_uso.png" alt="Clasificación según uso" />
+
+    <p class="caption"><strong>Figura 4.4</strong> Clasificación según uso</p>
+</div>
+
+
+<ul>
+<li><strong>Código:</strong> Clave con el que será identificado de manera técnica.</li>
+<li><strong>Descripción:</strong> Nombre de la clasificación según uso. Indica el uso para el que puede estar destinado un indicador.</li>
+<li><strong>Comentario:</strong> Nota o comentario que se quiera agregar, opcional.</li>
+</ul>
+
+<h2 id="clasificacion-tecnica">4.5 Clasificación técnica</h2>
+
+<div class="figure" id="figure-4-5">
+    <img src="images/clasificacion_tecnica.png" alt="Clasificación técnica" />
+
+    <p class="caption"><strong>Figura 4.5</strong> Clasificación técnica</p>
+</div>
+
+
+<ul>
+<li><strong>Código:</strong> Clave con el que será identificado.</li>
+<li><strong>Descripción:</strong> Nombre de la Clasificación técnica. Esta es una subdivisión de la clasificación según uso.</li>
+<li><strong>Comentario:</strong> Nota o comentario que se quiera agregar, opcional.</li>
+<li><strong>Clasificación Según Uso:</strong> Es la clasificación según uso a la que pertenece.</li>
+</ul>
+
+<h2 id="significado-de-campos">4.6 Significado de campos</h2>
+
+<p>Se utiliza para identificar de manera estándar los datos provenientes de los orígenes. Por ejemplo en una base de datos el campo puede llamarse <strong>fecha_nacimiento</strong>, en otra puede llamarse <strong>fecha_nac</strong> y en ambos casos se refiere a lo mismo.</p>
+
+<div class="figure" id="figure-4-6">
+    <img src="images/significado_campo.png" alt="Significado campo" />
+
+    <p class="caption"><strong>Figura 4.6</strong> Significado campo</p>
+</div>
+
+
+<ul>
+<li><strong>Código:</strong> Identificador del significado.</li>
+<li><strong>Descripción:</strong> Nombre del significado</li>
+<li><strong>Utilizado para costeo:</strong> Marque esta casilla, si el significado será exclusivo para formularios de costeo.</li>
+<li><strong>Describirá campos de catálogo:</strong> Aquellos campos de tablas catálogos como, llave primaria, llave foránea, entre otros.</li>
+<li><strong>Catálogo asociado:</strong> Asociar un catálogo a un significado permitirá cargar otros datos por ejemplo que el campo sea una llave foránea y los demás datos se encuentren en una tabla catálogo. Ej.: código de municipio, y en la tabla catálogo se encontrará el nombre del municipio.</li>
+<li><strong>Tipos de gráficos permitidos:</strong> Se debe elegir los tipos de gráficos que se pueden usar sobre este campo</li>
+</ul>
+
+<h2 id="colores-alertas">4.7 Colores - Alertas</h2>
+
+<div class="figure" id="figure-4-7">
+    <img src="images/colores_alertas.png" alt="Significado campo" />
+
+    <p class="caption"><strong>Figura 4.7</strong> Significado campo</p>
+</div>
+
+- <strong>Código:</strong> Para crear colores y usarlos posteriormente en la definición de rangos de alertas, aquí ingresará un código del color en formato usado en HTML.
+- <strong>Color:</strong> Nombre que se mostrará para el color</p>
+
+    </div>
+
+    <div class="span3">
+        <div class="item local_toc">
+            <h3>Índice de contenidos</h3>
+
+            <ul class="unstyled">
+                                                <li class="level-1">
+                        <span></span>
+                        <a class="internal" href="./capitulo-4.html#catalogos">Catálogos</a>
+                    </li>
+                                    <li class="level-2">
+                        <span>4.1</span>
+                        <a class="internal" href="./capitulo-4.html#fuente-de-datos">Fuente de datos</a>
+                    </li>
+                                    <li class="level-2">
+                        <span>4.2</span>
+                        <a class="internal" href="./capitulo-4.html#responsable-de-datos">Responsable de datos</a>
+                    </li>
+                                    <li class="level-2">
+                        <span>4.3</span>
+                        <a class="internal" href="./capitulo-4.html#responsable-indicador">Responsable indicador</a>
+                    </li>
+                                    <li class="level-2">
+                        <span>4.4</span>
+                        <a class="internal" href="./capitulo-4.html#clasificacion-segun-uso">Clasificación según uso</a>
+                    </li>
+                                    <li class="level-2">
+                        <span>4.5</span>
+                        <a class="internal" href="./capitulo-4.html#clasificacion-tecnica">Clasificación técnica</a>
+                    </li>
+                                    <li class="level-2">
+                        <span>4.6</span>
+                        <a class="internal" href="./capitulo-4.html#significado-de-campos">Significado de campos</a>
+                    </li>
+                                    <li class="level-2">
+                        <span>4.7</span>
+                        <a class="internal" href="./capitulo-4.html#colores-alertas">Colores - Alertas</a>
+                    </li>
+                                        </ul>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+</html>

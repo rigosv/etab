@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="author" content="eTAB" />
+    <meta name="date" content="07/05/2019"/>
+    <meta name="generator" content="easybook 5.0-DEV"/>
+
+    <title>ETL | Manual del Administrador</title>
+
+    <link rel="stylesheet" href="./css/easybook.css" />
+
+</head>
+
+<body class="item chapter">
+<div class="container">
+<div class="menu">
+    <div class="row">
+        <h1 class="span9"><a href="./index.html">Manual del Administrador</a></h1>
+        <p class="span3">
+                        <a href="./capitulo-1.html"><span>&larr;</span> Anterior</a>
+            
+                        <a href="./capitulo-4.html">Siguiente <span>&rarr;</span></a>
+                    </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span9">
+        <h1 id="etl"><span>Capítulo 2</span> ETL</h1>
+        <p>El bloque ETL (Extract Transform Load) es la sección dónde se configuran los orígenes de datos y se obtiene la información de ellos.</p>
+
+<h2 id="conexion-a-bases-de-datos">2.1 Conexión a bases de datos</h2>
+
+<p>Cuando los datos provienen de una base de datos ya existente, se debe configurar antes la conexión a ésta. 
+Los motores soportados son: PostgreSQL, MySQL, SQL Server y Oracle.
+Se inicia en el menú <strong>Origen de Datos --> Conexión a base de datos</strong> Debemos ingresar los datos necesarios para configurar la conexión, 
+una vez ingresados se puede probar la conexión con el botón <strong>Probar Conexión</strong> el cual nos devolverá un mensaje con el resultado de la prueba.</p>
+
+<div class="figure" id="figure-2-1">
+    <img src="images/crear_conexion.gif" alt="Formulario de conexión de base de datos" />
+
+    <p class="caption"><strong>Figura 2.1</strong> Formulario de conexión de base de datos</p>
+</div>
+
+
+<h2 id="origen-de-datos">2.2 Origen de datos</h2>
+
+<p>Para la creación de un origen de datos tenemos las secciones: 
+- <strong>Datos generales</strong> que contendrá la descripción general del origen. 
+- <strong>Desde base de datos</strong> donde especificará si los datos se obtendrán desde una conexión a una base de datos o desde un archivo.
+- <strong>Desde archivo</strong> cuando los datos sean obtenidos de un archivo de hoja de cálculo o con formato csv.
+- <strong>Carga incremental</strong> Para orígens de datos que tengan un campo fecha o año, se puede indicar que la carga se inicie a partir del último registro de la 
+carga anterior, tomando algunos de estos campos (fecha o año ) como punto de control.</p>
+
+<p>En la sección de datos generales debemos especificar:
+- El nombre del origen de datos
+- Opcionalmente una descripción
+- Acciones poscarga, que consisten en una o más sentencias SQL separadas por punto y coma(;) que se ejecutarán después de realizar la carga de datos. 
+Esto es útil por ejemplo, para separar los datos en diferentes tablas o para ejecutar transformaciones de datos.
+- Si el origen de datos lo utilizaremos para cargar datos de tablas catálogos. De ser así, el origen de datos se guardará en una tabla <em>nombre_origen_ctl</em>, 
+estas tablas pueden ser usadas posteriormente para enlazar campos que sean llaves foráneas.</p>
+
+<div class="figure" id="figure-2-2">
+    <img src="images/crear_origen_datos.gif" alt="Creación de origen de datos" />
+
+    <p class="caption"><strong>Figura 2.2</strong> Creación de origen de datos</p>
+</div>
+
+
+<p>Para realizar la carga desde una base de datos se debe seleccionar la ficha <strong>Desde base de datos</strong> . 
+Ahí se ingresará el nombre de la conexión y la sentencia SQL para extraer los datos, es recomendable probar la sentencia 
+antes de guardarla con el botón <strong>Probar Sentencia SQL</strong> la cual mostrará un mensaje con el resultado de la prueba y un 
+listado de datos de muestra en el caso que ejecución de la sentencia haya sido exitosa.</p>
+
+<div class="figure" id="figure-2-3">
+    <img src="images/origen_datos_sql.gif" alt="Creación de origen de datos a partir de sentencia SQL" />
+
+    <p class="caption"><strong>Figura 2.3</strong> Creación de origen de datos a partir de sentencia SQL</p>
+</div>
+
+
+<p>Para cargar datos desde un archivo, debemos especificar la ruta del archivo, el cual puede ser una hoja electrónica
+o un archivo de texto con formato de valores separados por comas (CSV).
+<div class="figure" id="figure-2-4">
+    <img src="images/origen_datos_archivo.gif" alt="Creación de origen de datos a partir archivo" />
+
+    <p class="caption"><strong>Figura 2.4</strong> Creación de origen de datos a partir archivo</p>
+</div>
+
+
+<h4 id="configuracion-de-un-origen-de-datos">2.2.0.1 Configuración de un origen de datos</h4>
+
+<p>Al especificar las opciones necesarias en el formulario de origen de datos y guardarlo se cargará una nueva sección en la parte inferior del formulario, 
+por medio de la cual debemos configurar los datos obtenidos.</p>
+
+<p>Es de suma importancia realizar esta configuración correctamente. Debemos especificar para cada campo su significado. El significado 
+del campo determinará qué es lo que almacenará y por medio de éste se permitirá luego relacionar campos de diferentes orígenes de datos, 
+un significado de campo solo puede aparecer una vez en cada origen de datos. Un campo con especial importancia 
+es el <strong>Campo para cálculos</strong> el cual identificará el campo que se utilizará para realizar los cálculos dentro de la fórmula del indicador.</p>
+
+<div class="figure" id="figure-2-5">
+    <img src="images/origen_datos_significados.gif" alt="Configuración del origen de datos" />
+
+    <p class="caption"><strong>Figura 2.5</strong> Configuración del origen de datos</p>
+</div>
+
+
+<h4 id="carga-incremental">2.2.0.2 Carga incremental</h4>
+
+<p>Por defecto cada vez que se lee un origen de datos se hace una lectura completa, sustituyendo los valores de lecturas anteriores, 
+si la cantidad de datos es muy grande puede ser más conveniente hacer cargas incrementales, la cual consiste en leer los datos a 
+partir del punto en que fueron leidos en una lectura anterior y así cargar solamente los datos nuevos.</p>
+
+<p>Para configurar la carga incremental tiene que especificar:
+- <strong>Campo para lectura incremental</strong>. El campo que se usará como punto de control de la carga incremental, debe ser un campo de tipo fecha o año. 
+- <strong>Valor de corte</strong>. Especificando este campo, al realizar una segunda lectura, se determinará el último valor leido y se recuperarán los valores mayores a éste.
+Se puede dejar vació ya que se actualizará con el valor del último registro leido en la carga de datos. 
+- <strong>Ventana límite inferior</strong>. Representa el número de unidades (días si el campo de control es fecha o años para campo de control años) que se volverán a 
+leer a partir del valor de corte. Por ejemplo: si el valor de corte es <em>13/02/2016</em> y el límite inferior es <em>3</em> se leerá a partir de <em>10/02/2016</em>
+- <strong>Ventana límite superior</strong>. Este controla el número de unidades que se descontarán de la fecha actual, para realizar la lectura. 
+Por ejemplo: si la fecha actual es <em>15/09/2016</em> y el límite superior es <em>5</em>, no se leerán los datos hasta la fecha actual sino 5 días antes, 
+es decir hasta <em>10/09/2016</em></p>
+
+<div class="figure" id="figure-2-6">
+    <img src="images/carga_incremental.gif" alt="Carga incremental" />
+
+    <p class="caption"><strong>Figura 2.6</strong> Carga incremental</p>
+</div>
+
+
+    </div>
+
+    <div class="span3">
+        <div class="item local_toc">
+            <h3>Índice de contenidos</h3>
+
+            <ul class="unstyled">
+                                                <li class="level-1">
+                        <span></span>
+                        <a class="internal" href="./capitulo-2.html#etl">ETL</a>
+                    </li>
+                                    <li class="level-2">
+                        <span>2.1</span>
+                        <a class="internal" href="./capitulo-2.html#conexion-a-bases-de-datos">Conexión a bases de datos</a>
+                    </li>
+                                    <li class="level-2">
+                        <span>2.2</span>
+                        <a class="internal" href="./capitulo-2.html#origen-de-datos">Origen de datos</a>
+                    </li>
+                                        </ul>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+</html>

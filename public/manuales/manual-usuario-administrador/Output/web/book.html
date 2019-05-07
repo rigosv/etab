@@ -1,0 +1,694 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="author" content="eTAB" />
+    <meta name="date" content="07/05/2019"/>
+    <meta name="generator" content="easybook 5.0-DEV"/>
+
+    <title>Manual del Administrador</title>
+
+    <link rel="stylesheet" href="./css/easybook.css" />
+
+</head>
+
+<body>
+
+<div class="container">
+<div class="row">
+    <div class="span12">
+    <div class="item cover">
+    <h1>Manual del Administrador</h1>
+    <h2>eTAB</h2>
+</div>    </div>
+    <div class="span9">
+        <div class="item ">
+    <h1>Introducción</h1>
+
+    <p>El e-TAB es una herramienta que propone proveer información y datos presentando estos de una manera accesible y objetiva, 
+utilizando visualizaciones gráficas de diferentes tipos (gráficas, mapas, tablas interactivas) que buscará distribuir y 
+proveer información de diferentes programas de forma unificada. Inicialmente, basados en necesidades existentes, 
+es necesario un análisis para mejor entendimiento de la ejecución del programa dentro de la iniciativa. 
+Por lo tanto, el eTAB será alimentado por los datos obtenidos a partir de la información administraTiva producida por el sistema estatal y 
+nacional de información de salud.</p>
+
+<p>El Tablero de Seguimiento y Control en Línea permitirá:</p>
+
+<ol>
+<li>Monitorear el progreso de la ejecución y la utilización de los recursos.</li>
+<li>Monitorear el progreso hacia el logro de resultados. </li>
+<li>Retroalimentar el sistema para tomar medidas correctivas sobre la marcha del proyecto y alinearlo hacia el cumplimiento de los resultados comprometidos. </li>
+</ol>
+
+<p>La información contenida en el Tablero de Seguimiento, a su vez, alimentará el 
+Reporte de Monitoreo del Progreso y Desempeño (PMR), sistema de ìnformación del 
+BID y a disposición de la Iniciativa SM2015 y del MINSAL, la idea es evitar en 
+lo posible la creación de sistemas de información paralelos y más bien fortalecer 
+el sistema de información sectorial del MINSAL.</p>
+
+<p>El eTAB será desarrollado utilizando un repositorio de código de acceso abierto 
+a través de Internet y publicado bajo los términos de una licencia libre/open source <sup id="fnref:1"><a href="#fn:1" class="footnote-ref">1</a></sup>.</p>
+
+<div class="footnotes">
+<hr />
+<ol>
+
+<li id="fn:1">
+<p>Aprobada por la Free Softwale Foundation y la Open Source Initiative.&#160;<a href="#fnref:1" class="footnote-backref">&#8617;</a></p>
+</li>
+
+</ol>
+</div>
+
+</div>
+        <div class="item chapter">
+    <h1 id="generalidades"><span>Capítulo 1</span> Generalidades</h1>
+    <h2 id="flujo-de-trabajo">1.1 Flujo de trabajo</h2>
+
+<p>El flujo de trabajo principal, consiste en los siguientes pasos:</p>
+
+<ol>
+<li>Configurar una conexión desde donde se obtendrán los datos (Orígenes de datos -> Conexión a bases de datos -> Agregar
+Nuevo)</li>
+<li>Crear el origen de datos, se puede extraer desde una base de datos o un archivo (Orígenes de datos -> 
+Origen de datos -> Agregar Nuevo)</li>
+<li>Configurar el origen de datos, se deben especificar el significado de cada campo (Orígenes de datos -> 
+Origen de datos -> Seleccionar un origen para editar)</li>
+<li>Crear las variables (Indicadores -> Variables -> Agregar Nuevo)</li>
+<li>Crear la ficha técnica, la cual contendrá las especificaciones del indicador y la fórmula para calcularlo 
+(Indicadores -> Ficha Técnica -> Agregar Nuevo)</li>
+<li>Uso de los indicadores desde el tablero (Indicadores -> Tablero)</li>
+</ol>
+
+<p>Pasos alternos:</p>
+
+<ol>
+<li>Si los datos se obtendrán desde un archivo, no es necesario configurar una conexión a una base de datos</li>
+</ol>
+
+<h2 id="interfaz-principal">1.2 Interfaz principal</h2>
+
+<div class="figure" id="figure-1-1">
+    <img src="images/area_principal.png" alt="Interfaz Principal" />
+
+    <p class="caption"><strong>Figura 1.1</strong> Interfaz Principal</p>
+</div>
+
+
+<ol>
+<li>Nombre del usuario actual y la opción para salir.</li>
+<li>Logo/Imagen principal, la cual puede cambiar según la personalización que se haga en la instalación</li>
+<li>Menú principal, se mostrarán las opciones de acuerdo al perfil del usuario</li>
+<li>Acciones, contendrá opciones como agregar un nuevo elemento o filtrar resultados, dependerá de que se esté 
+mostrando en el área de trabajo</li>
+<li>Área de trabajo. Se mostrará su contenido de acuerdo a las opciones seleccionadas</li>
+</ol>
+
+<h2 id="listado">1.3 Listado</h2>
+
+<p>La mayoría de interfaces se componen de un listado, desde la cual podemos realizar las siguientes acciones:</p>
+
+<ol>
+<li>Crear un nuevo elemento</li>
+<li>Seleccionar un elemento para Editar/Borrar</li>
+<li>Cambiar el orden del listado, dando clic en el título de la columna</li>
+<li>Aplicar filtros</li>
+<li>Exportar los datos del listado</li>
+</ol>
+
+<div class="figure" id="figure-1-2">
+    <img src="images/listado.png" alt="Configuración del origen de datos" />
+
+    <p class="caption"><strong>Figura 1.2</strong> Configuración del origen de datos</p>
+</div>
+
+
+<h2 id="filtrando-elementos">1.4 Filtrando elementos</h2>
+
+<p>Cuando está en la vista <strong>listado</strong> se mostrará, en la barra de acciones, la opción Filtros, al darle clic se mostrará 
+una nueva sección que mostrará las opciones por las cuales puede filtrar el listado que se muestra actualmente, 
+los campos disponibles serán propios de cada listado y puede seleccionar uno o varios campos para filtrar. 
+Al establecer un filtro debe dar clic en el botón <strong>Filtrar</strong> para que éste se aplicado</p>
+
+<div class="figure" id="figure-1-3">
+    <img src="images/filtros.gif" alt="Filtros" />
+
+    <p class="caption"><strong>Figura 1.3</strong> Filtros</p>
+</div>
+
+
+<p>Por defecto se buscará los elementos que contengan el texto ingresado como filtro, pero también puede elegir la opción 
+<strong>Filtros avanzados</strong> para poder elegir la forma en que se debe buscar el texto ingresado: <strong>contiene</strong>, <strong>no contiene</strong>, <strong>es igual a</strong>; 
+como se muestra en la imagen siguiente</p>
+
+<div class="figure" id="figure-1-4">
+    <img src="images/filtros_avanzados.gif" alt="Filtros avanzados" />
+
+    <p class="caption"><strong>Figura 1.4</strong> Filtros avanzados</p>
+</div>
+
+
+<h2 id="acciones-sobre-un-elemento">1.5 Acciones sobre un elemento</h2>
+
+<p>Cuando se está creando un nuevo elemento se dispondrá en la parte inferior del formulario los siguientes botones de acción:</p>
+
+<ol>
+<li>Crear y editar. Guarda los datos actuales y permanece el formulario abierto para edición</li>
+<li>Crear y regresar al listado. Guarda los datos actuales y regresa a mostrar el listado.</li>
+<li>Crear y agregar otro. Guarda los datos y muestra el formulario en blanco para agregar otro elemento</li>
+</ol>
+
+<div class="figure" id="figure-1-5">
+    <img src="images/botones_crear.png" alt="Crear - Acciones" />
+
+    <p class="caption"><strong>Figura 1.5</strong> Crear - Acciones</p>
+</div>
+
+
+<p>Si se está editando un elemento existente dispondremos de los siguientes botones de acción:</p>
+
+<ol>
+<li>Actualizar. Guarda los cambios realizados y mantiene el formulario abierto para poder realizar más modificaciones.</li>
+<li>Actualizar y cerrar. Guarda los cambios y vuelve al listado.</li>
+<li>Borrar. Permite elimitar el elemento actual, se pedirá confirmación de la acción.</li>
+</ol>
+
+<div class="figure" id="figure-1-6">
+    <img src="images/botones_editar.png" alt="Editar - Acciones" />
+
+    <p class="caption"><strong>Figura 1.6</strong> Editar - Acciones</p>
+</div>
+
+
+</div>
+        <div class="item chapter">
+    <h1 id="etl"><span>Capítulo 2</span> ETL</h1>
+    <p>El bloque ETL (Extract Transform Load) es la sección dónde se configuran los orígenes de datos y se obtiene la información de ellos.</p>
+
+<h2 id="conexion-a-bases-de-datos">2.1 Conexión a bases de datos</h2>
+
+<p>Cuando los datos provienen de una base de datos ya existente, se debe configurar antes la conexión a ésta. 
+Los motores soportados son: PostgreSQL, MySQL, SQL Server y Oracle.
+Se inicia en el menú <strong>Origen de Datos --> Conexión a base de datos</strong> Debemos ingresar los datos necesarios para configurar la conexión, 
+una vez ingresados se puede probar la conexión con el botón <strong>Probar Conexión</strong> el cual nos devolverá un mensaje con el resultado de la prueba.</p>
+
+<div class="figure" id="figure-2-1">
+    <img src="images/crear_conexion.gif" alt="Formulario de conexión de base de datos" />
+
+    <p class="caption"><strong>Figura 2.1</strong> Formulario de conexión de base de datos</p>
+</div>
+
+
+<h2 id="origen-de-datos">2.2 Origen de datos</h2>
+
+<p>Para la creación de un origen de datos tenemos las secciones: 
+- <strong>Datos generales</strong> que contendrá la descripción general del origen. 
+- <strong>Desde base de datos</strong> donde especificará si los datos se obtendrán desde una conexión a una base de datos o desde un archivo.
+- <strong>Desde archivo</strong> cuando los datos sean obtenidos de un archivo de hoja de cálculo o con formato csv.
+- <strong>Carga incremental</strong> Para orígens de datos que tengan un campo fecha o año, se puede indicar que la carga se inicie a partir del último registro de la 
+carga anterior, tomando algunos de estos campos (fecha o año ) como punto de control.</p>
+
+<p>En la sección de datos generales debemos especificar:
+- El nombre del origen de datos
+- Opcionalmente una descripción
+- Acciones poscarga, que consisten en una o más sentencias SQL separadas por punto y coma(;) que se ejecutarán después de realizar la carga de datos. 
+Esto es útil por ejemplo, para separar los datos en diferentes tablas o para ejecutar transformaciones de datos.
+- Si el origen de datos lo utilizaremos para cargar datos de tablas catálogos. De ser así, el origen de datos se guardará en una tabla <em>nombre_origen_ctl</em>, 
+estas tablas pueden ser usadas posteriormente para enlazar campos que sean llaves foráneas.</p>
+
+<div class="figure" id="figure-2-2">
+    <img src="images/crear_origen_datos.gif" alt="Creación de origen de datos" />
+
+    <p class="caption"><strong>Figura 2.2</strong> Creación de origen de datos</p>
+</div>
+
+
+<p>Para realizar la carga desde una base de datos se debe seleccionar la ficha <strong>Desde base de datos</strong> . 
+Ahí se ingresará el nombre de la conexión y la sentencia SQL para extraer los datos, es recomendable probar la sentencia 
+antes de guardarla con el botón <strong>Probar Sentencia SQL</strong> la cual mostrará un mensaje con el resultado de la prueba y un 
+listado de datos de muestra en el caso que ejecución de la sentencia haya sido exitosa.</p>
+
+<div class="figure" id="figure-2-3">
+    <img src="images/origen_datos_sql.gif" alt="Creación de origen de datos a partir de sentencia SQL" />
+
+    <p class="caption"><strong>Figura 2.3</strong> Creación de origen de datos a partir de sentencia SQL</p>
+</div>
+
+
+<p>Para cargar datos desde un archivo, debemos especificar la ruta del archivo, el cual puede ser una hoja electrónica
+o un archivo de texto con formato de valores separados por comas (CSV).
+<div class="figure" id="figure-2-4">
+    <img src="images/origen_datos_archivo.gif" alt="Creación de origen de datos a partir archivo" />
+
+    <p class="caption"><strong>Figura 2.4</strong> Creación de origen de datos a partir archivo</p>
+</div>
+
+
+<h4 id="configuracion-de-un-origen-de-datos">2.2.0.1 Configuración de un origen de datos</h4>
+
+<p>Al especificar las opciones necesarias en el formulario de origen de datos y guardarlo se cargará una nueva sección en la parte inferior del formulario, 
+por medio de la cual debemos configurar los datos obtenidos.</p>
+
+<p>Es de suma importancia realizar esta configuración correctamente. Debemos especificar para cada campo su significado. El significado 
+del campo determinará qué es lo que almacenará y por medio de éste se permitirá luego relacionar campos de diferentes orígenes de datos, 
+un significado de campo solo puede aparecer una vez en cada origen de datos. Un campo con especial importancia 
+es el <strong>Campo para cálculos</strong> el cual identificará el campo que se utilizará para realizar los cálculos dentro de la fórmula del indicador.</p>
+
+<div class="figure" id="figure-2-5">
+    <img src="images/origen_datos_significados.gif" alt="Configuración del origen de datos" />
+
+    <p class="caption"><strong>Figura 2.5</strong> Configuración del origen de datos</p>
+</div>
+
+
+<h4 id="carga-incremental">2.2.0.2 Carga incremental</h4>
+
+<p>Por defecto cada vez que se lee un origen de datos se hace una lectura completa, sustituyendo los valores de lecturas anteriores, 
+si la cantidad de datos es muy grande puede ser más conveniente hacer cargas incrementales, la cual consiste en leer los datos a 
+partir del punto en que fueron leidos en una lectura anterior y así cargar solamente los datos nuevos.</p>
+
+<p>Para configurar la carga incremental tiene que especificar:
+- <strong>Campo para lectura incremental</strong>. El campo que se usará como punto de control de la carga incremental, debe ser un campo de tipo fecha o año. 
+- <strong>Valor de corte</strong>. Especificando este campo, al realizar una segunda lectura, se determinará el último valor leido y se recuperarán los valores mayores a éste.
+Se puede dejar vació ya que se actualizará con el valor del último registro leido en la carga de datos. 
+- <strong>Ventana límite inferior</strong>. Representa el número de unidades (días si el campo de control es fecha o años para campo de control años) que se volverán a 
+leer a partir del valor de corte. Por ejemplo: si el valor de corte es <em>13/02/2016</em> y el límite inferior es <em>3</em> se leerá a partir de <em>10/02/2016</em>
+- <strong>Ventana límite superior</strong>. Este controla el número de unidades que se descontarán de la fecha actual, para realizar la lectura. 
+Por ejemplo: si la fecha actual es <em>15/09/2016</em> y el límite superior es <em>5</em>, no se leerán los datos hasta la fecha actual sino 5 días antes, 
+es decir hasta <em>10/09/2016</em></p>
+
+<div class="figure" id="figure-2-6">
+    <img src="images/carga_incremental.gif" alt="Carga incremental" />
+
+    <p class="caption"><strong>Figura 2.6</strong> Carga incremental</p>
+</div>
+
+
+</div>
+        <div class="item chapter">
+    <h1 id=""><span>3.1</span> </h1>
+    <p>u# Gestión de usuarios y grupos
+Para la gestión de los usuario y grupos se utiliza la opción del menú <strong>Usuarios y grupos</strong>. Esta opción del menú aparecerá disponible solo para los usuarios con el perfil de administrador.</p>
+
+<h2 id="usuarios">3.1 Usuarios</h2>
+
+<p>Al seleccionar la opción <strong>Usuarios</strong> del menú Usuarios y grupos, se podrá realizar el mantenimiento de la información 
+de cada usuario, primero aparecerá el listado de usuarios y se podrá seleccionar al dar clic en el nombre.</p>
+
+<p>Al elegir un usuario podemos modificar su información, la cual está clasificada en 3 Fichas:</p>
+
+<ol>
+<li>Usuario</li>
+<li>Seguridad</li>
+<li>Indicadores y Salas</li>
+</ol>
+
+<h3 id="usuario">3.1.1 Usuario</h3>
+
+<p>La ficha usuario está dividida en dos secciones:
+- Perfil: Donde se ingresan los datos del usuario
+- General: Datos de identificación de ingreso al sistema</p>
+
+<div class="figure" id="figure-3-1">
+    <img src="images/usuario1.gif" alt="Usuario" />
+
+    <p class="caption"><strong>Figura 3.1</strong> Usuario</p>
+</div>
+
+
+<h3 id="seguridad">3.1.2 Seguridad</h3>
+
+<p>Esta ficha consta de dos secciones: Grupos y Roles.
+En está opción se pueden especificar los roles/permisos del usuario , los cuales se corresponden con cada opción del menú más la acción que se puede realizar.
+Por ejemplo: RESPONSABLE_DATO_CREATE le dará permiso para crear un elemento de la opción del menú Responsable Datos</p>
+
+<div class="figure" id="figure-3-2">
+    <img src="images/usuario_seguridad.gif" alt="Usuario - Administración" />
+
+    <p class="caption"><strong>Figura 3.2</strong> Usuario - Administración</p>
+</div>
+
+
+<div class="table" id="table-3-1">
+
+    <table>
+<thead>
+<tr>
+  <th>Atributo</th>
+  <th>Significado previsto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>VIEW</td>
+  <td>Cuando le es permitido a alguien ver el objeto.</td>
+</tr>
+<tr>
+  <td>EXPORT</td>
+  <td>Tiene disponibles las opciones de exportar el listado de objetos</td>
+</tr>
+<tr>
+  <td>EDIT</td>
+  <td>Cuando le es permitido a alguien hacer cambios al objeto.</td>
+</tr>
+<tr>
+  <td>CREATE</td>
+  <td>Cuando a alguien se le permite crear el objeto.</td>
+</tr>
+<tr>
+  <td>DELETE</td>
+  <td>Cuando a alguien se le permite eliminar el objeto.</td>
+</tr>
+<tr>
+  <td>OPERATOR</td>
+  <td>Cuando le es permitido a alguien realizar todas las acciones anteriores.</td>
+</tr>
+<tr>
+  <td>MASTER</td>
+  <td>Cuando le es permitido a alguien realizar todas las acciones anteriores, y además tiene permitido conceder cualquiera de los permisos anteriores a otros.</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+<p>Además se dispone de roles generales.
+<div class="table" id="table-3-2">
+
+    <table>
+<thead>
+<tr>
+  <th>Rol</th>
+  <th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>ROLE_USER</td>
+  <td>Rol de usuario normal</td>
+</tr>
+<tr>
+  <td>ROLE_SONATA_ADMIN</td>
+  <td>Rol de administrador, tendrá acceso a todas las opciones</td>
+</tr>
+<tr>
+  <td>ROLE_USER_TABLERO</td>
+  <td>Activa la opción de Tablero del menú Ficha Técnica</td>
+</tr>
+<tr>
+  <td>ROLE_USER_CUBOS</td>
+  <td>Activa la opción Cubos OLAP del menú Ficha Técnica</td>
+</tr>
+</tbody>
+</table>
+</div>
+</p>
+
+<h3 id="indicadores-y-salas">3.1.3 Indicadores y Salas</h3>
+
+<p>Por medio de esta opción se le asignan los indicadores y salas que tendrá disponibles el usuario en el trablero
+<div class="figure" id="figure-3-3">
+    <img src="images/usuario_indicadores_salas.gif" alt="Usuario - Indicadores y Salas" />
+
+    <p class="caption"><strong>Figura 3.3</strong> Usuario - Indicadores y Salas</p>
+</div>
+
+
+</div>
+        <div class="item chapter">
+    <h1 id="catalogos"><span>Capítulo 4</span> Catálogos</h1>
+    <p>Las siguientes opciones están ubicadas en el menú principal <strong>Catálogos</strong></p>
+
+<h2 id="fuente-de-datos">4.1 Fuente de datos</h2>
+
+<div class="figure" id="figure-4-1">
+    <img src="images/fuente_datos.png" alt="Fuente de datos" />
+
+    <p class="caption"><strong>Figura 4.1</strong> Fuente de datos</p>
+</div>
+
+
+<ul>
+<li><strong>Contacto:</strong> Nombre de la persona que proporciona datos.</li>
+<li><strong>Establecimiento:</strong> Organismo al que pertenece el contacto.</li>
+<li><strong>Correo electrónico:</strong> Correo electrónico oficial del contacto.</li>
+<li><strong>Número telefónico:</strong> Número telefónico del contacto.</li>
+<li><strong>Cargo:</strong> Cargo que ocupa el contacto dentro del organismo al que pertenece.</li>
+</ul>
+
+<h2 id="responsable-de-datos">4.2 Responsable de datos</h2>
+
+<div class="figure" id="figure-4-2">
+    <img src="images/responsable_datos.png" alt="Responsable de datos" />
+
+    <p class="caption"><strong>Figura 4.2</strong> Responsable de datos</p>
+</div>
+
+- <strong>Contacto:</strong> Nombre de la persona que es reponsable de los datos y la calidad de estos (Podría ser el mismo que en Fuente de datos).
+- <strong>Establecimiento:</strong> Organismo al que pertenece el contacto.
+- <strong>Correo electrónico:</strong> Correo electrónico oficial del contacto.
+- <strong>Número telefónico:</strong> Número telefónico del contacto.
+- <strong>Cargo:</strong> Cargo que ocupa el contacto dentro del organismo al que pertenece.</p>
+
+<h2 id="responsable-indicador">4.3 Responsable indicador</h2>
+
+<div class="figure" id="figure-4-3">
+    <img src="images/responsable_indicador.png" alt="Responsable de indicador" />
+
+    <p class="caption"><strong>Figura 4.3</strong> Responsable de indicador</p>
+</div>
+
+- <strong>Contacto:</strong> Nombre de la persona que es reponsable de hacer el seguimiento y control del indicador.
+- <strong>Establecimiento:</strong> Organismo al que pertenece el contacto.
+- <strong>Correo electrónico:</strong> Correo electrónico oficial del contacto.
+- <strong>Número telefónico:</strong> Número telefónico del contacto.
+- <strong>Cargo:</strong> Cargo que ocupa el contacto dentro del organismo al que pertenece.</p>
+
+<h2 id="clasificacion-segun-uso">4.4 Clasificación según uso</h2>
+
+<div class="figure" id="figure-4-4">
+    <img src="images/clasificacion_uso.png" alt="Clasificación según uso" />
+
+    <p class="caption"><strong>Figura 4.4</strong> Clasificación según uso</p>
+</div>
+
+
+<ul>
+<li><strong>Código:</strong> Clave con el que será identificado de manera técnica.</li>
+<li><strong>Descripción:</strong> Nombre de la clasificación según uso. Indica el uso para el que puede estar destinado un indicador.</li>
+<li><strong>Comentario:</strong> Nota o comentario que se quiera agregar, opcional.</li>
+</ul>
+
+<h2 id="clasificacion-tecnica">4.5 Clasificación técnica</h2>
+
+<div class="figure" id="figure-4-5">
+    <img src="images/clasificacion_tecnica.png" alt="Clasificación técnica" />
+
+    <p class="caption"><strong>Figura 4.5</strong> Clasificación técnica</p>
+</div>
+
+
+<ul>
+<li><strong>Código:</strong> Clave con el que será identificado.</li>
+<li><strong>Descripción:</strong> Nombre de la Clasificación técnica. Esta es una subdivisión de la clasificación según uso.</li>
+<li><strong>Comentario:</strong> Nota o comentario que se quiera agregar, opcional.</li>
+<li><strong>Clasificación Según Uso:</strong> Es la clasificación según uso a la que pertenece.</li>
+</ul>
+
+<h2 id="significado-de-campos">4.6 Significado de campos</h2>
+
+<p>Se utiliza para identificar de manera estándar los datos provenientes de los orígenes. Por ejemplo en una base de datos el campo puede llamarse <strong>fecha_nacimiento</strong>, en otra puede llamarse <strong>fecha_nac</strong> y en ambos casos se refiere a lo mismo.</p>
+
+<div class="figure" id="figure-4-6">
+    <img src="images/significado_campo.png" alt="Significado campo" />
+
+    <p class="caption"><strong>Figura 4.6</strong> Significado campo</p>
+</div>
+
+
+<ul>
+<li><strong>Código:</strong> Identificador del significado.</li>
+<li><strong>Descripción:</strong> Nombre del significado</li>
+<li><strong>Utilizado para costeo:</strong> Marque esta casilla, si el significado será exclusivo para formularios de costeo.</li>
+<li><strong>Describirá campos de catálogo:</strong> Aquellos campos de tablas catálogos como, llave primaria, llave foránea, entre otros.</li>
+<li><strong>Catálogo asociado:</strong> Asociar un catálogo a un significado permitirá cargar otros datos por ejemplo que el campo sea una llave foránea y los demás datos se encuentren en una tabla catálogo. Ej.: código de municipio, y en la tabla catálogo se encontrará el nombre del municipio.</li>
+<li><strong>Tipos de gráficos permitidos:</strong> Se debe elegir los tipos de gráficos que se pueden usar sobre este campo</li>
+</ul>
+
+<h2 id="colores-alertas">4.7 Colores - Alertas</h2>
+
+<div class="figure" id="figure-4-7">
+    <img src="images/colores_alertas.png" alt="Significado campo" />
+
+    <p class="caption"><strong>Figura 4.7</strong> Significado campo</p>
+</div>
+
+- <strong>Código:</strong> Para crear colores y usarlos posteriormente en la definición de rangos de alertas, aquí ingresará un código del color en formato usado en HTML.
+- <strong>Color:</strong> Nombre que se mostrará para el color</p>
+
+</div>
+        <div class="item lof">
+
+<h1>Lista de figuras</h1>
+
+<ul>
+                        <li>
+                <span>1.1</span>
+                <a href="#figure-1-1">Interfaz Principal</a>
+            </li>
+                                <li>
+                <span>1.2</span>
+                <a href="#figure-1-2">Configuración del origen de datos</a>
+            </li>
+                                <li>
+                <span>1.3</span>
+                <a href="#figure-1-3">Filtros</a>
+            </li>
+                                <li>
+                <span>1.4</span>
+                <a href="#figure-1-4">Filtros avanzados</a>
+            </li>
+                                <li>
+                <span>1.5</span>
+                <a href="#figure-1-5">Crear - Acciones</a>
+            </li>
+                                <li>
+                <span>1.6</span>
+                <a href="#figure-1-6">Editar - Acciones</a>
+            </li>
+                                    <li>
+                <span>2.1</span>
+                <a href="#figure-2-1">Formulario de conexión de base de datos</a>
+            </li>
+                                <li>
+                <span>2.2</span>
+                <a href="#figure-2-2">Creación de origen de datos</a>
+            </li>
+                                <li>
+                <span>2.3</span>
+                <a href="#figure-2-3">Creación de origen de datos a partir de sentencia SQL</a>
+            </li>
+                                <li>
+                <span>2.4</span>
+                <a href="#figure-2-4">Creación de origen de datos a partir archivo</a>
+            </li>
+                                <li>
+                <span>2.5</span>
+                <a href="#figure-2-5">Configuración del origen de datos</a>
+            </li>
+                                <li>
+                <span>2.6</span>
+                <a href="#figure-2-6">Carga incremental</a>
+            </li>
+                                    <li>
+                <span>3.1</span>
+                <a href="#figure-3-1">Usuario</a>
+            </li>
+                                <li>
+                <span>3.2</span>
+                <a href="#figure-3-2">Usuario - Administración</a>
+            </li>
+                                <li>
+                <span>3.3</span>
+                <a href="#figure-3-3">Usuario - Indicadores y Salas</a>
+            </li>
+                                    <li>
+                <span>4.1</span>
+                <a href="#figure-4-1">Fuente de datos</a>
+            </li>
+                                <li>
+                <span>4.2</span>
+                <a href="#figure-4-2">Responsable de datos</a>
+            </li>
+                                <li>
+                <span>4.3</span>
+                <a href="#figure-4-3">Responsable de indicador</a>
+            </li>
+                                <li>
+                <span>4.4</span>
+                <a href="#figure-4-4">Clasificación según uso</a>
+            </li>
+                                <li>
+                <span>4.5</span>
+                <a href="#figure-4-5">Clasificación técnica</a>
+            </li>
+                                <li>
+                <span>4.6</span>
+                <a href="#figure-4-6">Significado campo</a>
+            </li>
+                                <li>
+                <span>4.7</span>
+                <a href="#figure-4-7">Significado campo</a>
+            </li>
+            </ul>
+
+</div>
+    </div>
+    <div class="span3">
+    <div class="item toc">
+
+<h1>Índice de contenidos</h1>
+
+<ul class="unstyled">
+            <li class="chapter level-1">
+            <span>Capítulo 1</span> <a href="#generalidades">Generalidades</a>
+        </li>
+            <li class="chapter level-2">
+            <span>1.1</span> <a href="#flujo-de-trabajo">Flujo de trabajo</a>
+        </li>
+            <li class="chapter level-2">
+            <span>1.2</span> <a href="#interfaz-principal">Interfaz principal</a>
+        </li>
+            <li class="chapter level-2">
+            <span>1.3</span> <a href="#listado">Listado</a>
+        </li>
+            <li class="chapter level-2">
+            <span>1.4</span> <a href="#filtrando-elementos">Filtrando elementos</a>
+        </li>
+            <li class="chapter level-2">
+            <span>1.5</span> <a href="#acciones-sobre-un-elemento">Acciones sobre un elemento</a>
+        </li>
+                <li class="chapter level-1">
+            <span>Capítulo 2</span> <a href="#etl">ETL</a>
+        </li>
+            <li class="chapter level-2">
+            <span>2.1</span> <a href="#conexion-a-bases-de-datos">Conexión a bases de datos</a>
+        </li>
+            <li class="chapter level-2">
+            <span>2.2</span> <a href="#origen-de-datos">Origen de datos</a>
+        </li>
+                <li class="chapter level-2">
+            <span>3.1</span> <a href="#usuarios">Usuarios</a>
+        </li>
+                <li class="chapter level-1">
+            <span>Capítulo 4</span> <a href="#catalogos">Catálogos</a>
+        </li>
+            <li class="chapter level-2">
+            <span>4.1</span> <a href="#fuente-de-datos">Fuente de datos</a>
+        </li>
+            <li class="chapter level-2">
+            <span>4.2</span> <a href="#responsable-de-datos">Responsable de datos</a>
+        </li>
+            <li class="chapter level-2">
+            <span>4.3</span> <a href="#responsable-indicador">Responsable indicador</a>
+        </li>
+            <li class="chapter level-2">
+            <span>4.4</span> <a href="#clasificacion-segun-uso">Clasificación según uso</a>
+        </li>
+            <li class="chapter level-2">
+            <span>4.5</span> <a href="#clasificacion-tecnica">Clasificación técnica</a>
+        </li>
+            <li class="chapter level-2">
+            <span>4.6</span> <a href="#significado-de-campos">Significado de campos</a>
+        </li>
+            <li class="chapter level-2">
+            <span>4.7</span> <a href="#colores-alertas">Colores - Alertas</a>
+        </li>
+    </ul>
+
+</div>    </div>
+</div>
+</div>
+
+</body>
+</html>

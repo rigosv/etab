@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="author" content="eTAB" />
+    <meta name="date" content="06/05/2019"/>
+    <meta name="generator" content="easybook 5.0-DEV"/>
+
+    <title>Tablero de indicadores | Manual de Usuario</title>
+
+    <link rel="stylesheet" href="./css/easybook.css" />
+
+</head>
+
+<body class="item chapter">
+<div class="container">
+<div class="menu">
+    <div class="row">
+        <h1 class="span9"><a href="./index.html">Manual de Usuario</a></h1>
+        <p class="span3">
+                        <a href="./capitulo-2.html"><span>&larr;</span> Anterior</a>
+            
+                        <a href="./capitulo-4.html">Siguiente <span>&rarr;</span></a>
+                    </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span9">
+        <h1 id="tablero-de-indicadores"><span>Capítulo 3</span> Tablero de indicadores</h1>
+        <p>El objetivo del trablero es proveer una herramienta para el análisis de los datos del indicador de manera dinámica y que el usuario pueda interactuar para mostrar los datos de la forma que más le sea útil. Para ingresar elija en el menú principal <strong>Indicadores -> Tablero</strong></p>
+
+<h2 id="pestana-indicadores">3.1 Pestaña indicadores</h2>
+
+<p>Esta pestaña muestra el listado de indicadores agrupados según su clasificación técnica. Puede elegir la clasificación con la que desea mostrar el listado usando el botón <strong>Clasificación</strong> la dar clic en él se mostrarán las clasificaciones disponibles. La clasificación seleccionada se mostrará al lado derecho del botón.</p>
+
+<div class="figure" id="figure-3-1">
+    <img src="images/clasificacion_indicadores.png" alt="Clasificación indicadores" />
+
+    <p class="caption"><strong>Figura 3.1</strong> Clasificación indicadores</p>
+</div>
+
+
+<p>Si desea buscar algún indicador, posee un cuadro de texto donde puede ingresar parte del nombre y el listado se filtrará con los datos ingresados.</p>
+
+<div class="figure" id="figure-3-2">
+    <img src="images/filtro_indicador.png" alt="Filtro" />
+
+    <p class="caption"><strong>Figura 3.2</strong> Filtro</p>
+</div>
+
+
+<p>Para elegir un indicador del listado y mostrar su gráfico basta con dar clic sobre el nombre de éste, y se pasará a la pestaña <strong>Gráficos</strong></p>
+
+<h2 id="pestana-graficos">3.2 Pestaña Gráficos</h2>
+
+<p>Los indicadores seleccionados del listado se mostrarán en esta sección que tendrá un aspecto similar al mostrado en la siguiente figura
+<div class="figure" id="figure-3-3">
+    <img src="images/graficos.png" alt="Gráficos" />
+
+    <p class="caption"><strong>Figura 3.3</strong> Gráficos</p>
+</div>
+
+
+<p>Veamos los elementos disponibles con cada gráfico</p>
+
+<div class="figure" id="figure-3-4">
+    <img src="images/elementos_grafico.png" alt="Gráficos" />
+
+    <p class="caption"><strong>Figura 3.4</strong> Gráficos</p>
+</div>
+
+
+<h3 id="1-titulo-del-grafico">3.2.1 1. Título del gráfico.</h3>
+
+<p>Es el nombre del indicador que se está graficando, este valor es tomado de la ficha técnica.</p>
+
+<h3 id="2-rangos-de-alertas">3.2.2 2. Rangos de alertas.</h3>
+
+<p>Si se han definidos rangos de alertas para el indicador se mostrará el cuadro con el detalle de estos rangos: límite inferior, límite superior, color del rango y un comentario explicativo.
+Cada elemento del gráfico se mostrará con el color del rango al cual pertenece, si no existen rangos de alertas se usarán colores aleatoreos para mostrar el gráfico. Por ejemplo se puede definir en la ficha técnica que los elementos del gráfico cuyo valor esté entre 20 y 30 se muestren de color rojo.</p>
+
+<h3 id="3-boton-opciones-del-grafico">3.2.3 3. Botón opciones del gráfico.</h3>
+
+<div class="figure" id="figure-3-5">
+    <img src="images/opciones_grafico.png" alt="Opciones del indicador" />
+
+    <p class="caption"><strong>Figura 3.5</strong> Opciones del indicador</p>
+</div>
+
+
+<p>Aquí se encuentran las opciones para cambiar el tipo de orden de los datos que se muestran en los ejes X y Y, cambiar el tipo de gráfico y cambiar el máximo valor del eje Y; en este último se puede elegir entre el máximo valor de los datos (valor por defecto), el máximo valor de los rangos de alertas (si fueron definidos) o un valor ingresado por el usuario.</p>
+
+<p>Podemos elegir el tipo de gráfico: Columnas, líneas, mapa, circular, entre otros. El usuario podrá elegir el gráfico que represente mejor los datos, cada uno de estos gráficos es interactivo.
+En el caso de que la variable sea de tipo geográfica y exista un mapa asociado a ella, se dispondrá de este tipo de gráfico, para acercar el mapa se usará clic derecho de igual manera clic derecho sobre el mismo elemento para alejar, si se da clic sobre otro elemento cuando el mapa tiene un acercamiento se pasará ese elemento al centro.</p>
+
+<div class="figure" id="figure-3-6">
+    <img src="images/grafico_pastel.png" alt="Gráfico circular" />
+
+    <p class="caption"><strong>Figura 3.6</strong> Gráfico circular</p>
+</div>
+
+<div class="figure" id="figure-3-7">
+    <img src="images/grafico_columnas.png" alt="Gráfico de columnas" />
+
+    <p class="caption"><strong>Figura 3.7</strong> Gráfico de columnas</p>
+</div>
+
+<div class="figure" id="figure-3-8">
+    <img src="images/grafico_linea.png" alt="Gráfico de líneas" />
+
+    <p class="caption"><strong>Figura 3.8</strong> Gráfico de líneas</p>
+</div>
+
+<div class="figure" id="figure-3-9">
+    <img src="images/grafico_odometro.png" alt="Gráfico de odómetro" />
+
+    <p class="caption"><strong>Figura 3.9</strong> Gráfico de odómetro</p>
+</div>
+
+<div class="figure" id="figure-3-10">
+    <img src="images/grafico_termometro.png" alt="Gráfico de termómetro" />
+
+    <p class="caption"><strong>Figura 3.10</strong> Gráfico de termómetro</p>
+</div>
+
+<div class="figure" id="figure-3-11">
+    <img src="images/grafico_mapa.png" alt="Gráfico de mapa" />
+
+    <p class="caption"><strong>Figura 3.11</strong> Gráfico de mapa</p>
+</div>
+
+
+<h3 id="4-boton-zoom">3.2.4 4. Botón zoom.</h3>
+
+<p>Permite pasar a modo de pantalla completa utilizando el gráfico seleccionado, en este modo el gráfico sigue siendo interactivo y para salir se debe presionar la tecla <em>Escape</em></p>
+
+<h3 id="5boton-opciones">3.2.5 5.Botón opciones.</h3>
+
+<p>Este mostrará opciones generales tales como:
+- Ver ficha técnica
+- Cambiar vista gráfico / tabla de datos. Si desea mostrar la tabla con los datos en lugar del gráfico.
+- Ver SQL. Utilizado para recuperar la sentencia SQL que se utiliza para recuperar los datos de la base.
+- Descargar gráfico. Descarga el gráfico en un archivo de imagen.
+- Quitar indicador. Quita el gráfico del tablero
+- Marcar como favorito. Para que aparezca en el grupo de <strong>Favoritos</strong></p>
+
+<h3 id="6-boton-opciones-de-dimension">3.2.6 6. Botón opciones de dimensión</h3>
+
+<p>Aquí podemos cambiar dimensión, podemos elegir la dimensión/variable que se quiere graficar.
+Filtrar: Podemos realizar el filtrado de los elementos que se muestran en el gráfico de dos formas</p>
+
+<ol>
+<li>Todos los elementos que se muestran en el gráfico estarán disponibles como listado para poder seleccionar los que deseemos mostrar en el gráfico.</li>
+<li>Filtrar por posición, elegimos que posiciones se mostrarán, por ejemplo los primeros 5 elementos, los últimos 10, desde el tercero al 7, etc.</li>
+</ol>
+
+<p>Podemos combinar las diferentes opciones para adecuar el gráfico. Por ejemplo: Si queremos mostrar los 5 elementos con mayor índice, ordenamos el gráfico por indicador y aplicamos un filtro con límite superior 5</p>
+
+<h3 id="7-recargar">3.2.7 7. Recargar</h3>
+
+<p>Se utiliza para recargar el gráfico con las opciones por defecto, tal como se mostró al elegirlo en el listado de indicadores</p>
+
+<h3 id="8-fecha-de-ultima-lectura">3.2.8 8. Fecha de última lectura</h3>
+
+<p>En formato dd/mm/aaaa. Se toma la fecha más reciente en que se realizó la última lectura de cada origen de datos asociado al indicador</p>
+
+<h3 id="9-zona-del-grafico">3.2.9 9. Zona del gráfico</h3>
+
+<p>Es la parte donde se mostrará el gráfico, los elementos son interactivos. Cada vez que se dé clic sobre un elemento del gráfico se creará un filtro con el valor seleccionado, podemos aplicar filtros de acuerdo a la cantidad de variables disponibles para el indicador, además se puede regresar y quitar un filtro dando clic en el nivel deseado.</p>
+
+<h3 id="10-meta">3.2.10 10. Meta</h3>
+
+<p>Es el valor especificado en la ficha técnica como meta del indicador.</p>
+
+<h2 id="pestana-sala">3.3 Pestaña Sala</h2>
+
+<p>Un grupo de gráficos, se puede guardar con sus respectivas configuraciones: orden, filtro, tipo de gráfico, entre otras. A esto se le llama <em>Sala situacional</em>
+Al dar clic en el nombre de una sala se recuperan los gráficos con sus respectivas configuraciones guardadas.
+Si se da clic en el botón a la izquierda del nombre de cada sala se recupera esa sala en un archivo pdf para ser descargado.</p>
+
+<div class="figure" id="figure-3-12">
+    <img src="images/sala_listado.png" alt="Sala - listado" />
+
+    <p class="caption"><strong>Figura 3.12</strong> Sala - listado</p>
+</div>
+
+
+<h2 id="pestana-social">3.4 Pestaña Social</h2>
+
+<p>Cuando se carga una sala situacional, en la ficha <em>Social</em> dispondremos de las opciones para compartir la sala con otros usuarios, solo la puede compartir el usuario que creó la sala o el usuario administrador, también podemos agregar comentarios cortos al estilo de un chat.</p>
+
+<div class="figure" id="figure-3-13">
+    <img src="images/social.png" alt="Sala - listado" />
+
+    <p class="caption"><strong>Figura 3.13</strong> Sala - listado</p>
+</div>
+
+
+    </div>
+
+    <div class="span3">
+        <div class="item local_toc">
+            <h3>Índice de contenidos</h3>
+
+            <ul class="unstyled">
+                                                <li class="level-1">
+                        <span></span>
+                        <a class="internal" href="./capitulo-3.html#tablero-de-indicadores">Tablero de indicadores</a>
+                    </li>
+                                    <li class="level-2">
+                        <span>3.1</span>
+                        <a class="internal" href="./capitulo-3.html#pestana-indicadores">Pestaña indicadores</a>
+                    </li>
+                                    <li class="level-2">
+                        <span>3.2</span>
+                        <a class="internal" href="./capitulo-3.html#pestana-graficos">Pestaña Gráficos</a>
+                    </li>
+                                    <li class="level-2">
+                        <span>3.3</span>
+                        <a class="internal" href="./capitulo-3.html#pestana-sala">Pestaña Sala</a>
+                    </li>
+                                    <li class="level-2">
+                        <span>3.4</span>
+                        <a class="internal" href="./capitulo-3.html#pestana-social">Pestaña Social</a>
+                    </li>
+                                        </ul>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+</html>
