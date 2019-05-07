@@ -20,7 +20,7 @@
                     <form id="compartir_frm" class="form-horizontal content tab-pane" role="form">
                         <div class="form-group" >
                             <label class="control-label  ">{{ '_usuario_con_cuenta_' | trans }}</label>
-                            <select class="form-control" ng-model="configuracion.indicadores[posicion].tipo_grafico" multiple>
+                            <select class="form-control" ng-model="compartir.usuarios_con_cuenta" multiple>
                                 <option  value="All">{{ '_todos_' | trans }}</option>
                                 <option ng-repeat="item in compartir.lista_usuarios" value="<% item.id %>"><% item.nombre %></option>
                             </select>

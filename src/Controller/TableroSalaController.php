@@ -401,15 +401,18 @@ class TableroSalaController extends AbstractController
                 $qb->select('u');
                 $qb->from('App\Entity\User', 'u');
                 $users = $qb->getQuery()->getResult();
-                $usu = false;
             }else{
-                $usu = true;
-                $users = $req->get("usuarios_con_cuenta");
+                $qb = $em->createQueryBuilder();
+                $qb->select('u');
+                $qb->from('App\Entity\User', 'u');
+                $qb->where('u.id IN (:usuarios)');
+                $qb->setParameter('usuarios', $usuarios_con);
+                $users = $qb->getQuery()->getResult();
             }            
 
             foreach($users as $user)
             {  
-                $userId = $usu ? $user->id : $user->getId();
+                $userId = $user->getId();
                 $usuario = $em->getRepository(User::class)->findOneBy(array('id' => $userId));     
                 if($usuario->isEnabled())
                 { 
@@ -435,10 +438,10 @@ class TableroSalaController extends AbstractController
                 }
             }            
         }
-
+        $token  = md5(time());
         if($req->get("usuarios_sin_cuenta")!="")
         {
-            $token  = md5(time());
+            
             $dato = array(array
             (
                 'token' =>$token, 
