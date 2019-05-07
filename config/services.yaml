@@ -38,4 +38,9 @@ services:
     # explicitly configure the service
     App\Service\Util:
         public: true
+
+    Onurb\Bundle\ExcelBundle\Factory\ExcelFactory: '@phpspreadsheet'
+
+    Onurb\Bundle\ExcelBundle\Factory\CompatibilityFactory:
+        arguments: ['@phpspreadsheet', '@phpexcel']
     

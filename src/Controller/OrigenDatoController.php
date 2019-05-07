@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\DBAL as DBAL;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Onurb\Bundle\ExcelBundle\Factory\ExcelFactory;
 
 use App\Entity\OrigenDatos;
 use App\Entity\Campo;
@@ -163,7 +164,7 @@ class OrigenDatoController extends AbstractController
     /**
      * @Route("/origen_dato/{id}/leer", name="origen_dato_leer", options={"expose"=true})
      */
-    public function leerOrigenAction(OrigenDatos $origenDato, Request $request, Util $util, TranslatorInterface $translator)
+    public function leerOrigenAction(OrigenDatos $origenDato, Request $request, Util $util, TranslatorInterface $translator, ExcelFactory $phpspreadsheet)
     {
         $resultado = array('estado' => 'ok',
             'mensaje' => '',
@@ -224,7 +225,7 @@ class OrigenDatoController extends AbstractController
 
                 }
             } else {
-                $phpspreadsheet = $this->get('phpspreadsheet');
+                //$phpspreadsheet = $this->get('phpspreadsheet');
                 $resultado['tipo_origen'] = 'archivo';
 
                 $extension = explode( '.', $origenDato->getArchivoNombre());
