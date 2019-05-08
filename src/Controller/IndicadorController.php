@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Admin\FichaTecnicaAdmin;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -201,8 +202,8 @@ class IndicadorController extends AbstractController {
     /**
      * @Route("/indicador/{id}/ficha", name="get_indicador_ficha", options={"expose"=true})
      */
-    public function getFichaAction(FichaTecnica $fichaTec) {
-        $admin = $this->get('sonata.admin.ficha');
+    public function getFichaAction(FichaTecnica $fichaTec, FichaTecnicaAdmin $admin) {
+        //$admin = $this->get('sonata.admin.ficha');
 
         $admin->setSubject($fichaTec);
 
