@@ -43,4 +43,5 @@ services:
 
     Onurb\Bundle\ExcelBundle\Factory\CompatibilityFactory:
         arguments: ['@phpspreadsheet', '@phpexcel']
-    
+
+    App\Admin\FichaTecnicaAdmin: '@sonata.admin.ficha'
