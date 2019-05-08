@@ -68,35 +68,27 @@ se mostrará el resultado por cada trimestre, pero además mostrará el total al
 mostrará controles para contraer [-] o expandir [+] la información de los trimestres. 
 ![Table With Subtotal](images/pivot_table_subtotal.gif)
 
+#### Visualizaciones de gráficos
+Entre las visualizaciónes tenemos las que permiten representar los datos de manera gráfica: Barras horizontales, Barras horizontales apiladas, Barras, Barras apiladas, líneas, área, pastel, entre otras.
+ ![Gráficos](images/pivot_tipos_graficos.gif)
 
- ![Filtro de atributos](images/pivot_table5.png)
- 
-Por defecto se utiliza una tabla como tipo de resultado y contar como función de agregación. 
-Además cada atributo puede ser filtrado a través dando clic en el triángulo al lado del nombre de cada atributo, 
-la interfaz para filtrar será similar a la mostrada a la imagen:
-
-![Filtro de atributos](images/pivot_table5.png)
-
-Algunos de los tipos de resultado que se puede usar:
-
-- Tabla
-- Tabla con gráfico de barra
-- Gráfico de línea
-- Gráfico de barra
-- Gráfico de área
+Al elegir un tipo de visualización de gráfico, se contará con opciones para descargar la imagen del gráfico, hacer zoom marcando una región, mover el gráfico, 
+acercar o alejar la visualización y restablecer la escala.
 
 
+ ![Opciones gráficos](images/pivot_opciones_graficos.gif)
 
-Una tabla pivote después de cierta manipulación podría quedar de la siguiente forma:
+### Filtrar
+Para mostrar solamente algunos de los elementos de las variables se da clic sobre el tríguangulo apuntando hacia abajo que está a la par del nombre y se selecciona los elementos deseados
+ ![Filtros](images/pivot_filtros.gif)
 
-![Tabla pivote](images/pivot_table2.png)
 
-Al utilizar un gráfico pivote se mostraría un resultado similar al de la siguiente imagen:
+### Estados o escenarios
+Se puede guardar la configuración o estado de una tabla dinámica. El estado guarda la posicion de las variables, los filtros aplicados, la función de agregación y sus parámetros, el tipo de visualización. Para luego poder recuperarlos posteriormente evitando tener que volver a realizar todos los pasos para obtener la configuración de la tabla dinámica. Al crear un escenario se puede definir como **escenario por defecto**, significa que al cargar el indicador nuevamente
+esa será la configuración en que se mostrará. Se pueden borrar solamente los escenarios que el propio usuario ha creado, los escenarios creados por otros usuarios solo podemos verlos, no borrarlos.
+ ![Filtros](images/pivot_escenarios.gif)
 
-![Gráfico de una tabla pivote](images/pivot_table3.png)
 
-Si presionamos doble clic sobre cualquier zona del gráfico, se abrirá un cuadro
-de diálogo con un editor de gráficos, en el cual podemos elegir más tipos de gráficos
-y configurarlo según nuestra conveniencia (título, colores, tipos de letras, etc.)
-
-![Editor del gráfico](images/pivot_table4.png)
+### Ordenar los resultados
+Abajo de la función de agregación se encuentran dos controles de flechas, se utilizan para ordenar los resultados por la columna y fila de totales respectivamente. Si la flecha tiene dos puntas significa que no se ha aplicado un criterio de ordenamiento. La fecha arriba o a la derecha indican que se ha aplicado orden ascendente y a la izquierda o abajo orden descendente.
+![Filtros](images/pivot_ordenar.gif)

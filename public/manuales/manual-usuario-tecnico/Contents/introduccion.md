@@ -11,13 +11,7 @@ El Tablero de Seguimiento y Control en Línea permitirá:
 2. Monitorear el progreso hacia el logro de resultados. 
 3. Retroalimentar el sistema para tomar medidas correctivas sobre la marcha del proyecto y alinearlo hacia el cumplimiento de los resultados comprometidos. 
 
-La información contenida en el Tablero de Seguimiento, a su vez, alimentará el 
-Reporte de Monitoreo del Progreso y Desempeño (PMR), sistema de ìnformación del 
-BID y a disposición de la Iniciativa SM2015 y del MINSAL, la idea es evitar en 
-lo posible la creación de sistemas de información paralelos y más bien fortalecer 
-el sistema de información sectorial del MINSAL.
-
-El eTAB será desarrollado utilizando un repositorio de código de acceso abierto 
+El eTAB es desarrollado utilizando un repositorio de código de acceso abierto 
 a través de Internet y publicado bajo los términos de una licencia libre/open source [^1].
 
 

@@ -6,7 +6,7 @@
     <meta name="date" content="07/05/2019"/>
     <meta name="generator" content="easybook 5.0-DEV"/>
 
-    <title>Ficha técnica: Configuración del indicador | Manual de Usuario</title>
+    <title>Tabla Pivote | Manual de Usuario</title>
 
     <link rel="stylesheet" href="./css/easybook.css" />
 
@@ -18,125 +18,177 @@
     <div class="row">
         <h1 class="span9"><a href="./index.html">Manual de Usuario</a></h1>
         <p class="span3">
-                        <a href="./etab.html"><span>&larr;</span> Anterior</a>
+                        <a href="./capitulo-1.html"><span>&larr;</span> Anterior</a>
             
-                        <a href="./capitulo-4.html">Siguiente <span>&rarr;</span></a>
+                        <a href="./lista-de-figuras.html">Siguiente <span>&rarr;</span></a>
                     </p>
     </div>
 </div>
 
 <div class="row">
     <div class="span9">
-        <h1 id="ficha-tecnica-configuracion-del-indicador"><span>Capítulo 2</span> Ficha técnica: Configuración del indicador</h1>
-        <p>En esta sección se creará y configurará el indicador, esto se hace mediante una ficha técnica, la cual describe las características del indicador y su fórmula de cálculo.</p>
+        <h1 id="tabla-pivote"><span>Capítulo 2</span> Tabla Pivote</h1>
+        <p>La función básica de la tabla pivote es convertir un conjunto de datos en una tabla resumen. Se puede manipular 
+la tabla resumen utilizando su interfaz de usuario que permite arrastrar y soltar los campos en la disposición 
+deseada y convirtiéndola en una tabla pivote, muy similar a la que se encuentra en las hojas de cálculo.
+Además se puede utilizar gráficos para representar los datos en la tabla, generando un gráfico pivote.
+Para acceder a la tabla dinámica se hace a través del menú <strong>Indicadores --> Tabla dinámica</strong>.</p>
 
-<h2 id="variables">2.1 Variables</h2>
+<h2 id="descripcion-de-la-interfaz-de-usuario">2.1 Descripción de la interfáz de usuario</h2>
 
-<p>El primero paso a realizar en esta sección es la creación de las variables que intervienen en la fórmula para calcular el indicador. Elegir en el menú principal <strong>Indicadores->Variables</strong>.
-La puntos más importantes para la correcta creación de una variables es especificar el origen de datos asociado, el nombre de la variable y sus iniciales.</p>
+<p>Se dispone de dos pestañas principales, una donde se elige el indicador, cuyos datos se desean cargar a la tabla 
+pivote, y la sección que nos permitirá ver y manipular esta tabla.</p>
 
+<h3 id="cargar-un-indicador">2.1.1 Cargar un indicador</h3>
+
+<p>Para elegir un indicador se selecciona la pestaña <strong>Indicadores</strong>, la cual contiene un listado agrupado según una clasificación.
+Se puede cambiar la clasificación por la que nos interese y podemos utilizar la casilla de búsqueda para filtrar el listado.
 <div class="figure" id="figure-2-1">
-    <img src="images/variable_dato_crear.gif" alt="Formulario de Variable de datos" />
+    <img src="images/pivot-cargar_indicador.gif" alt="Tabla pivote" />
 
-    <p class="caption"><strong>Figura 2.1</strong> Formulario de Variable de datos</p>
+    <p class="caption"><strong>Figura 2.1</strong> Tabla pivote</p>
 </div>
 
 
-<h2 id="ficha-tecnica">2.2 Ficha técnica</h2>
-
-<p>La ficha técnica es la que contendrá toda la descripción del indicador, el formulario de la ficha técnica es de los más largos, se explicará por partes. Cargar desde el menú principal <strong>Indicadores->Ficha técnica</strong></p>
+<p>La siguiente figura muestra la interfaz inicial de la tabla pivote</p>
 
 <div class="figure" id="figure-2-2">
-    <img src="images/ficha_tecnica_crear.gif" alt="Ficha técnica - Crear" />
+    <img src="images/pivot_table1.png" alt="Tabla pivote" />
 
-    <p class="caption"><strong>Figura 2.2</strong> Ficha técnica - Crear</p>
+    <p class="caption"><strong>Figura 2.2</strong> Tabla pivote</p>
 </div>
 
 
-<h3 id="datos-generales">2.2.1 Datos generales</h3>
+<h3 id="disposicion-de-campos">2.1.2 Disposición de campos</h3>
 
-<p>Describe los campos que describen al indicador: 
-- <strong>Código:</strong> Valor que identifique al indicador
-- <strong>Nombre:</strong> Nombre corto que describa el indicador
-- <strong>Interpretación:</strong> La forma en que se deben interpretar los datos obtenidos o aclaración sobre los datos registrados
-- <strong>Concepto:</strong> Concepto u objetivo del indicador
-- <strong>Unidad de medida:</strong>: Unidad de medida que regresará el resultado de aplicar la fórmula de cálculo
-- <strong>Ruta</strong>: Si los datos son obtenidos de algún sistema de información, se colocan los pasos a seguir para llegar a ellos.</p>
+<p>El siguiente punto es arrastrar los atributos deseados y soltarlos en las áreas filas y columnas, según se requiera.</p>
 
 <div class="figure" id="figure-2-3">
-    <img src="images/ficha1.png" alt="Ficha técnica - Datos generales" />
+    <img src="images/pivot_disposicion_campos.gif" alt="Disposición de campos" />
 
-    <p class="caption"><strong>Figura 2.3</strong> Ficha técnica - Datos generales</p>
+    <p class="caption"><strong>Figura 2.3</strong> Disposición de campos</p>
 </div>
 
 
-<h3 id="definicion-de-la-formula">2.2.2 Definición de la fórmula</h3>
+<h3 id="funcion-de-agregacion">2.1.3 Función de agregación</h3>
 
-<p>Se debe indicar las variables que se utilizarán en la fórmula del indicador y escribir la fórmula, tomando en cuenta:
-1. Solo puede utilizar operadores matemáticos: /, *, +, - (, )
-2. Para utilizar las variables debe escribir las iniciales de la variable entre llaves { }
-3. Se verificará la sintaxis de la fórmula y que utilice las variables seleccionadas.</p>
-
-<div class="figure" id="figure-2-4">
-    <img src="images/ficha2.png" alt="Ficha técnica - Definición de la fórmula" />
-
-    <p class="caption"><strong>Figura 2.4</strong> Ficha técnica - Definición de la fórmula</p>
-</div>
-
-
-<h3 id="otros-datos">2.2.3 Otros datos</h3>
+<p>De acuerdo al tipo de análisis que se quiera realizar debemos elegir la función de agregación adecuada.
+Entre algunas de las funciones de agregación tenemos:</p>
 
 <ul>
-<li><strong>Tipos de gráficos permitidos:</strong> Indicar los gráficos que se desea que se puedan utilizar para este idnicador en el tablero.
-Si se deja este campo vacío se permitirán todos los tipos de gráficos.</li>
-<li><strong>Cantidad de decimales:</strong> El número de decimales para mostrar los resultados de la fórmula.</li>
-<li><strong>Meta:</strong> Valor objetivo del indicador, en algunos tipos de gráficos la meta se representa como una línea horizontal.</li>
-<li><strong>Periocidad:</strong> Frecuencia con que se obtienen datos de la medición.</li>
-<li><strong>Confiabilidad:</strong> Indicar un porcentaje de confiabilidad de los datos obtenidos.</li>
-<li><strong>Observación:</strong> Comentarios generales</li>
+<li>Contar</li>
+<li>Suma</li>
+<li>Suma entera</li>
+<li>Promedio: Realiza la función de promedio aritmético</li>
+<li>Cociente: Utiliza dos atributos para su cálculo y se devuelve el cociente de ellos.</li>
+<li>Proporción del total: Cada celda se calcula como porcentaje tomando como 100% el total general.</li>
+<li>Proporción de filas: Cada celda se calcula como porcentaje tomando como 100% el total de la fila.</li>
+<li>Proporción de columnas: Cada celda se calcula como porcentaje tomando como 100% el total de la columna. </li>
 </ul>
 
+<p>Si elegimos una función de agregación diferente a contar debemos especificar sobre qué atributo(s) se calculará la función. 
+Los atributos cuyo nombre tiene dos guiones bajos al principio y final, como <code>__total_controles_puerpuerales__</code> son las variables de la fórmula de cálculo
+definida en la ficha técnica.</p>
+
+<div class="figure" id="figure-2-4">
+    <img src="images/pivot_funcion_agregacion.gif" alt="Función e agregación" />
+
+    <p class="caption"><strong>Figura 2.4</strong> Función e agregación</p>
+</div>
+
+
+<h3 id="tipo-de-resultado">2.1.4 Tipo de resultado</h3>
+
+<p>Establece la visualización que le daremos a los datos. Algunas opciones disponibles son:</p>
+
+<h4 id="tabla">2.1.4.1 Tabla</h4>
+
+<p>Visualización por defecto, una tabla con datos del resultado de la aplicación de la función de agregación</p>
+
+<h4 id="table-barchart">2.1.4.2 Table Barchart</h4>
+
+<p>Muestra la tabla con datos pero además muestra una barra según el valor de cada casilla. 
 <div class="figure" id="figure-2-5">
-    <img src="images/ficha4.png" alt="Ficha técnica - Otros datos" />
+    <img src="images/pivot_table-barchart.gif" alt="Table barchart" />
 
-    <p class="caption"><strong>Figura 2.5</strong> Ficha técnica - Otros datos</p>
+    <p class="caption"><strong>Figura 2.5</strong> Table barchart</p>
 </div>
 
 
-<h3 id="clasificacion-tecnica">2.2.4 Clasificación técnica</h3>
+<h4 id="heatmap">2.1.4.3 Heatmap</h4>
 
-<p>Se elige la categoría a la que pertenece el indicador</p>
+<p>El mapa de calor utiliza por defecto el color rojo para los valores más altos y degradando hasta llegar a blanco para los valores más bajos.
+Si el indicador tiene rangos de alertas definidos, se utilizarán esos en lugar de los colores por defecto.</p>
 
+<p>Las variaciones <strong>Row Heatmap</strong> y <strong>Col Heatmap</strong> utiliza la misma lógica pero sobre cada columna o fila para identificar los valores mayores y menores.
 <div class="figure" id="figure-2-6">
-    <img src="images/ficha3.png" alt="Ficha técnica - Datos generales" />
+    <img src="images/pivot_heatmap.gif" alt="Heatmap" />
 
-    <p class="caption"><strong>Figura 2.6</strong> Ficha técnica - Datos generales</p>
+    <p class="caption"><strong>Figura 2.6</strong> Heatmap</p>
 </div>
 
 
-<h3 id="configuracion-alertas">2.2.5 Configuración - Alertas</h3>
+<h4 id="table-with-subtotal-table-with-subtotal-bar-chart">2.1.4.4 Table With Subtotal/ Table With Subtotal Bar Chart</h4>
 
-<p>Para la generación de alertas del indicador podemos establecer un valor estándar o una serie de rangos de valores y 
-asignar un color y comentario que describa el comportamiento del indicador en ese rango de valores.</p>
-
+<p>Para utilizar estas visualizaciones, es necesario que se disponga de dos o más variables en la zona de columnas o en la zona de filas. 
+De esta forma hará cálculos de subtotales para la variable que agrupe a otra. Por ejemplo si mostramos la tabla para Año y trimistre; 
+se mostrará el resultado por cada trimestre, pero además mostrará el total al corte de cada año. El campo de nivel mayor (año en este ejemplo)
+mostrará controles para contraer [-] o expandir [+] la información de los trimestres. 
 <div class="figure" id="figure-2-7">
-    <img src="images/ficha5.gif" alt="Ficha técnica - Alertas" />
+    <img src="images/pivot_table_subtotal.gif" alt="Table With Subtotal" />
 
-    <p class="caption"><strong>Figura 2.7</strong> Ficha técnica - Alertas</p>
+    <p class="caption"><strong>Figura 2.7</strong> Table With Subtotal</p>
 </div>
 
 
-<h3 id="configuracion-orden-de-dimensiones-del-indicador">2.2.6 Configuración - Orden de dimensiones del indicador</h3>
+<h4 id="visualizaciones-de-graficos">2.1.4.5 Visualizaciones de gráficos</h4>
 
-<p>Una vez guardado la ficha técnica, se realiza el cálculo de cuales son sus indicadores disponibles, 
-lo cual se obtiene a partir de los campos comunes de las variables que intervienen en el cálculo del indicador. 
-Se puede cambiar el orden por defecto en que se presentarán las dimensiones en el tablero, para eso editamos la ficha técnica 
-y vamos al final del formulario, encontraremos las dimensiones del indicador y podemos especificar el orden arrastrando cada una de ellas.</p>
+<p>Entre las visualizaciónes tenemos las que permiten representar los datos de manera gráfica: Barras horizontales, Barras horizontales apiladas, Barras, Barras apiladas, líneas, área, pastel, entre otras.
+ <div class="figure" id="figure-2-8">
+    <img src="images/pivot_tipos_graficos.gif" alt="Gráficos" />
 
-<div class="figure" id="figure-2-8">
-    <img src="images/ficha6.gif" alt="Ficha técnica - Dimensiones" />
+    <p class="caption"><strong>Figura 2.8</strong> Gráficos</p>
+</div>
 
-    <p class="caption"><strong>Figura 2.8</strong> Ficha técnica - Dimensiones</p>
+
+<p>Al elegir un tipo de visualización de gráfico, se contará con opciones para descargar la imagen del gráfico, hacer zoom marcando una región, mover el gráfico, 
+acercar o alejar la visualización y restablecer la escala.</p>
+
+<div class="figure" id="figure-2-9">
+    <img src="images/pivot_opciones_graficos.gif" alt="Opciones gráficos" />
+
+    <p class="caption"><strong>Figura 2.9</strong> Opciones gráficos</p>
+</div>
+
+
+<h3 id="filtrar">2.1.5 Filtrar</h3>
+
+<p>Para mostrar solamente algunos de los elementos de las variables se da clic sobre el tríguangulo apuntando hacia abajo que está a la par del nombre y se selecciona los elementos deseados
+ <div class="figure" id="figure-2-10">
+    <img src="images/pivot_filtros.gif" alt="Filtros" />
+
+    <p class="caption"><strong>Figura 2.10</strong> Filtros</p>
+</div>
+
+
+<h3 id="estados-o-escenarios">2.1.6 Estados o escenarios</h3>
+
+<p>Se puede guardar la configuración o estado de una tabla dinámica. El estado guarda la posicion de las variables, los filtros aplicados, la función de agregación y sus parámetros, el tipo de visualización. Para luego poder recuperarlos posteriormente evitando tener que volver a realizar todos los pasos para obtener la configuración de la tabla dinámica. Al crear un escenario se puede definir como <strong>escenario por defecto</strong>, significa que al cargar el indicador nuevamente
+esa será la configuración en que se mostrará. Se pueden borrar solamente los escenarios que el propio usuario ha creado, los escenarios creados por otros usuarios solo podemos verlos, no borrarlos.
+ <div class="figure" id="figure-2-11">
+    <img src="images/pivot_escenarios.gif" alt="Filtros" />
+
+    <p class="caption"><strong>Figura 2.11</strong> Filtros</p>
+</div>
+
+
+<h3 id="ordenar-los-resultados">2.1.7 Ordenar los resultados</h3>
+
+<p>Abajo de la función de agregación se encuentran dos controles de flechas, se utilizan para ordenar los resultados por la columna y fila de totales respectivamente. Si la flecha tiene dos puntas significa que no se ha aplicado un criterio de ordenamiento. La fecha arriba o a la derecha indican que se ha aplicado orden ascendente y a la izquierda o abajo orden descendente.
+<div class="figure" id="figure-2-12">
+    <img src="images/pivot_ordenar.gif" alt="Filtros" />
+
+    <p class="caption"><strong>Figura 2.12</strong> Filtros</p>
 </div>
 
 
@@ -149,15 +201,11 @@ y vamos al final del formulario, encontraremos las dimensiones del indicador y p
             <ul class="unstyled">
                                                 <li class="level-1">
                         <span></span>
-                        <a class="internal" href="./capitulo-2.html#ficha-tecnica-configuracion-del-indicador">Ficha técnica: Configuración del indicador</a>
+                        <a class="internal" href="./capitulo-2.html#tabla-pivote">Tabla Pivote</a>
                     </li>
                                     <li class="level-2">
                         <span>2.1</span>
-                        <a class="internal" href="./capitulo-2.html#variables">Variables</a>
-                    </li>
-                                    <li class="level-2">
-                        <span>2.2</span>
-                        <a class="internal" href="./capitulo-2.html#ficha-tecnica">Ficha técnica</a>
+                        <a class="internal" href="./capitulo-2.html#descripcion-de-la-interfaz-de-usuario">Descripción de la interfáz de usuario</a>
                     </li>
                                         </ul>
         </div>

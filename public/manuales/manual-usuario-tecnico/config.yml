@@ -16,8 +16,8 @@ book:
         - { element: toc   }
         - { element: introduction, content: introduccion.md }
         - { element: part, title: 'Etab' }
-        - { element: chapter, number: 2, content: ficha_tecnica.md }
-        - { element: chapter, number: 4, content: pivottable.md }
+        - { element: chapter, number: 1, content: ficha_tecnica.md }
+        - { element: chapter, number: 2, content: pivottable.md }
         - { element: lof}
 
     editions:
