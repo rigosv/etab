@@ -536,7 +536,7 @@ class MatrizSeguimientoRESTController extends Controller {
             $em->flush();
 
             foreach ($ve as $k1 => $v1) {
-                if($k1 != "meta" && $k1 != "id" && $k1 != "nombre" && $k1 != '$$hashKey'){
+                if($k1 != "meta" && $k1 != "fuente"  && $k1 != "id" && $k1 != "nombre" && $k1 != '$$hashKey'){
                     $matrizDato = $em->getRepository(MatrizSeguimientoDato::class)->findBy(
                         array(
                             'matriz' => $seguimiento->getId(),
