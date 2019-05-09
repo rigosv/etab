@@ -28,12 +28,22 @@ function cargarHelpContent(urlBase, recurso){
         $("#helpSidebar DIV.content-help").show();
         $("#helpSidebar .navbtn").show();
 
-        //Verificar si tiene un punto de enlace dentro de la página cargada
-        var partes = recurso.split('#');
-        if (partes.length > 1 ){
-            var height =parseFloat( $('#helpSidebar').css('height').replace('px') );
-            $('#helpSidebar').animate({scrollTop: $("#"+partes[1]).position().top - height*0.45},'slow');
-        }
+        setTimeout(function() {
+            //Verificar si tiene un punto de enlace dentro de la página cargada
+            var partes = recurso.split('#');
+            if (partes.length > 1 ){
+                var height =parseFloat( $('#helpSidebar').css('height').replace('px') );
+                var elm = $('#helpSidebar').find("#"+partes[1]);
+
+                $('#helpSidebar').animate({scrollTop: $(elm).position().top - height*0.4},'slow');
+
+                $(elm).addClass('alert alert-info');
+                $(elm).fadeOut(1000);
+                $(elm).fadeIn(1000);
+            }
+        }, 1000);
+
+
     });
 }
 

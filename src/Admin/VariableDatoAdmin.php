@@ -5,7 +5,7 @@ namespace App\Admin;
 use Sonata\AdminBundle\Admin\AbstractAdmin as Admin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
-use Sonata\CoreBundle\Validator\ErrorElement;
+use Sonata\Form\Validator\ErrorElement;
 use Sonata\AdminBundle\Form\FormMapper;
 use Doctrine\ORM\EntityRepository;
 use App\Entity\OrigenDatos;
@@ -80,6 +80,18 @@ class VariableDatoAdmin extends Admin
         $actions = parent::getBatchActions();
         unset($actions['delete']);
         return $actions;
+    }
+
+    public function getTemplate($name)
+    {
+        switch ($name) {
+            case 'edit':
+                return 'CRUD/variable_dato-edit.html.twig';
+                break;
+            default:
+                return parent::getTemplateRegistry()->getTemplate($name);
+                break;
+        }
     }
 
 }

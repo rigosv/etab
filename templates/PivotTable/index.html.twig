@@ -32,6 +32,11 @@
         <img id="cargador" src="{{ asset('images/ajax-loader.gif') }}"/>
     </div>
     <div class="marco-sala" id="marco-sala">
+        <button onclick="openHelpPanel('/manuales/manual-usuario-tecnico/Output/website/book/', 'capitulo-2.html#tabla-pivote')"
+                title="{{ '_ayuda_'|trans }}"
+                class="btn btn-primary navbar-right" style="margin-top: 10px;">
+            <i class="fa fa-question-circle " aria-hidden="true"></i>
+        </button>
         <ul class="nav nav-tabs" id="myTab">
             <li ><a href="#tab1">{{'_tabla_pivote_'|trans}}</a></li>
             <li class="active"><a href="#listado_indicadores">{{"indicadores"|trans}}</a></li>
@@ -44,7 +49,6 @@
                 <li ><a href="#log_actividad">{{"_bitacora_actividad_"|trans}}</a></li>
             {% endif %}
         </ul>
-
         <div id='nombre_sala2' ></div>
         <div class="tab-content">
             <div class="content tab-pane" id="tab1" >

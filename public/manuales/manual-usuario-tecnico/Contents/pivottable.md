@@ -5,7 +5,7 @@ deseada y convirtiéndola en una tabla pivote, muy similar a la que se encuentra
 Además se puede utilizar gráficos para representar los datos en la tabla, generando un gráfico pivote.
 Para acceder a la tabla dinámica se hace a través del menú **Indicadores --> Tabla dinámica**.
 
-## Descripción de la interfáz de usuario
+## Descripción de la interfaz de usuario
 Se dispone de dos pestañas principales, una donde se elige el indicador, cuyos datos se desean cargar a la tabla 
 pivote, y la sección que nos permitirá ver y manipular esta tabla.
 

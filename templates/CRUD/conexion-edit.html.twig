@@ -11,3 +11,12 @@
         {{admin.trans('probar_conexion')}}
     </button>
 {% endblock %}
+
+{% block sonata_admin_content_actions_wrappers %}
+    <button onclick="openHelpPanel('/manuales/manual-usuario-administrador/Output/website/book/', 'capitulo-2.html#conexion-a-bases-de-datos')"
+            title="{{ '_ayuda_'|trans }}"
+            class="btn btn-primary navbar-right" style="margin-top: 10px;">
+        <i class="fa fa-question-circle " aria-hidden="true"></i>
+    </button>
+    {{ parent() }}
+{% endblock %}
