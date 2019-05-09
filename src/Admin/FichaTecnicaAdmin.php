@@ -5,13 +5,13 @@ namespace App\Admin;
 use Sonata\AdminBundle\Admin\AbstractAdmin as Admin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
-use Sonata\CoreBundle\Validator\ErrorElement;
+use Sonata\Form\Validator\ErrorElement;
 use Sonata\AdminBundle\Form\FormMapper;
 use App\Entity\FichaTecnica;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
-use Sonata\CoreBundle\Form\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use App\Entity\VariableDato;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use App\Entity\ClasificacionTecnica;
@@ -181,6 +181,8 @@ class FichaTecnicaAdmin extends Admin
     public function validate(ErrorElement $errorElement, $object)
     {
 
+        $trans = $this->getConfigurationPool()->getContainer()->get('translator');
+
         //Verificar que todos los campos esten configurados
         foreach ($object->getVariables() as $variable) {
             $campos_no_configurados = $this->getModelManager()
@@ -190,7 +192,7 @@ class FichaTecnicaAdmin extends Admin
             if (count($campos_no_configurados) > 0) {
                 $errorElement
                         ->with('variables')
-                        ->addViolation($variable->getIniciales() . ': ' . ('origen_no_configurado'))
+                        ->addViolation($variable->getIniciales() . ': ' . $trans->trans('origen_no_configurado'))
                         ->end();
             }
         }
@@ -203,7 +205,7 @@ class FichaTecnicaAdmin extends Admin
         if (count($variables_sel) == 0)
             $errorElement
                     ->with('variables')
-                    ->addViolation(('elija_al_menos_una_variable'))
+                    ->addViolation($trans->trans('elija_al_menos_una_variable'))
                     ->end()
             ;
         else {
@@ -219,7 +221,7 @@ class FichaTecnicaAdmin extends Admin
                     (count(array_diff($vars_formula[1], $variables_sel)) > 0)) {
                 $errorElement
                         ->with('formula')
-                        ->addViolation(('vars_sel_diff_vars_formula'))
+                        ->addViolation($trans->trans('vars_sel_diff_vars_formula'))
                         ->end()
                 ;
             }
@@ -243,7 +245,7 @@ class FichaTecnicaAdmin extends Admin
             //Verificar que no tenga letras, para evitar un ataque de inyección
             if (preg_match('/[A-Z]+/i', $formula_check) != 0) {
                 $formula_valida = false;
-                $mensaje = 'sintaxis_invalida_variables_entre_llaves';
+                $mensaje = $trans->trans('sintaxis_invalida_variables_entre_llaves');
             } else {
                 //evaluar la formula, evitar que se muestren los errores por si los lleva
                 ob_start();
@@ -252,7 +254,7 @@ class FichaTecnicaAdmin extends Admin
 
                 if (!is_numeric($result)) {
                     $formula_valida = false;
-                    $mensaje = 'sintaxis_invalida';
+                    $mensaje = $trans->trans('sintaxis_invalida');
                 }
             }
 
