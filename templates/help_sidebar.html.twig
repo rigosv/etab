@@ -1,0 +1,18 @@
+<link rel="stylesheet" href="{{ app.request.schemeAndHttpHost ~ asset('css/helpBar.css') }}" type="text/css" media="all" />
+<script type="text/javascript" src="{{ app.request.schemeAndHttpHost ~ asset('js/helpBar.js') }}"></script>
+
+<div id="helpSidebar" class="helpSidebar">
+    <div class="btn-group navbtn" role="group" aria-label="...">
+        <button type="button" class="btn btn-primary" id="maxresBtn" title='{{ '_maximizar_'|trans }}'
+                onclick="maxresHelpPanel()"
+                data-title-max="{{ '_maximizar_'|trans }}"
+                data-title-res="{{ '_restaurar_'|trans }}"
+        >
+            <i class="fa fa-window-maximize" aria-hidden="true"></i>
+        </button>
+        <button type="button" class="btn btn-danger" onclick="closeHelpPanel()" title="{{ '_cerrar_'|trans }}" >
+            <i class="fa fa-times" aria-hidden="true"></i>
+        </button>
+    </div>
+    <DIV class="content-help" style="display: none;"></div>
+</div>
