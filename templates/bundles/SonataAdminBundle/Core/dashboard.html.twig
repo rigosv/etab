@@ -1,0 +1,186 @@
+{% extends base_template %}
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .panel-body .btn:not(.btn-block) { width:120px;margin-bottom:10px; }
+    </style>
+{% endblock %}
+{% block title %}{{ 'title_dashboard'|trans({}, 'SonataAdminBundle') }}{% endblock%}
+{% block breadcrumb %}{% endblock %}
+{% block content %}
+    {% if app_dashboard %}
+        <div class="container">
+            <div class="row">
+                {% if is_granted(['ROLE_SUPER_ADMIN', 'ROLE_USER_TABLERO', 'ROLE_USER_PIVOT_TABLE', 'ROLE_USER_MATRIZ_SEGUIMIENTO']) %}
+                    <div class="col-md-6">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">
+                                    <span class="glyphicon glyphicon-bookmark"></span> eTab</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    {% if is_granted(['ROLE_SUPER_ADMIN', 'ROLE_USER_TABLERO', 'ROLE_USER_PIVOT_TABLE']) %}
+                                        <div class="col-xs-6 col-md-6">
+                                            {% if is_granted(['ROLE_SUPER_ADMIN', 'ROLE_USER_TABLERO']) %}
+                                                <a href="{{ path('indicadores_tablero') }}" class="btn btn-danger btn-lg" role="button">
+                                                    <i class="fa fa-bar-chart fa-2x " aria-hidden="true"></i>
+                                                    <br/>Tablero<br/>Indicadores
+                                                </a>
+                                            {% endif %}
+                                            {% if is_granted(['ROLE_SUPER_ADMIN', 'ROLE_USER_PIVOT_TABLE']) %}
+                                                <a href="{{ path('pivotTable') }}" class="btn btn-info btn-lg " role="button">
+                                                    <span class="fa-stack">
+                                                        <i class="fa fa-exchange fa-stack-1x text-black"></i>
+                                                        <i class="fa fa-columns fa-stack-2x"></i>
+                                                    </span>
+                                                    <br/>Tabla<br/>Dinámica
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                    {% if is_granted(['ROLE_SUPER_ADMIN', 'ROLE_USER_MATRIZ_SEGUIMIENTO']) %}
+                                        <div class="col-xs-6 col-md-6">
+                                            <a href="{{ path('matrizReporte') }}" class="btn btn-primary btn-lg" role="button">
+                                                <i class="fa fa-calendar-check-o fa-2x " aria-hidden="true"></i>
+                                                <br/>Matriz<br/>Seguimiento
+                                            </a>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if is_granted(['ROLE_SUPER_ADMIN', 'ROLE_USER_TABLERO_CALIDAD', 'ROLE_USER_PLAN_MEJORA_CALIDAD']) %}
+                    <div class="col-md-6">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">
+                                    <span class="glyphicon glyphicon-bookmark"></span> Calidad</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    {% if is_granted(['ROLE_SUPER_ADMIN', 'ROLE_USER_TABLERO_CALIDAD', 'ROLE_USER_CAPTURA_DATOS']) %}
+                                        <div class="col-xs-6 col-md-6">
+                                            <a href="{{ path('formulario_captura') }}" class="btn btn-success btn-lg" role="button">
+                                                <span class="fa-stack">
+                                                    <i class="fa fa-list-ol fa-stack-2x"></i>
+                                                    <i class="fa fa-check fa-stack-1x text-black"></i>
+                                                </span>
+                                                <br/>Captura<br/>Datos
+                                            </a>
+                                            <a href="{{ path('tablero_calidad') }}" class="btn btn-primary btn-lg " role="button">
+                                                <span class="fa fa-list-alt fa-2x" aria-hidden="true"></span>
+                                                <br/>Estándares<br/>&nbsp;
+                                            </a>
+                                        </div>
+                                    {% endif %}
+                                    {% if is_granted(['ROLE_SUPER_ADMIN', 'ROLE_USER_TABLERO_CALIDAD', 'ROLE_USER_PLAN_MEJORA_CALIDAD']) %}
+                                        <div class="col-xs-6 col-md-6">
+                                            <a href="{{ path('tablero_general_calidad') }}" class="btn btn-danger btn-lg" role="button">
+                                                <i class="fa fa-dashboard fa-2x " aria-hidden="true"></i>
+                                                <br/>Tablero<br/>Mando
+                                            </a>
+                                            <a href="{{ path('calidad_planmejora') }}" class="btn btn-warning btn-lg" role="button">
+                                                <span class="fa-stack">
+                                                    <i class="fa fa-calendar-o fa-stack-2x " aria-hidden="true"></i>
+                                                    <i class="fa fa-line-chart fa-stack-1x text-black"></i>
+                                                </span>
+                                                <br/>Plan<br/>Mejora
+                                            </a>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                {% if is_granted(['ROLE_USER_COSTEO']) %}
+                    <div class="col-md-12">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">
+                                    <span class="glyphicon glyphicon-bookmark"></span> Costos</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="panel panel-primary">
+                                            <div class="panel-heading">
+                                                <h3 class="panel-title">
+                                                    <span class="glyphicon glyphicon-bookmark"></span> Recurso humano</h3>
+                                            </div>
+                                            <div class="panel-body">
+                                                <div class="row">
+                                                    <div class="col-xs-6 col-md-6">
+                                                        <a href="{{ path('costos_rrhh_valor_pagado2') }}" class="btn btn-primary btn-lg" role="button">
+                                                            <span class="fa-stack">
+                                                                <i class="fa fa-list-ol fa-stack-2x"></i>
+                                                                <i class="fa fa-check fa-stack-1x text-black"></i>
+                                                            </span>
+                                                            <br/>Captura<br/>Datos
+                                                        </a>
+                                                        <a href="{{ 'costos_rrhh_costeo' }}" class="btn btn-danger btn-lg" role="button">
+                                                            <span class="fa-stack">
+                                                                <i class="fa fa-users fa-stack-2x"></i>
+                                                                <i class="fa fa-dollar fa-stack-2x text-black"></i>
+                                                            </span>
+                                                            <br/>Costeo<br/>&nbsp;
+                                                        </a>
+                                                    </div>
+
+                                                    <div class="col-xs-6 col-md-6">
+                                                        <a href="{{ path('costos_rrhh_valor_pagado_detalle') }}" class="btn btn-warning btn-lg " role="button">
+                                                            <span class="fa fa-list-alt fa-2x" aria-hidden="true"></span>
+                                                            <br/>Detalle<br/>Valor pagado
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="panel panel-primary">
+                                            <div class="panel-heading">
+                                                <h3 class="panel-title">
+                                                    <span class="glyphicon glyphicon-bookmark"></span> Gastos Administrativos</h3>
+                                            </div>
+                                            <div class="panel-body">
+                                                <div class="row">
+                                                    <div class="col-xs-6 col-md-6">
+                                                        <a href="{{ path('costos_ga_compromisosfinancieros') }}" class="btn btn-success btn-lg" style='padding-left: 3px;' role="button">
+                                                            <span class="fa fa-money fa-2x" aria-hidden="true"></span>
+                                                            <br/>Compromisos<br/>Financieros
+                                                        </a>
+                                                        <a href="{{ path('ga_costeo') }}" class="btn btn-primary btn-lg " role="button">
+                                                            <span class="fa fa-hospital-o fa-2x" aria-hidden="true"></span>
+                                                            <br/><span class="fa fa-dollar" aria-hidden="true"></span><br/>Costeo
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <a href="{{ path('costos_suministros_costeo') }}" class="btn btn-success btn-lg" style='padding-left: 5px' role="button">
+                                            <span class="fa fa-medkit fa-2x" aria-hidden="true"></span>
+                                            <br/>Suministros<br/>&nbsp;
+                                        </a>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <a href="{{ path('costos_produccion_costeo') }}" class="btn btn-danger btn-lg" role="button">
+                                            <span class="fa fa-user-md fa-2x" aria-hidden="true"></span>
+                                            <br/>Producción<br/>&nbsp;
+                                        </a>
+                                    </div>
+                                </div>
+                                {#<a href="http://www.jquery2dotnet.com/" class="btn btn-success btn-lg btn-block" role="button"><span class="glyphicon glyphicon-globe"></span> Website</a>#}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
