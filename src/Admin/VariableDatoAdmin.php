@@ -62,6 +62,8 @@ class VariableDatoAdmin extends Admin
 
     public function validate(ErrorElement $errorElement, $object)
     {
+        $trans = $this->getConfigurationPool()->getContainer()->get('translator');
+
         $campos_no_configurados = $this->getModelManager()->findBy('App\Entity\Campo',
                 array('origenDato' => $object->getOrigenDatos(),
                     'significado' => null));
@@ -70,6 +72,12 @@ class VariableDatoAdmin extends Admin
             $errorElement
                 ->with('origenDatos')
                     ->addViolation(('origen_no_configurado'))
+                ->end();
+        }
+        if ( !preg_match("/^[0-9a-zA-Z]+$/", $object->getIniciales())) {
+            $errorElement
+                ->with('iniciales')
+                ->addViolation($trans->trans('_solo_caracteres_alfanumericos_') )
                 ->end();
         }
 
