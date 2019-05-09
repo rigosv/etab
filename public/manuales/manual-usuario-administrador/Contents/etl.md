@@ -12,6 +12,7 @@ una vez ingresados se puede probar la conexión con el botón **Probar Conexión
 
 ## Origen de datos
 Para la creación de un origen de datos tenemos las secciones: 
+
 - **Datos generales** que contendrá la descripción general del origen. 
 - **Desde base de datos** donde especificará si los datos se obtendrán desde una conexión a una base de datos o desde un archivo.
 - **Desde archivo** cuando los datos sean obtenidos de un archivo de hoja de cálculo o con formato csv.
@@ -20,6 +21,7 @@ carga anterior, tomando algunos de estos campos (fecha o año ) como punto de co
 
 
 En la sección de datos generales debemos especificar:
+
 - El nombre del origen de datos
 - Opcionalmente una descripción
 - Acciones poscarga, que consisten en una o más sentencias SQL separadas por punto y coma(;) que se ejecutarán después de realizar la carga de datos. 
@@ -61,6 +63,7 @@ partir del punto en que fueron leidos en una lectura anterior y así cargar sola
 
 
 Para configurar la carga incremental tiene que especificar:
+
 - **Campo para lectura incremental**. El campo que se usará como punto de control de la carga incremental, debe ser un campo de tipo fecha o año. 
 - **Valor de corte**. Especificando este campo, al realizar una segunda lectura, se determinará el último valor leido y se recuperarán los valores mayores a éste.
 Se puede dejar vació ya que se actualizará con el valor del último registro leido en la carga de datos. 

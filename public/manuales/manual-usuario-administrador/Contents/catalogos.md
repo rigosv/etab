@@ -12,6 +12,7 @@ Las siguientes opciones están ubicadas en el menú principal **Catálogos**
 
 ## Responsable de datos
 ![Responsable de datos](images/responsable_datos.png)
+
 - **Contacto:** Nombre de la persona que es reponsable de los datos y la calidad de estos (Podría ser el mismo que en Fuente de datos).
 - **Establecimiento:** Organismo al que pertenece el contacto.
 - **Correo electrónico:** Correo electrónico oficial del contacto.
@@ -21,6 +22,7 @@ Las siguientes opciones están ubicadas en el menú principal **Catálogos**
 
 ## Responsable indicador
 ![Responsable de indicador](images/responsable_indicador.png)
+
 - **Contacto:** Nombre de la persona que es reponsable de hacer el seguimiento y control del indicador.
 - **Establecimiento:** Organismo al que pertenece el contacto.
 - **Correo electrónico:** Correo electrónico oficial del contacto.
@@ -59,6 +61,7 @@ Se utiliza para identificar de manera estándar los datos provenientes de los or
 
 ## Colores - Alertas
 ![Significado campo](images/colores_alertas.png)
+
 - **Código:** Para crear colores y usarlos posteriormente en la definición de rangos de alertas, aquí ingresará un código del color en formato usado en HTML.
 - **Color:** Nombre que se mostrará para el color
 

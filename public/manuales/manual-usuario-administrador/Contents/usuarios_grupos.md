@@ -14,6 +14,7 @@ Al elegir un usuario podemos modificar su información, la cual está clasificad
 ###Usuario
 
 La ficha usuario está dividida en dos secciones:
+
 - Perfil: Donde se ingresan los datos del usuario
 - General: Datos de identificación de ingreso al sistema
 

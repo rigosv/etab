@@ -15,7 +15,8 @@ La ficha técnica es la que contendrá toda la descripción del indicador, el fo
 ![Ficha técnica - Crear](images/ficha_tecnica_crear.gif)
 
 ### Datos generales
-Describe los campos que describen al indicador: 
+Describe los campos que describen al indicador:
+ 
 - **Código:** Valor que identifique al indicador
 - **Nombre:** Nombre corto que describa el indicador
 - **Interpretación:** La forma en que se deben interpretar los datos obtenidos o aclaración sobre los datos registrados
@@ -27,6 +28,7 @@ Describe los campos que describen al indicador:
 ![Ficha técnica - Datos generales](images/ficha1.png)
 
 ### Definición de la fórmula
+
 Se debe indicar las variables que se utilizarán en la fórmula del indicador y escribir la fórmula, tomando en cuenta:
 1. Solo puede utilizar operadores matemáticos: /, *, +, - (, )
 2. Para utilizar las variables debe escribir las iniciales de la variable entre llaves { }
@@ -36,6 +38,7 @@ Se debe indicar las variables que se utilizarán en la fórmula del indicador y 
 
 
 ### Otros datos
+
 - **Tipos de gráficos permitidos:** Indicar los gráficos que se desea que se puedan utilizar para este idnicador en el tablero.
 Si se deja este campo vacío se permitirán todos los tipos de gráficos.
 - **Cantidad de decimales:** El número de decimales para mostrar los resultados de la fórmula.

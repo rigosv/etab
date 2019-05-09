@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <meta name="author" content="eTAB" />
-    <meta name="date" content="07/05/2019"/>
+    <meta name="date" content="08/05/2019"/>
     <meta name="generator" content="easybook 5.0-DEV"/>
 
     <title>Manual del Administrador</title>
@@ -195,20 +195,26 @@ una vez ingresados se puede probar la conexión con el botón <strong>Probar Con
 
 <h2 id="origen-de-datos">2.2 Origen de datos</h2>
 
-<p>Para la creación de un origen de datos tenemos las secciones: 
-- <strong>Datos generales</strong> que contendrá la descripción general del origen. 
-- <strong>Desde base de datos</strong> donde especificará si los datos se obtendrán desde una conexión a una base de datos o desde un archivo.
-- <strong>Desde archivo</strong> cuando los datos sean obtenidos de un archivo de hoja de cálculo o con formato csv.
-- <strong>Carga incremental</strong> Para orígens de datos que tengan un campo fecha o año, se puede indicar que la carga se inicie a partir del último registro de la 
-carga anterior, tomando algunos de estos campos (fecha o año ) como punto de control.</p>
+<p>Para la creación de un origen de datos tenemos las secciones:</p>
 
-<p>En la sección de datos generales debemos especificar:
-- El nombre del origen de datos
-- Opcionalmente una descripción
-- Acciones poscarga, que consisten en una o más sentencias SQL separadas por punto y coma(;) que se ejecutarán después de realizar la carga de datos. 
-Esto es útil por ejemplo, para separar los datos en diferentes tablas o para ejecutar transformaciones de datos.
-- Si el origen de datos lo utilizaremos para cargar datos de tablas catálogos. De ser así, el origen de datos se guardará en una tabla <em>nombre_origen_ctl</em>, 
-estas tablas pueden ser usadas posteriormente para enlazar campos que sean llaves foráneas.</p>
+<ul>
+<li><strong>Datos generales</strong> que contendrá la descripción general del origen. </li>
+<li><strong>Desde base de datos</strong> donde especificará si los datos se obtendrán desde una conexión a una base de datos o desde un archivo.</li>
+<li><strong>Desde archivo</strong> cuando los datos sean obtenidos de un archivo de hoja de cálculo o con formato csv.</li>
+<li><strong>Carga incremental</strong> Para orígens de datos que tengan un campo fecha o año, se puede indicar que la carga se inicie a partir del último registro de la 
+carga anterior, tomando algunos de estos campos (fecha o año ) como punto de control.</li>
+</ul>
+
+<p>En la sección de datos generales debemos especificar:</p>
+
+<ul>
+<li>El nombre del origen de datos</li>
+<li>Opcionalmente una descripción</li>
+<li>Acciones poscarga, que consisten en una o más sentencias SQL separadas por punto y coma(;) que se ejecutarán después de realizar la carga de datos. 
+Esto es útil por ejemplo, para separar los datos en diferentes tablas o para ejecutar transformaciones de datos.</li>
+<li>Si el origen de datos lo utilizaremos para cargar datos de tablas catálogos. De ser así, el origen de datos se guardará en una tabla <em>nombre_origen_ctl</em>, 
+estas tablas pueden ser usadas posteriormente para enlazar campos que sean llaves foráneas.</li>
+</ul>
 
 <div class="figure" id="figure-2-2">
     <img src="images/crear_origen_datos.gif" alt="Creación de origen de datos" />
@@ -261,15 +267,18 @@ es el <strong>Campo para cálculos</strong> el cual identificará el campo que s
 si la cantidad de datos es muy grande puede ser más conveniente hacer cargas incrementales, la cual consiste en leer los datos a 
 partir del punto en que fueron leidos en una lectura anterior y así cargar solamente los datos nuevos.</p>
 
-<p>Para configurar la carga incremental tiene que especificar:
-- <strong>Campo para lectura incremental</strong>. El campo que se usará como punto de control de la carga incremental, debe ser un campo de tipo fecha o año. 
-- <strong>Valor de corte</strong>. Especificando este campo, al realizar una segunda lectura, se determinará el último valor leido y se recuperarán los valores mayores a éste.
-Se puede dejar vació ya que se actualizará con el valor del último registro leido en la carga de datos. 
-- <strong>Ventana límite inferior</strong>. Representa el número de unidades (días si el campo de control es fecha o años para campo de control años) que se volverán a 
-leer a partir del valor de corte. Por ejemplo: si el valor de corte es <em>13/02/2016</em> y el límite inferior es <em>3</em> se leerá a partir de <em>10/02/2016</em>
-- <strong>Ventana límite superior</strong>. Este controla el número de unidades que se descontarán de la fecha actual, para realizar la lectura. 
+<p>Para configurar la carga incremental tiene que especificar:</p>
+
+<ul>
+<li><strong>Campo para lectura incremental</strong>. El campo que se usará como punto de control de la carga incremental, debe ser un campo de tipo fecha o año. </li>
+<li><strong>Valor de corte</strong>. Especificando este campo, al realizar una segunda lectura, se determinará el último valor leido y se recuperarán los valores mayores a éste.
+Se puede dejar vació ya que se actualizará con el valor del último registro leido en la carga de datos. </li>
+<li><strong>Ventana límite inferior</strong>. Representa el número de unidades (días si el campo de control es fecha o años para campo de control años) que se volverán a 
+leer a partir del valor de corte. Por ejemplo: si el valor de corte es <em>13/02/2016</em> y el límite inferior es <em>3</em> se leerá a partir de <em>10/02/2016</em></li>
+<li><strong>Ventana límite superior</strong>. Este controla el número de unidades que se descontarán de la fecha actual, para realizar la lectura. 
 Por ejemplo: si la fecha actual es <em>15/09/2016</em> y el límite superior es <em>5</em>, no se leerán los datos hasta la fecha actual sino 5 días antes, 
-es decir hasta <em>10/09/2016</em></p>
+es decir hasta <em>10/09/2016</em></li>
+</ul>
 
 <div class="figure" id="figure-2-6">
     <img src="images/carga_incremental.gif" alt="Carga incremental" />
@@ -299,9 +308,12 @@ de cada usuario, primero aparecerá el listado de usuarios y se podrá seleccion
 
 <h3 id="usuario">3.1.1 Usuario</h3>
 
-<p>La ficha usuario está dividida en dos secciones:
-- Perfil: Donde se ingresan los datos del usuario
-- General: Datos de identificación de ingreso al sistema</p>
+<p>La ficha usuario está dividida en dos secciones:</p>
+
+<ul>
+<li>Perfil: Donde se ingresan los datos del usuario</li>
+<li>General: Datos de identificación de ingreso al sistema</li>
+</ul>
 
 <div class="figure" id="figure-3-1">
     <img src="images/usuario1.gif" alt="Usuario" />
@@ -438,11 +450,14 @@ Por ejemplo: RESPONSABLE_DATO_CREATE le dará permiso para crear un elemento de 
     <p class="caption"><strong>Figura 4.2</strong> Responsable de datos</p>
 </div>
 
-- <strong>Contacto:</strong> Nombre de la persona que es reponsable de los datos y la calidad de estos (Podría ser el mismo que en Fuente de datos).
-- <strong>Establecimiento:</strong> Organismo al que pertenece el contacto.
-- <strong>Correo electrónico:</strong> Correo electrónico oficial del contacto.
-- <strong>Número telefónico:</strong> Número telefónico del contacto.
-- <strong>Cargo:</strong> Cargo que ocupa el contacto dentro del organismo al que pertenece.</p>
+
+<ul>
+<li><strong>Contacto:</strong> Nombre de la persona que es reponsable de los datos y la calidad de estos (Podría ser el mismo que en Fuente de datos).</li>
+<li><strong>Establecimiento:</strong> Organismo al que pertenece el contacto.</li>
+<li><strong>Correo electrónico:</strong> Correo electrónico oficial del contacto.</li>
+<li><strong>Número telefónico:</strong> Número telefónico del contacto.</li>
+<li><strong>Cargo:</strong> Cargo que ocupa el contacto dentro del organismo al que pertenece.</li>
+</ul>
 
 <h2 id="responsable-indicador">4.3 Responsable indicador</h2>
 
@@ -452,11 +467,14 @@ Por ejemplo: RESPONSABLE_DATO_CREATE le dará permiso para crear un elemento de 
     <p class="caption"><strong>Figura 4.3</strong> Responsable de indicador</p>
 </div>
 
-- <strong>Contacto:</strong> Nombre de la persona que es reponsable de hacer el seguimiento y control del indicador.
-- <strong>Establecimiento:</strong> Organismo al que pertenece el contacto.
-- <strong>Correo electrónico:</strong> Correo electrónico oficial del contacto.
-- <strong>Número telefónico:</strong> Número telefónico del contacto.
-- <strong>Cargo:</strong> Cargo que ocupa el contacto dentro del organismo al que pertenece.</p>
+
+<ul>
+<li><strong>Contacto:</strong> Nombre de la persona que es reponsable de hacer el seguimiento y control del indicador.</li>
+<li><strong>Establecimiento:</strong> Organismo al que pertenece el contacto.</li>
+<li><strong>Correo electrónico:</strong> Correo electrónico oficial del contacto.</li>
+<li><strong>Número telefónico:</strong> Número telefónico del contacto.</li>
+<li><strong>Cargo:</strong> Cargo que ocupa el contacto dentro del organismo al que pertenece.</li>
+</ul>
 
 <h2 id="clasificacion-segun-uso">4.4 Clasificación según uso</h2>
 
@@ -517,8 +535,11 @@ Por ejemplo: RESPONSABLE_DATO_CREATE le dará permiso para crear un elemento de 
     <p class="caption"><strong>Figura 4.7</strong> Significado campo</p>
 </div>
 
-- <strong>Código:</strong> Para crear colores y usarlos posteriormente en la definición de rangos de alertas, aquí ingresará un código del color en formato usado en HTML.
-- <strong>Color:</strong> Nombre que se mostrará para el color</p>
+
+<ul>
+<li><strong>Código:</strong> Para crear colores y usarlos posteriormente en la definición de rangos de alertas, aquí ingresará un código del color en formato usado en HTML.</li>
+<li><strong>Color:</strong> Nombre que se mostrará para el color</li>
+</ul>
 
 </div>
         <div class="item lof">

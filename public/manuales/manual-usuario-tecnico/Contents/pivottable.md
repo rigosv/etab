@@ -42,10 +42,11 @@ Si elegimos una función de agregación diferente a contar debemos especificar s
 Los atributos cuyo nombre tiene dos guiones bajos al principio y final, como `__total_controles_puerpuerales__` son las variables de la fórmula de cálculo
 definida en la ficha técnica.
 
-![Función e agregación](images/pivot_funcion_agregacion.gif)
+![Función de agregación](images/pivot_funcion_agregacion.gif)
 
 ### Tipo de resultado
 Establece la visualización que le daremos a los datos. Algunas opciones disponibles son:
+
 #### Tabla
 Visualización por defecto, una tabla con datos del resultado de la aplicación de la función de agregación
 
@@ -79,16 +80,20 @@ acercar o alejar la visualización y restablecer la escala.
  ![Opciones gráficos](images/pivot_opciones_graficos.gif)
 
 ### Filtrar
-Para mostrar solamente algunos de los elementos de las variables se da clic sobre el tríguangulo apuntando hacia abajo que está a la par del nombre y se selecciona los elementos deseados
+Para mostrar solamente algunos de los elementos de las variables se da clic sobre el triángulo apuntando hacia abajo que está a la par de su nombre y se selecciona los elementos deseados
  ![Filtros](images/pivot_filtros.gif)
 
 
 ### Estados o escenarios
-Se puede guardar la configuración o estado de una tabla dinámica. El estado guarda la posicion de las variables, los filtros aplicados, la función de agregación y sus parámetros, el tipo de visualización. Para luego poder recuperarlos posteriormente evitando tener que volver a realizar todos los pasos para obtener la configuración de la tabla dinámica. Al crear un escenario se puede definir como **escenario por defecto**, significa que al cargar el indicador nuevamente
-esa será la configuración en que se mostrará. Se pueden borrar solamente los escenarios que el propio usuario ha creado, los escenarios creados por otros usuarios solo podemos verlos, no borrarlos.
- ![Filtros](images/pivot_escenarios.gif)
+Se puede guardar la configuración o estado de una tabla dinámica. El estado guarda la posicion de las variables, los filtros aplicados, 
+la función de agregación y sus parámetros, el tipo de visualización. Para luego poder recuperarlos posteriormente evitando tener que volver a 
+realizar todos los pasos para obtener la configuración de la tabla dinámica. Al crear un escenario se puede definir como **escenario por defecto**, 
+significa que al cargar el indicador nuevamente
+esa será la configuración en que se mostrará. Se pueden borrar solamente los escenarios que el propio usuario ha creado, 
+los escenarios creados por otros usuarios solo podemos verlos, no borrarlos.
+ ![Escenarios](images/pivot_escenarios.gif)
 
 
 ### Ordenar los resultados
 Abajo de la función de agregación se encuentran dos controles de flechas, se utilizan para ordenar los resultados por la columna y fila de totales respectivamente. Si la flecha tiene dos puntas significa que no se ha aplicado un criterio de ordenamiento. La fecha arriba o a la derecha indican que se ha aplicado orden ascendente y a la izquierda o abajo orden descendente.
-![Filtros](images/pivot_ordenar.gif)
+![Ordenar](images/pivot_ordenar.gif)
