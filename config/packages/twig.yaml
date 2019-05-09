@@ -1,6 +1,7 @@
 twig:
   globals:
     app_theme: '%app.theme%'
+    app_dashboard: '%app.dashboard%'
     cium_disponible: '%cium.disponible%'
     cium_url: '%cium.url%'
   form_themes:

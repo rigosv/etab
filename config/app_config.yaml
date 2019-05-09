@@ -1,7 +1,7 @@
 #app_config.yaml
 parameters:
     locale: 'es'
-    app.theme : 'simple'
+    app.theme : 'default'
     app.logo_correo_archivo: 'logo_salud.png'
     app.from_correo: 'default@correo.com'
     app.upload_directory: '%kernel.project_dir%/public/uploads'
@@ -11,6 +11,7 @@ parameters:
     couchbase_url: '%env(resolve:COUCHBASE_URL)%'
     couchbase_user: '%env(resolve:COUCHBASE_USER)%'
     couchbase_password: '%env(resolve:COUCHBASE_PASSWORD)%'
-    cium.disponible: true
+    cium.disponible: false
     cium.url: 'http://cium.saludchiapas.gob.mx/'
+    app.dashboard: false
     
