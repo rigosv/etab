@@ -59,12 +59,6 @@ class GrupoIndicadores
      **/
     private $grupos;
     
-    /**
-    *
-    * @ORM\OneToMany(targetEntity="Imagen", mappedBy="sala" , cascade={"persist", "remove"}, orphanRemoval=true))    
-    *     
-    */
-    private $imagenes;
 
     /**
      * Constructor
@@ -212,38 +206,6 @@ class GrupoIndicadores
         return $this->grupos;
     }
 
-    /**
-     * Add imagenes
-     *
-     * @param \App\Entity\Image $imagenes
-     * @return GrupoIndicadores
-     */
-    public function addImagene(\App\Entity\Imagen $imagenes)
-    {
-        $this->imagenes[] = $imagenes;
-
-        return $this;
-    }
-
-    /**
-     * Remove imagenes
-     *
-     * @param \App\Entity\Image $imagenes
-     */
-    public function removeImagene(\App\Entity\Imagen $imagenes)
-    {
-        $this->imagenes->removeElement($imagenes);
-    }
-
-    /**
-     * Get imagenes
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getImagenes()
-    {
-        return $this->imagenes;
-    }
 
     /**
      * Add acciones

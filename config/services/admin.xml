@@ -16,19 +16,7 @@
             <argument>SonataAdminBundle:CRUD</argument>
             <call method="setMaxPerPage"><argument>%admin_max_per_page_number%</argument></call>
         </service>
-        
-        <service id="sonata.admin.imagen" class="App\Admin\ImagenAdmin">
-            <tag name="sonata.admin" 
-                 manager_type="orm" 
-                 group="catalogos" 
-                 label="_imagen_"
-            />
-            <argument />
-            <argument>App\Entity\Imagen</argument>
-            <argument>SonataAdminBundle:CRUD</argument>
-            <call method="setMaxPerPage"><argument>%admin_max_per_page_number%</argument></call>
-        </service>
-        
+
         <service id="sonata.admin.responsable_dato" class="App\Admin\ResponsableDatoAdmin">
             <tag name="sonata.admin" 
                  manager_type="orm" 

@@ -180,18 +180,6 @@ class FichaTecnicaAdmin extends Admin
 
     public function validate(ErrorElement $errorElement, $object)
     {
-        //Verificar que el usuario tiene una agencia asignada
-        $usuario = $this->getConfigurationPool()
-                ->getContainer()
-                ->get('security.token_storage')
-                ->getToken()
-                ->getUser();
-        if ($usuario->getAgencia() == null){
-            $errorElement
-                        ->with('nombre')
-                        ->addViolation(('_usuario_no_agencia_'))
-                        ->end();
-        }
 
         //Verificar que todos los campos esten configurados
         foreach ($object->getVariables() as $variable) {
@@ -271,7 +259,7 @@ class FichaTecnicaAdmin extends Admin
             if ($formula_valida == false) {
                 $errorElement
                         ->with('formula')
-                        ->addViolation(($mensaje))
+                        ->addViolation($mensaje)
                         ->end();
             }
         }
@@ -296,16 +284,7 @@ class FichaTecnicaAdmin extends Admin
     {
         $this->setAlertas($fichaTecnica);
         $this->crearCamposIndicador($fichaTecnica);   
-        
-        /*
-         * La agencia del indicador será la agencia del usuario que lo crea
-         */
-        $usuario = $this->getConfigurationPool()
-                ->getContainer()
-                ->get('security.token_storage')
-                ->getToken()
-                ->getUser();
-        $fichaTecnica->setAgencia($usuario->getAgencia());
+
     }
 
     public function setAlertas($fichaTecnica)
