@@ -13,3 +13,11 @@ file that was distributed with this source code.
     {{ parent() }}
     <script src="{{ asset('js/CRUD/base_edit.js') }}" type="text/javascript"></script>
 {% endblock %}
+
+{% block title %}
+    {% if objectId|default(admin.id(object)) is not null %}
+        {{ "title_edit"|trans({'%name%': admin.toString(object)|truncate(100) }, 'SonataAdminBundle') }}
+    {% else %}
+        {{ "title_create"|trans({}, 'SonataAdminBundle') }}
+    {% endif %}
+{% endblock %}
