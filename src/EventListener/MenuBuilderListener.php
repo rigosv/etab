@@ -122,6 +122,15 @@ class MenuBuilderListener
                     'route' => 'matrizReporte'
                 ]);
             }
+
+
+            $menu->addChild('_ayuda_', [
+                'label' => '_documentacion_',
+                'route' => 'ayuda'
+            ])->setExtras([
+                    'icon' => '<i class="fa fa-book"></i>',
+            ]);
+
         }
     }
 

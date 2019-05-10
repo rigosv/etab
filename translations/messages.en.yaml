@@ -519,3 +519,22 @@ _dimension_filtrar_: 'Dimension to filter'
 _dimension_representa_: 'This corresponds to'
 _acciones_poscarga_help_: 'SQL statement that will be executed at the end of the data load. You can separate several statements by semicolons'
 _acciones_poscarga_: 'Postload actions'
+action_poscarga_title: Execute postload actions
+_accion_: Action
+_registros_afectados_: Affected records
+_gestion_escenarios_: Scenario management
+_crear_escenario_: New scenario
+_escenario_por_defecto_: Default scenario
+_nombre_: Name
+_no_puede_sobreescribir_configuracion_escenario_otro_usuario_: You can not overwrite the scenario created by another user
+_escenario_guardado_correctamente_: Scenario saved correctly
+_escenario_: Scenario
+_escenarios_propios_: Own scenarios
+_escenarios_otros_: Scenarios created by other users
+_no_escenarios_creados: No scenarios created
+_confirmar_borrado_?: Confirm deleted?
+_si_: Yes
+_no_: No
+_ayuda_: Help
+_solo_caracteres_alfanumericos_: Use only alphanumeric characters
+_documentacion_: Documentation

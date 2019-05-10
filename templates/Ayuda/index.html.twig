@@ -1,0 +1,60 @@
+{% extends 'standard_layout.html.twig' %}
+
+{% block content %}
+    <div class="wall" role="alert">
+        <h1><i class="fa fa-book" aria-hidden="true"></i>
+            Etab</h1>
+    </div>
+    <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-aqua-gradient">
+                    <i class="fa fa-user-circle-o"></i>
+                </span>
+
+                <div class="info-box-content">
+                    <span class="info-box-number">{{ '_usuario_tecnico_'|trans|upper }}</span>
+                </div>
+                <A href='#' title="{{ '_formato_html_'|trans }}" style="padding: 10px;"
+                   onclick="openHelpPanel('/manuales/manual-usuario-tecnico/Output/website/book/', 'index.html')"
+                >
+                    <i class="fa fa-html5 fa-2x"></i>
+                </A>
+                <A href='{{ asset('/manuales/manual-usuario-tecnico/Output/print/book.pdf') }}'
+                   style="padding: 10px;"
+                   target="_blank" title="{{ '_formato_pdf_'|trans }}">
+                    <i class="fa fa-file-pdf-o fa-2x"></i>
+                </A>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span href='#' class="info-box-icon bg-red-gradient"
+                      onclick="openHelpPanel('/manuales/manual-usuario-administrador/Output/website/book/', 'index.html')"
+                >
+                    <span class="fa-stack">
+                      <i class="fa fa-user fa-stack-2x"></i>
+                      <i class="fa fa-key fa-stack-1x text-black"></i>
+                    </span>
+                </span>
+
+                <div class="info-box-content">
+                    <span class="info-box-number">{{ '_usuario_administrador_'|trans|upper }}</span>
+                </div>
+
+                <A href='#' title="{{ '_formato_html_'|trans }}" style="padding: 10px;"
+                   onclick="openHelpPanel('/manuales/manual-usuario-administrador/Output/website/book/', 'index.html')"
+                >
+                    <i class="fa fa-html5 fa-2x"></i>
+                </A>
+                <A href='{{ asset('/manuales/manual-usuario-administrador/Output/print/book.pdf') }}'
+                   target="_blank" title="{{ '_formato_pdf_'|trans }}" style="padding: 10px;">
+
+                    <i class="fa fa-file-pdf-o fa-2x"></i>
+                </A>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
