@@ -1,4 +1,11 @@
 #Modelo de datos
+
+## Diagrama de relaciones
+![Relaciones base de datos](images/diagrama_conceptual.png)
+
+## Diagrama físico de la base de datos
+![Diagrama físico](images/diagrama_fisico.png)
+
 ##Diccionario de datos
 
 ### Listado de tablas

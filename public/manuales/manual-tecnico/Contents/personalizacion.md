@@ -64,11 +64,9 @@ El eTab utiliza por defecto, el protocolo de transporte basado en Redis por defe
 Y la configuración se pone en el archivo `.env.local` los datos para conectarse a nuestra 
 instalación del servidor de redis, en la línea:
 
-~~~
- ###> enqueue/redis ###
- ENQUEUE_DSN=redis://localhost
- ###< enqueue/redis ###
-~~~
+    ###> enqueue/redis ###
+    ENQUEUE_DSN=redis://localhost
+    ###< enqueue/redis ###
 
 ### Cambiar el protocolo de transporte
 Si se desea utilizar/probar otro protocolo, por ejemplo RabbitMQ, se debe instalar el servidor 
@@ -78,20 +76,19 @@ correspondiente al paquete. Y luego cambiar la variable de entorno en el archivo
 
 1. Instalar el servidor RabbitMQ, según la [guía oficial](http://getcomposer.org/)
 2. Agregar la extensión de PHP 
-~~~
- # apt-get install php-amqp
-~~~
+
+    # apt-get install php-amqp
+
 3. Instalar el componente de Enqueue para ese protocolo
-~~~
- $ composer require enqueue/amqp-ext
-~~~
+
+    $ composer require enqueue/amqp-ext
+
 
 4. Cambiar el archivo de configuración `.env.local`
-~~~
- ###> enqueue/amqp ###
- ENQUEUE_DSN=amqp://guest:guest@localhost:5672/%2f/messages
- ###< enqueue/amqp ###
-~~~
+
+    ###> enqueue/amqp ###
+    ENQUEUE_DSN=amqp://guest:guest@localhost:5672/%2f/messages
+    ###< enqueue/amqp ###
 
 ¡Eso sería todo! La dificultad estará en el costo de instalar el servidor del protocolo que 
 deseemos probar, una vez hecho eso, en el eTab solo se debe agregar el paquete de enqueue 
@@ -100,9 +97,8 @@ correspondiente y cambiar una línea en el archivo `.env.local`
 ### Activar las colas para la carga de datos
 Independientemente de la implementación del protocolo la activación de las colas se hará 
 con el siguiente comando:
-~~~
- bin/console messenger:consume-messages
-~~~
+
+    bin/console messenger:consume-messages
 
 En el proceso de instalación, se configuró `supervisor` para que verifique cada 5 minutos si está activas las colas
 y las carga si no lo están.
