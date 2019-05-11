@@ -41,7 +41,7 @@ function cargarHelpContent(urlBase, recurso){
                 $(elm).fadeOut(1000);
                 $(elm).fadeIn(1000);
             }
-        }, 1000);
+        }, 2000);
 
 
     });
