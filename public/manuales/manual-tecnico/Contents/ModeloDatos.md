@@ -290,7 +290,7 @@
     </tr>
     <tr>
         <td >id_session</td>
-        <td ></td>
+        <td >Identificador de la sesión en que se realizaron las acciones</td>
         <td >character varying</td>
         <td >100</td>
         <td >No</td>
