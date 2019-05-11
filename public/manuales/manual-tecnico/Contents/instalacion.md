@@ -142,11 +142,11 @@ partición en que está el proyecto y luego ejecutar
 
 
 ### Ejecutando el etab
-En produccion, se debe usar un servidor web como Nginx o Apache, puede ver el siguiente enlace para configurar
+En produccion, se debe usar un servidor web como Nginx o Apache, puede ver el siguiente enlace para 
 [configurar un servidor web](https://symfony.com/doc/current/setup/web_server_configuration.html)
 Para desarrollo o una verificación rápida se puede usar un servidor web local, activándolo de la siguiente forma
 
-    symfony server:start
+    $ bin/console server:start
 
 Abra el navegador web y cargue la ruta `http://localhost:8000/`
 
