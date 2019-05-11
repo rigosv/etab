@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="author" content="eTAB" />
+    <meta name="date" content="10/05/2019"/>
+    <meta name="generator" content="easybook 5.0-DEV"/>
+
+    <title>Tecnologías utilizadas | Manual Técnico</title>
+
+    <link rel="stylesheet" href="./css/easybook.css" />
+
+</head>
+
+<body class="item chapter">
+<div class="container">
+<div class="menu">
+    <div class="row">
+        <h1 class="span9"><a href="./index.html">Manual Técnico</a></h1>
+        <p class="span3">
+                        <a href="./introduccion.html"><span>&larr;</span> Anterior</a>
+            
+                        <a href="./capitulo-2.html">Siguiente <span>&rarr;</span></a>
+                    </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span9">
+        <h1 id="tecnologias-utilizadas"><span>Capítulo 1</span> Tecnologías utilizadas</h1>
+        <p>El Tablero eTAB es un servicio Web disponible para que dependencias del sistema de salud suban 
+sus datos para poder analizarlos, generar gráficas y reportes.</p>
+
+<p>La aplicación cuenta con un módulo para efectuar la extracción,transformación y carga de datos (ETL) 
+desde diferentes fuentes. Estos datos son agregados y almacenados en una base de datos relacional (OLTP). 
+Los datos están organizados por catálogos de referencia e Indicadores medibles. Los usuarios del sistema 
+pueden administrar estos indicadores y catálogos y todos sus tributos usando el las herramientas que brinda 
+el sistema.
+Para efectuar consultas en línea los datos son agregados dentro de tablas optimizadas para el análisis en 
+linea (OLAP). 
+Las tablas para análisis son actualizadas periódicamente usando procedimientos almacenados de PostgresSQL.<br />
+La gestión de consultas a las tablas de análisis OLAP se realiza por medio de un servidor dedicado. 
+La interacción entre el servidor OLAP y el resto de la aplicación se realiza por medio de consultas AJAX. 
+El resultado de las consultas al servidor OLAP, es porcesado usando JQuery y graficado usando la libreria de gráficos D3.</p>
+
+<p>Todo el software utilizado para creación del SIIG/eTAB son paquetes de software libre.
+Estos incluyen:</p>
+
+<ul>
+<li>GitHub: Gestor de control de versiones de código fuente</li>
+<li>Apache: Servidor de paginas web</li>
+<li>PostgreSQL: Gestor de bases de Datos</li>
+<li>Symfony: Entorno de desarrollo para PHP</li>
+<li>PHP: Lenguaje de desarrollo de la Aplicación eTAB</li>
+<li>D3.js: Librería para la generación de gráficos</li>
+<li>JQuery: Lenguaje para interfaces de usuario</li>
+<li>RabbitMQ: Servidor de Mensajería</li>
+<li>EasyBook: Generador de documentos en formato PDF</li>
+<li>Bootstrap: Framework para interfaces de usuario</li>
+<li>PivotTable.js: Librería para crear tabla pivote</li>
+<li>Redis: Motor de base de datos en memoria.</li>
+<li>AngularJS: Framework javascript</li>
+</ul>
+
+    </div>
+
+    <div class="span3">
+        <div class="item local_toc">
+            <h3>Índice de contenidos</h3>
+
+            <ul class="unstyled">
+                                                <li class="level-1">
+                        <span></span>
+                        <a class="internal" href="./capitulo-1.html#tecnologias-utilizadas">Tecnologías utilizadas</a>
+                    </li>
+                                        </ul>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+</html>

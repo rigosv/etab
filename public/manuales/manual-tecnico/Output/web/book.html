@@ -1,0 +1,4389 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="author" content="eTAB" />
+    <meta name="date" content="10/05/2019"/>
+    <meta name="generator" content="easybook 5.0-DEV"/>
+
+    <title>Manual Técnico</title>
+
+    <link rel="stylesheet" href="./css/easybook.css" />
+
+</head>
+
+<body>
+
+<div class="container">
+<div class="row">
+    <div class="span12">
+    <div class="item cover">
+    <h1>Manual Técnico</h1>
+    <h2>eTAB</h2>
+</div>    </div>
+    <div class="span9">
+        <div class="item ">
+    <h1>Introducción</h1>
+
+    <p>El presente manual técnico describe cada uno de los componentes del sistema eTAB y los pasos 
+necesarios para instalarlo.</p>
+
+<p>El sistema de información eTAB es parte de la iniciativa Salud Mesoamérica 2015 (SM2015). 
+Esta es una iniciativa cuyo fin es reducir las inequidades en salud que están afectando al 
+20 por ciento mas pobre de la población en Centro America y Mexico. Esta iniciativa también tiene 
+como objetivo apoyar los esfuerzos de los gobiernos de la región para alcanzar los Objetivos del Milenio.</p>
+
+<p>Salud Mesoamérica 2015, pone especial atención a la áreas de  salud reproductiva, nutrición maternal 
+y neonatal maternal  inmunización, y la prevención y control del dengue y la malaria. 
+Para este fin Salud Mesoamérica 2015trabajara en conjunto con los ministerios de salud de la región 
+y el Sistema de Salud  Publica Mesoamericano. Este proyecto es parte de la plataforma de integración 
+regional conocido como Proyecto Mesoamerica.</p>
+
+<p>Los resultados esperados de incluyen una reducción significante en las tasa de mortalidad infantil 
+para niños de menos de cinco años. Esta iniciativa también esta busca reducir la malnutrición crónica 
+en la niñez y las mujeres embarazadas. Estos cambios son críticos para mejorar las estadísticas sobre 
+partos y para ofrecer mejores condiciones para el crecimiento del recién nacido. A su vez esta iniciativa 
+busca tener un efecto directo en comunidades pobres sobre la cobertura y calidad de vacunas, control pre y 
+post natal y acceso a planificación familiar entre otros servicios.</p>
+
+<p>Salud Mesoamérica 2015 espera generar conocimiento de relevancia global sobre como aumentar asistencia 
+en salud de bajo costo en comunidades pobres.   Para este fin el sistema de información eTAB permite 
+analizar y dar seguimiento a los indicadores en salud con los que trabaja este proyecto.</p>
+
+</div>
+        <div class="item chapter">
+    <h1 id="tecnologias-utilizadas"><span>Capítulo 1</span> Tecnologías utilizadas</h1>
+    <p>El Tablero eTAB es un servicio Web disponible para que dependencias del sistema de salud suban 
+sus datos para poder analizarlos, generar gráficas y reportes.</p>
+
+<p>La aplicación cuenta con un módulo para efectuar la extracción,transformación y carga de datos (ETL) 
+desde diferentes fuentes. Estos datos son agregados y almacenados en una base de datos relacional (OLTP). 
+Los datos están organizados por catálogos de referencia e Indicadores medibles. Los usuarios del sistema 
+pueden administrar estos indicadores y catálogos y todos sus tributos usando el las herramientas que brinda 
+el sistema.
+Para efectuar consultas en línea los datos son agregados dentro de tablas optimizadas para el análisis en 
+linea (OLAP). 
+Las tablas para análisis son actualizadas periódicamente usando procedimientos almacenados de PostgresSQL.<br />
+La gestión de consultas a las tablas de análisis OLAP se realiza por medio de un servidor dedicado. 
+La interacción entre el servidor OLAP y el resto de la aplicación se realiza por medio de consultas AJAX. 
+El resultado de las consultas al servidor OLAP, es porcesado usando JQuery y graficado usando la libreria de gráficos D3.</p>
+
+<p>Todo el software utilizado para creación del SIIG/eTAB son paquetes de software libre.
+Estos incluyen:</p>
+
+<ul>
+<li>GitHub: Gestor de control de versiones de código fuente</li>
+<li>Apache: Servidor de paginas web</li>
+<li>PostgreSQL: Gestor de bases de Datos</li>
+<li>Symfony: Entorno de desarrollo para PHP</li>
+<li>PHP: Lenguaje de desarrollo de la Aplicación eTAB</li>
+<li>D3.js: Librería para la generación de gráficos</li>
+<li>JQuery: Lenguaje para interfaces de usuario</li>
+<li>RabbitMQ: Servidor de Mensajería</li>
+<li>EasyBook: Generador de documentos en formato PDF</li>
+<li>Bootstrap: Framework para interfaces de usuario</li>
+<li>PivotTable.js: Librería para crear tabla pivote</li>
+<li>Redis: Motor de base de datos en memoria.</li>
+<li>AngularJS: Framework javascript</li>
+</ul>
+
+</div>
+        <div class="item chapter">
+    <h1 id="instalacion-del-etab"><span>Capítulo 2</span> Instalación del eTAB</h1>
+    <h2 id="requerimientos">2.1 Requerimientos</h2>
+
+<ul>
+<li>PostgreSQL 9.6+</li>
+<li>PHP 7.2+</li>
+</ul>
+
+<h2 id="instalacion">2.2 Instalación</h2>
+
+<h3 id="instalacion-de-los-requerimientos-desde-un-servidor-debian">2.2.1 Instalación de los requerimientos desde un servidor Debian</h3>
+
+<p>Es muy importante poner atención al indicador "#" significa que el comando 
+debe ser ejecutado como usuario root y "$" que debe ser ejecutado como un usuario normal, 
+en ambos casos desde una consola de comandos.</p>
+
+<div class="code code">
+<pre class="code"># apt-get update
+# apt-get install php php-pgsql php-curl php-sqlite3 sqlite php-cli php-xsl php-intl  postgresql acl git-core curl postgresql-contrib php-ldap php-mysql php-sybase php-json php-bcmath php-mbstring redis-server php-redis php-zip php-gd wkhtmltopdf php-fpm composer supervisor php-acpu</pre>
+</div>
+
+<h3 id="crear-usuario-y-directorio-de-trabajo">2.2.2 Crear usuario y directorio de trabajo</h3>
+
+<p>El directorio y usuario a utilizar pueden variar de acuerdo a los que se deseen elegir en cada instalación, 
+como ejemplo se usará un usuario llamado <em>etab</em> y el directorio de instalación <em>/var/www/etab</em></p>
+
+<div class="code code">
+<pre class="code"># adduser etab
+# mkdir /var/www/etab
+# chown etab:etab /var/www/etab
+# su etab
+$ cd /var/www</pre>
+</div>
+
+<h3 id="obtener-el-codigo-fuente">2.2.3 Obtener el código fuente</h3>
+
+<div class="code code">
+<pre class="code">$ git clone https://github.com/rigosv/etab</pre>
+</div>
+
+<p>A partir de este punto todos los comandos se deben ejecutar dentro de la carpeta en que se ha descargado 
+el código fuente</p>
+
+<h3 id="instalar-composer">2.2.4 Instalar composer</h3>
+
+<p><a href="http://getcomposer.org/">Composer</a> Es una librería de PHP para el manejo de dependencias. 
+Para instalarlo, dentro de la carpeta donde descargaste el código fuente se debe ejecutar:</p>
+
+<div class="code code">
+<pre class="code">$ curl -s https://getcomposer.org/installer | php</pre>
+</div>
+
+<h2 id="configuracion">2.3 Configuración</h2>
+
+<h3 id="configuracion-de-postgres">2.3.1 Configuración de Postgres</h3>
+
+<h4 id="editar-archivo-de-configuracion">2.3.1.1 Editar archivo de configuración</h4>
+
+<p>Como usuario root realizar:</p>
+
+<ol>
+<li>Editar el archivo <em>/etc/postgresql/9.6/main/pg_hba.conf</em> (Verificar la ruta con la versión correspondiente) </li>
+<li>Cambiar la siguiente línea, sustituir la última palabra por <em>md5</em> </li>
+</ol>
+
+<div class="code code">
+<pre class="code">local   all             all                       md5</pre>
+</div>
+
+<p>Reiniciar PostgreSQL</p>
+
+<div class="code code">
+<pre class="code"># /etc/init.d/postgresql restart</pre>
+</div>
+
+<h4 id="crear-el-usuario-dueno-de-la-base-de-datos-y-la-estructura-inicial">2.3.1.2 Crear el usuario dueño de la base de datos y la estructura inicial</h4>
+
+<p>Se creará el usuario dueño de la base de datos, las opciones utilizadas dependerán de 
+los criterios que se quieran seguir, se muestra un ejemplo, ejecutar <em>createuser --help</em> 
+para la explicación de las opciones.</p>
+
+<div class="code code">
+<pre class="code"># su postgres
+$ createuser -d -S  -R -P admin
+$ createdb etab -O admin
+$ exit
+# exit
+$ psql -d etab -f src/EstructuraDB/etab_initdb.sql -U admin</pre>
+</div>
+
+<h4 id="configurar-los-parametros-de-conexion">2.3.1.3 Configurar los parámetros de conexión</h4>
+
+<p>Configurar los valores correspondientes en el archivo <strong>.env.local</strong> 
+(Si no existe copiar el contenido de .env: <code>cp .env .env.local</code> )</p>
+
+<div class="code code">
+<pre class="code">DATABASE_URL=pgsql://[usuario]:[clave]@[IP_SERVIDOR]:[PUERTO]/[NOMBRE_DB]
+&nbsp;
+// Si los orígenes se guardarán en la misma base de datos, utilizar el mismo nombre de base de datos 
+DATABASE_ETAB_DATOS_URL=pgsql://[usuario]:[clave]@[IP_SERVIDOR]:[PUERTO]/[NOMBRE_DB_ORIGENES]</pre>
+</div>
+
+<p>Configurar el parámetro "server_version" estableciendo la versión de postgres utilizada, en el archivo 
+<strong>config/packages/doctrine.yaml</strong></p>
+
+<h3 id="instalar-todas-las-librerias-necesarias">2.3.2 Instalar todas las librerías necesarias</h3>
+
+<p>Si es un servidor de pruebas</p>
+
+<div class="code code">
+<pre class="code">$ php composer.phar install</pre>
+</div>
+
+<p>Si es un servidor de producción</p>
+
+<div class="code code">
+<pre class="code">$ php composer install --no-dev --optimize-autoloader</pre>
+</div>
+
+<h3 id="configurar-el-supervisor-de-gestion-de-colas">2.3.3 Configurar el supervisor de gestión de colas</h3>
+
+<p>crear el archivo etab_colas.conf</p>
+
+<div class="code code">
+<pre class="code"># nano  /etc/supervisor/conf.d/etab_colas.conf</pre>
+</div>
+
+<p>Poner el siguiente contenido en el archivo (verificar la ruta y usuario con que se ha instalado el etab y 
+sustituir en este archivo, en el ejemplo se asume que está instalado en /var/www/etab con el usuario admin )</p>
+
+<div class="code code">
+<pre class="code">[program:pf_message_consumer]
+command=/var/www/etab/bin/console messenger:consume-messages --env=prod --no-debug --time-limit=300
+user=admin
+process_name=%(program_name)s_%(process_num)02d
+numprocs=1
+autostart=true
+autorestart=true
+startsecs=0
+redirect_stderr=true</pre>
+</div>
+
+<p>reiniciar el supervisor</p>
+
+<div class="code code">
+<pre class="code"># /etc/init.d/supervisor restart</pre>
+</div>
+
+<h3 id="permisos-sobre-carpetas">2.3.4 Permisos sobre carpetas</h3>
+
+<p>Es necesario tener <a href="https://help.ubuntu.com/community/FilePermissionsACLs">soporte para ACL</a> en la 
+partición en que está el proyecto y luego ejecutar</p>
+
+<div class="code code">
+<pre class="code">$ setfacl -R -m u:www-data:rwx -m u:`whoami`:rwx app/cache app/logs web/uploads
+$ setfacl -dR -m u:www-data:rwx -m u:`whoami`:rwx app/cache app/logs web/uploads</pre>
+</div>
+
+<h3 id="crear-el-usuario-administrador-de-la-aplicacion">2.3.5 Crear el usuario administrador de la aplicación</h3>
+
+<div class="code code">
+<pre class="code">$ bin/console fos:user:create --super-admin</pre>
+</div>
+
+<h3 id="ejecutando-el-etab">2.3.6 Ejecutando el etab</h3>
+
+<p>En produccion, se debe usar un servidor web como Nginx o Apache, puede ver el siguiente enlace para configurar
+<a href="https://symfony.com/doc/current/setup/web_server_configuration.html">configurar un servidor web</a>
+Para desarrollo o una verificación rápida se puede usar un servidor web local, activándolo de la siguiente forma</p>
+
+<div class="code code">
+<pre class="code">symfony server:start</pre>
+</div>
+
+<p>Abra el navegador web y cargue la ruta <code>http://localhost:8000/</code></p>
+
+<h3 id="origenes-de-datos-desde-mssqlserver">2.3.7 Orígenes de datos desde MSSQLServer</h3>
+
+<p>Si se leerá orígenes de datos desde MSSQLServer, instalar los controladores de Microsoft, según la siguiente guía
+<a href="https://docs.microsoft.com/en-us/sql/connect/php/installation-tutorial-linux-mac?view=sql-server-2017">MSSQLServer</a></p>
+
+</div>
+        <div class="item chapter">
+    <h1 id="personalizacion"><span>Capítulo 3</span> Personalización</h1>
+    <h2 id="temas">3.1 Temas</h2>
+
+<p>Se tiene una separación en cuanto a la personalización de la interfaz de usuairo en cada instalación del etab. 
+Para esto se utilizarán temas. El objetivo es que en cada instalación tome un tema base, 
+se hagan los cambios necesarios y se active ese tema, sin cambiar nada de los temas existentes. 
+Además si el tema es muy diferente (más allá de cambiar el logo) se puede agregar al repositorio 
+y así ir creando un conjunto de temas disponibles. Existen 3 temas: <strong>default</strong>, <strong>MINSAL_ESA</strong>, y <strong>simple</strong></p>
+
+<h3 id="temas-de-ejemplo">3.1.1 Temas de ejemplo</h3>
+
+<h4 id="tema-default">3.1.1.1 Tema default</h4>
+
+<p>En este tema no tiene imágenes relacionadas a una institución, el menú principal es vertical del lado izquierdo.</p>
+
+<div class="figure" id="figure-3-1">
+    <img src="images/default-ingreso.png" alt="Pantalla de ingreso, tema default" />
+
+    <p class="caption"><strong>Figura 3.1</strong> Pantalla de ingreso, tema default</p>
+</div>
+
+
+<div class="figure" id="figure-3-2">
+    <img src="images/default-inicial.png" alt="Pantalla de ingreso, tema default" />
+
+    <p class="caption"><strong>Figura 3.2</strong> Pantalla de ingreso, tema default</p>
+</div>
+
+
+<h4 id="tema-minsal-esa">3.1.1.2 Tema MINSAL_ESA</h4>
+
+<p>Es el tema utilizado en El Salvador, contiene imágenes que identifican al Ministerio de Salud, su menú es horizontal.</p>
+
+<div class="figure" id="figure-3-3">
+    <img src="images/minsal-ingreso.png" alt="Pantalla de ingreso, tema MINSAL_ESA" />
+
+    <p class="caption"><strong>Figura 3.3</strong> Pantalla de ingreso, tema MINSAL_ESA</p>
+</div>
+
+
+<div class="figure" id="figure-3-4">
+    <img src="images/minsal-inicial.png" alt="Pantalla de ingreso, tema MINSAL_ESA" />
+
+    <p class="caption"><strong>Figura 3.4</strong> Pantalla de ingreso, tema MINSAL_ESA</p>
+</div>
+
+
+<h3 id="crear-un-tema">3.1.2 Crear un tema</h3>
+
+<ol>
+<li>En la ruta <code>public/themes</code> dentro del directorio del proyecto, crear un nuevo directorio 
+(el nombre del directorio será el nombre del tema), este contendrá los archivos de imágenes, css y js.</li>
+<li><p>Debe contener al menos los archivos que tenga el tema default, agregando además los nuevos 
+que se vayan a utilizar.
+<div class="figure" id="figure-3-5">
+    <img src="images/estructura-tema.png" alt="Estructura de un tema" />
+
+    <p class="caption"><strong>Figura 3.5</strong> Estructura de un tema</p>
+</div>
+</li>
+<li><p>Crear el directorio del nuevo tema para contener la estructura (debe coincidir con el nombre del 
+directorio creado para los las imágenes, estilos y js ) para modificar la estructura de la interfaz, 
+en la ruta: <code>templates/themes</code></p></li>
+<li><p>Como en el caso anterior el tema default, nos indica los archivos mínimos que será obligatorio 
+tener en nuestro nuevo tema
+<div class="figure" id="figure-3-6">
+    <img src="images/estructura2-tema.png" alt="Estructura de un tema" />
+
+    <p class="caption"><strong>Figura 3.6</strong> Estructura de un tema</p>
+</div>
+</li>
+<li><p>Para activar el nuevo tema, cambiar el parámetro <code>app.theme</code> en el archivo de configuración 
+<code>config/app_config.yaml</code> (el nombre del tema será el nombre del directorio).
+<div class="figure" id="figure-3-7">
+    <img src="images/config-tema.png" alt="Estructura de un tema" />
+
+    <p class="caption"><strong>Figura 3.7</strong> Estructura de un tema</p>
+</div>
+</li>
+</ol>
+
+<h2 id="gestion-de-carga-de-origenes-de-datos">3.2 Gestión de carga de orígenes de datos</h2>
+
+<p>Se está utilizando <strong>Enqueue bundle</strong> el cual permite integrar el componente <strong>Enqueue</strong>. 
+Este último brindará  el servicio de mensajería pudiendo utilizar el protocolo de transporte que 
+mejor nos parezca; entre los protocolos posibles tenemos:</p>
+
+<ul>
+<li>AMQP(s) based on PHP AMQP extension </li>
+<li>AMQP based on bunny </li>
+<li>AMQP(s) based on php-amqplib </li>
+<li>Beanstalk </li>
+<li>STOMP </li>
+<li>Amazon SQS </li>
+<li>Google PubSub </li>
+<li>Kafka </li>
+<li>Redis </li>
+<li>Gearman </li>
+<li>Doctrine DBAL </li>
+<li>Filesystem </li>
+<li>Mongodb </li>
+</ul>
+
+<p>El eTab utiliza por defecto, el protocolo de transporte basado en Redis por defecto. 
+Y la configuración se pone en el archivo <code>.env.local</code> los datos para conectarse a nuestra 
+instalación del servidor de redis, en la línea:</p>
+
+<div class="code code">
+<pre class="code">###&gt; enqueue/redis ###
+ENQUEUE_DSN=redis://localhost
+###&lt; enqueue/redis ###</pre>
+</div>
+
+<h3 id="cambiar-el-protocolo-de-transporte">3.2.1 Cambiar el protocolo de transporte</h3>
+
+<p>Si se desea utilizar/probar otro protocolo, por ejemplo RabbitMQ, se debe instalar el servidor 
+de RabbitMQ, agregar la extensión para que PHP pueda leer el protocolo y el componente de Enqueue 
+correspondiente al paquete. Y luego cambiar la variable de entorno en el archivo <code>.env.local</code></p>
+
+<ol>
+<li>Instalar el servidor RabbitMQ, según la <a href="http://getcomposer.org/">guía oficial</a></li>
+<li>Agregar la extensión de PHP </li>
+</ol>
+
+<div class="code code">
+<pre class="code"># apt-get install php-amqp</pre>
+</div>
+
+<ol>
+<li>Instalar el componente de Enqueue para ese protocolo</li>
+</ol>
+
+<div class="code code">
+<pre class="code">$ composer require enqueue/amqp-ext</pre>
+</div>
+
+<ol>
+<li>Cambiar el archivo de configuración <code>.env.local</code></li>
+</ol>
+
+<div class="code code">
+<pre class="code">###&gt; enqueue/amqp ###
+ENQUEUE_DSN=amqp://guest:guest@localhost:5672/%2f/messages
+###&lt; enqueue/amqp ###</pre>
+</div>
+
+<p>¡Eso sería todo! La dificultad estará en el costo de instalar el servidor del protocolo que 
+deseemos probar, una vez hecho eso, en el eTab solo se debe agregar el paquete de enqueue 
+correspondiente y cambiar una línea en el archivo <code>.env.local</code></p>
+
+<h3 id="activar-las-colas-para-la-carga-de-datos">3.2.2 Activar las colas para la carga de datos</h3>
+
+<p>Independientemente de la implementación del protocolo la activación de las colas se hará 
+con el siguiente comando:</p>
+
+<div class="code code">
+<pre class="code">bin/console messenger:consume-messages</pre>
+</div>
+
+<p>En el proceso de instalación, se configuró <code>supervisor</code> para que verifique cada 5 minutos si está activas las colas
+y las carga si no lo están.</p>
+
+<h3 id="gestion-manual-de-mensajes">3.2.3 Gestión manual de mensajes</h3>
+
+<p>Si se desea manipular los mensajes de carga de los orígenes de datos, por ejemplo para borrarlos 
+y que ya no se tomen en cuenta, se deberá realizar de acuerdo al servidor del protocolo utilizado. 
+Por ejemplo actualmente con RabbitMQ se ingresa a la interfaz web de administración de este y desde 
+ahí se pueden borrar las colas o mensajes que estas tengan.</p>
+
+<p>Con redis, podemos utilizar el cliente de redis o cualquier otro cliente gráfico que hayamos instalado 
+(eso ya depende de cada instalación). 
+Si se desea borrar todos los mensajes pendientes, de manera rápida, podemos utilizar el comando 
+<code>bin/console redis:flushall</code> para borrar todos los datos en caché de redis. 
+Esto incluye caché de indicadores mostrados en el tablero los cuales se volverán a generar al volver a 
+utilizar un indicador en el tablero.</p>
+
+<p>Si solo se desea borrar los mensajes correspondiente a la carga de datos, se realizan los siguientes pasos:</p>
+
+<ol>
+<li><p>Ingresamos a la consola de administración de redis, comando <code>redis-cli</code>
+<div class="figure" id="figure-3-8">
+    <img src="images/redis-cli.png" alt="Consola Redis" />
+
+    <p class="caption"><strong>Figura 3.8</strong> Consola Redis</p>
+</div>
+</li>
+<li><p>Ver si hay mensajes pendientes de procesar, comando <code>KEYS *</code>
+<div class="figure" id="figure-3-9">
+    <img src="images/redis-keys.png" alt="Redis keys" />
+
+    <p class="caption"><strong>Figura 3.9</strong> Redis keys</p>
+</div>
+</li>
+<li><p>Si hay mensajes veremos una llave con el nombre <strong>messages</strong>. Para borrar los mensajes usamos el 
+comando <code>DEL</code>
+<div class="figure" id="figure-3-10">
+    <img src="images/redis-del.png" alt="Redis DEL" />
+
+    <p class="caption"><strong>Figura 3.10</strong> Redis DEL</p>
+</div>
+</li>
+<li><p>Buscar los procesos del componente messenger que se estén ejecutando: <code>ps aux | grep messenger</code>
+<div class="figure" id="figure-3-11">
+    <img src="images/ps-aux.png" alt="ps aux" />
+
+    <p class="caption"><strong>Figura 3.11</strong> ps aux</p>
+</div>
+</li>
+<li><p>Detener los procesos encontrados, utilizar el número de proceso encontrado en el comando anterior : 
+<code>kill -9 3226</code></p></li>
+</ol>
+
+</div>
+        <div class="item chapter">
+    <h1 id="modelo-de-datos"><span>Capítulo 4</span> Modelo de datos</h1>
+    <h2 id="diagrama-de-relaciones">4.1 Diagrama de relaciones</h2>
+
+<div class="figure" id="figure-4-1">
+    <img src="images/diagrama_conceptual.png" alt="Relaciones base de datos" />
+
+    <p class="caption"><strong>Figura 4.1</strong> Relaciones base de datos</p>
+</div>
+
+
+<h2 id="diagrama-fisico-de-la-base-de-datos">4.2 Diagrama físico de la base de datos</h2>
+
+<div class="figure" id="figure-4-2">
+    <img src="images/diagrama_fisico.png" alt="Diagrama físico" />
+
+    <p class="caption"><strong>Figura 4.2</strong> Diagrama físico</p>
+</div>
+
+
+<h2 id="diccionario-de-datos">4.3 Diccionario de datos</h2>
+
+<h3 id="listado-de-tablas">4.3.1 Listado de tablas</h3>
+
+<div class="table" id="table-4-1">
+
+    <table border="1" style="border-collapse: collapse;" id="tablas">
+    <thead>
+    <tr style="background-color: #1c94c4;">
+        <TH>Tabla</TH>
+        <TH>Descripción</TH>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>alerta </td>
+            <td>Contiene los colores utilizados en los rangos de alertas</td>
+        </tr>
+        <tr>
+            <td>bitacora </td>
+            <td>Guarda las acciones del usuario</td>
+        </tr>
+        <tr>
+            <td>boletin </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>campo </td>
+            <td>Los campos para identificar los elementos de los orígenes de datos</td>
+        </tr>        
+        <tr>
+            <td>clasificacion_tecnica </td>
+            <td>Es el segundo nivel para clasificar los indicadores</td>
+        </tr>
+        <tr>
+            <td>clasificacion_uso </td>
+            <td>Es el primer nivel para clasificar los indicadores</td>
+        </tr>
+        <tr>
+            <td>conexion </td>
+            <td>Contiene los parámetros de conexión a las bases de datos de donde se extraen los orígenes de datos </td>
+        </tr>
+        <tr>
+            <td>configuracion_pivot_table </td>
+            <td>Guarda los estados de la tabla dinámica</td>
+        </tr>        
+        <tr>
+            <td>ficha_tecnica </td>
+            <td>Contiene los campos de la ficha técnica que describen los indicadores</td>
+        </tr>
+        <tr>
+            <td>ficha_tecnica_campo </td>
+            <td>Los campos que pertenecen a la ficha técnica</td>
+        </tr>
+        <tr>
+            <td>fichatecnica_clasificaciontecnica </td>
+            <td>Las relación que determina a qué clasificaciones pertenece la ficha técnica</td>
+        </tr>
+        <tr>
+            <td>fichatecnica_tiposgraficos </td>
+            <td>Determina los tipos de gráficos que permitirá la ficha técnica</td>
+        </tr>
+        <tr>
+            <td>ficha_tecnica_variable_dato </td>
+            <td>Relaciona las variables que se utilizará en la fórmula de cálculo del indicador</td>
+        </tr>
+        <tr>
+            <td>fila_origen_dato_v2 </td>
+            <td>Estructura modelo para crear el almacenamiento de los orígenes de datos</td>
+        </tr>
+        <tr>
+            <td>fos_user_group </td>
+            <td>Grupo de usuarios</td>
+        </tr>
+        <tr>
+            <td>fos_user_user </td>
+            <td>Usuarios del sistema</td>
+        </tr>
+        <tr>
+            <td>fos_user_user_group </td>
+            <td>Relación para definir los grupos a los que pertenecen los usuarios</td>
+        </tr>
+        <tr>
+            <td>fuente_dato </td>
+            <td>Contiene la información de las fuentes de datos</td>
+        </tr>
+        <tr>
+            <td>fusion_origenes_datos </td>
+            <td>Relación de los indicadores base con los indicadores que fusiona</td>
+        </tr>
+        <tr>
+            <td>group_fichatecnica </td>
+            <td>Determina las fichas técnicas a las que se tiene acceso por nivel de grupo</td>
+        </tr>
+        <tr>
+            <td>group_grupoindicadores </td>
+            <td>Relaciona las salas situacionales a las que tiene acceso un grupo de usuarios</td>
+        </tr>        
+        <tr>
+            <td>grupo_indicadores </td>
+            <td>Indicadors a los que se tiene acceso a nivel de grupo de usuarios</td>
+        </tr>
+        <tr>
+            <td>grupo_indicadores_indicador </td>
+            <td>Los indicadores que pertenecen a una sala situacional</td>
+        </tr>        
+        <tr>
+            <td>indicador_alertas </td>
+            <td>Las alertas asociadas a un indicador</td>
+        </tr>
+        <tr>
+            <td>indicador_usuario </td>
+            <td>Indicadores asociados a un usuario</td>
+        </tr>        
+        <tr>
+            <td>matriz_indicadores_desempeno </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>matriz_indicadores_desempeno_ficha_tecnica </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>matriz_indicadores_etab </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>matriz_indicadores_etab_alertas </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>matriz_indicadores_relacion </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>matriz_indicadores_relacion_alertas </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>matriz_indicadores_usuario </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>matriz_seguimiento </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>matriz_seguimiento_dato </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>matriz_seguimiento_matriz </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>motor_bd </td>
+            <td>Los motores de base de datos soportados para crear orígenes de datos</td>
+        </tr>
+        <tr>
+            <td>origen_datos </td>
+            <td>Contiene información para la obtención de los datos desde sus orígenes</td>
+        </tr>
+        <tr>
+            <td>origenes_conexiones </td>
+            <td>Las conexiones sobre las que trabajará un origen de datos</td>
+        </tr>
+        <tr>
+            <td>periodos </td>
+            <td>Periodos de lectura</td>
+        </tr>
+        <tr>
+            <td>responsable_dato </td>
+            <td>Información para identificar al responsable de brindar los datos</td>
+        </tr>
+        <tr>
+            <td>responsable_indicador </td>
+            <td>Información del responsable del indicador</td>
+        </tr>
+        <tr>
+            <td>sala_acciones </td>
+            <td>Lista de acciones o comentarios sobre una sala situacional</td>
+        </tr>
+        <tr>
+            <td>sala_comentarios </td>
+            <td>Comentarios realizados dentro de una sala situacional</td>
+        </tr>
+        <tr>
+            <td>significado_campo </td>
+            <td>Se utilizar para estándarizar el significado de los campos de los diferentes orígenes de datos</td>
+        </tr>
+        <tr>
+            <td>significados_tipos_graficos </td>
+            <td>Los tipos de gráficos permitidos para un significado de datos</td>
+        </tr>        
+        <tr>
+            <td>tipo_grafico </td>
+            <td>Los tipos de gráficos soportados</td>
+        </tr>
+        <tr>
+            <td>usuario_grupo_indicadores </td>
+            <td>Las salas situacionales asociadas a un usuario</td>
+        </tr>
+        <tr>
+            <td>usuario_indicadores_favoritos </td>
+            <td>Indicadores favoritos de un usuario</td>
+        </tr>
+        <tr>
+            <td>variable_dato </td>
+            <td>Las variables que se utilizan en la ficha técnica del indicador</td>
+        </tr>
+    </tbody>
+</table>
+</div>
+
+
+<p></br></p>
+
+<h3 id="descripcion-de-la-tabla-alerta">4.3.2 Descripción de la tabla: <strong>alerta</strong></h3>
+
+<div class="table" id="table-4-2">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-alerta">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id</td>
+        <td >LLave primaria</td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    <tr>
+        <td >codigo</td>
+        <td >Código html para identificar la alerta</td>
+        <td >character varying</td>
+        <td >30</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >color</td>
+        <td >Nombre del color</td>
+        <td >character varying</td>
+        <td >50</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-bitacora">4.3.3 Descripción de la tabla: <strong>bitacora</strong></h3>
+
+<div class="table" id="table-4-3">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-bitacora">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id</td>
+        <td >Llave primaria</td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    <tr>
+        <td >id_usuario</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >Sí</td>
+        <td>
+            FOREIGN KEY fos_user_user(id)                    </td>
+    </tr>
+    <tr>
+        <td >id_session</td>
+        <td >Identificador de la sesión en que se realizaron las acciones</td>
+        <td >character varying</td>
+        <td >100</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >fecha_hora</td>
+        <td >Fecha y hora en que se realizó la acción</td>
+        <td >timestamp without time zone</td>
+        <td ></td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >accion</td>
+        <td >Nombre de la acción realizada</td>
+        <td >character varying</td>
+        <td >100</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >elemento</td>
+        <td >Elementos afectados</td>
+        <td >text</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-boletin">4.3.4 Descripción de la tabla: <strong>boletin</strong></h3>
+
+<div class="table" id="table-4-4">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-boletin">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    <tr>
+        <td >sala</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >Sí</td>
+        <td>
+            FOREIGN KEY grupo_indicadores(id)                    </td>
+    </tr>
+    <tr>
+        <td >grupo</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >Sí</td>
+        <td>
+            FOREIGN KEY fos_user_group(id)                    </td>
+    </tr>
+    <tr>
+        <td >nombre</td>
+        <td ></td>
+        <td >character varying</td>
+        <td >100</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >creado</td>
+        <td ></td>
+        <td >timestamp without time zone</td>
+        <td ></td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >actualizado</td>
+        <td ></td>
+        <td >timestamp without time zone</td>
+        <td ></td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >token</td>
+        <td ></td>
+        <td >character varying</td>
+        <td >72</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-campo">4.3.5 Descripción de la tabla: <strong>campo</strong></h3>
+
+<div class="table" id="table-4-5">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-campo">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id</td>
+        <td >Llave primaria</td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    <tr>
+        <td >id_origen_datos</td>
+        <td ></td>
+        <td >bigint</td>
+        <td >64</td>
+        <td >Sí</td>
+        <td>
+            FOREIGN KEY origen_datos(id)                    </td>
+    </tr>
+    <tr>
+        <td >id_tipo_campo</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >Sí</td>
+        <td>
+            FOREIGN KEY tipo_campo(id)                    </td>
+    </tr>
+    <tr>
+        <td >id_significado_campo</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >Sí</td>
+        <td>
+            FOREIGN KEY significado_campo(id)                    </td>
+    </tr>
+    <tr>
+        <td >nombre</td>
+        <td >Nombre del campo</td>
+        <td >character varying</td>
+        <td >100</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >descripcion</td>
+        <td >Texto descriptivo del campo</td>
+        <td >text</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>    
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripicon-de-la-tabla-clasificacion-tecnica">4.3.6 Descripicón de la tabla: <strong>clasificacion_tecnica</strong></h3>
+
+<div class="table" id="table-4-6">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-clasificacion_tecnica">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    <tr>
+        <td >codigo</td>
+        <td >Código que describe la clasificación técnica</td>
+        <td >character varying</td>
+        <td >15</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >descripcion</td>
+        <td >Texto descriptivo de la clasificación técnica</td>
+        <td >character varying</td>
+        <td >50</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >comentario</td>
+        <td >Comentarios u observaciones de la clasficación</td>
+        <td >text</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >clasificacionuso_id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >Sí</td>
+        <td>
+            FOREIGN KEY clasificacion_uso(id)                    </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-clasificacion-uso">4.3.7 Descripción de la tabla: <strong>clasificacion_uso</strong></h3>
+
+<div class="table" id="table-4-7">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-clasificacion_uso">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    <tr>
+        <td >codigo</td>
+        <td >El código de la clasificación de uso</td>
+        <td >character varying</td>
+        <td >15</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >descripcion</td>
+        <td >Texto descriptivo de la clasificación de uso</td>
+        <td >character varying</td>
+        <td >50</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >comentario</td>
+        <td >Comentarios generales</td>
+        <td >text</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-conexion">4.3.8 Descripción de la tabla: <strong>conexion</strong></h3>
+
+<div class="table" id="table-4-8">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-conexion">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    <tr>
+        <td >id_motor</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >Sí</td>
+        <td>
+            FOREIGN KEY motor_bd(id)                    </td>
+    </tr>
+    <tr>
+        <td >nombre_conexion</td>
+        <td >Nombre que describe la conexión</td>
+        <td >character varying</td>
+        <td >100</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >comentario</td>
+        <td >Comentario general</td>
+        <td >text</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >ip</td>
+        <td >Dirección IP del host al que se hará la conexión </td>
+        <td >character varying</td>
+        <td >15</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >usuario</td>
+        <td >Usuario para realizar la conexión</td>
+        <td >character varying</td>
+        <td >25</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >clave</td>
+        <td >Clave del usuario para la conexión</td>
+        <td >character varying</td>
+        <td >150</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >nombre_base_datos</td>
+        <td >Nombre de la base de datos a la que se conectará</td>
+        <td >character varying</td>
+        <td >50</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >puerto</td>
+        <td >Puerto utilizado en la conexión</td>
+        <td >character varying</td>
+        <td >5</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >instancia</td>
+        <td >Instancia de la base de datos a utilizar</td>
+        <td >character varying</td>
+        <td >50</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-configuracion-pivot-table">4.3.9 Descripción de la tabla: <strong>configuracion_pivot_table</strong></h3>
+
+<div class="table" id="table-4-9">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-configuracion_pivot_table">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    <tr>
+        <td >nombre</td>
+        <td >Nombre del escenario a guardar</td>
+        <td >character varying</td>
+        <td >255</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >por_defecto</td>
+        <td >true si es un escenario por defecto</td>
+        <td >boolean</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >configuracion</td>
+        <td >Configuración guardada de la tabla dinámica</td>
+        <td >text</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >id_elemento</td>
+        <td >Identificador del elemento sobre la que se realiza la tabla dinámica</td>
+        <td >integer</td>
+        <td >32</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >tipo_elemento</td>
+        <td >Tipo de elemento que utilizará la configuración guardada de la tabla dinámica</td>
+        <td >character varying</td>
+        <td >50</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >id_usuario</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >Sí</td>
+        <td>
+            FOREIGN KEY fos_user_user(id)                    </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-ficha-tecnica">4.3.10 Descripción de la tabla: <strong>ficha_tecnica</strong></h3>
+
+<div class="table" id="table-4-10">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-ficha_tecnica">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    <tr>
+        <td >nombre</td>
+        <td >Nombre de la ficha técnica</td>
+        <td >character varying</td>
+        <td >150</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >tema</td>
+        <td >Texto explicativo del indicador </td>
+        <td >text</td>
+        <td ></td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >concepto</td>
+        <td >Concepto u objetivo del indicador</td>
+        <td >text</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >unidad_medida</td>
+        <td >Unida de medida en que se mostrarán los resultados</td>
+        <td >character varying</td>
+        <td >50</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >formula</td>
+        <td >Fórmula para cálcular el indicador</td>
+        <td >character varying</td>
+        <td >300</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >observacion</td>
+        <td >Comentarios generales</td>
+        <td >text</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >campos_indicador</td>
+        <td >Campos que utilizará la ficha técnica</td>
+        <td >text</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >confiabilidad</td>
+        <td >Para ingresar un número que indique el porcentaje de confiabilidad de los cálculos</td>
+        <td >integer</td>
+        <td >32</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >updated_at</td>
+        <td >La fecha en que se actualizó la ficha técnica</td>
+        <td >timestamp without time zone</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >id_periodo</td>
+        <td >Periodo de lectura del indicador</td>
+        <td >integer</td>
+        <td >32</td>
+        <td >Sí</td>
+        <td>
+            FOREIGN KEY periodos(id)                    </td>
+    </tr>
+    <tr>
+        <td >ultima_lectura</td>
+        <td >Fecha en que se realizó la última carga de datos</td>
+        <td >timestamp without time zone</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >es_acumulado</td>
+        <td >true si es un indicador acumulado</td>
+        <td >boolean</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >meta</td>
+        <td >Meta de la medición del indicador</td>
+        <td >double precision</td>
+        <td >53</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >codigo</td>
+        <td >Código de la ficha técnica</td>
+        <td >character varying</td>
+        <td >100</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >ruta</td>
+        <td >Si los datos se obtienen de un sistema, se puede registrar la ruta para obtener los datos</td>
+        <td >text</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >cantidad_decimales</td>
+        <td >Cantidad de decimales que se usarán para mostrar el resultado del cálculo del indicador</td>
+        <td >integer</td>
+        <td >32</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-ficha-tecnica-campo">4.3.11 Descripción de la tabla: <strong>ficha_tecnica_campo</strong></h3>
+
+<div class="table" id="table-4-11">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-ficha_tecnica_campo">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id_ficha_tecnica</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY, FOREIGN KEY ficha_tecnica(id)                    </td>
+    </tr>
+    <tr>
+        <td >id_campo</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY, FOREIGN KEY campo(id)                    </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-fichatecnica-clasificaciontecnica">4.3.12 Descripción de la tabla: <strong>fichatecnica_clasificaciontecnica</strong></h3>
+
+<div class="table" id="table-4-12">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-fichatecnica_clasificaciontecnica">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >fichatecnica_id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY, FOREIGN KEY ficha_tecnica(id)                    </td>
+    </tr>
+    <tr>
+        <td >clasificaciontecnica_id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY, FOREIGN KEY clasificacion_tecnica(id)                    </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-fichatecnica-tiposgraficos">4.3.13 Descripción de la tabla: <strong>fichatecnica_tiposgraficos</strong></h3>
+
+<div class="table" id="table-4-13">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-fichatecnica_tiposgraficos">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >fichatecnica_id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY, FOREIGN KEY ficha_tecnica(id)                    </td>
+    </tr>
+    <tr>
+        <td >tipografico_id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY, FOREIGN KEY tipo_grafico(id)                    </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-ficha-tecnica-variable-dato">4.3.14 Descripción de la tabla: <strong>ficha_tecnica_variable_dato</strong></h3>
+
+<div class="table" id="table-4-14">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-ficha_tecnica_variable_dato">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id_ficha_tecnica</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY, FOREIGN KEY ficha_tecnica(id)                    </td>
+    </tr>
+    <tr>
+        <td >id_variable_dato</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-fila-origen-dato-v2">4.3.15 Descripción de la tabla: <strong>fila_origen_dato_v2</strong></h3>
+
+<div class="table" id="table-4-15">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-fila_origen_dato_v2">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id_origen_dato</td>
+        <td >Identificador del origen de datos</td>
+        <td >integer</td>
+        <td >32</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >datos</td>
+        <td >Datos en formato json</td>
+        <td >jsonb</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >ultima_lectura</td>
+        <td >Fecha en que se realizó la última carga de datos</td>
+        <td >timestamp without time zone</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >id_conexion</td>
+        <td >Identificador de la conexión de la que se obtuvieron los datos</td>
+        <td >integer</td>
+        <td >32</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-fos-user-group">4.3.16 Descripción de la tabla: <strong>fos_user_group</strong></h3>
+
+<div class="table" id="table-4-16">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-fos_user_group">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    <tr>
+        <td >name</td>
+        <td >Nombre del grupo</td>
+        <td >character varying</td>
+        <td >255</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >roles</td>
+        <td >Roles asignados al grupo</td>
+        <td >text</td>
+        <td ></td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-fos-user-user">4.3.17 Descripción de la tabla: <strong>fos_user_user</strong></h3>
+
+<div class="table" id="table-4-17">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-fos_user_user">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    <tr>
+        <td >username</td>
+        <td >Código de ingreso del usuario</td>
+        <td >character varying</td>
+        <td >180</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>   
+    <tr>
+        <td >email</td>
+        <td >Dirección electrónica</td>
+        <td >character varying</td>
+        <td >180</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>    
+    <tr>
+        <td >enabled</td>
+        <td >true si el usuario está habilitado</td>
+        <td >boolean</td>
+        <td ></td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>    
+    <tr>
+        <td >password</td>
+        <td >Clave de acceso</td>
+        <td >character varying</td>
+        <td >255</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >last_login</td>
+        <td >Fecha de última conexión</td>
+        <td >timestamp without time zone</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >roles</td>
+        <td >Roles del usuario</td>
+        <td >text</td>
+        <td ></td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >created_at</td>
+        <td >Fecha de creación del usuario</td>
+        <td >timestamp without time zone</td>
+        <td ></td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >updated_at</td>
+        <td >Fecha de actualización del usuario</td>
+        <td >timestamp without time zone</td>
+        <td ></td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >date_of_birth</td>
+        <td >Fecha de nacimiento del usuario</td>
+        <td >timestamp without time zone</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >firstname</td>
+        <td >Nombre</td>
+        <td >character varying</td>
+        <td >64</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >lastname</td>
+        <td >Apellidos del usuario</td>
+        <td >character varying</td>
+        <td >64</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>  
+    <tr>
+        <td >gender</td>
+        <td >Género del usuario</td>
+        <td >character varying</td>
+        <td >1</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>      
+    <tr>
+        <td >establecimientoprincipal_id</td>
+        <td >Identificar del establecimiento al que pertenece el usuario</td>
+        <td >integer</td>
+        <td >32</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-fos-user-user-group">4.3.18 Descripción de la tabla: <strong>fos_user_user_group</strong></h3>
+
+<div class="table" id="table-4-18">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-fos_user_user_group">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >user_id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY, FOREIGN KEY fos_user_user(id)                    </td>
+    </tr>
+    <tr>
+        <td >group_id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY, FOREIGN KEY fos_user_group(id)                    </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-fuente-dato">4.3.19 Descripción de la tabla; <strong>fuente_dato</strong></h3>
+
+<div class="table" id="table-4-19">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-fuente_dato">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    <tr>
+        <td >establecimiento</td>
+        <td >Establecimiento al que pertenece el usurio</td>
+        <td >character varying</td>
+        <td >100</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >contacto</td>
+        <td >Nombre del contacto</td>
+        <td >character varying</td>
+        <td >100</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >correo</td>
+        <td >Dirección de correo electrónico</td>
+        <td >character varying</td>
+        <td >50</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >telefono</td>
+        <td ></td>
+        <td >character varying</td>
+        <td >15</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >cargo</td>
+        <td ></td>
+        <td >character varying</td>
+        <td >50</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-fusion-origenes-datos">4.3.20 Descripción de la tabla: <strong>fusion_origenes_datos</strong></h3>
+
+<div class="table" id="table-4-20">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-fusion_origenes_datos">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    <tr>
+        <td >id_origen_datos</td>
+        <td >Identificador del origen de datos principal</td>
+        <td >bigint</td>
+        <td >64</td>
+        <td >Sí</td>
+        <td>
+            FOREIGN KEY origen_datos(id)                    </td>
+    </tr>
+    <tr>
+        <td >id_origen_datos_fusionado</td>
+        <td >Identificador del origen de datos que es fusionado</td>
+        <td >bigint</td>
+        <td >64</td>
+        <td >Sí</td>
+        <td>
+            FOREIGN KEY origen_datos(id)                    </td>
+    </tr>
+    <tr>
+        <td >campos</td>
+        <td ></td>
+        <td >text</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-group-fichatecnica">4.3.21 Descripción de la tabla: <strong>group_fichatecnica</strong></h3>
+
+<div class="table" id="table-4-21">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-group_fichatecnica">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >group_id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY, FOREIGN KEY fos_user_group(id)                    </td>
+    </tr>
+    <tr>
+        <td >fichatecnica_id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY, FOREIGN KEY ficha_tecnica(id)                    </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-group-grupoindicadores">4.3.22 Descripción de la tabla: <strong>group_grupoindicadores</strong></h3>
+
+<div class="table" id="table-4-22">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-group_grupoindicadores">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >group_id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY, FOREIGN KEY fos_user_group(id)                    </td>
+    </tr>
+    <tr>
+        <td >grupoindicadores_id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY, FOREIGN KEY grupo_indicadores(id)                    </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-grupo-indicadores">4.3.23 Descripción de la tabla: <strong>grupo_indicadores</strong></h3>
+
+<div class="table" id="table-4-23">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-grupo_indicadores">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    <tr>
+        <td >nombre</td>
+        <td >Nombre de la sala situacional</td>
+        <td >character varying</td>
+        <td >50</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >updated_at</td>
+        <td >Fecha en que se actualizó</td>
+        <td >timestamp without time zone</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-grupo-indicadores-indicador">4.3.24 Descripción de la tabla: <strong>grupo_indicadores_indicador</strong></h3>
+
+<div class="table" id="table-4-24">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-grupo_indicadores_indicador">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    <tr>
+        <td >indicador_id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >Sí</td>
+        <td>
+            FOREIGN KEY ficha_tecnica(id)                    </td>
+    </tr>
+    <tr>
+        <td >grupo_indicadores_id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >Sí</td>
+        <td>
+            FOREIGN KEY grupo_indicadores(id)                    </td>
+    </tr>
+    <tr>
+        <td >dimension</td>
+        <td >La dimensión que se usó para el indicador en la sala</td>
+        <td >character varying</td>
+        <td >50</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >filtro</td>
+        <td >El filtro del indicador</td>
+        <td >character varying</td>
+        <td >500</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >filtro_posicion_desde</td>
+        <td >Valor inicial del filtro </td>
+        <td >character varying</td>
+        <td >10</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >filtro_posicion_hasta</td>
+        <td >Valor final del filtro</td>
+        <td >character varying</td>
+        <td >10</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >filtro_elementos</td>
+        <td >Elementos filtrados</td>
+        <td >text</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >posicion</td>
+        <td >Posición a filtrar</td>
+        <td >integer</td>
+        <td >32</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >tipo_grafico</td>
+        <td >Tipo de gráfico utilizado</td>
+        <td >character varying</td>
+        <td >50</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >vista</td>
+        <td >Forma de presentación: gráfico, tabla</td>
+        <td >character varying</td>
+        <td >20</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >orden</td>
+        <td >La posición del indicador en la sala</td>
+        <td >character varying</td>
+        <td >100</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-indicador-alertas">4.3.25 Descripción de la tabla: <strong>indicador_alertas</strong></h3>
+
+<div class="table" id="table-4-25">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-indicador_alertas">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    <tr>
+        <td >id_color_alerta</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            FOREIGN KEY alerta(id)                    </td>
+    </tr>
+    <tr>
+        <td >id_indicador</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            FOREIGN KEY ficha_tecnica(id)                    </td>
+    </tr>
+    <tr>
+        <td >limite_inferior</td>
+        <td >Límite inferior del rango de la alerta</td>
+        <td >double precision</td>
+        <td >53</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >limite_superior</td>
+        <td >Límite superior del rango de la alerta</td>
+        <td >double precision</td>
+        <td >53</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >comentario</td>
+        <td >Comentario general</td>
+        <td >text</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-indicador-usuario">4.3.26 Descripción de la tabla: <strong>indicador_usuario</strong></h3>
+
+<div class="table" id="table-4-26">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-indicador_usuario">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id_usuario</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY, FOREIGN KEY fos_user_user(id)                    </td>
+    </tr>
+    <tr>
+        <td >id_indicador</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY, FOREIGN KEY ficha_tecnica(id)                    </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-indicador-variablecaptura">4.3.27 Descripción de la tabla: <strong>indicador_variablecaptura</strong></h3>
+
+<div class="table" id="table-4-27">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-indicador_variablecaptura">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >indicador_id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    <tr>
+        <td >variablecaptura_id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-matriz-indicadores-desempeno">4.3.28 Descripción de la tabla: <strong>matriz_indicadores_desempeno</strong></h3>
+
+<div class="table" id="table-4-28">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-matriz_indicadores_desempeno">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    <tr>
+        <td >id_matriz</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >Sí</td>
+        <td>
+            FOREIGN KEY matriz_seguimiento_matriz(id)                    </td>
+    </tr>
+    <tr>
+        <td >nombre</td>
+        <td ></td>
+        <td >character varying</td>
+        <td >500</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >orden</td>
+        <td ></td>
+        <td >character varying</td>
+        <td >4</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >creado</td>
+        <td ></td>
+        <td >timestamp without time zone</td>
+        <td ></td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >actualizado</td>
+        <td ></td>
+        <td >timestamp without time zone</td>
+        <td ></td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-matriz-indicadores-desempeno-ficha-tecnica">4.3.29 Descripción de la tabla: <strong>matriz_indicadores_desempeno_ficha_tecnica</strong></h3>
+
+<div class="table" id="table-4-29">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-matriz_indicadores_desempeno_ficha_tecnica">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >matriz_indicadores_desempeno_id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY, FOREIGN KEY matriz_indicadores_desempeno(id)                    </td>
+    </tr>
+    <tr>
+        <td >ficha_tecnica_id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY, FOREIGN KEY ficha_tecnica(id)                    </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-matriz-indicadores-etab">4.3.30 Descripción de la tabla: <strong>matriz_indicadores_etab</strong></h3>
+
+<div class="table" id="table-4-30">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-matriz_indicadores_etab">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    <tr>
+        <td >id_ficha_tecnica</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            FOREIGN KEY ficha_tecnica(id)                    </td>
+    </tr>
+    <tr>
+        <td >id_desempeno</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            FOREIGN KEY matriz_indicadores_desempeno(id)                    </td>
+    </tr>
+    <tr>
+        <td >filtros</td>
+        <td ></td>
+        <td >text</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >creado</td>
+        <td ></td>
+        <td >timestamp without time zone</td>
+        <td ></td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >actualizado</td>
+        <td ></td>
+        <td >timestamp without time zone</td>
+        <td ></td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-matriz-indicadores-etab-alertas">4.3.31 Descripción de la tabla: <strong>matriz_indicadores_etab_alertas</strong></h3>
+
+<div class="table" id="table-4-31">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-matriz_indicadores_etab_alertas">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    <tr>
+        <td >matriz_indicador_etab_id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            FOREIGN KEY matriz_indicadores_etab(id)                    </td>
+    </tr>
+    <tr>
+        <td >limite_inferior</td>
+        <td ></td>
+        <td >double precision</td>
+        <td >53</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >limite_superior</td>
+        <td ></td>
+        <td >double precision</td>
+        <td >53</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >color</td>
+        <td ></td>
+        <td >text</td>
+        <td ></td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >creado</td>
+        <td ></td>
+        <td >timestamp without time zone</td>
+        <td ></td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >actualizado</td>
+        <td ></td>
+        <td >timestamp without time zone</td>
+        <td ></td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-matriz-indicadores-relacion">4.3.32 Descripción de la tabla: <strong>matriz_indicadores_relacion</strong></h3>
+
+<div class="table" id="table-4-32">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-matriz_indicadores_relacion">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    <tr>
+        <td >id_desempeno</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            FOREIGN KEY matriz_indicadores_desempeno(id)                    </td>
+    </tr>
+    <tr>
+        <td >nombre</td>
+        <td ></td>
+        <td >character varying</td>
+        <td >500</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >fuente</td>
+        <td ></td>
+        <td >character varying</td>
+        <td >500</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >creado</td>
+        <td ></td>
+        <td >timestamp without time zone</td>
+        <td ></td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >actualizado</td>
+        <td ></td>
+        <td >timestamp without time zone</td>
+        <td ></td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-matriz-indicadores-relacion-alertas">4.3.33 Descripción de la tabla: <strong>matriz_indicadores_relacion_alertas</strong></h3>
+
+<div class="table" id="table-4-33">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-matriz_indicadores_relacion_alertas">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    <tr>
+        <td >matriz_indicador_relacion_id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            FOREIGN KEY matriz_indicadores_relacion(id)                    </td>
+    </tr>
+    <tr>
+        <td >limite_inferior</td>
+        <td ></td>
+        <td >double precision</td>
+        <td >53</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >limite_superior</td>
+        <td ></td>
+        <td >double precision</td>
+        <td >53</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >color</td>
+        <td ></td>
+        <td >text</td>
+        <td ></td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >creado</td>
+        <td ></td>
+        <td >timestamp without time zone</td>
+        <td ></td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >actualizado</td>
+        <td ></td>
+        <td >timestamp without time zone</td>
+        <td ></td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-matriz-indicadores-usuario">4.3.34 Descripción de la tabla: <strong>matriz_indicadores_usuario</strong></h3>
+
+<div class="table" id="table-4-34">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-matriz_indicadores_usuario">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    <tr>
+        <td >id_matriz</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >Sí</td>
+        <td>
+            FOREIGN KEY matriz_seguimiento_matriz(id)                    </td>
+    </tr>
+    <tr>
+        <td >id_usuario</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >Sí</td>
+        <td>
+            FOREIGN KEY fos_user_user(id)                    </td>
+    </tr>
+    <tr>
+        <td >creado</td>
+        <td ></td>
+        <td >timestamp without time zone</td>
+        <td ></td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >actualizado</td>
+        <td ></td>
+        <td >timestamp without time zone</td>
+        <td ></td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-matriz-seguimiento">4.3.35 Descripción de la tabla: <strong>matriz_seguimiento</strong></h3>
+
+<div class="table" id="table-4-35">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-matriz_seguimiento">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    <tr>
+        <td >id_desempeno</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >Sí</td>
+        <td>
+            FOREIGN KEY matriz_indicadores_desempeno(id)                    </td>
+    </tr>
+    <tr>
+        <td >anio</td>
+        <td ></td>
+        <td >character varying</td>
+        <td >4</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >etab</td>
+        <td ></td>
+        <td >boolean</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >meta</td>
+        <td ></td>
+        <td >character varying</td>
+        <td >65</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >indicador</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >creado</td>
+        <td ></td>
+        <td >timestamp without time zone</td>
+        <td ></td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >actualizado</td>
+        <td ></td>
+        <td >timestamp without time zone</td>
+        <td ></td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-matriz-seguimiento-dato">4.3.36 Descripción de la tabla: <strong>matriz_seguimiento_dato</strong></h3>
+
+<div class="table" id="table-4-36">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-matriz_seguimiento_dato">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    <tr>
+        <td >id_matriz</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >Sí</td>
+        <td>
+            FOREIGN KEY matriz_seguimiento(id)                    </td>
+    </tr>
+    <tr>
+        <td >mes</td>
+        <td ></td>
+        <td >character varying</td>
+        <td >20</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >planificado</td>
+        <td ></td>
+        <td >character varying</td>
+        <td >20</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >real</td>
+        <td ></td>
+        <td >character varying</td>
+        <td >20</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >creado</td>
+        <td ></td>
+        <td >timestamp without time zone</td>
+        <td ></td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >actualizado</td>
+        <td ></td>
+        <td >timestamp without time zone</td>
+        <td ></td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-matriz-seguimiento-matriz">4.3.37 Descripción de la tabla: <strong>matriz_seguimiento_matriz</strong></h3>
+
+<div class="table" id="table-4-37">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-matriz_seguimiento_matriz">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    <tr>
+        <td >nombre</td>
+        <td ></td>
+        <td >character varying</td>
+        <td >100</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >descripcion</td>
+        <td ></td>
+        <td >text</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-motor-bd">4.3.38 Descripción de la tabla: <strong>motor_bd</strong></h3>
+
+<div class="table" id="table-4-38">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-motor_bd">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    <tr>
+        <td >nombre</td>
+        <td >Nombre que identifica al motor de la base de datos</td>
+        <td >character varying</td>
+        <td >50</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >codigo</td>
+        <td >Código a utilizar para identificar el motod de base de datos</td>
+        <td >character varying</td>
+        <td >20</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-origen-datos">4.3.39 Descripción de la tabla: <strong>origen_datos</strong></h3>
+
+<div class="table" id="table-4-39">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-origen_datos">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id</td>
+        <td ></td>
+        <td >bigint</td>
+        <td >64</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    <tr>
+        <td >nombre</td>
+        <td >Nombre del origen de datos</td>
+        <td >character varying</td>
+        <td >100</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >descripcion</td>
+        <td >Texto descriptivo del origen de datos</td>
+        <td >text</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >sentencia_sql</td>
+        <td >Sentencia SQL para extraer los datos</td>
+        <td >text</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >archivo_nombre</td>
+        <td >Nombre del archivo cuando la carga es desde hoja de cálculo o archivo csv</td>
+        <td >character varying</td>
+        <td >255</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >es_fusionado</td>
+        <td >true si es un origen de datos fusionado</td>
+        <td >boolean</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >es_catalogo</td>
+        <td >true si es un origen de datos para crear una tabla catálogo</td>
+        <td >boolean</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >nombre_catalogo</td>
+        <td >Nombre de la tabla catálogo</td>
+        <td >character varying</td>
+        <td >100</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >campos_fusionados</td>
+        <td >Si es un origen fusionado, que campos se han fusionado</td>
+        <td >text</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >ultima_actualizacion</td>
+        <td >Fecha de la última actualización</td>
+        <td >timestamp without time zone</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >ventana_limite_inferior</td>
+        <td >Valor utilizado en carga incremental</td>
+        <td >integer</td>
+        <td >32</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >ventana_limite_superior</td>
+        <td >Valor utilizado en carga incremental</td>
+        <td >integer</td>
+        <td >32</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >campolecturaincremental_id</td>
+        <td >El campo que se usará para el control de la lectura incremental</td>
+        <td >integer</td>
+        <td >32</td>
+        <td >Sí</td>
+        <td>
+            FOREIGN KEY campo(id)                    </td>
+    </tr>
+    <tr>
+        <td >tiempo_segundos_ultima_carga</td>
+        <td >Para controlar el tiempo que se tarda la carga de datos</td>
+        <td >integer</td>
+        <td >32</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >carga_finalizada</td>
+        <td >Indica si la última carga de datos se realizó correctamente</td>
+        <td >boolean</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >error_carga</td>
+        <td >true si ocurrió un error al cargar los datos</td>
+        <td >boolean</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >mensaje_error_carga</td>
+        <td >Mensaje de error si la carga de datos falló</td>
+        <td >text</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >valor_corte</td>
+        <td ></td>
+        <td >character varying</td>
+        <td >50</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >formato_valor_corte</td>
+        <td >Formato del campo que se usará para controlar la carga incremental</td>
+        <td >character varying</td>
+        <td >100</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >acciones_poscarga</td>
+        <td >Sentencias SQL separadas por ; que se ejecutarán después de realizada la carga de datos</td>
+        <td >text</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-origen-datos-fusiones">4.3.40 Descripción de la tabla: <strong>origen_datos_fusiones</strong></h3>
+
+<div class="table" id="table-4-40">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-origen_datos_fusiones">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id_origen_dato</td>
+        <td ></td>
+        <td >bigint</td>
+        <td >64</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY, FOREIGN KEY origen_datos(id)                    </td>
+    </tr>
+    <tr>
+        <td >id_origen_dato_fusionado</td>
+        <td ></td>
+        <td >bigint</td>
+        <td >64</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY, FOREIGN KEY origen_datos(id)                    </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-origenes-conexiones">4.3.41 Descripción de la tabla: <strong>origenes_conexiones</strong></h3>
+
+<div class="table" id="table-4-41">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-origenes_conexiones">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >origendatos_id</td>
+        <td ></td>
+        <td >bigint</td>
+        <td >64</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY, FOREIGN KEY origen_datos(id)                    </td>
+    </tr>
+    <tr>
+        <td >conexion_id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY, FOREIGN KEY conexion(id)                    </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-periodos">4.3.42 Descripción de la tabla: <strong>periodos</strong></h3>
+
+<div class="table" id="table-4-42">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-periodos">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    <tr>
+        <td >descripcion</td>
+        <td >Descripción del periodo</td>
+        <td >character varying</td>
+        <td >25</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >codigo</td>
+        <td >Código que identifica el perido</td>
+        <td >character varying</td>
+        <td >7</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-responsable-dato">4.3.43 Descripción de la tabla: <strong>responsable_dato</strong></h3>
+
+<div class="table" id="table-4-43">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-responsable_dato">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    <tr>
+        <td >establecimiento</td>
+        <td >Establecimiento del responsable del dato</td>
+        <td >character varying</td>
+        <td >100</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >contacto</td>
+        <td >Nombre del contacto</td>
+        <td >character varying</td>
+        <td >100</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >correo</td>
+        <td ></td>
+        <td >character varying</td>
+        <td >50</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >telefono</td>
+        <td ></td>
+        <td >character varying</td>
+        <td >15</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >cargo</td>
+        <td ></td>
+        <td >character varying</td>
+        <td >50</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-responsable-indicador">4.3.44 Descripción de la tabla: <strong>responsable_indicador</strong></h3>
+
+<div class="table" id="table-4-44">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-responsable_indicador">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    <tr>
+        <td >establecimiento</td>
+        <td ></td>
+        <td >character varying</td>
+        <td >100</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >contacto</td>
+        <td ></td>
+        <td >character varying</td>
+        <td >100</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >correo</td>
+        <td ></td>
+        <td >character varying</td>
+        <td >50</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >telefono</td>
+        <td ></td>
+        <td >character varying</td>
+        <td >15</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >cargo</td>
+        <td ></td>
+        <td >character varying</td>
+        <td >50</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-sala-acciones">4.3.45 Descripción de la tabla: <strong>sala_acciones</strong></h3>
+
+<div class="table" id="table-4-45">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-sala_acciones">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    <tr>
+        <td >grupo_indicadores_id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >Sí</td>
+        <td>
+            FOREIGN KEY grupo_indicadores(id)                    </td>
+    </tr>
+    <tr>
+        <td >usuario_id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >Sí</td>
+        <td>
+            FOREIGN KEY fos_user_user(id)                    </td>
+    </tr>
+    <tr>
+        <td >acciones</td>
+        <td >Texto con las acciones a realizar</td>
+        <td >text</td>
+        <td ></td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >observaciones</td>
+        <td >Observaciones generales</td>
+        <td >text</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >responsables</td>
+        <td >Nombre de los responsables de realizar las acciones</td>
+        <td >text</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >fecha</td>
+        <td >Fecha de asignación de acciones</td>
+        <td >timestamp without time zone</td>
+        <td ></td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-sala-comentarios">4.3.46 Descripción de la tabla: <strong>sala_comentarios</strong></h3>
+
+<div class="table" id="table-4-46">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-sala_comentarios">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    <tr>
+        <td >grupo_indicadores_id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >Sí</td>
+        <td>
+            FOREIGN KEY grupo_indicadores(id)                    </td>
+    </tr>
+    <tr>
+        <td >usuario_id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >Sí</td>
+        <td>
+            FOREIGN KEY fos_user_user(id)                    </td>
+    </tr>
+    <tr>
+        <td >comentario</td>
+        <td >Texto del comentario realizado en la sala situacional</td>
+        <td >text</td>
+        <td ></td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >fecha</td>
+        <td >Fecha en que se realizó el comentario</td>
+        <td >timestamp without time zone</td>
+        <td ></td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-significado-campo">4.3.47 Descripción de la tabla: <strong>significado_campo</strong></h3>
+
+<div class="table" id="table-4-47">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-significado_campo">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    <tr>
+        <td >descripcion</td>
+        <td ></td>
+        <td >character varying</td>
+        <td >200</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >codigo</td>
+        <td ></td>
+        <td >character varying</td>
+        <td >40</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >uso_en_catalogo</td>
+        <td >true si es un significado para utilizar en catálogos</td>
+        <td >boolean</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >catalogo</td>
+        <td >Nombre del catálogo asociado al significado de campo</td>
+        <td >character varying</td>
+        <td >255</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >acumulable</td>
+        <td >true si el signficado de campo es acumulable</td>
+        <td >boolean</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-significados-tipos-graficos">4.3.48 Descripción de la tabla: <strong>significados_tipos_graficos</strong></h3>
+
+<div class="table" id="table-4-48">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-significados_tipos_graficos">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >significadocampo_id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY, FOREIGN KEY significado_campo(id)                    </td>
+    </tr>
+    <tr>
+        <td >tipografico_id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY, FOREIGN KEY tipo_grafico(id)                    </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-base-de-datos-tipo-campo">4.3.49 Descripción de la base de datos: <strong>tipo_campo</strong></h3>
+
+<div class="table" id="table-4-49">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-tipo_campo">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    <tr>
+        <td >descripcion</td>
+        <td ></td>
+        <td >character varying</td>
+        <td >50</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >codigo</td>
+        <td ></td>
+        <td >character varying</td>
+        <td >50</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-tipo-grafico">4.3.50 Descripción de la tabla: tipo_grafico**</h3>
+
+<div class="table" id="table-4-50">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-tipo_grafico">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    <tr>
+        <td >descripcion</td>
+        <td ></td>
+        <td >character varying</td>
+        <td >50</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >codigo</td>
+        <td ></td>
+        <td >character varying</td>
+        <td >50</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-usuario-grupo-indicadores">4.3.51 Descripción de la tabla: <strong>usuario_grupo_indicadores</strong></h3>
+
+<div class="table" id="table-4-51">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-usuario_grupo_indicadores">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >grupo_indicadores_id</td>
+        <td >Identificador de la sala situacional</td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY, FOREIGN KEY grupo_indicadores(id)                    </td>
+    </tr>
+    <tr>
+        <td >usuario_id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY, FOREIGN KEY fos_user_user(id)                    </td>
+    </tr>
+    <tr>
+        <td >es_duenio</td>
+        <td >true si el usuario es dueño de la sala situacional</td>
+        <td >boolean</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >usuario_asigno_id</td>
+        <td >Identificador del usuario que asignó la sala situacional</td>
+        <td >integer</td>
+        <td >32</td>
+        <td >Sí</td>
+        <td>
+            FOREIGN KEY fos_user_user(id)                    </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-usuario-indicadores-favoritos">4.3.52 Descripción de la tabla: <strong>usuario_indicadores_favoritos</strong></h3>
+
+<div class="table" id="table-4-52">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-usuario_indicadores_favoritos">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id_usuario</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY, FOREIGN KEY fos_user_user(id)                    </td>
+    </tr>
+    <tr>
+        <td >id_indicador</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY, FOREIGN KEY ficha_tecnica(id)                    </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+
+
+<h3 id="descripcion-de-la-tabla-variable-dato">4.3.53 Descripción de la tabla: <strong>variable_dato</strong></h3>
+
+<div class="table" id="table-4-53">
+
+    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-variable_dato">
+    <thead>
+    <tr style="background-color: #1c94c4; ">
+        <TH style="width: 20%" >Campo</TH>
+        <TH style="width: 40%" >Descripción</TH>
+        <th style="width: 10%" >Tipo dato</th>
+        <th style="width: 5%" >Longitud</th>
+        <th style="width: 5%">Nulo</th>
+        <th style="width: 15%">Restricciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td >id</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >No</td>
+        <td>
+            PRIMARY KEY                    </td>
+    </tr>
+    <tr>
+        <td >id_fuente_dato</td>
+        <td ></td>
+        <td >integer</td>
+        <td >32</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >id_responsable_dato</td>
+        <td >Identificador del responsable del dato</td>
+        <td >integer</td>
+        <td >32</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >id_origen_datos</td>
+        <td >Identificador del origen de datos</td>
+        <td >bigint</td>
+        <td >64</td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >nombre</td>
+        <td >Nombre de la variable</td>
+        <td >character varying</td>
+        <td >200</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>  
+    <tr>
+        <td >iniciales</td>
+        <td >Iniciales o código identificador de la variable</td>
+        <td >character varying</td>
+        <td >255</td>
+        <td >No</td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td >comentario</td>
+        <td >Comentario general</td>
+        <td >text</td>
+        <td ></td>
+        <td >Sí</td>
+        <td>
+        </td>
+    </tr>    
+    </tbody>
+</table>
+</div>
+
+
+<div class="code code">
+<pre class="code">&nbsp;</pre>
+</div>
+
+</div>
+        <div class="item lof">
+
+<h1>Lista de figuras</h1>
+
+<ul>
+                        <li>
+                <span>3.1</span>
+                <a href="#figure-3-1">Pantalla de ingreso, tema default</a>
+            </li>
+                                <li>
+                <span>3.2</span>
+                <a href="#figure-3-2">Pantalla de ingreso, tema default</a>
+            </li>
+                                <li>
+                <span>3.3</span>
+                <a href="#figure-3-3">Pantalla de ingreso, tema MINSAL_ESA</a>
+            </li>
+                                <li>
+                <span>3.4</span>
+                <a href="#figure-3-4">Pantalla de ingreso, tema MINSAL_ESA</a>
+            </li>
+                                <li>
+                <span>3.5</span>
+                <a href="#figure-3-5">Estructura de un tema</a>
+            </li>
+                                <li>
+                <span>3.6</span>
+                <a href="#figure-3-6">Estructura de un tema</a>
+            </li>
+                                <li>
+                <span>3.7</span>
+                <a href="#figure-3-7">Estructura de un tema</a>
+            </li>
+                                <li>
+                <span>3.8</span>
+                <a href="#figure-3-8">Consola Redis</a>
+            </li>
+                                <li>
+                <span>3.9</span>
+                <a href="#figure-3-9">Redis keys</a>
+            </li>
+                                <li>
+                <span>3.10</span>
+                <a href="#figure-3-10">Redis DEL</a>
+            </li>
+                                <li>
+                <span>3.11</span>
+                <a href="#figure-3-11">ps aux</a>
+            </li>
+                                    <li>
+                <span>4.1</span>
+                <a href="#figure-4-1">Relaciones base de datos</a>
+            </li>
+                                <li>
+                <span>4.2</span>
+                <a href="#figure-4-2">Diagrama físico</a>
+            </li>
+            </ul>
+
+</div>
+    </div>
+    <div class="span3">
+    <div class="item toc">
+
+<h1>Índice de contenidos</h1>
+
+<ul class="unstyled">
+            <li class="chapter level-1">
+            <span>Capítulo 1</span> <a href="#tecnologias-utilizadas">Tecnologías utilizadas</a>
+        </li>
+                <li class="chapter level-1">
+            <span>Capítulo 2</span> <a href="#instalacion-del-etab">Instalación del eTAB</a>
+        </li>
+            <li class="chapter level-2">
+            <span>2.1</span> <a href="#requerimientos">Requerimientos</a>
+        </li>
+            <li class="chapter level-2">
+            <span>2.2</span> <a href="#instalacion">Instalación</a>
+        </li>
+            <li class="chapter level-2">
+            <span>2.3</span> <a href="#configuracion">Configuración</a>
+        </li>
+                <li class="chapter level-1">
+            <span>Capítulo 3</span> <a href="#personalizacion">Personalización</a>
+        </li>
+            <li class="chapter level-2">
+            <span>3.1</span> <a href="#temas">Temas</a>
+        </li>
+            <li class="chapter level-2">
+            <span>3.2</span> <a href="#gestion-de-carga-de-origenes-de-datos">Gestión de carga de orígenes de datos</a>
+        </li>
+                <li class="chapter level-1">
+            <span>Capítulo 4</span> <a href="#modelo-de-datos">Modelo de datos</a>
+        </li>
+            <li class="chapter level-2">
+            <span>4.1</span> <a href="#diagrama-de-relaciones">Diagrama de relaciones</a>
+        </li>
+            <li class="chapter level-2">
+            <span>4.2</span> <a href="#diagrama-fisico-de-la-base-de-datos">Diagrama físico de la base de datos</a>
+        </li>
+            <li class="chapter level-2">
+            <span>4.3</span> <a href="#diccionario-de-datos">Diccionario de datos</a>
+        </li>
+    </ul>
+
+</div>    </div>
+</div>
+</div>
+
+</body>
+</html>
