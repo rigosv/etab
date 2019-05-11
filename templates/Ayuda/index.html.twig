@@ -15,10 +15,19 @@
                 <div class="info-box-content">
                     <span class="info-box-number">{{ '_usuario_tecnico_'|trans|upper }}</span>
                 </div>
+
                 <A href='#' title="{{ '_formato_html_'|trans }}" style="padding: 10px;"
                    onclick="openHelpPanel('/manuales/manual-usuario-tecnico/Output/website/book/', 'index.html')"
                 >
                     <i class="fa fa-html5 fa-2x"></i>
+                </A>
+                <A href='{{ asset('/manuales/manual-usuario-tecnico/Output/web/book.html') }}'
+                   title="{{ '_formato_html_single_page_'|trans }}"
+                   style="padding: 10px;" target="_blank" >
+                    <span class="fa-stack fa-2x">
+                      <i class="fa fa-circle fa-stack-2x"></i>
+                      <i class="fa fa-html5 fa-stack-1x fa-inverse"></i>
+                    </span>
                 </A>
                 <A href='{{ asset('/manuales/manual-usuario-tecnico/Output/print/book.pdf') }}'
                    style="padding: 10px;"
@@ -29,9 +38,7 @@
         </div>
         <div class="col-md-3 col-sm-6 col-xs-12">
             <div class="info-box">
-                <span href='#' class="info-box-icon bg-red-gradient"
-                      onclick="openHelpPanel('/manuales/manual-usuario-administrador/Output/website/book/', 'index.html')"
-                >
+                <span href='#' class="info-box-icon bg-red-gradient">
                     <span class="fa-stack">
                       <i class="fa fa-user fa-stack-2x"></i>
                       <i class="fa fa-key fa-stack-1x text-black"></i>
@@ -47,7 +54,45 @@
                 >
                     <i class="fa fa-html5 fa-2x"></i>
                 </A>
+                <A href='{{ asset('/manuales/manual-usuario-administrador/Output/web/book.html') }}'
+                   title="{{ '_formato_html_single_page_'|trans }}"
+                   style="padding: 10px;" target="_blank" >
+                    <span class="fa-stack fa-2x">
+                      <i class="fa fa-circle fa-stack-2x"></i>
+                      <i class="fa fa-html5 fa-stack-1x fa-inverse"></i>
+                    </span>
+                </A>
                 <A href='{{ asset('/manuales/manual-usuario-administrador/Output/print/book.pdf') }}'
+                   target="_blank" title="{{ '_formato_pdf_'|trans }}" style="padding: 10px;">
+
+                    <i class="fa fa-file-pdf-o fa-2x"></i>
+                </A>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span href='#' class="info-box-icon bg-orange">
+                  <i class="fa fa-gears"></i>
+                </span>
+
+                <div class="info-box-content">
+                    <span class="info-box-number">{{ '_manual_tecnico_'|trans|upper }}</span>
+                </div>
+
+                <A href='#' title="{{ '_formato_html_'|trans }}" style="padding: 10px;"
+                   onclick="openHelpPanel('/manuales/manual-tecnico/Output/website/book/', 'index.html')"
+                >
+                    <i class="fa fa-html5 fa-2x"></i>
+                </A>
+                <A href='{{ asset('/manuales/manual-tecnico/Output/web/book.html') }}'
+                   title="{{ '_formato_html_single_page_'|trans }}"
+                   style="padding: 10px;" target="_blank" >
+                    <span class="fa-stack fa-2x">
+                      <i class="fa fa-circle fa-stack-2x"></i>
+                      <i class="fa fa-html5 fa-stack-1x fa-inverse"></i>
+                    </span>
+                </A>
+                <A href='{{ asset('/manuales/manual-tecnico/Output/print/book.pdf') }}'
                    target="_blank" title="{{ '_formato_pdf_'|trans }}" style="padding: 10px;">
 
                     <i class="fa fa-file-pdf-o fa-2x"></i>
