@@ -148,9 +148,10 @@ partición en que está el proyecto y luego ejecutar
  $ setfacl -dR -m u:www-data:rwx -m u:`whoami`:rwx app/cache app/logs web/uploads
 ~~~
 
-### Orígenes de datos desde MSSQLServer
-Si se leerá orígenes de datos desde MSSQLServer, instalar los controladores de Microsoft, según la siguiente guía
-[MSSQLServer](https://docs.microsoft.com/en-us/sql/connect/php/installation-tutorial-linux-mac?view=sql-server-2017)
+### Crear el usuario administrador de la aplicación
+~~~
+ $ bin/console fos:user:create --super-admin
+~~~
 
 ### Ejecutando el etab
 En produccion, se debe usar un servidor web como Nginx o Apache, puede ver el siguiente enlace para configurar
@@ -161,3 +162,7 @@ Para desarrollo o una verificación rápida se puede usar un servidor web local,
 ~~~
 
 Abra el navegador web y cargue la ruta `http://localhost:8000/`
+
+### Orígenes de datos desde MSSQLServer
+Si se leerá orígenes de datos desde MSSQLServer, instalar los controladores de Microsoft, según la siguiente guía
+[MSSQLServer](https://docs.microsoft.com/en-us/sql/connect/php/installation-tutorial-linux-mac?view=sql-server-2017)
