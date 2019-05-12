@@ -149,15 +149,29 @@ class IndicadorRESTController extends Controller {
                 'color' => $a->getColor()->getCodigo()
             ];
         }
+        $respX['formula'] = $fichaTec->getFormula();
 
         if ($fichaTec->getUpdatedAt() != '' and $fichaTec->getUltimaLectura() != '' and $fichaTec->getUltimaLectura() < $fichaTec->getUpdatedAt()) {
             // Buscar la petición en la caché de Redis
 
             $respj = $redis->get('indicador_'.$fichaTec->getId().'_parte_'.$porcion);
             if ($respj != null){
-                $resp = '{"datos": '. $respj.', "total_partes": "'. $redis->get('indicador_'.$fichaTec->getId().'_tamanio_') . '"}';
+                $resp = '{  "alertas" : '. json_encode($alertas) .',
+                            "formula": "'. $fichaTec->getFormula() .'", 
+                            "datos": '. $respj.', 
+                            "total_partes": "'. $redis->get('indicador_'.$fichaTec->getId().'_tamanio_') . '" 
+                          }';
                 $response->setContent($resp);
                 return $response;
+                /*
+                 *  $respRedis =   '{"datos": '. $respj.',
+                                "total_partes": "'. $redis->get('indicador_'.$fichaTec->getId().'_tamanio_') .'" ,
+                                "alertas" : "' . json_encode( $alertas ) . '",
+                                "formula": "' . $fichaTec->getFormula()
+                                . '"}';
+                $response->setContent( $respRedis );
+                return $response;
+                 */
             }
         }
 
@@ -167,7 +181,7 @@ class IndicadorRESTController extends Controller {
         $respX['datos'] = $resp;
         $respX['alertas'] = $alertas;
 
-        $respX['formula'] = $fichaTec->getFormula();
+
         $respX['total_partes'] = ceil($totalRegistros / $this->tamanio );
 
         $redis->set('indicador_'.$fichaTec->getId().'_tamanio_', $respX['total_partes']);

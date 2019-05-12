@@ -4,6 +4,7 @@ namespace App\RESTController;
 
 use App\AlmacenamientoDatos\AlmacenamientoProxy;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\FichaTecnica;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -129,7 +130,6 @@ class ApiRESTController extends Controller {
 
         $fichaRepository = $em->getRepository(FichaTecnica::class);
         $datos = array();
-
         foreach ($indicadores as $ind) {
             try {
                 $fichaRepository->crearIndicador($ind);
@@ -141,8 +141,8 @@ class ApiRESTController extends Controller {
                 );
             } catch (Exception $exc) {
                 $respuesta = array('state' => 'fail', 'message' => $exc->getTraceAsString());
-                $response->setContent(json_encode($respuesta));
-                return $response;
+
+                return new JsonResponse($respuesta);
             }
         }
 

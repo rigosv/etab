@@ -147,6 +147,7 @@ $(document).ready(function() {
         escenarioActivo = null;
         alertas = [];
         formula = '';
+        xaggregatorName = "Suma";
         $('#div-nombre-escenario').hide();
         var id_indicador = $(this).attr('data-id');
         var nombre_indicador = $(this).html();
@@ -169,7 +170,7 @@ $(document).ready(function() {
                         datos = datos.concat(mpsx.datos);
                         cargadas++;
                         if (cargadas == mps.total_partes){
-                            cargarTablaDinamica(datos, mps.alertas, mps.formula);
+                            cargarTablaDinamica(datos, mpsx.alertas, mpsx.formula);
                         }
                     });
                 }
@@ -188,10 +189,10 @@ $(document).ready(function() {
         escenarioActivo = null;
         alertas = [];
         formula = '';
+        xaggregatorName = "Suma";
         $('#div-nombre-escenario').hide();
         var codigo = $(this).attr('data-id');
         var nombre_elemento = $(this).html();
-        xaggregatorName = "Suma";
 
         $.getJSON(Routing.generate('get_datos_formulario_captura', {codigo: codigo}), function(mps) {
             if (mps.estado == 'error'){
@@ -213,10 +214,10 @@ $(document).ready(function() {
         escenarioActivo = null;
         alertas = [];
         formula = '';
+        xaggregatorName = "Suma";
         $('#div-nombre-escenario').hide();
         var nombre_elemento = $(this).html();
         var idFrm = $(this).attr('data-id');
-        xaggregatorName = "Suma";
 
         $.getJSON(Routing.generate('get_datos_evaluacion_calidad', {id: idFrm}), function(mps) {
             datos_ = mps;
@@ -234,8 +235,8 @@ $(document).ready(function() {
         escenarioActivo = null;
         alertas = [];
         formula = '';
-        $('#div-nombre-escenario').hide();
         xaggregatorName = "Suma";
+        $('#div-nombre-escenario').hide();
 
         $.getJSON(Routing.generate('get_log_actividad'), function(mps) {
             datos_ = mps;
@@ -404,7 +405,7 @@ $(document).ready(function() {
                                             for (i in alertas) {
                                                 rango = alertas[i];
 
-                                                if (x*factor >= rango.li && x*factor <= rango.ls) {
+                                                if ( Math.round(x * factor) >= rango.li && Math.round(x * factor) <= rango.ls) {
                                                     return rango.color;
                                                 }
                                             }
