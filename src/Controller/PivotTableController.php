@@ -208,7 +208,19 @@ class PivotTableController extends AbstractController {
             $id = 'expedientes_hosp';
         }
 
-        $datos = $em->getRepository(Estandar::class)->getDatosCalidad($id);
+        
+        if (in_array($id, ['general_pna', 'expedientes_pna', 'general_hosp', 'expedientes_hosp'])){
+            $datos = $em->getRepository(Estandar::class)->getDatosCalidad($id);
+        } else {
+            $datos = [];
+            for ($i = 0 ; $i < 12; $i++){
+                $newdate = date("Y-m", strtotime("-$i months"));
+                list($anio, $mes) = explode('-', $newdate);
+                $datos_ = $em->getRepository(Estandar::class)->getDatosCalidad($id, $anio, $mes);
+
+                $datos = array_merge($datos, $datos_);
+            }
+        }
 
         $response->setContent(json_encode($datos));
         return $response;
