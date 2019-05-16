@@ -95,7 +95,7 @@ Puedes ver el código de conducta para este proyecto en el siguiente archivo [CO
 ### Licencia
 ---
 
-La Documentación de Soporte y Uso del software se encuentra licenciada bajo Creative Commons IGO 3.0 Atribución-NoComercial-SinObraDerivada (CC-IGO 3.0 BY-NC-ND) [LICENCIA.md](https://github.com/rigosv/etab/blob/master/LICENSE.md)
+La Documentación de Soporte y Uso del software se encuentra bajo la licencia GPLv3
 
   
 
@@ -107,4 +107,5 @@ El BID no será responsable, bajo circunstancia alguna, de daño ni indemnizaci�
 
 I. Bajo cualquier teoría de responsabilidad, ya sea por contrato, infracción de derechos de propiedad intelectual, negligencia o bajo cualquier otra teoría; y/o
 
-II. A raíz del uso de la Herramienta Digital, incluyendo, pero sin limitación de potenciales defectos en la Herramienta Digital, o la pérdida o inexactitud de los datos de cualquier tipo. Lo anterior incluye los gastos o daños asociados a fallas de comunicación y/o fallas de funcionamiento de computadoras, vinculados con la utilización de la Herramienta Digital.
+II. A raíz del uso de la Herramienta Digital, incluyendo, pero sin limitación de potenciales defectos en la Herramienta Digital, o la pérdida o inexactitud de los datos de cualquier tipo. 
+Lo anterior incluye los gastos o daños asociados a fallas de comunicación y/o fallas de funcionamiento de computadoras, vinculados con la utilización de la Herramienta Digital.
