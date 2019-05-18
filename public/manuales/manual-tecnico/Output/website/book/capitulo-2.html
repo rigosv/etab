@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="author" content="eTAB" />
-    <meta name="date" content="10/05/2019"/>
+    <meta name="date" content="17/05/2019"/>
     <meta name="generator" content="easybook 5.0-DEV"/>
 
     <title>Instalación del eTAB | Manual Técnico</title>
@@ -181,8 +181,8 @@ redirect_stderr=true</pre>
 partición en que está el proyecto y luego ejecutar</p>
 
 <div class="code code">
-<pre class="code">$ setfacl -R -m u:www-data:rwx -m u:`whoami`:rwx app/cache app/logs web/uploads
-$ setfacl -dR -m u:www-data:rwx -m u:`whoami`:rwx app/cache app/logs web/uploads</pre>
+<pre class="code">$ setfacl -R -m u:www-data:rwx -m u:`whoami`:rwx var/cache var/log public/uploads
+$ setfacl -dR -m u:www-data:rwx -m u:`whoami`:rwx var/cache var/log public/uploads</pre>
 </div>
 
 <h3 id="crear-el-usuario-administrador-de-la-aplicacion">2.3.5 Crear el usuario administrador de la aplicación</h3>
@@ -193,12 +193,12 @@ $ setfacl -dR -m u:www-data:rwx -m u:`whoami`:rwx app/cache app/logs web/uploads
 
 <h3 id="ejecutando-el-etab">2.3.6 Ejecutando el etab</h3>
 
-<p>En produccion, se debe usar un servidor web como Nginx o Apache, puede ver el siguiente enlace para configurar
+<p>En producción, se debe usar un servidor web como Nginx o Apache, puede ver el siguiente enlace para 
 <a href="https://symfony.com/doc/current/setup/web_server_configuration.html">configurar un servidor web</a>
 Para desarrollo o una verificación rápida se puede usar un servidor web local, activándolo de la siguiente forma</p>
 
 <div class="code code">
-<pre class="code">symfony server:start</pre>
+<pre class="code">$ bin/console server:start</pre>
 </div>
 
 <p>Abra el navegador web y cargue la ruta <code>http://localhost:8000/</code></p>

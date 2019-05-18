@@ -132,8 +132,8 @@ reiniciar el supervisor
 Es necesario tener [soporte para ACL](https://help.ubuntu.com/community/FilePermissionsACLs) en la 
 partición en que está el proyecto y luego ejecutar
 
-    $ setfacl -R -m u:www-data:rwx -m u:`whoami`:rwx app/cache app/logs web/uploads
-    $ setfacl -dR -m u:www-data:rwx -m u:`whoami`:rwx app/cache app/logs web/uploads
+    $ setfacl -R -m u:www-data:rwx -m u:`whoami`:rwx var/cache var/log public/uploads
+    $ setfacl -dR -m u:www-data:rwx -m u:`whoami`:rwx var/cache var/log public/uploads
 
 
 ### Crear el usuario administrador de la aplicación
