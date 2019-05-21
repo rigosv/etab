@@ -393,13 +393,17 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
                 x: etiquetas,
                 y: meta,
                 type: 'scatter',
-                name: jQuery('#metaEtq').val()
+                name: jQuery('#metaEtq').val() + ': ' + meta[0]
             },
             {
                 x: etiquetas,
                 y: datos,
                 type: 'scatter',
-                name: jQuery('#resultadoEtq').val(),                
+                name: jQuery('#resultadoEtq').val(),
+                line: {
+                    color: 'black',
+                    width: 2
+                }
             }];
 
         if ( $scope.verP ){
