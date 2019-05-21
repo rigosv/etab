@@ -266,7 +266,7 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
             });
             $scope.color[id][k] = color;            
         }
-    }
+    };
     $scope.temporal = [];
     var temporal = [];
     var temporalK = [];
@@ -352,5 +352,117 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
         setTimeout(function() {
             $(id).html('');
         }, 6000);
+    }
+
+    /**
+     * @ngdoc method
+     * @name Matriz.MatrizCtrl#valorAbsoluto
+     * @methodOf Matriz.MatrizCtrl
+     *
+     * @description
+     * Graficar los datos del indicador
+     * @param {ind} ind indicador
+     *
+     */
+    $scope.graficar = function(ind) {
+
+        let estatus = null;
+        let datos = [];
+        let real = [];
+        let planificado = [];
+        let meta = [];
+        let etiquetas = [];
+        let dataAlerta = [];
+        let data = [];
+        angular.forEach($scope.meses, function(v, k) {
+            estatus = null;
+            if (ind[v].real != null && ind[v].planificado != null && ind[v].real != '' && ind[v].planificado != '') {
+                estatus = (ind[v].planificado == 0) ? ind[v].real :  ind[v].real / ind[v].planificado * 100;
+            }
+
+            if ( estatus != null) {
+                real.push(ind[v].real);
+                planificado.push(ind[v].planificado);
+                etiquetas.push(v);
+                datos.push(estatus);
+                meta.push(ind.meta);
+            }
+        });               
+
+        data = [{
+                x: etiquetas,
+                y: meta,
+                type: 'scatter',
+                name: jQuery('#metaEtq').val()
+            },
+            {
+                x: etiquetas,
+                y: datos,
+                type: 'scatter',
+                name: jQuery('#resultadoEtq').val(),                
+            }];
+
+        if ( $scope.verP ){
+            data.push ({
+                x: etiquetas,
+                y: planificado,
+                type: 'scatter',
+                name: jQuery('#planeacionEtq').val()
+            });
+        }
+
+        if ( $scope.verR ){
+            data.push ({
+                x: etiquetas,
+                y: real,
+                type: 'scatter',
+                name: jQuery('#realEtq').val()
+            });
+        }
+
+        angular.forEach(ind.alertas, function(v, k) {
+            dataAlerta.push({'limite_sup': v.limite_superior, 'color': v.color.codigo, 'limite_inf': v.limite_inferior });
+        });
+
+        angular.forEach(dataAlerta, function(v, k) {
+            
+            let dataAlertaGrp = [];
+            angular.forEach(etiquetas, function(vv, kk) {
+                dataAlertaGrp.push(v.limite_sup);
+            });
+            data.push ({
+                x: etiquetas,
+                y: dataAlertaGrp,
+                type: 'scatter',
+                name: v.limite_inf + ' -- ' + v.limite_sup,
+                line: {
+                    color: v.color,
+                    dash: 'dot',
+                    width: 3
+                }
+            });
+        });
+
+
+        let options = {
+            displayModeBar: true,
+            displaylogo: false,
+            modeBarButtonsToRemove: ['select2d', 'lasso2d', 'resetScale2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian' ],
+            responsive: true,
+            locale: 'es',
+            toImageButtonOptions: {
+                format: 'png', // one of png, svg, jpeg, webp
+                filename: 'grafico',
+                height: 500,
+                width: 700,
+                scale: 1, // Multiply title/legend/axis/canvas sizes by this factor
+            }
+        };
+
+        Plotly.newPlot('tendencia', data, {}, options);
+
+        jQuery('#tituloGrafico').html(ind.nombre);
+        jQuery('#grafico').modal('show');
+
     }
 })
