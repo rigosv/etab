@@ -16,13 +16,17 @@
     <script src="{{ asset('js/export_plugin/filesaver.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/export_plugin/jquery.base64.js') }}" type="text/javascript"></script>
 
+    <script src="{{ asset('js/pivotTable/pivot.min.js') }}" type="text/javascript"></script>
+    {#<script src="{{ asset('js/pivotTable/pivot.es-sv.min.js') }}" type="text/javascript"></script>#}
     <script src="{{ asset('js/plotly/plotly-latest.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('js/plotly/plotly-locale-es-latest.js') }}" type="text/javascript"></script>
+    {#<script src="{{ asset('js/plotly/plotly-locale-es-latest.js') }}" type="text/javascript"></script>#}
+    <script src="{{ asset('js/pivotTable/plotly_renderers.min.js') }}" type="text/javascript"></script>
     
 {% endblock javascripts %}
 
 {% block stylesheets %}
     {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('js/pivotTable/pivot.min.css') }}" type="text/css" media="all" />
     <link rel="stylesheet" href="{{ asset('css/FichaTecnicaAdmin/tablero.css') }}">
 
     <style>
@@ -51,6 +55,10 @@
             min-height: 50px;
             margin-bottom: 20px;
             border: 1px solid transparent;
+        }
+
+        .pvtUnused, .pvtHorizList, .pvtVals, .pvtRows {
+            display: none;
         }
     </style>
 
@@ -109,6 +117,7 @@
                                 
                                 <li class="sonata-actions">
                                     <button type="button" class="btn btn-info" ng-click="crearPlaneacion(ruta ,anio)"><i class="glyphicon glyphicon-refresh"></i></button>
+                                    <button type="button" class="btn btn-info" ng-click="analisisGeneral()"><i class="fa fa-bar-chart" aria-hidden="true"></i></button>
                                 </li>
                             </ul>
                         </div>
@@ -294,7 +303,7 @@
         </div><!-- /.modal -->
 
         <div class="modal fade" tabindex="-1" role="dialog" id="grafico">
-            <div class="modal-dialog" style="width:70%" role="document">
+            <div class="modal-dialog" style="width:90%" role="document">
                 <div class="modal-content">
                     <input type="hidden" id='resultadoEtq' value="{{ '_resultado_'|trans }}">
                     <input type="hidden" id='metaEtq' value="{{ '_meta_'|trans }}">

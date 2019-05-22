@@ -354,6 +354,27 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
         }, 6000);
     }
 
+
+    var configPlotly = {
+        displayModeBar: true,
+        displaylogo: false,
+        modeBarButtonsToRemove: ['select2d', 'lasso2d', 'resetScale2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian' ],
+        responsive: true,
+        toImageButtonOptions: {
+            format: 'png', // one of png, svg, jpeg, webp
+            filename: 'grafico',
+            height: 500,
+            width: 700,
+            scale: 1, // Multiply title/legend/axis/canvas sizes by this factor
+        }
+    };
+
+    var layoutPlotly = {
+        legend: {
+            orientation: 'h',
+        }
+    }
+
     /**
      * @ngdoc method
      * @name Matriz.MatrizCtrl#valorAbsoluto
@@ -365,7 +386,7 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
      *
      */
     $scope.graficar = function(ind) {
-
+        $("#tendencia").html('');
         let estatus = null;
         let datos = [];
         let real = [];
@@ -445,26 +466,47 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
             });
         });
 
-
-        let options = {
-            displayModeBar: true,
-            displaylogo: false,
-            modeBarButtonsToRemove: ['select2d', 'lasso2d', 'resetScale2d', 'toggleSpikelines', 'hoverClosestCartesian', 'hoverCompareCartesian' ],
-            responsive: true,
-            locale: 'es',
-            toImageButtonOptions: {
-                format: 'png', // one of png, svg, jpeg, webp
-                filename: 'grafico',
-                height: 500,
-                width: 700,
-                scale: 1, // Multiply title/legend/axis/canvas sizes by this factor
-            }
-        };
-
-        Plotly.newPlot('tendencia', data, {}, options);
+        Plotly.newPlot('tendencia', data, {}, configPlotly);
 
         jQuery('#tituloGrafico').html(ind.nombre);
         jQuery('#grafico').modal('show');
 
+    };
+
+    $scope.analisisGeneral = function() {
+        $("#tendencia").html('');
+        let datos = [];
+        angular.forEach($scope.dato.matriz, function(item, k) {
+            angular.forEach(item.indicadores_relacion, function(ind, kk) {
+                angular.forEach($scope.meses, function(v, k) {
+                    estatus = null;
+
+                    if ( ind[v] != undefined && ind[v].real != null && ind[v].planificado != null && ind[v].real != '' && ind[v].planificado != '') {
+                        estatus = (ind[v].planificado == 0) ? ind[v].real :  ind[v].real / ind[v].planificado * 100;
+
+                        datos.push({'indicador': ind.nombre, 'mes': v, 'resultado': estatus});
+                    }
+                });
+            });
+        });
+
+        var renderers = $.extend($.pivotUtilities.renderers, $.pivotUtilities.subtotal_renderers,
+            $.pivotUtilities.plotly_renderers);
+
+
+        $("#tendencia").pivotUI(datos, {
+            renderers: renderers,
+            aggregatorName: 'Average',
+            vals : ['resultado'],
+            rows: ['indicador'],
+            cols: ['mes'],
+            rendererOptions: {
+                plotlyConfig : configPlotly,
+                plotly: layoutPlotly
+            }
+        }, true);
+
+        jQuery('#tituloGrafico').html('');
+        jQuery('#grafico').modal('show');
     }
 })
