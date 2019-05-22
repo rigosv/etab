@@ -378,9 +378,7 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
             estatus = null;
             if (ind[v].real != null && ind[v].planificado != null && ind[v].real != '' && ind[v].planificado != '') {
                 estatus = (ind[v].planificado == 0) ? ind[v].real :  ind[v].real / ind[v].planificado * 100;
-            }
-
-            if ( estatus != null) {
+                
                 real.push(ind[v].real);
                 planificado.push(ind[v].planificado);
                 etiquetas.push(v);
