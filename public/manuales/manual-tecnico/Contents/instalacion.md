@@ -13,7 +13,7 @@ debe ser ejecutado como usuario root y "$" que debe ser ejecutado como un usuari
 en ambos casos desde una consola de comandos.
 
     # apt-get update
-    # apt-get install php php-pgsql php-curl php-sqlite3 sqlite php-cli php-xsl php-intl  postgresql acl git-core curl postgresql-contrib php-ldap php-mysql php-sybase php-json php-bcmath php-mbstring redis-server php-redis php-zip php-gd php-fpm composer supervisor php-acpu
+    # apt-get install php php-pgsql php-curl php-sqlite3 sqlite php-cli php-xsl php-intl  postgresql acl git-core curl postgresql-contrib php-mysql php-sybase php-json php-bcmath php-mbstring redis-server php-redis php-zip php-gd php-fpm composer supervisor php-acpu
 
 
 ### Crear usuario y directorio de trabajo
@@ -87,12 +87,12 @@ Configurar el parámetro "server_version" estableciendo la versión de postgres 
 
 Si es un servidor de pruebas
 
-    $ php composer.phar install
+    $ composer install
 
 
 Si es un servidor de producción
 
-    $ php composer install --no-dev --optimize-autoloader
+    $ composer install --no-dev --optimize-autoloader
 
 
 
