@@ -13,7 +13,7 @@ debe ser ejecutado como usuario root y "$" que debe ser ejecutado como un usuari
 en ambos casos desde una consola de comandos.
 
     # apt-get update
-    # apt-get install php php-pgsql php-curl php-sqlite3 sqlite php-cli php-xsl php-intl  postgresql acl git-core curl postgresql-contrib php-ldap php-mysql php-sybase php-json php-bcmath php-mbstring redis-server php-redis php-zip php-gd wkhtmltopdf php-fpm composer supervisor php-acpu
+    # apt-get install php php-pgsql php-curl php-sqlite3 sqlite php-cli php-xsl php-intl  postgresql acl git-core curl postgresql-contrib php-ldap php-mysql php-sybase php-json php-bcmath php-mbstring redis-server php-redis php-zip php-gd php-fpm composer supervisor php-acpu
 
 
 ### Crear usuario y directorio de trabajo
@@ -34,12 +34,6 @@ como ejemplo se usará un usuario llamado *etab* y el directorio de instalación
 
 A partir de este punto todos los comandos se deben ejecutar dentro de la carpeta en que se ha descargado 
 el código fuente
-
-### Instalar composer
-[Composer](http://getcomposer.org/) Es una librería de PHP para el manejo de dependencias. 
-Para instalarlo, dentro de la carpeta donde descargaste el código fuente se debe ejecutar:
-
-    $ curl -s https://getcomposer.org/installer | php
 
 
 ## Configuración
