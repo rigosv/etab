@@ -12,8 +12,8 @@ App.controller("TableroCtrl", function(
   $window,
   $filter,
   Crud
-) {
-  $scope.sala = { id: "", nombre: "" };
+) {   
+    $scope.sala = { id: "", nombre: "" };
   $scope.abrio_sala = false;
   $scope.abrio_indicador = false;
 
@@ -40,6 +40,11 @@ App.controller("TableroCtrl", function(
   $scope.inidcadores_no_clasificados = [];
   $scope.inidcadores_busqueda = [];
   $scope.inidcadores_favoritos = [];
+
+  $scope.valorFiltroGeneral = '';
+  $scope.dimensionesGenerales = [];
+  $scope.dimensionGeneral = '';
+  $scope.filtroGeneralEsCatalogo = false;
 
   /**
    * @ngdoc method
@@ -2237,5 +2242,72 @@ App.controller("TableroCtrl", function(
   $scope.ruta = '';
   $scope.asignarURL = function (ruta) {
     $scope.ruta = ruta;
-  }  
+  }
+
+
+
+  $scope.abrirModalFiltrosGenerales =  () => {
+
+      let dimensionesExistentes = [];
+      let dimensionesAux = [];
+      angular.forEach( $scope.indicadores, function(ind) {
+          angular.forEach( ind.informacion.dimensiones, function(dimension, key) {
+            
+            if ( !dimensionesExistentes.includes(key) ) {
+                dimensionesExistentes.push(key);
+                dimensionesAux.push({'datos': dimension, 'codigo': key});
+            }
+          });
+      });
+
+      $scope.dimensionesGenerales = dimensionesAux.sort((a,b) => (a.datos.descripcion > b.datos.description) ? 1 : -1 );
+
+      jQuery('#modalFiltrosGenerales').modal('show');
+  };
+
+  $scope.recuperarValoresDimensionGeneral =  () => {
+      $scope.filtroGeneralEsCatalogo = false;
+      if( $scope.dimensionGeneral.split('id_').length > 1 ){
+          $scope.filtroGeneralEsCatalogo = true;
+          
+          //recuperar los datos del catálogo
+      }
+  };
+
+  $scope.aplicarFiltroGeneral = () => {
+      
+      let nuevosFiltros = [];
+      let existe = false;
+      let etiqueta = '';
+      let dimension = $scope.dimensionGeneral;
+      let valor = jQuery('#valorFiltro1').val();
+
+      if ( dimension != '?' && valor.trim() !='' ) {
+          angular.forEach($scope.indicadores, function (ind) {
+              nuevosFiltros = [];
+              angular.forEach(ind.filtros, function (filtro) {
+                  //Ya tenía el filtro, modificar su valor
+                  
+                  if (filtro.codigo == dimension) {
+                      filtro.valor = valor;
+                      existe = true;
+                      etiqueta = filtro.etiqueta;
+                  }
+                  nuevosFiltros.push(filtro);
+              });
+
+              //Si no existe agregarlo al principio
+              if (!existe) {
+                  nuevosFiltros.unshift({
+                      'codigo': dimension,
+                      'etiqueta': etiqueta,
+                      'valor': $scope.valorFiltroGeneral
+                  });
+              }
+
+              ind.filtros = nuevosFiltros;
+              $scope.agregarIndicadorDimension(ind.dimension, ind.posicion - 1);
+          });
+      }
+    };
 });

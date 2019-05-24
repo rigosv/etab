@@ -62,6 +62,10 @@
                     <a class="btn btn-warning" title="{{'_cerrar_sala_' | trans}}" id="_cerrar_sala_" ng-if="abrio_sala" ng-click="cerraSala()">
                         <i class="fa fa-times"></i> <span class="hidden-xs">{{"_cerrar_sala_" | trans}}</span>
                     </a>
+
+                    <a class="btn dropdown-toggle btn-primary navbar-btn" ng-click="abrirModalFiltrosGenerales()" ng-if="indicadores.length > 0">
+                        <i class="glyphicon glyphicon-filter"></i> <span class="hidden-xs">{{"_filtros_generales_" | trans}}</span>
+                    </a>
                 </div>
             </div>
         </nav>
