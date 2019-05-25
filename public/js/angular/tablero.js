@@ -42,9 +42,11 @@ App.controller("TableroCtrl", function(
   $scope.inidcadores_favoritos = [];
 
   $scope.valorFiltroGeneral = '';
+  $scope.valorFiltroGeneralCatalogo = '';
   $scope.dimensionesGenerales = [];
   $scope.dimensionGeneral = '';
   $scope.filtroGeneralEsCatalogo = false;
+  $scope.datosCatalogo = [];
 
   /**
    * @ngdoc method
@@ -2222,7 +2224,7 @@ App.controller("TableroCtrl", function(
     $scope.compartir.es_permanente = !$scope.compartir.es_permanente;
   };
 
-  $scope.moverIndicador = function (index, item) { 
+  $scope.moverIndicador = function (index, item) {
     if(item.index < index)
       index--;
     if (!angular.isUndefined(index)) {      
@@ -2260,8 +2262,7 @@ App.controller("TableroCtrl", function(
           });
       });
 
-      $scope.dimensionesGenerales = dimensionesAux.sort((a,b) => (a.datos.descripcion > b.datos.description) ? 1 : -1 );
-
+      $scope.dimensionesGenerales = dimensionesAux.sort((a,b) => { return a.datos.descripcion.localeCompare(b.datos.descripcion) });
       jQuery('#modalFiltrosGenerales').modal('show');
   };
 
@@ -2269,8 +2270,12 @@ App.controller("TableroCtrl", function(
       $scope.filtroGeneralEsCatalogo = false;
       if( $scope.dimensionGeneral.split('id_').length > 1 ){
           $scope.filtroGeneralEsCatalogo = true;
-          
-          //recuperar los datos del catálogo
+
+          $scope.cargarCatalogo(
+              "../api/v1/tablero/datosCatalogo/"+$scope.dimensionGeneral,
+              $scope.datosCatalogo,
+              "cc_uso"
+          );
       }
   };
 
@@ -2280,7 +2285,7 @@ App.controller("TableroCtrl", function(
       let existe = false;
       let etiqueta = '';
       let dimension = $scope.dimensionGeneral;
-      let valor = jQuery('#valorFiltro1').val();
+      let valor = ( $scope.filtroGeneralEsCatalogo ) ? jQuery('#valorFiltro2').val() : jQuery('#valorFiltro1').val();
 
       if ( dimension != '?' && valor.trim() !='' ) {
           angular.forEach($scope.indicadores, function (ind) {
@@ -2298,11 +2303,14 @@ App.controller("TableroCtrl", function(
 
               //Si no existe agregarlo al principio
               if (!existe) {
-                  nuevosFiltros.unshift({
-                      'codigo': dimension,
-                      'etiqueta': etiqueta,
-                      'valor': $scope.valorFiltroGeneral
-                  });
+                  //Verificar primero si existe en el listado de dimensiones del indicador
+                  if ( ind.dimensiones.includes(dimension)) {
+                      nuevosFiltros.unshift({
+                          'codigo': dimension,
+                          'etiqueta': etiqueta,
+                          'valor': valor
+                      });
+                  }
               }
 
               ind.filtros = nuevosFiltros;

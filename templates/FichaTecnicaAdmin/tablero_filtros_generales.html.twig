@@ -18,17 +18,18 @@
                     </div>
                 </div>
 
-                <div class="form-group" ng-if="!(filtroGeneralEsCatalogo) && dimensionGeneral != '' && dimensionGeneral != '?' ">
+                <div class="form-group" ng-show="!(filtroGeneralEsCatalogo) && dimensionGeneral != '' && dimensionGeneral != '?' ">
                     <label for="valorFiltro1" class="col-sm-2 control-label">{{ '_valor_filtro_' | trans}}</label>
                     <div class="col-sm-10">
                         <input type="text" id="valorFiltro1" ng-model="valorFiltroGeneral" >
                     </div>
                 </div>
 
-                <div class="form-group" ng-if="filtroGeneralEsCatalogo">
+                <div class="form-group" ng-show="filtroGeneralEsCatalogo">
                     <label for="valorFiltro2" class="col-sm-2 control-label">{{ '_valor_filtro_' | trans}}</label>
                     <div class="col-sm-10">
-                        <select id="valorFiltro2" class="form-control" >
+                        <select id="valorFiltro2" class="form-control" ng-model="valorFiltroGeneralCatalogo" >
+                            <option ng-repeat="item in datosCatalogo" value="<% item.descripcion %>"><% item.descripcion %></option>
                         </select>
                     </div>
                 </div>

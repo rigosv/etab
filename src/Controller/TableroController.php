@@ -1313,4 +1313,73 @@ class TableroController extends AbstractController {
 
         return $response;    
     }
+
+    /**
+     * @Route("/datosCatalogo/{codigoDimension}", name="datosCatalogo_index", methods={"GET"})
+     *
+     * @SWG\Get(
+     *      tags={"Tablero"},
+     *      summary="Datos de catálogos",
+     *      description="Lista de valores de los campos que son catálogo",
+     *      produces={"application/json"}
+     * ),
+     * @SWG\Response(
+     *     response=200,
+     *     description="Regresa objecto"
+     *  ),
+     *
+     * @SWG\Response(
+     *     response=404,
+     *     description="El elemento no existe"
+     *  ),
+     *
+     *  @SWG\Response(
+     *     response=500,
+     *     description="Regresa un error ocurrido en el servidor"
+     *  ),
+     */
+    public function datosCatalogo(Request $request, $codigoDimension){
+
+        $em = $this->getDoctrine()->getManager();
+
+        try{
+
+            $significado = $em->getRepository(SignificadoCampo::class)
+                ->findOneBy( ['codigo' => $codigoDimension] );
+
+            $catalogo = $significado->getCatalogo();
+
+            if ($catalogo != '') {
+                $sql_ctl = "SELECT id, descripcion FROM $catalogo ORDER BY descripcion LIMIT 500";
+                $data = $em->getConnection()->executeQuery($sql_ctl)->fetchAll();
+            }
+
+            $total = count($data);
+
+            // validar que hay datos
+            if( $total > 0 ){
+                $response = [
+                    'status' => 200,
+                    'messages' => "Ok",
+                    'data' => $data,
+                    'total' => $total
+                ];
+            } else{
+                $response = [
+                    'status' => 404,
+                    'messages' => "Not Found",
+                    'data' => [],
+                ];
+            }
+        }catch(\Exception $e){
+            $response = [
+                'status' => 500,
+                'messages' => $e->getMessage(),
+                'data' => [],
+            ];
+
+        }
+
+        return new JsonResponse($response);
+    }
 }
