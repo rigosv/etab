@@ -25,8 +25,6 @@ Estos incluyen:
 * PHP: Lenguaje de desarrollo de la Aplicación eTAB
 * D3.js: Librería para la generación de gráficos
 * JQuery: Lenguaje para interfaces de usuario
-* RabbitMQ: Servidor de Mensajería
-* EasyBook: Generador de documentos en formato PDF
 * Bootstrap: Framework para interfaces de usuario
 * PivotTable.js: Librería para crear tabla pivote
 * Redis: Motor de base de datos en memoria.
