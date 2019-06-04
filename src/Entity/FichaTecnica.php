@@ -233,7 +233,7 @@ class FichaTecnica
     private $agenciasAcceso;
 
     /**
-     * @ORM\ManyToMany(targetEntity="TipoGrafico", cascade={"remove", "persist"})
+     * @ORM\ManyToMany(targetEntity="TipoGrafico")
      * @ORM\JoinTable(name="fichatecnica_tiposgraficos",
      *      joinColumns={@ORM\JoinColumn(name="fichatecnica_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="tipografico_id", referencedColumnName="id")}
