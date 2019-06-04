@@ -11,7 +11,7 @@ use App\Entity\FichaTecnica;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Sonata\Form\Type\CollectionType;
 use App\Entity\VariableDato;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use App\Entity\ClasificacionTecnica;
@@ -81,6 +81,10 @@ class FichaTecnicaAdmin extends Admin
                 ->tab('_configuracion_')
                     ->with('alertas')
                         ->add('alertas', CollectionType::class, array(
+                            'type_options' => [
+                                // Prevents the "Delete" option from being displayed
+                                'delete' => false
+                            ],
                             'label' => 'alertas',
                             'required' => true), array(
                             'edit' => 'inline',
@@ -292,7 +296,7 @@ class FichaTecnicaAdmin extends Admin
     public function setAlertas($fichaTecnica)
     {
         $alertas = $fichaTecnica->getAlertas();
-        $fichaTecnica->removeAlertas();
+        
         if ($alertas != null and count($alertas) > 0) {
             foreach ($alertas as $alerta) {
                 $alerta->setIndicador($fichaTecnica);

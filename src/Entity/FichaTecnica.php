@@ -206,15 +206,7 @@ class FichaTecnica
      *      )
      **/
     private $campos;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="ConfiguracionPivotTable")
-     * @ORM\JoinTable(name="indicadores_configuracion_pivot_table",
-     *      joinColumns={@ORM\JoinColumn(name="id_ficha_tecnica", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="id_configuracion_pivot_table", referencedColumnName="id")}
-     *      )
-     **/
-    private $escenariosPivotTable;
+    
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
@@ -464,40 +456,6 @@ class FichaTecnica
     public function getCampos()
     {
         return $this->campos;
-    }
-
-
-    /**
-     * Add escenarios
-     *
-     * @param  App\Entity\escenariosPivotTable $escenarios
-     * @return FichaTecnica
-     */
-    public function addEscenariosPivotTable(\App\Entity\ConfiguracionPivotTable $escenarios)
-    {
-        $this->escenariosPivotTable[] = $escenarios;
-
-        return $this;
-    }
-
-    /**
-     * Remove escenarios
-     *
-     * @param MINSAL\IndicadoresBundle\Entity\ConfiguracionPivotTable $escenarios
-     */
-    public function removeEscenario(\App\Entity\ConfiguracionPivotTable $escenario)
-    {
-        $this->campos->removeElement($escenario);
-    }
-
-    /**
-     * Get escenarios
-     *
-     * @return Doctrine\Common\Collections\Collection
-     */
-    public function getEscenariosPivotTable()
-    {
-        return $this->escenariosPivotTable;
     }
 
     /**
