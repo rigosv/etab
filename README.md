@@ -20,7 +20,6 @@ El eTAB, o Tablero Electrónico, es una herramienta de inteligencia de negocios 
 
 #### Requerimientos:
 
-Describir los requsitos aqui:
 * PostgreSQL 9.6+
 * PHP 7.2+
 
