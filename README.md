@@ -88,7 +88,7 @@ Ejemplo Book: [http://etabv2.saludchiapas.gob.mx/manuales/etab_tablero/Output/we
 > - [Jennifer Nelson ](mailto:jennifern@iadb.org)
 > - [Rigoberto Reyes ](https://github.com/rigosv "Github")
 > - [Benjamin Castillo ](https://github.com/bcastillo "Github")
-> - [Marco Claderon ](https://github.com/m2rc8 "Github")
+> - [Marco Calderon ](https://github.com/m2rc8 "Github")
 > - [Eliecer Ramirez Esquinca](https://github.com/checherman "Github")
 > - [Karla Schwarzbauer](mailto:karla.schwarz@gmail.com)
 > - Fabiano Cruz
