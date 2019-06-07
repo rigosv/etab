@@ -187,7 +187,7 @@ class FichaTecnicaRepository extends ServiceEntityRepository {
                 $sql .= "SELECT  $campos, $oper(calculo::numeric) AS  $tabla $campos_calculados
                             INTO  TEMP $tabla" . "_var
                             FROM $tabla
-                            WHERE  (calculo::numeric) > 0
+                            WHERE  (calculo::numeric) >= 0
                             GROUP BY $campos $campos_calculados_nombre                
                                 ;";
             } else {
@@ -195,7 +195,7 @@ class FichaTecnicaRepository extends ServiceEntityRepository {
                 INTO  TEMP $tabla" . "_var
                 FROM $tabla
                 GROUP BY $campos $campos_calculados_nombre
-                    HAVING  $oper(calculo::numeric) > 0
+                    HAVING  $oper(calculo::numeric) >= 0
                     ;";
             }
             
@@ -448,7 +448,7 @@ class FichaTecnicaRepository extends ServiceEntityRepository {
 
                 
         $sql .= " GROUP BY " . $dimension . $grupo_tendencia;
-        $sql .=  " HAVING (($formula)::numeric) > 0 ";
+        $sql .=  " HAVING (($formula)::numeric) >= 0 ";
         $sql .= " ORDER BY $dimension $orden_tendencia";
 
         try {
