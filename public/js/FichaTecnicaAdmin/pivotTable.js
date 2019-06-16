@@ -314,7 +314,7 @@ $(document).ready(function() {
                     $("#output").pivotUI(datos, {
                         renderers: renderers,
                         dataClass: dataClass,
-                        menuLimit: 500,
+                        menuLimit: 1000,
                         aggregatorName: ( cfgAggregatorName == '') ? xaggregatorName : cfgAggregatorName,
                         vals : cfgVals,
                         rows: cfgRows,
@@ -380,7 +380,7 @@ $(document).ready(function() {
                         inclusions: cfgInclusions,
                         rowOrder: cfgRowOrder,
                         colOrder: cfgColOrder,
-                        menuLimit: 500,
+                        menuLimit: 1000,
                         unusedAttrsVertical: false,
                         onRefresh: onChangeTable,
                         rendererOptions: {
