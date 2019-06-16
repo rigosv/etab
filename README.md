@@ -25,7 +25,7 @@ El eTAB, o Tablero Electrónico, es una herramienta de inteligencia de negocios 
 
 #### Instalación:
 
-[Manual de instalación](https://github.com/rigosv/etab/edit/master/public/manuales/manual-tecnico/Contents/instalacion.md)
+[Manual de instalación](https://github.com/rigosv/etab/blob/master/public/manuales/manual-tecnico/Contents/instalacion.md)
 
 
 ### Manuales técnicos:
@@ -91,7 +91,8 @@ Ejemplo Book: [http://etabv2.saludchiapas.gob.mx/manuales/etab_tablero/Output/we
 > - [Marco Calderon ](https://github.com/m2rc8 "Github")
 > - [Eliecer Ramirez Esquinca](https://github.com/checherman "Github")
 > - [Karla Schwarzbauer](mailto:karla.schwarz@gmail.com)
-> - Fabiano Cruz
+> - [Fabiano Cruz](mailto:fabianoc@gmail.com)
+> - [Eric López](mailto:eric.ramirez.sv@gmail.com)
 > - Belize Ministry of Health
 > - SIGSA/MSPAS Guatemala 
 > - SESAL Honduras
