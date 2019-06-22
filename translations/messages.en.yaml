@@ -553,3 +553,17 @@ _valor_filtro_: Filter value
 ver_ficha_tecnica: See technical sheet
 _campo_requerido_: Required field
 _pagina_: Page
+_exportar_tabla_datos_pdf_: Export data table to PDF
+_orientacion_: Orientation
+_vertical_: Portrait
+_horizontal_: Landscape
+_formato_: Format
+_carta_: Letter
+_legal_: Legal
+_a4_: A4
+_pivot_image_help_: The image to be displayed in the page header, use base64 format. Do not insert additional line breaks or spaces
+_tipo_imagen_:  Type of image
+_imagen_alto_cm_: Height of the image (cm)
+_imagen_ancho_cm_: Width of the image (cm)
+_imagen_coordenada_x_cm_: Initial position X of the image (cm)
+_guardar_configuracion_: Save settings

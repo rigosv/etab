@@ -649,3 +649,17 @@ _valor_filtro_: Valor filtro
 ver_ficha_tecnica: Ver ficha técnica
 _campo_requerido_: Campo requerido
 _pagina_: Página
+_exportar_tabla_datos_pdf_: Exportar tabla de datos a PDF
+_orientacion_: Orientación
+_vertical_: Vertical
+_horizontal_: Horizontal
+_formato_: Formato
+_carta_: Carta
+_legal_: Legal
+_a4_: A4
+_pivot_image_help_: La imagen a mostrar en el encabezado de página, en formato base64. No insertar saltos de línea o espacios en blanco adicionales
+_tipo_imagen_:  Tipo de imagen
+_imagen_alto_cm_: Alto de la imagen (cm)
+_imagen_ancho_cm_: Ancho de la imagen (cm)
+_imagen_coordenada_x_cm_: Posición inicial X de la imagen (cm)
+_guardar_configuracion_: Guardar configuración
