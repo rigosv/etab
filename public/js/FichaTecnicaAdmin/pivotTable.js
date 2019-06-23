@@ -63,10 +63,10 @@ $(document).ready(function() {
         var formato = $('#formato').val();
                 
         var base64Image = $('#imagen').val().trim();
-        var tipoImagen = $('#imagen-tipo').val(); 
-        var imageHeight = parseFloat( $('#imagen-alto').val() );
-        var imageWidth = parseFloat( $('#imagen-ancho').val() );
-        var imageX = parseFloat( $('#imagen-coordenada-x').val() );
+        var tipoImagen = $('#imagen_tipo').val(); 
+        var imageHeight = parseFloat( $('#imagen_alto').val() );
+        var imageWidth = parseFloat( $('#imagen_ancho').val() );
+        var imageX = parseFloat( $('#imagen_coordenada_x').val() );
        
         
         var paginaText = $('#paginaText').val(); 
