@@ -663,3 +663,8 @@ _imagen_alto_cm_: Alto de la imagen (cm)
 _imagen_ancho_cm_: Ancho de la imagen (cm)
 _imagen_coordenada_x_cm_: Posición inicial X de la imagen (cm)
 _guardar_configuracion_: Guardar configuración
+_variables_configuracion_: Variables de configuración
+_codigo_: Código
+_valor_: Valor
+Variables Configuracion List: 'Variables de configuración :: listado'
+Variables Configuracion Create: 'Variables de configuración :: crear'
