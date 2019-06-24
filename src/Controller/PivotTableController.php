@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\FichaTecnica;
 use App\Entity\Bitacora;
+use App\Entity\VariablesConfiguracion;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -48,13 +49,17 @@ class PivotTableController extends AbstractController {
             $MINSALCalidadBundle['estandares']['pna'] = $em->getRepository(Indicador::class)->getIndicadoresEvaluadosListaChequeoNivel('pna');
             $MINSALCalidadBundle['estandares']['hosp'] = $em->getRepository(Indicador::class)->getIndicadoresEvaluadosListaChequeoNivel('hosp');
         }
+        
+        //Variables de configuración
+        $configuracion = $em->getRepository(VariablesConfiguracion::class)->getConfiguracionExportarPivotPdf();
 
         return $this->render('PivotTable/index.html.twig', array(
             'categorias' => $datos['categorias'],
             'clasificacionUso' => $datos['clasficacion_uso'],
             'indicadores_no_clasificados' => $datos['indicadores_no_clasificados'],
             'formularios' => $formularios,
-            'MINSALCalidadBundle' => $MINSALCalidadBundle
+            'MINSALCalidadBundle' => $MINSALCalidadBundle,
+            'configuracion' => $configuracion
         ));
     }
 
@@ -209,7 +214,7 @@ class PivotTableController extends AbstractController {
         }
 
         
-	if (in_array($id, ['general_pna', 'expedientes_pna', 'general_hosp', 'expedientes_hosp'])){
+        if (in_array($id, ['general_pna', 'expedientes_pna', 'general_hosp', 'expedientes_hosp'])){
             $datos = $em->getRepository(Estandar::class)->getDatosCalidad($id);
         } elseif ($request->get('anio') != null and $request->get('mes') != null ) {
             $datos = $em->getRepository(Estandar::class)->getDatosCalidad($id, $request->get('anio'), $request->get('mes'));
