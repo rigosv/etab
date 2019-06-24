@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\FichaTecnica;
 use App\Entity\Bitacora;
-use App\Entity\VariablesConfiguracion;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -49,17 +48,13 @@ class PivotTableController extends AbstractController {
             $MINSALCalidadBundle['estandares']['pna'] = $em->getRepository(Indicador::class)->getIndicadoresEvaluadosListaChequeoNivel('pna');
             $MINSALCalidadBundle['estandares']['hosp'] = $em->getRepository(Indicador::class)->getIndicadoresEvaluadosListaChequeoNivel('hosp');
         }
-        
-        //Variables de configuración
-        $configuracion = $em->getRepository(VariablesConfiguracion::class)->getConfiguracionExportarPivotPdf();
 
         return $this->render('PivotTable/index.html.twig', array(
             'categorias' => $datos['categorias'],
             'clasificacionUso' => $datos['clasficacion_uso'],
             'indicadores_no_clasificados' => $datos['indicadores_no_clasificados'],
             'formularios' => $formularios,
-            'MINSALCalidadBundle' => $MINSALCalidadBundle,
-            'configuracion' => $configuracion
+            'MINSALCalidadBundle' => $MINSALCalidadBundle
         ));
     }
 
@@ -199,7 +194,7 @@ class PivotTableController extends AbstractController {
     /**
      * @Route("/datos/{id}", name="get_datos_evaluacion_calidad", options={"expose"=true})
      */
-    public function getDatosEvaluacionCalidadAction($id) {
+    public function getDatosEvaluacionCalidadAction($id, Request $request) {
         $em = $this->getDoctrine()->getManager();
         $response = new Response();
 
@@ -214,11 +209,15 @@ class PivotTableController extends AbstractController {
         }
 
         
-        if (in_array($id, ['general_pna', 'expedientes_pna', 'general_hosp', 'expedientes_hosp'])){
+	if (in_array($id, ['general_pna', 'expedientes_pna', 'general_hosp', 'expedientes_hosp'])){
             $datos = $em->getRepository(Estandar::class)->getDatosCalidad($id);
+        } elseif ($request->get('anio') != null and $request->get('mes') != null ) {
+            $datos = $em->getRepository(Estandar::class)->getDatosCalidad($id, $request->get('anio'), $request->get('mes'));
+            $response->setContent(json_encode($datos));
+            return $response;
         } else {
             $datos = [];
-            for ($i = 0 ; $i < 12; $i++){
+            for ($i = 0 ; $i < 6; $i++){
                 $newdate = date("Y-m", strtotime("-$i months"));
                 list($anio, $mes) = explode('-', $newdate);
                 $datos_ = $em->getRepository(Estandar::class)->getDatosCalidad($id, $anio, $mes);
@@ -226,7 +225,6 @@ class PivotTableController extends AbstractController {
                 $datos = array_merge($datos, $datos_);
             }
         }
-
         $response->setContent(json_encode($datos));
         return $response;
     }
