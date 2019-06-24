@@ -36,7 +36,7 @@ class VariablesConfiguracionAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-                ->add('codigo', null, array('label' => '_codigo_'))
+                ->addIdentifier('codigo', null, array('label' => '_codigo_'))
                 ->add('descripcion', null, array('label' => '_descripcion_', 'required' => false))
                 ->add('valor', null, array('label' => '_valor_', 'required' => true))
                 ->add('_action', 'actions', array(
