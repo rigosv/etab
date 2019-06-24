@@ -80,56 +80,55 @@
             {% if is_granted('ROLE_SUPER_ADMIN') or is_granted('ROLE_USER_LOG_ACTIVIDAD') %}
                 {% include 'PivotTable/log_actividad.html.twig'%}
             {% endif %}
-            {% if is_granted('ROLE_SUPER_ADMIN') %}
-                <div class="content tab-pane" id="configuracion" >
-                    <form id="configuracion">   
-                        <fieldset>
-                            <legend>{{ '_exportar_tabla_datos_pdf_'|trans }}</legend>
-                            <div class="form-group">
-                                <label for="orientacion">{{ '_orientacion_'|trans }}</label>
-                                <select class="form-control" id="orientacion" name="orientacion">
-                                    <option value="p" {% if configuracion['orientacion'].valor == 'p' %} selected {% endif %} >{{ '_vertical_'|trans }}</option>
-                                    <option value="l" {% if configuracion['orientacion'].valor == 'l' %} selected {% endif %} >{{ '_horizontal_'|trans }}</option>                            
-                                </select>
-                            </div>
-                            <div class="form-group">                                
-                                <label for="formato">{{ '_formato_'|trans }}</label>
-                                <select class="form-control" id="formato" name="formato">
-                                    <option value="letter" {% if configuracion['formato'].valor == 'letter' %} selected {% endif %} >{{ '_carta_'|trans }}</option>
-                                    <option value="legal" {% if configuracion['formato'].valor == 'legal' %} selected {% endif %} >{{ '_legal_'|trans }}</option>
-                                    <option value="A4" {% if configuracion['formato'].valor == 'A4' %} selected {% endif %} >{{ '_a4_'|trans }}</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="imagen">{{ '_imagen_'|trans }}</label>
-                                <textarea class="form-control" rows="3" id="imagen" aria-describedby="helpImagen">{{ configuracion['imagen'].valor }}</textarea>
-                                <span id="helpImagen" class="help-block">{{ '_pivot_image_help_'|trans }}</span>
-                            </div>
-                            <div class="form-group">
-                                <label for="imagen-tipo">{{ '_tipo_imagen_'|trans }}</label>
-                                <select class="form-control" id="imagen_tipo" name="imagen_tipo">
-                                    <option value="PNG" {% if configuracion['imagen_tipo'].valor == 'PNG' %} selected {% endif %} >PNG</option>
-                                    <option value="JPG" {% if configuracion['imagen_tipo'].valor == 'JPG' %} selected {% endif %} >JPG</option>                            
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="imagen-alto">{{ '_imagen_alto_cm_'|trans }}</label>
-                                <input type="number" id="imagen_alto" value="{{ configuracion['imagen_alto_cm'].valor }}">
-                            </div>
-                            <div class="form-group">
-                                <label for="imagen-ancho">{{ '_imagen_ancho_cm_'|trans }}</label>
-                                <input type="number" id="imagen_ancho" value="{{ configuracion['imagen_ancho_cm'].valor }}">
-                            </div>
-                            <div class="form-group">
-                                <label for="imagen-coordenada-x">{{ '_imagen_coordenada_x_cm_'|trans }}</label>
-                                <input type="number" id="imagen_coordenada_x" value="{{ configuracion['imagen_coordenada_x_cm'].valor }}">
-                            </div>
-                            <button type="button" class="btn btn-primary">{{ '_guardar_configuracion_'|trans }}</button>
-                        </form>
-                    </fieldset>
+            
+            <div class="content tab-pane" id="configuracion" >
+                <form id="configuracion">   
+                    <fieldset>
+                        <legend>{{ '_exportar_tabla_datos_pdf_'|trans }}</legend>
+                        <div class="form-group">
+                            <label for="orientacion">{{ '_orientacion_'|trans }}</label>
+                            <select class="form-control" id="orientacion" name="orientacion">
+                                <option value="p" {% if configuracion['orientacion'].valor == 'p' %} selected {% endif %} >{{ '_vertical_'|trans }}</option>
+                                <option value="l" {% if configuracion['orientacion'].valor == 'l' %} selected {% endif %} >{{ '_horizontal_'|trans }}</option>                            
+                            </select>
+                        </div>
+                        <div class="form-group">                                
+                            <label for="formato">{{ '_formato_'|trans }}</label>
+                            <select class="form-control" id="formato" name="formato">
+                                <option value="letter" {% if configuracion['formato'].valor == 'letter' %} selected {% endif %} >{{ '_carta_'|trans }}</option>
+                                <option value="legal" {% if configuracion['formato'].valor == 'legal' %} selected {% endif %} >{{ '_legal_'|trans }}</option>
+                                <option value="A4" {% if configuracion['formato'].valor == 'A4' %} selected {% endif %} >{{ '_a4_'|trans }}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="imagen">{{ '_imagen_'|trans }}</label>
+                            <textarea class="form-control" rows="3" id="imagen" aria-describedby="helpImagen">{{ configuracion['imagen'].valor }}</textarea>
+                            <span id="helpImagen" class="help-block">{{ '_pivot_image_help_'|trans }}</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="imagen-tipo">{{ '_tipo_imagen_'|trans }}</label>
+                            <select class="form-control" id="imagen_tipo" name="imagen_tipo">
+                                <option value="PNG" {% if configuracion['imagen_tipo'].valor == 'PNG' %} selected {% endif %} >PNG</option>
+                                <option value="JPG" {% if configuracion['imagen_tipo'].valor == 'JPG' %} selected {% endif %} >JPG</option>                            
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="imagen-alto">{{ '_imagen_alto_cm_'|trans }}</label>
+                            <input type="number" id="imagen_alto" value="{{ configuracion['imagen_alto_cm'].valor }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="imagen-ancho">{{ '_imagen_ancho_cm_'|trans }}</label>
+                            <input type="number" id="imagen_ancho" value="{{ configuracion['imagen_ancho_cm'].valor }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="imagen-coordenada-x">{{ '_imagen_coordenada_x_cm_'|trans }}</label>
+                            <input type="number" id="imagen_coordenada_x" value="{{ configuracion['imagen_coordenada_x_cm'].valor }}">
+                        </div
+                    </form>
+                </fieldset>
 
-                </div>
-            {% endif %}
+            </div>
+            
 
         </div>
     </div>
