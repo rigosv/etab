@@ -13,10 +13,10 @@
 {% block sonata_nav %}
     <nav class="navbar navbar-static-top menu-principal" role="navigation">
         <div class="navbar-left">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
                 <i class="fa fa-bars"></i>
             </button>
-            <div class="navbar-collapse pull-left collapse in" id="navbar-collapse">
+            <div class="navbar-collapse pull-left collapse" id="navbar-collapse">
                 {{ knp_menu_render('sonata_admin_sidebar', {template: get_global_template('knp_menu_template')}) }}
             </div>
         </div>
