@@ -28,11 +28,7 @@
 
                     <a data-target="#modalCompartir" data-toggle="modal" class="btn btn-info" title="{{'_compartir_sala_' | trans}}" id="_compartir_sala_" ng-if="abrio_sala">
                         <i class="fa fa-share"></i> <span class="hidden-xs">{{"_compartir_sala_" | trans}}</span>
-                    </a>
-                    
-                    <a href="javascript:void(0)" class="btnnav navbar-nav navbar-right btn btn-default" data-toggle="modal" data-target="#manual" style=" height: 50px;">
-                        <i class="fa fa-question" style="font-size: 2.5em;"></i>
-                    </a>
+                    </a>                    
                     
                     <div class="btn-group" id="_exportar_datos_btn" ng-if="abrio_sala || abrio_indicador">
                         <button class="btn btn-info dropdown-toggle" data-toggle="dropdown" title="Opciones" >
@@ -65,6 +61,10 @@
 
                     <a class="btn dropdown-toggle btn-primary navbar-btn" ng-click="abrirModalFiltrosGenerales()" ng-if="indicadores.length > 0">
                         <i class="glyphicon glyphicon-filter"></i> <span class="hidden-xs">{{"_filtros_generales_" | trans}}</span>
+                    </a>
+                    
+                    <a href="javascript:void(0)" class="btn btn-default pull-right" data-toggle="modal" data-target="#manual" style=" height: 50px;">
+                        <i class="fa fa-question" style="font-size: 2.5em;"></i>
                     </a>
                 </div>
             </div>
