@@ -86,3 +86,16 @@ Para guardar la sala, simplemente de clic al boton "Guardar sala" despues de hac
 > - 2.- Si la sala ya esta creada y queremos solo actualizar aparece este boton tambien para borrar, con previa confirmación
 > - 3.- Guardar los cambios
 > - 4.- Cerrar ventana
+
+## Filtros generales
+
+Esta opción se utiliza para aplicar filtros a todos los indicadores cargados en la sala
+
+1. Dar clic en el botón **Filtros generales**
+2. Elegir la dimensión por la cual vamos a filtrar
+3. Ingresar el valor a asignar al filtro
+4. Dar clic en aplicar filtro
+
+Si alguno de los indicadores no tiene la dimensión seleccionada, el filtro no será aplicado a dicho indicador
+
+![Filtros generales](filtros_generales.gif)
