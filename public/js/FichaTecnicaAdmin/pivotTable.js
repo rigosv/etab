@@ -4,6 +4,7 @@ var xaggregatorName = "Suma";
 var escenarioActivo = null;
 var alertas = [];
 var formula = '';
+var locale = 'es';
 
 $(document).ready(function() {
     var datos_ = '';
@@ -15,6 +16,10 @@ $(document).ready(function() {
         e.preventDefault();
         $(this).tab('show');
     });
+    
+    if ($('#locale').length > 0 ) {
+        locale = $('#locale').val();
+    }
     function ajax_states() {
         $(document).bind("ajaxStart.mine", function() {
             $('#div_carga').show();
@@ -381,7 +386,6 @@ $(document).ready(function() {
                         vals : cfgVals,
                         rows: cfgRows,
                         cols: cfgCols,
-                        aggregatorName: cfgAggregatorName,
                         rendererName: cfgRendererName,
                         exclusions: cfgExclusions,
                         inclusions: cfgInclusions,
@@ -410,7 +414,7 @@ $(document).ready(function() {
                                 }
                             }
                         }
-                    }, true, 'es');
+                    }, true, locale);
                 } else {
 
                     var factor, xvals='';
@@ -422,10 +426,10 @@ $(document).ready(function() {
 
                         var operandos = factorF[0].split('/');
                         if ( operandos.length > 1 ){
-                            xaggregatorName = 'Cociente';
+                            xaggregatorName = (locale == 'es') ? 'Cociente' : 'Sum over Sum';
                             xvals =  [operandos[0], operandos[1]];
                         } else {
-                            xaggregatorName = 'Suma';
+                            xaggregatorName = (locale == 'es') ? 'Suma' : 'Sum';
                             xvals =  [operandos[0]];
                         }
                     }
@@ -477,7 +481,7 @@ $(document).ready(function() {
                                 }
                             },
                         }
-                    }, true, 'es');
+                    }, true, locale);
                 }
 
 

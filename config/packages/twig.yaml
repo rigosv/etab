@@ -4,6 +4,7 @@ twig:
     app_dashboard: '%app.dashboard%'
     cium_disponible: '%cium.disponible%'
     cium_url: '%cium.url%'
+    locale: '%locale%'
   form_themes:
     - '@SonataCore/Form/datepicker.html.twig'
 
