@@ -1,5 +1,9 @@
 _tablero_: Dashboard
 _clave_: Password
+_repetir_clave_: Repeat key
+
+_area_atencion_: Area of ​​attention
+_tipo_area_atencion_: Type attention area
 establecimiento: 'Establishment'
 contacto: 'Contact'
 correo_electronico: 'Email'
@@ -11,6 +15,7 @@ codigo: 'Code'
 uso_catalogo: "Will describe catalog's fields"
 no_catalogo_y_describir_catalogo: "If used to describe a catalog, it can't be associated to one"
 formula: 'Formula'
+Formula: 'Fórmula'
 ayuda_ingreso_formula: 'To create/name variables use its initials inside brackets e.g.: {NAI} / {PTDA} * 100 '
 vars_sel_diff_vars_formula: 'Variables used in a formula must match those that were already selected'
 sintaxis_invalida: 'Formula has errors'
@@ -33,8 +38,6 @@ campos_indicador: Dimensions for this indicator
 nombre_archivo_mapa: Map's image file name
 cerrar_sesion: 'Logout'
 favoritos: 'Favourites'
-
-
 
 'clasificacion_tecnica' : 'Technical Classification'
 'Clasificacion Tecnica List': 'Technical Classification - Listing'
@@ -128,7 +131,7 @@ ip: 'IP address'
 usuario: 'User'
 Clave: 'Password'
 instancia: 'Instance'
-_repetir_clave_: 'Re type password'
+
 claves_no_coinciden: 'Passwords do not match'
 probar_conexion: 'Test Connection'
 conexion_error: 'Connection Error'
@@ -324,6 +327,7 @@ _no_conexion_configurada_: There is no connection configured
 _salas_situacionales_: 'Situation Rooms'
 _indicadores_y_salas_: Indicators and Rooms
 _roles_: Roles
+_perfil_: Profile
 _seguridad_: Security
 _graficos_: Graphs
 _acciones_: Actions
@@ -332,6 +336,7 @@ _comentarios_: Comments
 _enviar_: Send
 _guardar_como_: Save as
 _alerta_limite_inferior_: 'Lower limit'
+_alerta_limite_superior_: 'Upper limit'
 _regresar_menu_principal_: Return to main menu
 _agencia_: Agency
 _usuario_no_agencia_: The current user is not assigned to an Agency
@@ -377,9 +382,9 @@ _error_anterior_: It happened an error saving the last edited cell, modify it an
 _elija_un_formulario_:  Choose a form
 _operadores_permitidos_: 'Use "value" to refer to the cell value to validate. Allowed operators: and, or, relational and arithmetic operators'
 _error_validation_: 'Error validating data, the entered value must pass the condition: '
+'Bad credentials.': Invalid data
 _estatus_: Status
 _user_: User
-_perfil_: Profile
 _establecimiento_principal_ : Main establishment
 _ayuda_establecimiento_principal_: Establishment on which enters data into data entry forms
 _listado_salas_: List of rooms
@@ -389,6 +394,8 @@ _buscar_: Search
 _accesos_: Access
 _guardar_estado_: Save state
 _cargar_estado_: Load state
+_evaluacion_calidad_: Quality evaluation
+_datos_calidad_: Quality evaluation data
 _no_grafico_: No chart available
 title_user_edit_password: Change your password
 _menu_principal_: Main menu
@@ -408,18 +415,30 @@ _exportar_graficos_: Export graphs
 _exportar_fichas_tecnicas_: Export technical profile
 _url_acceso_ext_ayuda_: Use the following url for external access
 _exportar_tablas_datos_: Export data tables
-_matriz_seguimiento_: Monitoring matrix
+_Matrix_seguimiento_: Monitoring matrix
+Matrix_seguimiento: Monitoring matrix
 _reportes_: Reports
 _desde_: From
 _hasta_: To
 _cargar_reporte_: Load report
+_bitacora_actividad_: Activity log
+_cargar_bitacora_: Upload log
 _ruta_: Path
 Action: Action
 _proceso_: Process
 _catalogos_: Catalogs
+_analisis_descriptivo_: Descriptive analysis
+_desviacion_estandar_: Standard deviation
+_maximo_: Maximum
+_minimo_: Minimum
+_tercer_cuartil_: Third quartile
+_segundo_cuartil_mediana_: Second quartile (median)
+_primer_cuartil_: First quartile
+_crear_pivote_: Create pivot
 _uso_costeo_: Used for cost module
 _acumulable_: It is cumulative
 _acumulable_help_: This meaning will be used for cumulative dimensions in an indicator
+_establecimiento_: Establishment
 _telefono_help_: Format XXXX-XXXX
 Diccionario List: Diccionario List
 Diccionario Create: Diccionario Create
@@ -444,15 +463,15 @@ marque_enviar: "Marque enviar para que el boletin se envie al correo de los usua
 
 _config_indicador_desempeno_: 'Set performance indicator'
 _indicador_desempeno_: 'performance indicator'
-_capturar_matriz_: 'Data capture'
-_config_matriz_anio_: 'Set year planning'
+_capturar_Matrix_: 'Data capture'
+_config_Matrix_anio_: 'Set year planning'
 _indicador_etab_: 'Indicators available in Etab'
 _indicador_rel_: 'Indicators not available in Etab'
 _anio_select_: 'Select a year'
 _consultar_: 'Check'
 _planeado_: 'Planned'
 _real_: 'Real'
-_no_existe_planeacion_: 'There is no planning in this year for this matriz'
+_no_existe_planeacion_: 'There is no planning in this year for this Matrix'
 _crear_planeacion_: 'Create planning'
 _meta_anual_: 'Meta'
 _inidcador_: 'Indicator'
@@ -478,22 +497,63 @@ _ningun_dato_: 'no data is Not found'
 _guardar_ok_: 'I was saved successfully'
 _guardar_no_ok_: 'An error occurred and could not be saved :('
 
-_matriz_verP_: Show / Hide Planning '
-_matriz_verR_: Show / Hide Real '
-_matriz_verV_: Show / Hide Percent '
+_Matrix_verP_: Show / Hide Planning '
+_Matrix_verR_: Show / Hide Real '
+_Matrix_verV_: Show / Hide Percent '
 _fuente_: 'Source'
 _acumular_: 'Acumular'
-_config_matriz_: 'Set matriz'
-_matriz_: 'Matriz'
-_matriz_select_: 'Select matriz'
+_config_Matrix_: 'Set Matrix'
+_Matrix_: 'Matrix'
+_Matrix_select_: 'Select Matrix'
+
+seleccion_indicador: 'Select an indicator'
+seleccion_sala: 'Select a room'
+busqueda_libre: 'Free search'
+busqueda_libre_info: 'Enter the name of the search machine search and then press "enter"'
+seleccione_uso_y_tecnica: 'Select the classification according to use and a technical classification'
+no_hay_sin_clasificacion: 'All indicators are classified'
+no_hay_favoritos: 'No indicator has been added to favorites'
+_salas_propias_: 'Own rooms'
+_salas_grupos_: 'Rooms per group'
+_de_: 'From'
+_aa_: 'A'
+
+_exportar_svg_: 'Export an SVG'
+_exportar_png_: 'Export an PNG'
+_refresh_: 'Update'
+_full_screen_: 'Full Screen'
+_ver_tendencia_: 'Trend'
+_cargando_indicador_: 'Loading indicator, please wait ...'
+_indicador_warning: 'Failed to load the indicator'
+_indicador_error: 'Some error occurred on the server'
+
+btn_create_and_configure: Save and configure
+_solo_un_archivo_:  I can only upload one file
+_agregar_archivo_: Add file
+_origen_datos_archivo_: From file
+_origen_datos_sql_: From database
+_tipo_archivo_invalido_: Invalid file type
+
+_indicador_dimension_fin: 'It has reached the limit of dimensions'
+
+_exportar_excel_: 'Export an Excel'
+_exportar_pdf_: 'Export an Pdf'
+_exportar_csv_: 'Export an Csv'
+
+periocidad: 'Periocity'
+_restablecer_: 'Restore'
+
 _cantidad_decimales_: Number of decimals
 _cantidad_decimales_help_: The number of decimal places specified will be used in the result of the formula
 _formato_valor_corte_: Cutting value format
 _formato_valor_corte_help_: "Date format of the incremental field. 'Y-m-d H:i:s'  by default"
 _valor_corte_: Cutting value
 _valor_corte_help_: Last value read in the data load
+
 _clonar_ficha_tecnica_: Clone technical profile
 _regresar_: Return
+_guardar_ : Save
+_grafico_aprecia_mejor_meta: 'This graphic is best appreciated if you set a goal'
 _solo_lectura_: Read only
 javascript.nombre_campo: Field name
 _es_permanente_: 'it is permanent'
@@ -519,6 +579,7 @@ _dimension_filtrar_: 'Dimension to filter'
 _dimension_representa_: 'This corresponds to'
 _acciones_poscarga_help_: 'SQL statement that will be executed at the end of the data load. You can separate several statements by semicolons'
 _acciones_poscarga_: 'Postload actions'
+action_poscarga: Postload actions
 action_poscarga_title: Execute postload actions
 _accion_: Action
 _registros_afectados_: Affected records
@@ -537,6 +598,13 @@ _si_: Yes
 _no_: No
 _ayuda_: Help
 _solo_caracteres_alfanumericos_: Use only alphanumeric characters
+_tablero_indicadores_: Indicators board
+_estandares_: Standards
+_costeo_: Costing
+_detalle_valor_pagado_: Detail paid value
+_gastos_administrativos_: Administrative expenses
+_compromisos_financieros_:  Financial commitments
+
 _documentacion_: Documentation
 _formato_html_single_page_: HTML format, single page
 _formato_html_: HTML format
@@ -546,12 +614,14 @@ _usuario_tecnico_: Technical user
 _manual_tecnico_: Technical manual
 _restaurar_: Restore
 _maximizar_: Maximize
+_resultado_: Result
 _filtros_generales_: Global filters
 _dimension_: Dimension
 _aplicar_filtro_: Apply filter
 _valor_filtro_: Filter value
 ver_ficha_tecnica: See technical sheet
 _campo_requerido_: Required field
+
 _pagina_: Page
 _exportar_tabla_datos_pdf_: Export data table to PDF
 _orientacion_: Orientation
@@ -572,3 +642,36 @@ _codigo_: Code
 _valor_: Value
 Variables Configuracion List: 'Configuration variables :: List'
 Variables Configuracion Create: 'configuration variables :: Create'
+
+_manual_: 'Manual'
+_ancho_grafico_: 'Graphic width size'
+_alto_grafico_: 'Graphic high size'
+_exportar_diccionario_datos_: Export Data diccinario
+_cerrar_sala_: 'Close room'
+_compartir_sala_: 'Share room'
+_editar_: Edit
+_borrar_: Delete
+_actualizar_sala_: 'Update Room'
+
+_esta_seguro_eliminar_sala_: 'Are you sure you want to eliminate the room?'
+_mensaje_ok_eliminar_sala_: 'The room was eliminated'
+_mensaje_error_eliminar_sala_: 'Error deleting the room'
+_mensaje_ok_guardar_sala_: 'The room was saved correctly'
+_mensaje_error_guardar_sala_: 'Error when saving the room'
+_mensaje_ok_guardar_sala_accion_: 'The action of the room was saved correctly'
+_mensaje_error_guardar_sala_accion_: 'Error al guardar la acción de la sala'
+_mensaje_ok_guardar_sala_compartir_: 'Error saving the action of the room'
+_mensaje_error_guardar_sala_compartir_: 'The room was shared correctly'
+
+_historial_sala_: 'Action history'
+
+_foro_discusion_: 'Discussion forum'
+_usuario_sin_cuenta_correos_ : 'Write the user´s email. You can write more than 1 separating by commas'
+_usuario_sin_cuenta_: 'Users without account '
+_usuario_con_cuenta_: 'Users with account'
+_todos_: 'All'
+_exportar_elegir_: 'Choose the format to export'
+_exportar_a_: 'Export to'
+
+_exportar_datos_excel_ : 'Export data to excel'
+_ver_grafica_: 'See graphic'

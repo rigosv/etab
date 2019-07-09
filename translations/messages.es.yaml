@@ -1,10 +1,10 @@
 _tablero_: Tablero
 _clave_: Clave
 _repetir_clave_: Repetir clave
-action_load_data: Cargar Datos
+
 _area_atencion_: Área atención
 _tipo_area_atencion_: Tipo área atención
-oestablecimiento: 'Establecimiento'
+establecimiento: 'Establecimiento'
 contacto: 'Contacto'
 correo_electronico: 'Correo Electrónico'
 telefono: 'Número telefónico'
@@ -21,6 +21,7 @@ vars_sel_diff_vars_formula: 'Las variables utilizadas en la fórmula deben coinc
 sintaxis_invalida: 'La fórmula contiene errores de sintaxis'
 sintaxis_invalida_variables_entre_llaves: 'La fórmula contiene errores de sintaxis, las variables deben ir entre llaves({ }) '
 catalogo: 'Catálogo asociado'
+comentario: 'Comentario'
 formato_xxxx-xxxx: 'Formato XXXX-XXXX'
 elija_catalogo: 'Debe seleccionar un catálogo'
 marque_uso_en_catalogo: 'Ha especificado el nombre de un catálogo, debe marcar esta opción'
@@ -32,7 +33,6 @@ limite_inferior: 'Valor'
 limite_superior: 'Límite superior'
 color: 'Color'
 indicador_alertas: 'Alertas de indicador'
-comentario: 'Comentario'
 elija_al_menos_una_variable: 'Debe elegir al menos una variable'
 campos_indicador: Dimensiones del indicador
 nombre_archivo_mapa: Nombre del archivo del mapa
@@ -131,6 +131,7 @@ ip: 'Dirección IP'
 usuario: 'Usuario'
 Clave: 'Clave'
 instancia: 'Instancia'
+
 claves_no_coinciden: 'Las claves ingresadas no son iguales'
 probar_conexion: 'Probar Conexión'
 conexion_error: 'Error en la conexión'
@@ -162,6 +163,7 @@ estandar_nacional: 'Estándar Nacional'
 presentacion: 'Presentación'
 btn_create_and_config_data_source: 'Crear y configurar origen de datos'
 action_merge: 'Fusionar'
+action_load_data: 'Cargar datos'
 archivo_asociado: 'Archivo asociado'
 subir_nuevo_archivo: 'Subir nuevo archivo'
 origen_datos_archivo: 'Hoja de cálculo o archivo de texto (CSV)'
@@ -276,7 +278,6 @@ tablero:
   tipo_grafico_principal: Tipo de gráfico principal
   tipo_grafico_secundario: Tipo de gráfico secundario
 
-
 _no_clasificados_ : 'Sin clasificacion'
 _interpretacion_ : 'Interpretación'
 _nivel_de_usuario_ : 'Nivel de usuario'
@@ -379,6 +380,7 @@ _error_conexion_: Error de comunicación. No se pudo guardar el dato, verifique 
 _error_conexion_2_: Error de comunicación. Verifique su conexión a la red, si el problema persiste notificarlo al administrador del sistema
 _error_anterior_: Sucedió un error al guardar la última celda editada, modifíquela y vuelva a intentar guardarla
 _elija_un_formulario_:  Elija un formulario
+_operadores_permitidos_: 'Use "valor" para referirse al valor de celda para validar. Operadores permitidos: y, o, operadores relacionales y aritméticos.'
 _error_validation_: 'Error al validar dato, el valor ingresado debe pasar la condición: '
 'Bad credentials.': Datos no válidos
 _estatus_: Estatus
@@ -442,8 +444,11 @@ Diccionario List: 'Diccionario :: Listado'
 Diccionario Create: 'Diccionario :: Crear'
 Regla Transformacion List: 'Regla de transformación :: Listado'
 Regla Transformacion Create: 'Regla de transformación :: Crear'
+Campo List: 'Lista de campo'
+Campo Create: 'Crear campo'
 _configuracion_: Configuración
 Id: Id
+
 _suba_archivo_tipo_hoja_calculo_csv_: Formato de archivo no válido, se aceptan hojas de cálculo y archivo csv
 _se_ha_iniciado_la_carga_del_origen_: Se ha iniciado la carga del origen de datos
 
@@ -501,7 +506,6 @@ _config_matriz_: 'Configurar matriz'
 _matriz_: 'Matriz'
 _matriz_select_: 'Seleccione una matriz'
 
-
 seleccion_indicador: 'Seleccione un indicador'
 seleccion_sala: 'Seleccione una sala'
 busqueda_libre: 'Busqueda libre'
@@ -546,38 +550,6 @@ _formato_valor_corte_help_: Formato de fecha del campo incremental. 'Y-m-d H:i:s
 _valor_corte_: Valor de corte
 _valor_corte_help_: Último valor leído en la carga de datos
 
-_manual_: 'Manual'
-_ancho_grafico_: 'Tamaño ancho gráfico'
-_alto_grafico_: 'Tamaño alto gráfico'
-_exportar_diccionario_datos_: Exportar Diccinario de datos
-_cerrar_sala_: 'Cerrar sala'
-_compartir_sala_: 'Compartir sala'
-_editar_: Editar
-_borrar_: Borrar
-_actualizar_sala_: 'Actualizar Sala'
-
-_esta_seguro_eliminar_sala_: '¿Esta seguro de eliminar la sala?'
-_mensaje_ok_eliminar_sala_: 'La sala fue eliminada'
-_mensaje_error_eliminar_sala_: 'Error al eliminar la sala'
-_mensaje_ok_guardar_sala_: 'La sala se guardo correctamente'
-_mensaje_error_guardar_sala_: 'Error al guardar la sala'
-_mensaje_ok_guardar_sala_accion_: 'La acción de la sala se guardo correctamente'
-_mensaje_error_guardar_sala_accion_: 'Error al guardar la acción de la sala'
-_mensaje_ok_guardar_sala_compartir_: 'La sala se compartio correctamente'
-_mensaje_error_guardar_sala_compartir_: 'Error al compartir la sala'
-
-_historial_sala_: 'Historial de acciones'
-
-_foro_discusion_: 'Foro de discusión'
-_usuario_sin_cuenta_correos_ : 'Escribir el correo del usuario. Puede escribir mas de 1 separando por comas'
-_usuario_sin_cuenta_: 'Usuarios sin cuenta '
-_usuario_con_cuenta_: 'Usuarios con cuenta '
-_todos_: 'Todos'
-_exportar_elegir_: 'Elige el formato para exportar'
-_exportar_a_: 'Exportar a'
-
-_exportar_datos_excel_ : 'Exportar datos a excel'
-_ver_grafica_: 'Ver gráfica'
 _clonar_ficha_tecnica_: Clonar ficha técnica
 _regresar_: Regresar
 _guardar_ : Guardar
@@ -632,12 +604,13 @@ _costeo_: Costeo
 _detalle_valor_pagado_: Detalle valor pagado
 _gastos_administrativos_: Gastos administrativos
 _compromisos_financieros_: Compromisos financieros
+
 _documentacion_: Documentación
-_usuario_administrador_: Usuario administrador
-_usuario_tecnico_: Usuario técnico
+_formato_html_single_page_: Formato HTML de una sola página
 _formato_pdf_: Formato PDF
 _formato_html_: Formato HTML
-_formato_html_single_page_: Formato HTML de una sola página
+_usuario_administrador_: Usuario administrador
+_usuario_tecnico_: Usuario técnico
 _manual_tecnico_: Manual técnico
 _restaurar_: Restaurar
 _maximizar_: Maximizar
@@ -648,6 +621,7 @@ _aplicar_filtro_: Aplicar filtro
 _valor_filtro_: Valor filtro
 ver_ficha_tecnica: Ver ficha técnica
 _campo_requerido_: Campo requerido
+
 _pagina_: Página
 _exportar_tabla_datos_pdf_: Exportar tabla de datos a PDF
 _orientacion_: Orientación
@@ -668,3 +642,36 @@ _codigo_: Código
 _valor_: Valor
 Variables Configuracion List: 'Variables de configuración :: listado'
 Variables Configuracion Create: 'Variables de configuración :: crear'
+
+_manual_: 'Manual'
+_ancho_grafico_: 'Tamaño ancho gráfico'
+_alto_grafico_: 'Tamaño alto gráfico'
+_exportar_diccionario_datos_: Exportar Diccinario de datos
+_cerrar_sala_: 'Cerrar sala'
+_compartir_sala_: 'Compartir sala'
+_editar_: Editar
+_borrar_: Borrar
+_actualizar_sala_: 'Actualizar Sala'
+
+_esta_seguro_eliminar_sala_: '¿Esta seguro de eliminar la sala?'
+_mensaje_ok_eliminar_sala_: 'La sala fue eliminada'
+_mensaje_error_eliminar_sala_: 'Error al eliminar la sala'
+_mensaje_ok_guardar_sala_: 'La sala se guardo correctamente'
+_mensaje_error_guardar_sala_: 'Error al guardar la sala'
+_mensaje_ok_guardar_sala_accion_: 'La acción de la sala se guardo correctamente'
+_mensaje_error_guardar_sala_accion_: 'Error al guardar la acción de la sala'
+_mensaje_ok_guardar_sala_compartir_: 'La sala se compartio correctamente'
+_mensaje_error_guardar_sala_compartir_: 'Error al compartir la sala'
+
+_historial_sala_: 'Historial de acciones'
+
+_foro_discusion_: 'Foro de discusión'
+_usuario_sin_cuenta_correos_ : 'Escribir el correo del usuario. Puede escribir mas de 1 separando por comas'
+_usuario_sin_cuenta_: 'Usuarios sin cuenta '
+_usuario_con_cuenta_: 'Usuarios con cuenta '
+_todos_: 'Todos'
+_exportar_elegir_: 'Elige el formato para exportar'
+_exportar_a_: 'Exportar a'
+
+_exportar_datos_excel_ : 'Exportar datos a excel'
+_ver_grafica_: 'Ver gráfica'
