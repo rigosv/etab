@@ -295,6 +295,7 @@ _sala_: 'Room'
 _salas_: 'Rooms'
 _agregar_area_grafico_: 'Add graphic area'
 _guardar_sala_: 'Save room'
+_save_actions_: 'Save action'
 _sala_situacional_: 'Situation Room'
 _nombre_sala_: Room name
 _cerrar_: Close
@@ -345,7 +346,7 @@ _descripcion_: Description
 _archivo_: File
 _imagen_: Image
 _mostrar_cinta_: Show carousel
-_sala_acciones_: Situation Room Accions
+_sala_acciones_: Situation Room Actions
 _fecha_: Date
 _usuario_: User
 _observaciones_: Observations
@@ -415,8 +416,8 @@ _exportar_graficos_: Export graphs
 _exportar_fichas_tecnicas_: Export technical profile
 _url_acceso_ext_ayuda_: Use the following url for external access
 _exportar_tablas_datos_: Export data tables
-_Matrix_seguimiento_: Monitoring matrix
-Matrix_seguimiento: Monitoring matrix
+_matriz_seguimiento_: Monitoring matrix
+matriz_seguimiento: Monitoring matrix
 _reportes_: Reports
 _desde_: From
 _hasta_: To
@@ -463,8 +464,8 @@ marque_enviar: "Marque enviar para que el boletin se envie al correo de los usua
 
 _config_indicador_desempeno_: 'Set performance indicator'
 _indicador_desempeno_: 'performance indicator'
-_capturar_Matrix_: 'Data capture'
-_config_Matrix_anio_: 'Set year planning'
+_capturar_matriz_: 'Data capture'
+_config_matriz_anio_: 'Set year planning'
 _indicador_etab_: 'Indicators available in Etab'
 _indicador_rel_: 'Indicators not available in Etab'
 _anio_select_: 'Select a year'
@@ -497,14 +498,14 @@ _ningun_dato_: 'no data is Not found'
 _guardar_ok_: 'I was saved successfully'
 _guardar_no_ok_: 'An error occurred and could not be saved :('
 
-_Matrix_verP_: Show / Hide Planning '
-_Matrix_verR_: Show / Hide Real '
-_Matrix_verV_: Show / Hide Percent '
+_matriz_verP_: Show / Hide Planning '
+_matriz_verR_: Show / Hide Real '
+_matriz_verV_: Show / Hide Percent '
 _fuente_: 'Source'
 _acumular_: 'Acumular'
-_config_Matrix_: 'Set Matrix'
-_Matrix_: 'Matrix'
-_Matrix_select_: 'Select Matrix'
+_config_matriz_: 'Set Matrix'
+_matriz_: 'Matrix'
+_matriz_select_: 'Select Matrix'
 
 seleccion_indicador: 'Select an indicator'
 seleccion_sala: 'Select a room'
@@ -659,8 +660,8 @@ _mensaje_error_eliminar_sala_: 'Error deleting the room'
 _mensaje_ok_guardar_sala_: 'The room was saved correctly'
 _mensaje_error_guardar_sala_: 'Error when saving the room'
 _mensaje_ok_guardar_sala_accion_: 'The action of the room was saved correctly'
-_mensaje_error_guardar_sala_accion_: 'Error al guardar la acción de la sala'
-_mensaje_ok_guardar_sala_compartir_: 'Error saving the action of the room'
+_mensaje_error_guardar_sala_accion_: 'Error saving the room´s action'
+_mensaje_ok_guardar_sala_compartir_: 'The room was shared correctly'
 _mensaje_error_guardar_sala_compartir_: 'The room was shared correctly'
 
 _historial_sala_: 'Action history'

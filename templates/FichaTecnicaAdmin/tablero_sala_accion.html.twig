@@ -67,7 +67,7 @@
         <div class="modal-footer">
             <button id="guardar_accion_sala" class="btn btn-primary" ng-click="guardarAccionSala(sala)" ng-disabled="sala_cargando">
                 <img src="{{ app.request.schemeAndHttpHost ~ asset('images/ajax-loader.gif') }}" style="width:20px" ng-if="sala_cargando"/>
-                {{ '_guardar_sala_' | trans }}
+                {{ '_save_actions_' | trans }}
             </button>
             <button class="btn btn-warning" data-dismiss="modal" aria-hidden="true">{{ '_cerrar_' | trans}}</button>
         </div>
