@@ -393,7 +393,8 @@ class TableroSalaController extends AbstractController
             $dato = array(array
             (
                 'token' =>md5(time()), 
-                'sala' => $sala->getId()
+                'sala' => $sala->getId(),
+                'nombre_sala' => $sala->getNombre()
             ));
             $usuarios_con = $req->get("usuarios_con_cuenta");
             if(count($usuarios_con) > 0 && $usuarios_con[0] == 'All'){
@@ -429,7 +430,7 @@ class TableroSalaController extends AbstractController
                                     . '/images/'. $this->getParameter('app.logo_correo_archivo');
 
                     $message = (new \Swift_Message('Sala eTAB'))
-                        ->attach(\Swift_Attachment::fromPath($documento1))
+                        //->attach(\Swift_Attachment::fromPath($documento1))
                         ->setFrom($this->getParameter('app.from_correo'))
                         ->setTo($usuario->getEmail()) 
                         ->setBody($this->renderView('Page/sala.html.twig', array('dato' => $dato,'array' => $array)),"text/html");
@@ -445,10 +446,12 @@ class TableroSalaController extends AbstractController
             $dato = array(array
             (
                 'token' =>$token, 
-                'sala' => $sala->getId()
+                'sala' => $sala->getId(),
+                'nombre_sala' => $sala->getNombre()
             ));
             
-            $usuario = explode(",", $req->get("usuarios_sin_cuenta"));
+            
+            $usuario = explode(",", preg_replace('/\s+/', '', $req->get("usuarios_sin_cuenta")));
 
             for($i=0; $i<count($usuario);$i++)
             {       
@@ -471,7 +474,7 @@ class TableroSalaController extends AbstractController
                     $dato['imagenbase64'] = 'data:image/' . $tipo . ';base64,' . base64_encode($data);
 
                     $message = (new \Swift_Message('Sala eTAB'))
-                        ->attach(\Swift_Attachment::fromPath($documento1))
+                        //->attach(\Swift_Attachment::fromPath($documento1))
                         ->setFrom($this->getParameter('app.from_correo'))
                         ->setTo(trim($usuario[$i]))
                         ->setBody($this->renderView('Page/sala.html.twig', array('dato' => $dato,'array' => $array)),"text/html");
