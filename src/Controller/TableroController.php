@@ -723,6 +723,7 @@ class TableroController extends AbstractController {
                 }
             }
             $usuario = $this->getUser();
+            $es_favorito = false;
             if($usuario){
                 $fav = "SELECT id_indicador FROM usuario_indicadores_favoritos WHERE id_usuario =".$usuario->getId()." and id_indicador = ".$fichaTec->getId();
 
@@ -736,7 +737,7 @@ class TableroController extends AbstractController {
                         $es_favorito = true;
                 }
             }
-            $es_favorito = false;
+            
             
             
 
