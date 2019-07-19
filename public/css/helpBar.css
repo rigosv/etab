@@ -28,13 +28,15 @@
 
 section.content-header, section.content {
     transition: 0.5s;
-    padding: 16px;
+    padding: 16px;    
 }
 
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
     .helpSidebar {padding-top: 15px;}
 }
+
+
 
 /*
 

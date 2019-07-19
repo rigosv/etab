@@ -43,6 +43,7 @@
         "symfony/web-link": "*",
         "symfony/web-profiler-bundle": "*",
         "symfony/web-server-bundle": "*",
+        "symfony/webpack-encore-bundle": "^1.6",
         "symfony/webpack-encore-pack": "*",
         "symfony/yaml": "*"
     },

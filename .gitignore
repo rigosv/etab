@@ -31,3 +31,9 @@ yarn-error.log
 ###< lexik/jwt-authentication-bundle ###
 /config/app_config.yaml
 /nbproject
+###> symfony/webpack-encore-bundle ###
+/node_modules/
+/public/build/
+npm-debug.log
+yarn-error.log
+###< symfony/webpack-encore-bundle ###
