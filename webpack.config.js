@@ -16,14 +16,14 @@ Encore
     .enableVersioning(Encore.isProduction())
 
     // uncomment to define the assets of the project
-    .addEntry('app', './assets/js/app.js')
-    //.addStyleEntry('css/app', './assets/css/app.scss')
+    .addEntry('app/js', './assets/js/app.js')
+    .addStyleEntry('app/css', './assets/css/app.scss')
 
     // uncomment if you use TypeScript
     //.enableTypeScriptLoader()
 
     // uncomment if you use Sass/SCSS files
-    //.enableSassLoader()
+    .enableSassLoader()
 
     // uncomment for legacy applications that require $/jQuery as a global variable
     //.autoProvidejQuery()
