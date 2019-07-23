@@ -55,6 +55,15 @@
               @quitar-filtros="quitarFiltros()"
               @click-plot="clicGrafico($event)"
           ></GraficoBasico>
+          <Mapa
+              v-if="[ 'MAPA', 'GEOLOCATION', 'MAP' ].includes(indicador.configuracion.tipo_grafico.toUpperCase() ) 
+                      && indicador.cargando == false "
+              :indicador="indicador"
+              :index="index"
+              @filtar-posicion="filtrarPosicion($event)"
+              @quitar-filtros="quitarFiltros()"
+              @click-plot="clicGrafico($event)"
+          ></Mapa>
 
           <div slot="footer">
               <div>
@@ -113,6 +122,7 @@
 <script>
 
   import GraficoBasico from "../Graficos/GraficoBasico";
+  import Mapa from "../Graficos/Mapa";
   import IndicadorBarraOpciones from "./IndicadorBarraOpciones";
   import IndicadorBreadcum from "./IndicadorBreadcum";
   import IndicadorMensajes from "./IndicadorMensajes";
@@ -130,7 +140,8 @@
           IndicadorBarraOpciones,
           IndicadorBreadcum,
           IndicadorMensajes,
-          ConfiguracionIndicador
+          ConfiguracionIndicador,
+          Mapa
       },
       mixins: [IndicadorMixin],
       methods : {
