@@ -25,6 +25,8 @@ Encore
     // uncomment if you use Sass/SCSS files
     .enableSassLoader()
 
+    .enableSingleRuntimeChunk()
+
     // uncomment for legacy applications that require $/jQuery as a global variable
     //.autoProvidejQuery()
 
@@ -37,7 +39,5 @@ Encore
         vue: 'vue/dist/vue.js'
     });
 
-
-;
 
 module.exports = Encore.getWebpackConfig();
