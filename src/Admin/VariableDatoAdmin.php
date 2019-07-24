@@ -74,7 +74,7 @@ class VariableDatoAdmin extends Admin
                     ->addViolation(('origen_no_configurado'))
                 ->end();
         }
-        if ( !preg_match("/^[0-9a-zA-Z]+$/", $object->getIniciales())) {
+        if ( !preg_match("/^[0-9a-zA-Z_]+$/", $object->getIniciales())) {
             $errorElement
                 ->with('iniciales')
                 ->addViolation($trans->trans('_solo_caracteres_alfanumericos_') )
