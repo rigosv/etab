@@ -676,3 +676,5 @@ _exportar_a_: 'Export to'
 
 _exportar_datos_excel_ : 'Export data to excel'
 _ver_grafica_: 'See graphic'
+_longitud_centro_: 'Longitude center coordinate'
+_latitud_centro_: 'Latitude center coordinate'

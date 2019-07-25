@@ -42,9 +42,9 @@ class SignificadoCampoAdmin extends Admin
                 ->tab(('_datos_geograficos_'), array('collapsed' => false))
                     ->with('')
                         ->add('nombreMapa', null, array('label' => ('nombre_archivo_mapa')))
-                        ->add('escala', null, array('label' => ('_escala_')))
-                        ->add('origenX', null, array('label' => ('_origen_x_')))
-                        ->add('origenY', null, array('label' => ('_origen_y_')))
+                        ->add('escala', null, array('label' => ('zoom')))
+                        ->add('origenX', null, array('label' => ('_latitud_centro_')))
+                        ->add('origenY', null, array('label' => ('_longitud_centro_')))
                     ->end()
                 ->end()
                 ;
