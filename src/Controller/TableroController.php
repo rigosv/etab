@@ -82,9 +82,11 @@ class TableroController extends AbstractController {
 
                 $data = [];
                 foreach ($indicadores_permitidos as $ind ) {
-                    foreach( $ind->getClasificacionTecnica() as $ct ) {
-                        $cu = $ct->getClasificacionUso();
-                        $data[ $cu->getId() ] = ['id' => $cu->getId(), 'codigo' => $cu->getCodigo(), 'descripcion' => $cu->getDescripcion() ];
+                    if($ind){
+                        foreach( $ind->getClasificacionTecnica() as $ct ) {
+                            $cu = $ct->getClasificacionUso();
+                            $data[ $cu->getId() ] = ['id' => $cu->getId(), 'codigo' => $cu->getCodigo(), 'descripcion' => $cu->getDescripcion() ];
+                        }
                     }
                 }
 
