@@ -25,7 +25,7 @@ class ConexionAdmin extends Admin {
                     'required' => true))
                 ->add('puerto', null, array('label' => ('puerto'), 'required' => false))
                 ->add('instancia', null, array('label' => ('instancia'), 'required' => false))
-                ->add('ip', null, array('label' => ('ip')))
+                ->add('ip', null, array('label' => ('host')))
                 ->add('usuario', null, array('label' => ('usuario')))
                 ->add('clave', RepeatedType::class, array(
                     'type' => PasswordType::class,
