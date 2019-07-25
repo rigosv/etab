@@ -126,7 +126,9 @@ class AlmacenamientoProxy implements DashboardInterface, OrigenDatosInterface
                 $newDatos = [];
                 foreach ($datos as $d ){
                     if ( array_key_exists($d['category'], $datosSust) ) {
+                        $d['id'] = $d['category'];
                         $d['category'] = $datosSust[$d['category']];
+
                     }
                     $newDatos[] = $d;
                 }
