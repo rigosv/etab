@@ -48,11 +48,11 @@
         "leaflet": "^1.5.1",
         "static-eval": "^2.0.2",
         "vue": "^2.6.10",
+        "vue-grid-layout": "^2.3.4",
         "vue-i18n": "^8.12.0",
         "vue-plotly": "^1.0.0",
         "vue-snotify": "^3.2.1",
         "vue2-leaflet": "^2.2.1",
-        "vuedraggable": "^2.23.0",
         "vuex": "^3.1.1"
     }
 }
