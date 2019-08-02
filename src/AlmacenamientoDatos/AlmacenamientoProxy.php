@@ -112,29 +112,37 @@ class AlmacenamientoProxy implements DashboardInterface, OrigenDatosInterface
         $significado = $this->em->getRepository(SignificadoCampo::class)
             ->findOneBy(['codigo' => $dimension]);
         $catalogo = $significado->getCatalogo();
-        if ($catalogo != '') {
-            //Las coincidencias a buscar
-            $buscar = [];
-            foreach ($datos as $d ){ $buscar[] = $d['category']; }
-            $sql_ctl = "SELECT id, descripcion FROM $catalogo WHERE id IN (".implode(',', $buscar).")";
-            try {
-                $datCatalogo = $this->em->getConnection()->executeQuery($sql_ctl)->fetchAll();
-                $datosSust = [];
-                foreach ($datCatalogo as $dc ){ $datosSust[$dc['id']] = $dc['descripcion'] ;}
+        
+        if ($catalogo != '' ) {
+            
+            if ( $verSql ) {
+                $datos = preg_replace('/\b' . $dimension . '\b/', 'B.descripcion', $datos);
+                $datos = preg_replace('/\bA\b/', 'A INNER JOIN '. $catalogo . ' B ON (A. '.$dimension.' = B.id) ', $datos);
+            } else {
+                //Las coincidencias a buscar
+                $buscar = [];            
+                foreach ($datos as $d ){ $buscar[] = $d['category']; }
+                
+                $sql_ctl = "SELECT id, descripcion FROM $catalogo WHERE id IN (".implode(',', $buscar).")";
+                try {
+                    $datCatalogo = $this->em->getConnection()->executeQuery($sql_ctl)->fetchAll();
+                    $datosSust = [];                
+                    foreach ($datCatalogo as $dc ){ $datosSust[$dc['id']] = $dc['descripcion'] ;}
+                    
+                    //Hacer la sustitución, en lugar de mandar los ids de los catálogos, mandar la descripción
+                    $newDatos = [];
+                    foreach ($datos as $d ){
+                        if ( array_key_exists($d['category'], $datosSust) ) {
+                            $d['id'] = $d['category'];
+                            $d['category'] = $datosSust[$d['category']];
 
-                //Hacer la sustitución, en lugar de mandar los ids de los catálogos, mandar la descripción
-                $newDatos = [];
-                foreach ($datos as $d ){
-                    if ( array_key_exists($d['category'], $datosSust) ) {
-                        $d['id'] = $d['category'];
-                        $d['category'] = $datosSust[$d['category']];
-
+                        }
+                        $newDatos[] = $d;
                     }
-                    $newDatos[] = $d;
-                }
-                $datos = $newDatos;
-            } catch ( \Exception $e ) {
+                    $datos = $newDatos;
+                } catch ( \Exception $e ) {
 
+                }
             }
         }
 
