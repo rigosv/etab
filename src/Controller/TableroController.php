@@ -571,6 +571,8 @@ class TableroController extends AbstractController {
        
         // iniciar el manager de doctrine
         $em = $this->getDoctrine()->getManager();
+
+        $dimension = ( $dimension == 'null') ? null : $dimension;
         try{
             $datos = (object) $request->request->all(); 
 
@@ -1155,6 +1157,7 @@ class TableroController extends AbstractController {
         $sala = $req->sala;
         $indicadores = $req->indicadores;
         $em->getConnection()->beginTransaction();
+        
         try {
             if ($sala["id"] != '') {
                 $grupoIndicadores = $em->find(GrupoIndicadores::class, $sala["id"]);
@@ -1172,7 +1175,12 @@ class TableroController extends AbstractController {
                 if (!empty($grafico->id)) {
                     $indG = new GrupoIndicadoresIndicador();
                     $ind = $em->find(FichaTecnica::class, $grafico->id);
-                    $indG->setDimension($grafico->dimensiones[$grafico->dimension]);
+                    if ( array_key_exists($grafico->dimension, $grafico->dimensiones) ) {
+                        $indG->setDimension($grafico->dimensiones[$grafico->dimension]);
+                    } else {
+                        $indG->setDimension($grafico->dimension);
+                    }
+                    
                     $indG->setFiltro(json_encode($grafico->filtros));
                     
                     if(property_exists($grafico, 'filtro_desde'))
@@ -1185,7 +1193,7 @@ class TableroController extends AbstractController {
                     $indG->setIndicador($ind);
                     $indG->setPosicion($grafico->posicion);
 
-                    if (property_exists($grafico, 'orden')) {
+                    if (property_exists($grafico, 'orden') or property_exists($grafico, 'configuracion')) {
                         $indG->setOrden(json_encode($grafico->configuracion));
                     }
                     $indG->setTipoGrafico($grafico->configuracion["tipo_grafico"]);
