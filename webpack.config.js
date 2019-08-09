@@ -30,14 +30,8 @@ Encore
     // uncomment for legacy applications that require $/jQuery as a global variable
     //.autoProvidejQuery()
 
-    .addLoader({
-        test: /\.vue$/,
-        loader: 'vue-loader'
-    })
-    .addPlugin(new VueLoaderPlugin())
-    .addAliases({
-        vue: 'vue/dist/vue.js'
-    });
+    .enableVueLoader()
+    ;
 
 
 module.exports = Encore.getWebpackConfig();
