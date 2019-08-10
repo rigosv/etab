@@ -183,9 +183,12 @@ class AlmacenamientoProxy implements DashboardInterface, OrigenDatosInterface
         //Sustituir los datos de los catálogos
         if ( count( $datosSust ) > 0 ) {
             $datosNew = [];
+            
             foreach ( $datos as $fila ) {
                 foreach( $datosSust as $campo => $valor ){
-                    $fila[ $campo ] = $datosSust[$campo][$fila[$campo]];
+                    if (array_key_exists($fila[$campo], $datosSust[$campo]) and array_key_exists($campo, $datosSust)) {
+                        $fila[ $campo ] = $datosSust[$campo][$fila[$campo]];
+                    }
                 }
                 $datosNew[] = $fila;
             }
