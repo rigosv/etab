@@ -917,6 +917,7 @@ class TableroController extends AbstractController {
                     "concepto" => $data->getConcepto(),
                     "unidad_medida" => $data->getUnidadMedida(),
                     "formula" => $data->getFormula(),
+                    "cantidad_decimales" => $data->getCantidadDecimales(),
                     "observacion" => $data->getObservacion(),                    
                     "ruta" => $data->getRuta(),
                     "dimensiones" => $data->getCamposIndicador(),
