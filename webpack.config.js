@@ -1,5 +1,4 @@
 var Encore = require('@symfony/webpack-encore');
-const { VueLoaderPlugin } = require('vue-loader');
 
 Encore
     // the project directory where compiled assets will be stored
