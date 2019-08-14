@@ -529,7 +529,7 @@ class TableroController extends AbstractController {
     }
 
     /**
-     * @Route("/datosIndicador/{id}/{dimension}", name="datosIndicador_index", methods={"POST"})
+     * @Route("/datosIndicador/{id}/{dimension}", name="datosIndicador_index", methods={"POST", "GET"})
      * 
      * @SWG\Post(
      *      tags={"Tablero"},
@@ -575,6 +575,21 @@ class TableroController extends AbstractController {
         $dimension = ( $dimension == 'null') ? null : $dimension;
         try{
             $datos = (object) $request->request->all(); 
+            
+            //Verificar si la petición a sido realizada con GET
+            if (! property_exists($datos,'filtros') ){
+                $filtros_ = $request->get('filtros');
+                $datos->filtros = [];
+                foreach ($filtros_ as $f ){
+                    $datos->filtros[] = json_decode($f);
+                }
+
+                $datos->ver_sql = ( $request->get('ver_sql') == null or $request->get('ver_sql') == 'false' ) ? false : $request->get('ver_sql');
+                $datos->tendencia = ( $request->get('tendencia') == null or $request->get('tendencia') == 'false') ? false : true;
+                if ( $request->get('otros_filtros') != null ) {
+                    $datos->otros_filtros = $request->get('otros_filtros');
+                }
+            }
 
             if ($datos->filtros == null or $datos->filtros == '')
                 $filtros = null;
@@ -582,11 +597,12 @@ class TableroController extends AbstractController {
                 $filtros_dimensiones = [];
                 $filtros_valores = [];
                 $filtros = [];
+                
                 foreach ($datos->filtros as $f) 
                 {  
                     $f = (object) $f;
                     $filtros[$f->codigo] = $f->valor;
-                } 
+                }                 
             }
             $otros_filtros = '';
             if(property_exists($datos,'otros_filtros')){
@@ -596,9 +612,8 @@ class TableroController extends AbstractController {
                 $datos->tendencia = false;
             }
             $almacenamiento->crearIndicador($fichaTec, $dimension, $filtros);
-            $data = $almacenamiento->calcularIndicador($fichaTec, $dimension, $filtros, $datos->ver_sql, $otros_filtros, $datos->tendencia);
-                        
-            if($data){                 
+            $data = $almacenamiento->calcularIndicador($fichaTec, $dimension, $filtros, $datos->ver_sql, $otros_filtros, $datos->tendencia);                        
+            if($data){
                 if($datos->tendencia){
                     $info = []; $valores = [];
                     foreach ($data as $key => $value) {
