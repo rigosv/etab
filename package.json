@@ -56,6 +56,7 @@
         "html2pdf.js": "^0.9.1",
         "jspdf": "^1.5.3",
         "leaflet": "^1.5.1",
+        "numeral": "^2.0.6",
         "sql-formatter": "^2.3.3",
         "static-eval": "^2.0.2",
         "vue": "^2.6.10",
