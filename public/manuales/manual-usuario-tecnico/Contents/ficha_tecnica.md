@@ -19,8 +19,8 @@ Describe los campos que describen al indicador:
  
 - **Código:** Valor que identifique al indicador
 - **Nombre:** Nombre corto que describa el indicador
-- **Interpretación:** La forma en que se deben interpretar los datos obtenidos o aclaración sobre los datos registrados
-- **Concepto:** Concepto u objetivo del indicador
+- **Interpretación:** Definir qué mostrará el resultado obtenido y si el indicador se expresa en términos positivos o negativos, si es un número entero, decimal, porcentaje, entre otros.
+- **Concepto:** Establecer para qué se utilizará el indicador, sustentar la importancia de medir el indicador.
 - **Unidad de medida:**: Unidad de medida que regresará el resultado de aplicar la fórmula de cálculo
 - **Ruta**: Si los datos son obtenidos de algún sistema de información, se colocan los pasos a seguir para llegar a ellos.
 
