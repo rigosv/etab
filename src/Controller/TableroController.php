@@ -577,8 +577,8 @@ class TableroController extends AbstractController {
             $datos = (object) $request->request->all(); 
             
             //Verificar si la petición a sido realizada con GET
-            if (! property_exists($datos,'filtros') ){
-                $filtros_ = $request->get('filtros');
+            if ( $request->isMethod('get') ){
+                $filtros_ = ( $request->get('filtros') == null ) ? [] : $request->get('filtros');
                 $datos->filtros = [];
                 foreach ($filtros_ as $f ){
                     $datos->filtros[] = json_decode($f);
