@@ -187,6 +187,7 @@ class AlmacenamientoProxy implements DashboardInterface, OrigenDatosInterface
             foreach ( $datos as $fila ) {
                 foreach( $datosSust as $campo => $valor ){
                     if (array_key_exists($fila[$campo], $datosSust[$campo]) and array_key_exists($campo, $datosSust)) {
+                        $fila[ $campo.'_' ] = $fila[$campo];
                         $fila[ $campo ] = $datosSust[$campo][$fila[$campo]];
                     }
                 }
