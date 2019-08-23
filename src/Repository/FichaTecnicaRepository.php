@@ -187,7 +187,7 @@ class FichaTecnicaRepository extends ServiceEntityRepository {
                 $sql .= "SELECT  $campos, $oper(calculo::numeric) AS  $tabla $campos_calculados
                             INTO  TEMP $tabla" . "_var
                             FROM $tabla
-                            WHERE  (calculo::numeric) >= 0
+                            
                             GROUP BY $campos $campos_calculados_nombre                
                                 ;";
             } else {
@@ -195,7 +195,7 @@ class FichaTecnicaRepository extends ServiceEntityRepository {
                 INTO  TEMP $tabla" . "_var
                 FROM $tabla
                 GROUP BY $campos $campos_calculados_nombre
-                    HAVING  $oper(calculo::numeric) >= 0
+                    
                     ;";
             }
             
@@ -336,11 +336,11 @@ class FichaTecnicaRepository extends ServiceEntityRepository {
             preg_match('/\{.{1,}\}/', $denominador[1], $variables_d);
             if (count($variables_d) > 0)
                 $var_d = strtolower(str_replace(array('{', '}'), array('(', ')'), array_shift($variables_d)));
-            $evitar_div_0 = 'AND ' . $var_d . ' > 0';
+            $evitar_div_0 = 'AND ' . $var_d . ' != 0';
         }
 
         // Formar la cadena con las variables para ponerlas en la consulta
-        $variables_query = '';
+        $variables_query = '';        
         foreach ($variables as $var) {
             $oper_ = explode($var[0], $formula);
             $tieneOperadores = preg_match('/([A-Za-z]+)\($/', $oper_[0], $coincidencias, PREG_OFFSET_CAPTURE);
@@ -442,15 +442,15 @@ class FichaTecnicaRepository extends ServiceEntityRepository {
             $orden_tendencia = ", fecha";
         }
         $decimales = ( $fichaTecnica->getCantidadDecimales() == null ) ? 2 : $fichaTecnica->getCantidadDecimales();
-        $sql = "SELECT $dimension AS category, $variables_query, round(($formula)::numeric,$decimales) AS measure $fecha_tendencia        
-            FROM $tabla_indicador A" ;
-        $sql .= ' WHERE 1=1 ' . $evitar_div_0 . ' ' . $filtros .' '. $otros_filtros;
+            $sql = "SELECT $dimension AS category, $variables_query, round(($formula)::numeric,$decimales) AS measure $fecha_tendencia        
+                FROM $tabla_indicador A" ;
+            $sql .= ' WHERE 1=1 ' . $evitar_div_0 . ' ' . $filtros .' '. $otros_filtros;
 
-                
-        $sql .= " GROUP BY " . $dimension . $grupo_tendencia;
-        $sql .=  " HAVING (($formula)::numeric) >= 0 ";
-        $sql .= " ORDER BY $dimension $orden_tendencia";
-
+                    
+            $sql .= " GROUP BY " . $dimension . $grupo_tendencia;
+            //$sql .=  " HAVING (($formula)::numeric) >= 0 ";
+            $sql .= " ORDER BY $dimension $orden_tendencia";
+        
         try {
             if ($ver_sql == true)
                 return $sql;
