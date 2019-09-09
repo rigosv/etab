@@ -1,5 +1,4 @@
 var Encore = require('@symfony/webpack-encore');
-const { VueLoaderPlugin } = require('vue-loader');
 
 Encore
     // the project directory where compiled assets will be stored
@@ -30,14 +29,8 @@ Encore
     // uncomment for legacy applications that require $/jQuery as a global variable
     //.autoProvidejQuery()
 
-    .addLoader({
-        test: /\.vue$/,
-        loader: 'vue-loader'
-    })
-    .addPlugin(new VueLoaderPlugin())
-    .addAliases({
-        vue: 'vue/dist/vue.js'
-    });
+    .enableVueLoader()
+    ;
 
 
 module.exports = Encore.getWebpackConfig();

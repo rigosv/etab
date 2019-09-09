@@ -94,7 +94,7 @@ class GrupoIndicadoresIndicador
     /**
      * @var string $orden
      *
-     * @ORM\Column(name="orden", type="string", length=100, nullable=true)
+     * @ORM\Column(name="orden", type="text", nullable=true)
      */
     private $orden;
 

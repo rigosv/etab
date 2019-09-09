@@ -722,7 +722,7 @@ CREATE TABLE public.grupo_indicadores_indicador (
     posicion integer,
     tipo_grafico character varying(50) NOT NULL,
     vista character varying(20) DEFAULT NULL::character varying,
-    orden character varying(100) DEFAULT NULL::character varying
+    orden text DEFAULT NULL::character varying
 );
 
 
