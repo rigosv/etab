@@ -373,7 +373,6 @@ class TableroController extends AbstractController {
             foreach ($grp->getSalas() as $sala) {
                 foreach ($sala->getIndicadores() as $indicador) {
                     //foreach ($usuario->getIndicadores() as $indicador) {
-                    //array_push($indicadores_permitidos, $indicador);
                     array_push($indicadores_permitidos, $indicador->getIndicador());
                     //}
                 }
