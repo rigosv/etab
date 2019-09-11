@@ -373,7 +373,8 @@ class TableroController extends AbstractController {
             foreach ($grp->getSalas() as $sala) {
                 foreach ($sala->getIndicadores() as $indicador) {
                     //foreach ($usuario->getIndicadores() as $indicador) {
-                    array_push($indicadores_permitidos, $indicador);
+                    //array_push($indicadores_permitidos, $indicador);
+                    array_push($indicadores_permitidos, $indicador->getIndicador());
                     //}
                 }
             }
@@ -414,27 +415,26 @@ class TableroController extends AbstractController {
             $usuario = $this->getUser();
             $datos = (object) $request->query->all();  
             $where = '';
-            if ($usuario->hasRole('ROLE_SUPER_ADMIN')) {
-                $salas_permitidos = [];
-
-                foreach ($usuario->getGruposIndicadores() as $sala) {
-                    array_push($salas_permitidos, $sala->getGrupoIndicadores()->getId());
-                }
+            $salas_permitidos = [];
                 
-                //Salas asignadas al grupo al que pertenece el usuario
-                $grupos = [];
-                foreach ($usuario->getGroups() as $grp) {
-                    foreach ($grp->getSalas() as $sala) {
-                        array_push($salas_permitidos, $sala->getId());
-                        array_push($grupos, $sala->getId());
-                    }
-                }
+            foreach ($usuario->getGruposIndicadores() as $sala) {
+                array_push($salas_permitidos, $sala->getGrupoIndicadores()->getId());
+            }
 
-                if(count($salas_permitidos) > 0){
-                    $salas_permitidos = implode(",", $salas_permitidos);
-                    $where = "and id in($salas_permitidos)";
+            //Salas asignadas al grupo al que pertenece el usuario
+            $grupos = [];
+            foreach ($usuario->getGroups() as $grp) {
+                foreach ($grp->getSalas() as $sala) {
+                    array_push($salas_permitidos, $sala->getId());
+                    array_push($grupos, $sala->getId());
                 }
             }
+            array_unique($salas_permitidos);            
+
+            if (count($salas_permitidos) > 0) {
+                $salas_permitidos = implode(",", $salas_permitidos);
+                $where = "and id in($salas_permitidos)";
+            }            
 
             // devolver todos los datos si lo requiere   
             $conn = $em->getConnection();

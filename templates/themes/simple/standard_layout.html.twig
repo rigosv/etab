@@ -151,16 +151,25 @@ file that was distributed with this source code.
                     {% endspaceless %}
                 {% endblock %}
                 {% block sonata_nav %}
-                    <nav class="navbar navbar-static-top menu-principal" role="navigation" style="margin-left: 138px;">
-                        <div class="navbar-left">
-                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
-                                <i class="fa fa-bars"></i>
-                            </button>
-                            <div class="navbar-collapse pull-left collapse in" id="navbar-collapse">
+                
+                    <nav class="navbar2 navbar-default menu-principal" >
+                        <div class="container-fluid">
+
+                            <div class="navbar-header" >
+                                <button type="button" class="navbar-toggle " data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false" >
+                                    <span class="sr-only">Toggle navigation</span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                </button>
+                                
+                            </div>
+                            
+                            <!-- Collect the nav links, forms, and other content for toggling -->
+                            <div class="navbar-collapse pull-left  in" id="navbar-collapse">
                                 {{ knp_menu_render('sonata_admin_sidebar', {template: get_global_template('knp_menu_template')}) }}
                             </div>
                         </div>
-
                         {% block sonata_top_nav_menu %}
                             {% if app.user  %}
                                 <div class="navbar-custom-menu">
