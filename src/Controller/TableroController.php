@@ -571,7 +571,7 @@ class TableroController extends AbstractController {
         // iniciar el manager de doctrine
         $em = $this->getDoctrine()->getManager();
 
-        $dimension = ( $dimension == 'null') ? null : $dimension;
+        $dimension = ( $dimension == 'null') ? null : trim($dimension);
         try{
             $datos = (object) $request->request->all(); 
             
