@@ -169,8 +169,7 @@ file that was distributed with this source code.
                             <div class="navbar-collapse pull-left  in" id="navbar-collapse">
                                 {{ knp_menu_render('sonata_admin_sidebar', {template: get_global_template('knp_menu_template')}) }}
                             </div>
-                        </div>
-                        {% block sonata_top_nav_menu %}
+
                             {% if app.user  %}
                                 <div class="navbar-custom-menu">
                                     <ul class="nav navbar-nav">
@@ -187,7 +186,7 @@ file that was distributed with this source code.
                                     </ul>
                                 </div>
                             {% endif %}
-                        {% endblock %}
+                        </div>
                     </nav>
                 {% endblock sonata_nav %}
             </header>

@@ -877,9 +877,27 @@ class MatrizSeguimientoRESTController extends Controller {
                         'etab' => $etab
                     )
                 );
-                if($seguimiento)
-                    $seguimiento = $em->getRepository(MatrizSeguimiento::class)->find($seguimiento[0]->getId());
                 
+                if ($seguimiento)
+                    $seguimiento = $em->getRepository(MatrizSeguimiento::class)->find($seguimiento[0]->getId());
+                else {
+                    $seguimiento = new MatrizSeguimiento();
+                    $seguimiento->setAnio($anio);
+                    $seguimiento->setEtab($etab);
+                    $seguimiento->setIndicador($ve->id);                    
+
+                    $desempeno = $em->getRepository(MatrizIndicadoresDesempeno::class)->find($value->id);
+
+                    $seguimiento->setDesempeno($desempeno);                    
+
+                    $em = $this->getDoctrine()->getEntityManager();
+                    $em->persist($seguimiento);
+                    $em->flush();
+
+                    $seguimiento = $em->getRepository(MatrizSeguimiento::class)->find($seguimiento->getId());
+                }
+
+                                
                 foreach ($ve as $k1 => $v1) {
 
                     if($k1 != "meta" && $k1 != "id" && $k1 != "nombre" && $k1 != '$$hashKey'){
@@ -902,6 +920,8 @@ class MatrizSeguimientoRESTController extends Controller {
                             }  
 
                             $matrizDato->setReal($v1["real"]);
+                            $matrizDato->setMes($k1);
+                            $matrizDato->setMatriz($seguimiento);                      
 
                             $em = $this->getDoctrine()->getEntityManager();
                             $em->persist($matrizDato);

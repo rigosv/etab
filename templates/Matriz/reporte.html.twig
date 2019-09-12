@@ -230,20 +230,20 @@
                                                         <strong class="form-control" style="cursor:default" ng-click="acumular[($index + '-' + inde.id)] = !acumular[($index + '-' + inde.id)]; acumularAbsoluto(inde, $index, '-')"> 
                                                             <i class="fa <% acumular[($index + '-' + inde.id)] ? 'fa-check-square' : 'fa-square-o' %>" style="font-size: 24px;color: dodgerblue;"></i> &nbsp;                                                                                                                                        
                                                         </strong>
-                                                    <td class="nombre_matriz" width="1%"><% inde.meta %></td>
+                                                    <td class="nombre_matriz" width="1%"><% inde.meta ? inde.meta : '==' %></td>
                                                     <td ng-repeat="k in meses" width="110px" ng-init="valorAbsoluto(inde, ($index + '-' + inde.id), k)" style="background: <% color[($index + '-' + inde.id)][k] %> !important;">
                                                         <table width="100%" class="list-group" ng-if="inde[k].planificado >= 0">
                                                             <tbody style="border:none">
                                                                 
                                                                 <tr style="background: darkgray;" ng-if="verR && inde[k].real >= 0" class="list-group-item matriz-planeacion-texto" align="center"><th><% inde[k].real | number : 2 %></th></tr>
                                                                 <tr style="background: cornflowerblue;" ng-if="verP && inde[k].planificado >= 0" class="list-group-item matriz-planeacion-texto" align="center">
-                                                                    <th><% inde[k].planificado | number : 2 %> </th>
+                                                                    <th><% inde[k].planificado ? (inde[k].planificado | number : 2) : '==' %> </th>
                                                                 </tr>                                       
                                                                 <tr ng-show="statusx[($index + '-' + inde.id)][k] >= 0" class="list-group-item" align="center">
                                                                     <th>
                                                                         <strong ng-if="statusx[($index + '-' + inde.id)][k] >= 0" style="font-weight:900; text-shadow: 1px 1px 1px #FFF;" >
                                                                             <div align="center">
-                                                                                <% statusx[($index + '-' + inde.id)][k] | number : 0 %> %
+                                                                                <% statusx[($index + '-' + inde.id)][k] | number : 0 %> <% inde[k].simbolo %>
                                                                             </div>                                                                
                                                                         </strong>
                                                                     </th>
