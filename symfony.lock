@@ -290,6 +290,18 @@
             "ref": "fb7e19da7f013d0d422fa9bce16f5c510e27609b"
         }
     },
+    "sensiolabs/security-checker": {
+        "version": "4.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.0",
+            "ref": "160c9b600564faa1224e8f387d49ef13ceb8b793"
+        },
+        "files": [
+            "config/packages/security_checker.yaml"
+        ]
+    },
     "snc/redis-bundle": {
         "version": "2.0",
         "recipe": {
@@ -434,6 +446,9 @@
             "ref": "87c585d24de9f43bca80ebcfd5cf5cb39445d95f"
         }
     },
+    "symfony/http-client": {
+        "version": "v4.3.4"
+    },
     "symfony/http-foundation": {
         "version": "v4.1.1"
     },
@@ -463,6 +478,9 @@
             "version": "4.1",
             "ref": "f11dfa18618a8a5dd853ea3a302db2e0557e031c"
         }
+    },
+    "symfony/mime": {
+        "version": "v4.3.4"
     },
     "symfony/monolog-bridge": {
         "version": "v4.1.1"
@@ -505,6 +523,9 @@
     },
     "symfony/polyfill-php72": {
         "version": "v1.8.0"
+    },
+    "symfony/polyfill-php73": {
+        "version": "v1.12.0"
     },
     "symfony/process": {
         "version": "v4.1.1"

@@ -21,6 +21,7 @@
         "onurb/excel-bundle": "^1.0",
         "predis/predis": "v1.1.1",
         "sensio/framework-extra-bundle": "^5.2",
+        "sensiolabs/security-checker": "^6.0",
         "snc/redis-bundle": "v2.1.5",
         "sonata-project/doctrine-orm-admin-bundle": "^3.6",
         "sonata-project/user-bundle": "^4.2",
@@ -81,7 +82,8 @@
     "scripts": {
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
-            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+            "assets:install %PUBLIC_DIR%": "symfony-cmd",
+            "security-checker security:check": "script"
         },
         "post-install-cmd": [
             "@auto-scripts"
