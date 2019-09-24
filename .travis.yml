@@ -1,6 +1,10 @@
 language: php
 sudo: false
 
+services:
+  - redis-server
+  - postgresql
+
 cache:
   #yarn: true
   directories:
@@ -36,7 +40,9 @@ matrix:
       env: SYMFONY="5.0.*"
            ACTION="update"
 
-before_install:
+before_install:  
+  - psql -c "CREATE USER user1 WITH PASSWORD 'password1';" -U postgres
+  - psql -c 'CREATE DATABASE dbname OWNER user1;' -U postgres
   - '[[ "$TRAVIS_PHP_VERSION" == "7.4snapshot" ]] || phpenv config-rm xdebug.ini'
   - composer self-update
   # Set memory to max (memory fail)
@@ -55,7 +61,7 @@ install:
 script:
   #- ./bin/phpunit
   # this checks that the source code follows the Symfony Code Syntax rules
-  - '[[ "$TRAVIS_PHP_VERSION" == "7.4snapshot" ]] || ./vendor/bin/php-cs-fixer fix --diff --dry-run -v'
+  #- '[[ "$TRAVIS_PHP_VERSION" == "7.4snapshot" ]] || ./vendor/bin/php-cs-fixer fix --diff --dry-run -v'
   # 
   - cp .env .env.local
   # this checks that the YAML config files contain no syntax errors
