@@ -23,7 +23,7 @@ class ComentariosSala
     
     /**
      *
-     * @ORM\ManyToOne(targetEntity="GrupoIndicadores", inversedBy="usuarios")
+     * @ORM\ManyToOne(targetEntity="GrupoIndicadores")
      * @ORM\JoinColumn(name="grupo_indicadores_id", referencedColumnName="id")
      */
     private $sala;

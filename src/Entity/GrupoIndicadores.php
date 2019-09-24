@@ -47,7 +47,7 @@ class GrupoIndicadores
      * @ORM\OneToMany(targetEntity="SalaAcciones", mappedBy="sala" , cascade={"all"}, orphanRemoval=true)
      **/
     private $acciones;
-
+    
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      * @ORM\OneToMany(targetEntity="GrupoIndicadoresIndicador", mappedBy="grupo" , cascade={"all"}, orphanRemoval=true)
