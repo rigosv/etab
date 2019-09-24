@@ -220,6 +220,7 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
         });
     }
     $scope.color = [];
+    $scope.simbolo = [];
     $scope.statusx = [];
     $scope.acumular = [];
 
@@ -239,17 +240,20 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
             if (angular.isUndefined($scope.statusx[id])) {
                 $scope.statusx[id] = [];
                 $scope.color[id] = [];
+                $scope.simbolo[id] = [];
                 $scope.acumular[id] = false;
             }
             if (angular.isUndefined($scope.statusx[id][k])) {
                 $scope.statusx[id][k] = '';
                 $scope.color[id][k] = "white";
+                $scope.simbolo[id][k] = '';
             }
-            if (inde[k].real != null && inde[k].planificado != null && inde[k].real != '' && inde[k].planificado != '') {
-                if (inde[k].planificado == 0){
+            if (inde[k].real != null && inde[k].real != '') {                 
+                if (inde[k].planificado == 0 || inde[k].planificado == null || inde[k].planificado == ''){                    
                     $scope.statusx[id][k] = inde[k].real;
                 }else{
-                    $scope.statusx[id][k] = inde[k].real / inde[k].planificado * 100;                
+                    $scope.statusx[id][k] = inde[k].real / inde[k].planificado * 100;  
+                    $scope.simbolo[id][k] = '%';              
                 }
                 
             } else {
@@ -257,14 +261,17 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
             }
             if (isNaN($scope.statusx[id][k]))
                 $scope.statusx[id][k] = -1;
-            
-            color = $scope.statusx[id][k] > 100 ? "#0a3b0a" : "white";
-            angular.forEach(inde.alertas, function (v1, k1) {
-                if ($scope.statusx[id][k] >= v1.limite_inferior && $scope.statusx[id][k] <= v1.limite_superior ) {
-                  color = v1.color.codigo;
-                }
-            });
-            $scope.color[id][k] = color;            
+            var color = color = $scope.statusx[id][k] > 100 ? "#0a3b0a" : "white";
+            if (inde[k].planificado == null || inde[k].planificado == '') {                
+                color = "gainsboro";
+            } else {                
+                angular.forEach(inde.alertas, function (v1, k1) {
+                    if ($scope.statusx[id][k] >= v1.limite_inferior && $scope.statusx[id][k] <= v1.limite_superior ) {
+                    color = v1.color.codigo;
+                    }
+                });
+            }
+            $scope.color[id][k] = color;                    
         }
     };
     $scope.temporal = [];
@@ -306,14 +313,20 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
                 var k = $scope.meses[c];
                 var v = m[k];                
                 if (!angular.isUndefined(v)) {
-                    if (!isNaN(v.real) && v != null && v != '' && v.planificado != null && v.planificado != '') {
-                        temporalK[index + id + ind.id][k] = v.real;
-                        acumulado = acumulado + (v.real * 1);
-                        if(v.real != null){
-                            v.real = acumulado;
-                            ind[k].real = acumulado;
-                        }
-                    }             
+                    if (isNaN(v.real) || v.real == null || v.real == '' ) {
+                        v.real = 0;
+                    }
+                    if (v.planificado == null || v.planificado == '') {
+                        v.planificado = 0;
+                    }
+                    
+                    temporalK[index + id + ind.id][k] = v.real;
+                    acumulado = acumulado + (v.real * 1);
+                    if(v.real != null){
+                        v.real = acumulado;
+                        ind[k].real = acumulado;
+                    }
+                                 
                     $scope.valorAbsoluto(ind, (c + id + ind.id), k);
                 }
             });

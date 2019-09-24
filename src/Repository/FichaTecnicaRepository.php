@@ -468,6 +468,7 @@ class FichaTecnicaRepository extends ServiceEntityRepository {
         $variables = $fichaTecnica->getVariables();
         $origen_campos = array();
         $origenDato = array();
+        $campos_comunes = [];
         foreach ($variables as $k => $variable) {
             //Obtener la información de los campos de cada origen
             $origenDato[$k] = $variable->getOrigenDatos();

@@ -339,9 +339,9 @@ App.controller("TableroCtrl", function(
 
         Crud.crear(
           "../api/v1/tablero/datosIndicador/" +
-            $scope.indicadores[index].id +
+          $scope.indicadores[index].id +
             "/" +
-            element.dimension,
+          element.dimension.replace(/\r\n/g, "").replace(/ /g, ""),
           json,
           "application/json",
           function(data) {
@@ -532,9 +532,9 @@ App.controller("TableroCtrl", function(
       var json = { filtros: "", ver_sql: false, tendencia: false };
       Crud.crear(
         "../api/v1/tablero/datosIndicador/" +
-          item.id +
+        item.id +
           "/" +
-          $scope.indicadores[index].dimensiones[0],
+        $scope.indicadores[index].dimensiones[0].replace(/\r\n/g, "").replace(/ /g, ""),
         json,
         "application/json",
         function(data) {
@@ -594,9 +594,9 @@ App.controller("TableroCtrl", function(
       var json = { filtros: $scope.indicadores[index].filtros, ver_sql: false, tendencia: $scope.indicadores[index].tendencia};
       Crud.crear(
         "../api/v1/tablero/datosIndicador/" +
-          $scope.indicadores[index].id +
+        $scope.indicadores[index].id +
           "/" +
-          $scope.indicadores[index].dimensiones[dimension].trim(),
+        $scope.indicadores[index].dimensiones[dimension].replace(/\r\n/g, "").replace(/ /g, ""),
         json,
         "application/json",
         function(data) {
@@ -655,9 +655,9 @@ App.controller("TableroCtrl", function(
       };
       Crud.crear(
         "../api/v1/tablero/datosIndicador/" +
-          $scope.indicadores[index].id +
+        $scope.indicadores[index].id +
           "/" +
-          $scope.indicadores[index].dimensiones[dimension].trim(),
+        $scope.indicadores[index].dimensiones[dimension].replace(/\r\n/g, "").replace(/ /g, ""),
         json,
         "application/json",
         function(data) {
@@ -1265,9 +1265,9 @@ App.controller("TableroCtrl", function(
     var dimension = $scope.indicadores[index].dimension;
     Crud.crear(
       "../api/v1/tablero/datosIndicador/" +
-        $scope.indicadores[index].id +
+      $scope.indicadores[index].id +
         "/" +
-        $scope.indicadores[index].dimensiones[dimension].trim(),
+      $scope.indicadores[index].dimensiones[dimension].replace(/\r\n/g, "").replace(/ /g, ""),
       json,
       "application/json",
       function(data) {
@@ -1627,7 +1627,7 @@ App.controller("TableroCtrl", function(
       setTimeout(function() {
         var width = $("#mapa" + index).width(), height = tamano;        
 
-        var dimension = $scope.indicadores[index].dimensiones[$scope.indicadores[index].dimension].trim();
+        var dimension = $scope.indicadores[index].dimensiones[$scope.indicadores[index].dimension].replace(/\r\n/g, "").replace(/ /g, "");
         var url_mapa = $scope.indicadores[index].informacion.dimensiones[dimension].mapa;
         if (url_mapa){
           var url = $scope.ruta + "/js/Mapas/" + url_mapa + ".json";

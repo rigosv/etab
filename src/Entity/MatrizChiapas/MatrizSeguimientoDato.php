@@ -40,7 +40,7 @@ class MatrizSeguimientoDato
     /**
      * @var string
      *
-     * @ORM\Column(name="planificado", type="string", length=20)
+     * @ORM\Column(name="planificado", type="string", length=20, nullable=true)
      */
     private $planificado;
 
