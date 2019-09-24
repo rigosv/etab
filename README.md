@@ -1,9 +1,8 @@
 Esta herramienta digital forma parte del catálogo de herramientas del **Banco Interamericano de Desarrollo*. Puedes conocer más sobre la iniciativa del BID en [code.iadb.org](code.iadb.org)*
-
   
 
 ## eTAB (Tablero de Control) 
-
+[![Build Status](https://travis-ci.org/rigosv/etab.svg?branch=master)](https://travis-ci.org/rigosv/etab)
   
 
 ### Descripción y contexto
