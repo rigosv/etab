@@ -57,9 +57,10 @@ class MatrizIndicadoresRelAlertas
     private $actualizado;
 
     /**
+     * @var $matriz_indicador
      *
-     * @ORM\ManyToOne(targetEntity="MatrizIndicadoresRel", inversedBy="matrizIndicadoresRelacion_alerta")
-     * @ORM\JoinColumn(name="matriz_indicador_relacion_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
+     * @ORM\ManyToOne(targetEntity="MatrizIndicadoresRel", inversedBy="alertas", cascade={"persist"})
+     * @ORM\JoinColumn(name="matriz_indicador_relacion_id", referencedColumnName="id", nullable=false)
      *
      */
     private $matriz_indicador;

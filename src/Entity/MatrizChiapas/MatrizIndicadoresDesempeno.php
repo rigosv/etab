@@ -38,7 +38,7 @@ class MatrizIndicadoresDesempeno
     /**
      * @var string
      *
-     * @ORM\Column(name="orden", type="string", length=4, nullable=true)
+     * @ORM\Column(name="orden", type="integer", length=4, nullable=true)
      */
     private $orden;
 
@@ -58,15 +58,13 @@ class MatrizIndicadoresDesempeno
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
-     * @ORM\OneToMany(targetEntity="MatrizIndicadoresRel", mappedBy="matrizIndicadoresRelacion", cascade={"all"}, orphanRemoval=true)
-     *
+     * @ORM\OneToMany(targetEntity="MatrizIndicadoresRel", mappedBy="desempeno")
      */
     private $matrizIndicadoresRelacion;
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
-     * @ORM\OneToMany(targetEntity="MatrizIndicadoresEtab", mappedBy="matrizIndicadoresEtab", cascade={"all"}, orphanRemoval=true)
-     *
+     * @ORM\OneToMany(targetEntity="MatrizIndicadoresEtab", mappedBy="desempeno")
      */
     private $matrizIndicadoresEtab;
 

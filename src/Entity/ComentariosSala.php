@@ -20,11 +20,13 @@ class ComentariosSala
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-    
+
     /**
+     * @var $sala
      *
-     * @ORM\ManyToOne(targetEntity="GrupoIndicadores")
-     * @ORM\JoinColumn(name="grupo_indicadores_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="GrupoIndicadores", inversedBy="sala", cascade={"persist"})
+     * @ORM\JoinColumn(name="id_origen_datos", referencedColumnName="id", nullable=false)
+     *
      */
     private $sala;
 

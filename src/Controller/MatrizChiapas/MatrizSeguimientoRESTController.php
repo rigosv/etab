@@ -1040,7 +1040,7 @@ class MatrizSeguimientoRESTController extends Controller {
                     WHERE  e.id_desempeno = '".$ind->getId()."'");
                     $statement->execute();
                     $etabes = $statement->fetchAll();
-                    foreach($etabes as $indrs){  
+                    foreach($etabes as $ci => $indrs){  
                         
                         $statement = $connection->prepare("SELECT * FROM matriz_indicadores_etab_alertas WHERE matriz_indicador_etab_id = '".$indrs["id"]."'");
                         $statement->execute();
@@ -1086,6 +1086,8 @@ class MatrizSeguimientoRESTController extends Controller {
                         $etab[$i] = array('id'=>$indrs["id_ficha_tecnica"], 'nombre'=>$indrs["nombre"],  'fuente' => ' eTAB', 'meta' => $meta);
                         $etab[$i]["alertas"] = $alertas;
                         $representa = 0; $id_siguiente = 0;
+                        $errores = '';
+                        $ttm = 0;
                         foreach ($meses as $km => $vm) {
                             $vm = (object) $vm;
                             if($vm->mes != 'fuente'){
@@ -1093,6 +1095,7 @@ class MatrizSeguimientoRESTController extends Controller {
                                 $etab[$i][$vm->mes]["real"] = $vm->real;
                                                        
                                 try{
+                                    $ttm++; 
                                     // obtener datos de los indicadores de etab    
                                     $representa++;                                
                                     if($representa == $otros_filtros["representa"]){                                        

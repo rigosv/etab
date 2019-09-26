@@ -50,12 +50,17 @@ class MatrizIndicadoresRel
     private $actualizado;
 
     /**
-     *
      * @ORM\ManyToOne(targetEntity="MatrizIndicadoresDesempeno", inversedBy="matrizIndicadoresRelacion")
-     * @ORM\JoinColumn(name="id_desempeno", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     *
+     * @ORM\JoinColumn(name="id_desempeno", referencedColumnName="id", nullable=false)
      */
     private $desempeno;
+
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="MatrizIndicadoresRelAlertas", mappedBy="matriz_indicador", cascade={"all"}, orphanRemoval=true)
+     *
+     */
+    private $alertas;
 
 	public function __construct()
     {

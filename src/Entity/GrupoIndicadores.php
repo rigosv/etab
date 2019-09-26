@@ -58,6 +58,13 @@ class GrupoIndicadores
      * @ORM\ManyToMany(targetEntity="Group", mappedBy="salas")
      **/
     private $grupos;
+
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="ComentariosSala", mappedBy="sala", cascade={"all"}, orphanRemoval=true)
+     *
+     */
+    private $sala;
     
 
     /**

@@ -44,19 +44,24 @@ class MatrizIndicadoresEtab
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\FichaTecnica", inversedBy="ficha")
+     * @ORM\ManyToOne(targetEntity="App\Entity\FichaTecnica")
      * @ORM\JoinColumn(name="id_ficha_tecnica", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      *
      */
     private $ficha;
 
     /**
-     *
-     * @ORM\ManyToOne(targetEntity="MatrizIndicadoresDesempeno", inversedBy="desempeno")
-     * @ORM\JoinColumn(name="id_desempeno", referencedColumnName="id", nullable=false, onDelete="CASCADE")
-     *
+     * @ORM\ManyToOne(targetEntity="MatrizIndicadoresDesempeno", inversedBy="matrizIndicadoresEtab")
+     * @ORM\JoinColumn(name="id_desempeno", referencedColumnName="id", nullable=false)
      */
     private $desempeno;
+
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\OneToMany(targetEntity="MatrizIndicadoresEtabAlertas", mappedBy="matriz_indicador", cascade={"all"}, orphanRemoval=true)
+     *
+     */
+    private $alertas;
 
 	public function __construct()
     {
