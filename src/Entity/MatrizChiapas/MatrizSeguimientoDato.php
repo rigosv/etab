@@ -40,21 +40,21 @@ class MatrizSeguimientoDato
     /**
      * @var string
      *
-     * @ORM\Column(name="planificado", type="string", length=20, nullable=true)
+     * @ORM\Column(name="planificado", type="string", length=200, nullable=true)
      */
     private $planificado;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="real", type="string", length=20, nullable=true)
+     * @ORM\Column(name="real", type="string", length=200, nullable=true)
      */
     private $real;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="real_denominador", type="string", length=20, nullable=true)
+     * @ORM\Column(name="real_denominador", type="string", length=200, nullable=true)
      */
     private $real_denominador;
 
