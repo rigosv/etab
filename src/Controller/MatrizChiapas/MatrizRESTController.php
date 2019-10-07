@@ -686,6 +686,9 @@ class MatrizRESTController extends AbstractController {
                             
                             if(property_exists($valor1, 'fuente'))
                                 $relacion->setFuente($valor1->fuente);
+                            
+                            if(property_exists($valor1, 'es_formula'))
+                                $relacion->setEsFormula($valor1->es_formula);
                                 
                             $em->persist($relacion); 
 

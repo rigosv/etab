@@ -56,6 +56,14 @@ App.controller("MatrizConfiguracionCtrl", function (
     $scope.anio = new Date(year, month, day);
   };
 
+  $scope.cambioEsFormula = function(id, relacion){    
+    if(relacion.es_formula){  
+      $("#" + id).parent().addClass("checked");
+    }else{
+      $("#" + id).parent().removeClass("checked");
+    }
+  }
+
   $scope.dato = {
     id: null,
     nombre: '',
@@ -937,6 +945,13 @@ App.controller("MatrizConfiguracionCtrl", function (
         if (data.status == 200) {
           $scope.intento3 = 0;
           $scope.dato = data.data;
+          setTimeout(function(){
+            angular.forEach(data.data.indicadores_desempeno, function(valor, num) {
+              angular.forEach(valor.indicador_relacion, function (relacion, index) {
+                $scope.cambioEsFormula('es_formula'+ num + index, relacion)
+              });
+            });
+          }, 200);
           $scope.imprimir_mensaje(data.messages, "success");
         }
         else {

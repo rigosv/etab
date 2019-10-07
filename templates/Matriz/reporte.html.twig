@@ -235,7 +235,14 @@
                                                         <table width="100%" class="list-group" ng-if="inde[k].planificado >= 0">
                                                             <tbody style="border:none">
                                                                 
-                                                                <tr style="background: darkgray;" ng-if="verR && inde[k].real >= 0" class="list-group-item matriz-planeacion-texto" align="center"><th><% inde[k].real | number : 2 %></th></tr>
+                                                                <tr style="background: darkgray;" ng-if="verR && inde[k].real >= 0" class="list-group-item matriz-planeacion-texto" align="center">
+                                                                    <th ng-if="!inde.es_formula">
+                                                                        <% inde[k].real | number : 2 %>
+                                                                    </th>
+                                                                    <th ng-if="inde.es_formula">
+                                                                        <% inde[k].real | number : 2 %> / <% inde[k].real_denominador | number : 2 %>
+                                                                    </th>
+                                                                </tr>
                                                                 <tr style="background: cornflowerblue;" ng-if="verP && inde[k].planificado >= 0" class="list-group-item matriz-planeacion-texto" align="center">
                                                                     <th><% inde[k].planificado ? (inde[k].planificado | number : 2) : '' %> </th>
                                                                 </tr>                                       

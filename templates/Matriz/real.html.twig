@@ -155,7 +155,8 @@
                                                         <td><% inde.fuente %></td>
                                                         <td ng-repeat="k in meses" width="100px">
                                                             <div align="center" class="matriz-planeacion matriz-planeacion-texto"><% inde[k].planificado %></div>
-                                                            <input type="number" min="0" step="0.01" class="form-control" string-to-number ng-model="inde[k].real">                                        
+                                                            <input type="number" min="0" step="0.01" class="form-control" string-to-number ng-model="inde[k].real">
+                                                            <input ng-if="inde.es_formula" type="number" min="0" step="0.01" class="form-control" string-to-number ng-model="inde[k].real_denominador">
                                                         </td>                                    
                                                     </tr>                        
                                                 </tfoot>

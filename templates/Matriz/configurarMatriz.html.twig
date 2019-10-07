@@ -193,7 +193,7 @@
                                                                                                 <label class="control-label" for="nombre">
                                                                                                     {{ 'orden' | trans }}
                                                                                                 </label>
-                                                                                                <input type="text" ng-model="desempeno.orden" required="required" maxlength="500" class=" form-control" style="width:90%">                                                                        
+                                                                                                <input type="number" ng-model="desempeno.orden" required="required" step="1" class=" form-control" style="width:90%">                                                                        
                                                                                             </div>
                                                                                         </div>
                                                                                     </div>
@@ -258,6 +258,7 @@
                                                                                                                             <tr>
                                                                                                                                 <th>{{ 'nombre' | trans }}</th>
                                                                                                                                 <th>{{ '_fuente_' | trans }}</th>
+                                                                                                                                <th>{{ '_es_formula_' | trans }}</th>
                                                                                                                                 <th>{{ 'alertas' | trans }}</th>
                                                                                                                                 <th></th>
                                                                                                                             </tr>
@@ -266,6 +267,15 @@
                                                                                                                             <tr ng-repeat="relacion in desempeno.indicador_relacion">
                                                                                                                                 <td><input type="text" ng-model="relacion.nombre" required="required" maxlength="500" class=" form-control" ></td>
                                                                                                                                 <td><input type="text" ng-model="relacion.fuente" required="required" maxlength="500" class=" form-control" ></td>
+                                                                                                                                <td>
+                                                                                                                                    <div class="checkbox">
+                                                                                                                                        <label>
+                                                                                                                                        <input type="checkbox" ng-model="relacion.es_formula" id="es_formula<%num%><%$index%>" ng-change="cambioEsFormula('es_formula'+num+$index,  relacion)" >
+                                                                                                                                        <% relacion.es_formula %>
+                                                                                                                                        </label>
+                                                                                                                                    </div>
+                                                                                                                                                                                                                                                         
+                                                                                                                                </td>
                                                                                                                                 <td><button type="button" class="btn btn-primary" ng-click="abrirAlerta(num, $index, 'indicador_relacion')"><i class="fa fa-exclamation-circle"></i> {{ 'alertas' | trans}}</button></td>
                                                                                                                                 <td><button type="button" class="btn btn-danger"  ng-click="confirmarFila('indicador_relacion', 'confirmarFila', $index, num)"><i class="fa fa-minus"></i> </button></td>
                                                                                                                             </tr>

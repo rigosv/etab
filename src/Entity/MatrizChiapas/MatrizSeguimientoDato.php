@@ -52,6 +52,13 @@ class MatrizSeguimientoDato
     private $real;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="real_denominador", type="string", length=20, nullable=true)
+     */
+    private $real_denominador;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="creado", type="datetime")
@@ -203,6 +210,30 @@ class MatrizSeguimientoDato
     public function getReal()
     {
         return $this->real;
+    }
+
+    /**
+     * Set real_denominador
+     *
+     * @param string $real_denominador
+     *
+     * @return MatrizSeguimientoDato
+     */
+    public function setRealDenominador($real_denominador)
+    {
+        $this->real_denominador = $real_denominador;
+
+        return $this;
+    }
+
+    /**
+     * Get real_denominador
+     *
+     * @return string
+     */
+    public function getRealDenominador()
+    {
+        return $this->real_denominador;
     }
 
     /**

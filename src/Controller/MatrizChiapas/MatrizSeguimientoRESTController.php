@@ -633,10 +633,10 @@ class MatrizSeguimientoRESTController extends Controller {
                     $indicators = array(); $i=0;
                     $relaciones = $em->getRepository(MatrizIndicadoresRel::class)->findBy(array('desempeno' => $ind->getId()), array('id' => 'ASC'));
                     foreach($relaciones as $indrs){                
-                        $indicators[$i] = array('id'=>$indrs->getId(), 'nombre'=>$indrs->getNombre(), 'fuente' => ' '.$indrs->getFuente());
+                        $indicators[$i] = array('id'=>$indrs->getId(), 'nombre'=>$indrs->getNombre(), 'es_formula' => $indrs->getEsFormula(), 'fuente' => ' '.$indrs->getFuente());
 
                         $connection = $em->getConnection();
-                        $statement = $connection->prepare("SELECT msd.mes, msd.planificado, msd.real FROM matriz_seguimiento ms 
+                        $statement = $connection->prepare("SELECT msd.mes, msd.planificado, msd.real, msd.real_denominador FROM matriz_seguimiento ms 
                             LEFT JOIN matriz_seguimiento_dato msd ON msd.id_matriz = ms.id   
                             WHERE ms.anio = '$anio' and ms.etab = false and ms.id_desempeno = '".$value->id_desempeno."' and indicador = '".$indrs->getId()."'");
                         $statement->execute();
@@ -647,6 +647,7 @@ class MatrizSeguimientoRESTController extends Controller {
                             if($vm->mes != 'fuente'){
                                 $indicators[$i][$vm->mes]["planificado"] = $vm->planificado;
                                 $indicators[$i][$vm->mes]["real"] = $vm->real;
+                                $indicators[$i][$vm->mes]["real_denominador"] = $vm->real_denominador;
                             }
                         }
                         $i++;
@@ -905,6 +906,9 @@ class MatrizSeguimientoRESTController extends Controller {
                             if($v1["real"] == "")
                                 $v1["real"] = null;
                             
+                            if($v1["real_denominador"] == "")
+                                $v1["real_denominador"] = null;
+                            
                             $matrizDato = $em->getRepository(MatrizSeguimientoDato::class)->findBy(
                                 array(
                                     'matriz' => $seguimiento->getId(),
@@ -920,6 +924,7 @@ class MatrizSeguimientoRESTController extends Controller {
                             }  
 
                             $matrizDato->setReal($v1["real"]);
+                            $matrizDato->setRealDenominador($v1["real_denominador"]);
                             $matrizDato->setMes($k1);
                             $matrizDato->setMatriz($seguimiento);                      
 
@@ -1003,7 +1008,7 @@ class MatrizSeguimientoRESTController extends Controller {
                     $relaciones = $em->getRepository(MatrizIndicadoresRel::class)->findBy(array('desempeno' => $ind->getId()), array('id' => 'ASC'));
                     foreach($relaciones as $indrs){   
                                             
-                        $statement = $connection->prepare("SELECT msd.mes, msd.planificado, msd.real, ms.meta 
+                        $statement = $connection->prepare("SELECT msd.mes, msd.planificado, msd.real, msd.real_denominador, ms.meta 
                             FROM matriz_seguimiento ms 
                             LEFT JOIN matriz_seguimiento_dato msd ON msd.id_matriz = ms.id   
                             WHERE ms.anio = '$anio' and ms.etab = false and ms.id_desempeno = '".$value->id_desempeno."' and indicador = '".$indrs->getId()."'");
@@ -1012,7 +1017,7 @@ class MatrizSeguimientoRESTController extends Controller {
                         $meta = '';
                         if(isset($meses[0]))
                             $meta = $meses[0]["meta"];
-                        $indicators[$i] = array('id'=>$indrs->getId(), 'nombre'=>$indrs->getNombre(), 'fuente' => ' '.$indrs->getFuente(), 'meta' => $meta);
+                        $indicators[$i] = array('id'=>$indrs->getId(), 'nombre'=>$indrs->getNombre(), 'es_formula' => $indrs->getEsFormula(), 'fuente' => ' '.$indrs->getFuente(), 'meta' => $meta);
 
                         $statement = $connection->prepare("SELECT * FROM matriz_indicadores_relacion_alertas WHERE matriz_indicador_relacion_id = '".$indrs->getId()."'");
                         $statement->execute();
@@ -1027,7 +1032,8 @@ class MatrizSeguimientoRESTController extends Controller {
                             
                             if($vm->mes != 'fuente'){                                
                                 $indicators[$i][$vm->mes]["planificado"] = $vm->planificado;                            
-                                $indicators[$i][$vm->mes]["real"] = $vm->real;                                                     
+                                $indicators[$i][$vm->mes]["real"] = $vm->real;
+                                $indicators[$i][$vm->mes]["real_denominador"] = $vm->real_denominador;                                                     
                             }
                         }
                         $i++;

@@ -36,6 +36,13 @@ class MatrizIndicadoresRel
     private $fuente;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="es_formula", type="boolean", nullable=true)
+     */
+    private $es_formula;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="creado", type="datetime")
@@ -105,6 +112,29 @@ class MatrizIndicadoresRel
     public function getNombre()
     {
         return $this->nombre;
+    }
+
+    /**
+     * Set es_formula
+     *
+     * @param string $es_formula
+     * @return MatrizIndicadoresRel
+     */
+    public function setEsFormula($es_formula)
+    {
+        $this->es_formula = $es_formula;
+
+        return $this;
+    }
+
+    /**
+     * Get es_formula
+     *
+     * @return string 
+     */
+    public function getEsFormula()
+    {
+        return $this->es_formula;
     }
 
     /**
