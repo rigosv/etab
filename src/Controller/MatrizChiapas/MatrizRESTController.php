@@ -857,7 +857,8 @@ class MatrizRESTController extends AbstractController {
                             $indiclone = $v1["etab"] == 1 ? $etab_clonado[$v1["indicador"]] : $relacion_clonado[$v1["indicador"]];
                             $indiorigi[$indiclone] = $v1["indicador"];
                             $v1_etab = $v1["etab"] == 1 ? 1 : 0;
-                            $vvv = $v1["id"].",".$v1["id_desempeno"].",".$v1["anio"].",CAST (".$v1_etab." AS BOOLEAN),".$v1["meta"].",".$indiclone.",now(), now()";
+                            $v1["meta"] = $v1["meta"] != '' ? $v1["meta"] : '-';
+                            $vvv = $v1["id"].",".$v1["id_desempeno"].",".$v1["anio"].",CAST (".$v1_etab." AS BOOLEAN),'".$v1["meta"]."',".$indiclone.",now(), now()";
                             
                             $sql1 = "INSERT INTO matriz_seguimiento VALUES ($vvv)";
 
@@ -881,13 +882,15 @@ class MatrizRESTController extends AbstractController {
                             $statement->execute();
                             $indicator = $statement->fetchAll();
 
-                            $sql4 = "INSERT INTO matriz_seguimiento_dato
-                            SELECT ((SELECT MAX(id) FROM matriz_seguimiento_dato) + ROW_NUMBER () OVER (ORDER BY id ASC)) as id, ".$v1["id"].", mes, planificado, real, now(), now()  
-                            FROM matriz_seguimiento_dato 
-                            WHERE id_matriz = '".$indicator[0]["id"]."' group by id, id_matriz, mes, planificado, real";
+                            if(count($indicator) > 0){
+                                $sql4 = "INSERT INTO matriz_seguimiento_dato
+                                SELECT ((SELECT MAX(id) FROM matriz_seguimiento_dato) + ROW_NUMBER () OVER (ORDER BY id ASC)) as id, ".$v1["id"].", mes, planificado, real, now(), now()  
+                                FROM matriz_seguimiento_dato 
+                                WHERE id_matriz = '".$indicator[0]["id"]."' group by id, id_matriz, mes, planificado, real";
 
-                            $statement = $em->getConnection()->prepare($sql4);
-                            $statement->execute();
+                                $statement = $em->getConnection()->prepare($sql4);
+                                $statement->execute();
+                            }
                         }
                     }
                 }

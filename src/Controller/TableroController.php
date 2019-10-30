@@ -1035,6 +1035,12 @@ class TableroController extends AbstractController {
                     
                 foreach ($grupoIndicadores->getUsuarios() as $ind)
                     $em->remove($ind);
+
+                foreach ($grupoIndicadores->getGrupos() as $ind)
+                    $em->remove($ind);
+
+                foreach ($grupoIndicadores->getAcciones() as $ind)
+                    $em->remove($ind);
                 
                 $lasala=$em->find(GrupoIndicadores::class, $sala);
                 $em->remove($lasala);
