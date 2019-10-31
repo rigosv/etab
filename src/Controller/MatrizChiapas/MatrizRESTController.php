@@ -687,8 +687,10 @@ class MatrizRESTController extends AbstractController {
                             if(property_exists($valor1, 'fuente'))
                                 $relacion->setFuente($valor1->fuente);
                             
-                            if(property_exists($valor1, 'es_formula'))
+                            if(property_exists($valor1, 'es_formula')){
+                                $valor1->es_formula = $valor1->es_formula == '' ? false : $valor1->es_formula;
                                 $relacion->setEsFormula($valor1->es_formula);
+                            }
                                 
                             $em->persist($relacion); 
 
@@ -898,9 +900,64 @@ class MatrizRESTController extends AbstractController {
                 // borra las que no esten dentro del array que envio el usuario                  
                 if(count($existe_desemepno) > 0){ 
                     $existe_desemepno = implode(",", $existe_desemepno);
-                    $sql = "DELETE FROM matriz_indicadores_desempeno  WHERE id not in($existe_desemepno) and id_matriz = ".$data->getId();
-                    $statement = $em->getConnection()->prepare($sql);
-                    $statement->execute();   
+
+                    $connection = $em->getConnection();
+
+                    $sql = "SELECT id FROM matriz_indicadores_desempeno  WHERE id not in($existe_desemepno) and id_matriz = " . $data->getId();
+                    $statement = $connection->prepare($sql);
+                    $statement->execute();
+                    $variable = $statement->fetchAll();
+                    
+                    foreach ($variable as $desempeno) {
+                        // relaciones asignadas
+                        $statement = $connection->prepare("SELECT * FROM matriz_indicadores_relacion WHERE  id_desempeno = '" . $desempeno["id"] . "'");
+                        $statement->execute();
+                        $relaciones = $statement->fetchAll();
+
+                        foreach ($relaciones as $relacion) {
+                            $statement = $connection->prepare("DELETE FROM matriz_indicadores_relacion_alertas WHERE  matriz_indicador_relacion_id = '" . $relacion["id"] . "'");
+                            $statement->execute();
+                            $alertas = $statement->fetchAll();
+                        }
+                        $statement = $connection->prepare("DELETE FROM matriz_indicadores_relacion WHERE  id_desempeno = '" . $desempeno["id"] . "'");
+                        $statement->execute();
+                        $relaciones = $statement->fetchAll();
+
+                        // etab asignadas
+                        $statement = $connection->prepare("SELECT * FROM matriz_indicadores_etab WHERE  id_desempeno = '" . $desempeno["id"] . "'");
+                        $statement->execute();
+                        $etab = $statement->fetchAll();
+
+                        foreach ($etab as $key => $item) {
+                            $statement = $connection->prepare("DELETE FROM matriz_indicadores_etab_alertas WHERE  matriz_indicador_etab_id = '" . $item["id"] . "'");
+                            $statement->execute();
+                            $alertas = $statement->fetchAll();
+                        }
+
+                        $statement = $connection->prepare("DELETE FROM matriz_indicadores_etab WHERE  id_desempeno = '" . $desempeno["id"] . "'");
+                        $statement->execute();
+                        $etab = $statement->fetchAll();
+
+                        // datos
+                        $statement = $connection->prepare("SELECT * FROM matriz_seguimiento WHERE  id_desempeno = '" . $desempeno["id"] . "'");
+                        $statement->execute();
+                        $etab = $statement->fetchAll();
+
+                        foreach ($etab as $key => $item) {
+                            $statement = $connection->prepare("DELETE FROM matriz_seguimiento_dato WHERE  id_matriz = '" . $item["id"] . "'");
+                            $statement->execute();
+                            $alertas = $statement->fetchAll();
+                        }
+
+                        $statement = $connection->prepare("DELETE FROM matriz_seguimiento WHERE  id_desempeno = '" . $desempeno["id"] . "'");
+                        $statement->execute();
+                        $etab = $statement->fetchAll();
+
+                        $statement = $connection->prepare("DELETE FROM matriz_indicadores_desempeno WHERE  id = " . $desempeno["id"]);
+                        $statement->execute();
+                        $desempenos = $statement->fetchAll();
+                    }
+                     
                 }                
             }
             if(property_exists($datos, "usuarios")){

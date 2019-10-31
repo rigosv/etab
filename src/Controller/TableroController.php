@@ -1041,7 +1041,17 @@ class TableroController extends AbstractController {
 
                 foreach ($grupoIndicadores->getAcciones() as $ind)
                     $em->remove($ind);
-                
+
+                $connection = $em->getConnection();
+                // usuarios asignados                    
+                $statement = $connection->prepare("DELETE  FROM sala_acciones WHERE  grupo_indicadores_id = '" . $grupoIndicadores->getId() . "'");
+                $statement->execute();
+                $acciones = $statement->fetchAll();
+
+                $statement = $connection->prepare("DELETE  FROM sala_comentarios WHERE  id_origen_datos = '" . $grupoIndicadores->getId() . "'");
+                $statement->execute();
+                $comentarios = $statement->fetchAll();
+
                 $lasala=$em->find(GrupoIndicadores::class, $sala);
                 $em->remove($lasala);
                     
