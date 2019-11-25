@@ -906,7 +906,7 @@ class MatrizSeguimientoRESTController extends Controller {
                             if($v1["real"] == "")
                                 $v1["real"] = null;
                             
-                            if($v1["real_denominador"] == "")
+                            if(!array_key_exists("real_denominador", $v1))
                                 $v1["real_denominador"] = null;
                             
                             $matrizDato = $em->getRepository(MatrizSeguimientoDato::class)->findBy(
