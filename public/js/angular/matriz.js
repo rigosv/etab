@@ -33,6 +33,7 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
     $scope.verP = false;
     $scope.verR = false;
     $scope.verV = false;
+    $scope.verRes = true;
 
     $scope.cambiarVer = function(tipo){        
         $scope[tipo] = !$scope[tipo];
@@ -404,6 +405,7 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
      * @param {ind} ind indicador
      *
      */
+    $scope.mostrarexportarpivot = false;
     $scope.graficar = function(ind) {
         $("#tendencia").html('');
         let estatus = null;
@@ -414,16 +416,19 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
         let etiquetas = [];
         let dataAlerta = [];
         let data = [];
+        $scope.mostrarexportarpivot = false;
         angular.forEach($scope.meses, function(v, k) {
             estatus = null;
-            if (ind[v].real != null && ind[v].planificado != null && ind[v].real != '' && ind[v].planificado != '') {
-                estatus = (ind[v].planificado == 0) ? ind[v].real :  ind[v].real / ind[v].planificado * 100;
-                
-                real.push(ind[v].real);
-                planificado.push(ind[v].planificado);
-                etiquetas.push(v);
-                datos.push(estatus);
-                meta.push(ind.meta);
+            if(!angular.isUndefined(ind[v])){
+                if (ind[v].real != null && ind[v].planificado != null && ind[v].real != '' && ind[v].planificado != '') {
+                    estatus = (ind[v].planificado == 0) ? ind[v].real :  ind[v].real / ind[v].planificado * 100;
+                    
+                    real.push(ind[v].real);
+                    planificado.push(ind[v].planificado);
+                    etiquetas.push(v);
+                    datos.push(estatus);
+                    meta.push(ind.meta);
+                }
             }
         });               
 
@@ -462,6 +467,15 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
             });
         }
 
+        if ($scope.verRes) {
+            data.push({
+                x: etiquetas,
+                y: datos,
+                type: 'scatter',
+                name: jQuery('#realEtq').val()
+            });
+        }
+
         angular.forEach(ind.alertas, function(v, k) {
             dataAlerta.push({'limite_sup': v.limite_superior, 'color': v.color.codigo, 'limite_inf': v.limite_inferior });
         });
@@ -493,17 +507,24 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
     };
 
     $scope.analisisGeneral = function() {
+        $scope.mostrarexportarpivot = true;
         $("#tendencia").html('');
         let datos = [];
         angular.forEach($scope.dato.matriz, function(item, k) {
             angular.forEach(item.indicadores_relacion, function(ind, kk) {
                 angular.forEach($scope.meses, function(v, k) {
                     estatus = null;
-
-                    if ( ind[v] != undefined && ind[v].real != null && ind[v].planificado != null && ind[v].real != '' && ind[v].planificado != '') {
-                        estatus = (ind[v].planificado == 0) ? ind[v].real :  ind[v].real / ind[v].planificado * 100;
-
-                        datos.push({'indicador': ind.nombre, 'mes': v, 'resultado': estatus});
+                    if (!angular.isUndefined(ind[v])) {
+                        if ( ind[v] != undefined && ind[v].real != null && ind[v].planificado != null && ind[v].real != '' && ind[v].planificado != '') {
+                            if (($scope.verR || $scope.verP) && !$scope.verRes) {
+                                estatus = $scope.verR ? ind[v].real : ind[v].planificado;
+                            }else{
+                                estatus = (ind[v].planificado == 0) ? ind[v].real :  ind[v].real / ind[v].planificado * 100;
+                            }
+                            v = (k + 1) + " - " + v;
+                            
+                            datos.push({'indicador': ind.nombre, 'mes': v, 'resultado': estatus});
+                        }
                     }
                 });
             });
@@ -519,6 +540,7 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
             vals : ['resultado'],
             rows: ['indicador'],
             cols: ['mes'],
+            sorters: null,
             rendererOptions: {
                 plotlyConfig : configPlotly,
                 plotly: layoutPlotly
@@ -528,4 +550,20 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
         jQuery('#tituloGrafico').html('');
         jQuery('#grafico').modal('show');
     }
+
+    $scope.excelPivot = function (titulo) {
+        let colspan = $(".pvtTable").find("tr:first th").length;
+        let excelData =
+            "<table><tr><th colspan='" +
+            colspan +
+            "'><h1>" +
+            titulo +
+            " <h1></th></tr></table>";
+
+        excelData += $(".pvtRendererArea").html();
+        let blob = new Blob([excelData], {
+            type: "text/comma-separated-values;charset=utf-8"
+        });
+        saveAs(blob, titulo + ".xls");
+    };        
 })

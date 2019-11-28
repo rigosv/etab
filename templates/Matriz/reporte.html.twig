@@ -83,6 +83,13 @@
                             </a>
                             
                             <ul class="nav navbar-nav navbar-right" style="padding-top: 6px;">
+                                <li class="sonata-actions" ng-click="cambiarVer('verRes')">
+                                    
+                                    <strong class="form-control" style="cursor:default" style="color: cornflowerblue"> 
+                                        <i class="fa <% verRes ? 'fa-check-square' : 'fa-square-o' %>" style="font-size: 24px;color: dodgerblue;"></i> &nbsp;
+                                        {{ '_matriz_verRes_' | trans }}                                                                            
+                                    </strong>
+                                </li>
                                 <li class="sonata-actions" ng-click="cambiarVer('verP')">
                                     
                                     <strong class="form-control" style="cursor:default" style="color: cornflowerblue"> 
@@ -190,7 +197,7 @@
                                                                 <tr style="background: cornflowerblue;" ng-if="verP && inde[k].planificado >= 0" class="list-group-item matriz-planeacion-texto" align="center">
                                                                     <th><% inde[k].planificado | number : 2 %> </th>
                                                                 </tr>                                       
-                                                                <tr ng-show="statusx[($index + '_' + inde.id)][k] >= 0" class="list-group-item" align="center">
+                                                                <tr ng-show="statusx[($index + '_' + inde.id)][k] >= 0 && verRes" class="list-group-item" align="center" ">
                                                                     <th>
                                                                         <strong ng-if="statusx[($index + '_' + inde.id)][k] >= 0" style="font-weight:900; text-shadow: 1px 1px 1px #FFF;" >
                                                                             <div align="center">
@@ -246,7 +253,7 @@
                                                                 <tr style="background: cornflowerblue;" ng-if="verP && inde[k].planificado >= 0" class="list-group-item matriz-planeacion-texto" align="center">
                                                                     <th><% inde[k].planificado ? (inde[k].planificado | number : 2) : '' %> </th>
                                                                 </tr>                                       
-                                                                <tr ng-show="statusx[($index + '-' + inde.id)][k] >= 0" class="list-group-item" align="center">
+                                                                <tr ng-show="statusx[($index + '-' + inde.id)][k] >= 0 && verRes" class="list-group-item" align="center">
                                                                     <th>
                                                                         <strong ng-if="statusx[($index + '-' + inde.id)][k] >= 0" style="font-weight:900; text-shadow: 1px 1px 1px #FFF;" >
                                                                             <div align="center">
@@ -319,8 +326,10 @@
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <h4 class="modal-title" id="tituloGrafico"></h4>
+                        
                     </div>
-                    <div class="modal-body" style="height: 80vh;">
+                    <div class="modal-body" style="height: 80vh; width: 80vw;">                        
+                        <button ng-if="mostrarexportarpivot" type="button" class="btn btn-info" ng-click="excelPivot('Matriz')"><i class="glyphicon glyphicon-print"></i></button>
                         <div id="tendencia"></div>
                     </div>
                 </div>
