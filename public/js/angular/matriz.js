@@ -248,19 +248,21 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
                 $scope.statusx[id][k] = '';
                 $scope.color[id][k] = "white";
                 $scope.simbolo[id][k] = '';
+                inde[k].simbolo = '';
             }
             if (inde[k].real != null && inde[k].real != '') {  
                 if (inde[k].planificado == null || inde[k].planificado == '') {
                     $scope.statusx[id][k] = null;
                 } else if (inde[k].planificado == 0 ){                    
-                    $scope.statusx[id][k] = inde[k].real;
+                    $scope.statusx[id][k] = inde[k].real;                    
                 } else{
                     var numerador = inde[k].real;
                     if(inde.es_formula){
                         numerador = inde[k].real / inde[k].real_denominador;
                     }
                     $scope.statusx[id][k] = numerador / inde[k].planificado * 100;  
-                    $scope.simbolo[id][k] = '%';              
+                    $scope.simbolo[id][k] = '%';   
+                    inde[k].simbolo = '%';
                 }
                 
             } else {
@@ -284,6 +286,7 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
     $scope.temporal = [];
     var temporal = [];
     var temporalK = [];
+    var temporald = [];
 
     /**
      * @ngdoc method
@@ -313,8 +316,10 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
         indTemp.meses = meses;
         if ($scope.acumular[index + id + ind.id]) {
             var acumulado = 0;
+            var acumuladod = 0;
             temporal[index + id + ind.id] = ind;
             temporalK[index + id + ind.id] = [];
+            temporald[index + id + ind.id] = [];
             
             angular.forEach(indTemp.meses, function(m, c) {
                 var k = $scope.meses[c];
@@ -322,6 +327,11 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
                 if (!angular.isUndefined(v)) {
                     if (isNaN(v.real) || v.real == null || v.real == '' ) {
                         v.real = 0;
+                    }
+                    if (!angular.isUndefined(v.real_denominador)){
+                        if (isNaN(v.real_denominador) || v.real_denominador == null || v.real_denominador == '') {
+                            v.real_denominador = 0;
+                        }
                     }
                     if (v.planificado == null || v.planificado == '') {
                         v.planificado = 0;
@@ -333,6 +343,14 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
                         v.real = acumulado;
                         ind[k].real = acumulado;
                     }
+                    if (!angular.isUndefined(v.real_denominador)) {
+                        temporald[index + id + ind.id][k] = v.real_denominador;
+                        acumuladod = acumuladod + (v.real_denominador * 1);
+                        if (v.real_denominador != null) {
+                            v.real_denominador = acumuladod;
+                            ind[k].real_denominador = acumuladod;
+                        }
+                    }
                                  
                     $scope.valorAbsoluto(ind, (c + id + ind.id), k);
                 }
@@ -343,8 +361,12 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
             
             for (k in temporalK[index + id + indid]) {  
                 var x = $scope.meses.indexOf(k);                
-                temporal[index + id + indid][k].real = temporalK[index + id + indid][k];
-                $scope.valorAbsoluto(temporal[index + id + indid], (x + id + temporal[index + id + indid].id), k);                
+                temporal[index + id + indid][k].real = temporalK[index + id + indid][k];                
+                
+                if (!angular.isUndefined(temporal[index + id + indid][k].real_denominador)) {
+                    temporal[index + id + indid][k].real_denominador = temporald[index + id + indid][k];
+                }
+                $scope.valorAbsoluto(temporal[index + id + indid], (x + id + temporal[index + id + indid].id), k);  
             };
             ind = temporal[index + id + indid];
         }
