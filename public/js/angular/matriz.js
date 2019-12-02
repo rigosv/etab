@@ -258,9 +258,9 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
                 } else{
                     var numerador = inde[k].real;
                     if(inde.es_formula){
-                        numerador = inde[k].real / inde[k].real_denominador;
+                        numerador = (inde[k].real / inde[k].real_denominador) * 100;
                     }
-                    $scope.statusx[id][k] = numerador / inde[k].planificado * 100;  
+                    $scope.statusx[id][k] = (numerador / inde[k].planificado) * 100;  
                     $scope.simbolo[id][k] = '%';   
                     inde[k].simbolo = '%';
                 }
