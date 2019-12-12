@@ -639,7 +639,7 @@ class MatrizRESTController extends AbstractController {
             $em->flush();
 
             if(property_exists($datos, "indicadores_desempeno")){
-                $existe_desemepno = array();     
+                $existe_desemepno = array();  
                 foreach($datos->indicadores_desempeno as $clave => $valor){ 
                     if(is_array($valor)) {
                         $valor = (object) $valor;
@@ -673,11 +673,16 @@ class MatrizRESTController extends AbstractController {
                             if(is_array($valor1)) {
                                 $valor1 = (object) $valor1;
                             }
+                            $relacion = null;
                             if(property_exists($valor1, 'id') && $tipo == 2){
                                 $relacion = $em->getRepository(MatrizIndicadoresRel::class)->find($valor1->id);
-                            } else{
+                            }else{
+                                $relacion = $em->getRepository(MatrizIndicadoresRel::class)->findBy(array('desempeno' => $desempeno->getId(), "nombre" => $valor1->nombre, "fuente" => $valor1->fuente));
+                            }
+                            if (!$relacion) {
                                 $relacion = new MatrizIndicadoresRel();
                             }
+                            
 
                             $relacion->setDesempeno($em->getRepository(MatrizIndicadoresDesempeno::class)->find($desempeno->getId()));
 
