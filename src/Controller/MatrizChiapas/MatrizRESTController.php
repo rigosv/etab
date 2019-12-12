@@ -747,8 +747,13 @@ class MatrizRESTController extends AbstractController {
                         }
                         
                         // borra las que no esten dentro del array que envio el usuario                  
-                        if(count($existe_relacion) > 0){ 
+                        if(count($existe_relacion) > 0){
                             $existe_relacion = implode(",", $existe_relacion);
+
+                            $sql = "DELETE FROM matriz_indicadores_relacion_alertas  WHERE matriz_indicador_relacion_id not in($existe_relacion) ";
+                            $statement = $em->getConnection()->prepare($sql);
+                            $statement->execute(); 
+                            
                             $sql = "DELETE FROM matriz_indicadores_relacion  WHERE id not in($existe_relacion) and id_desempeno = ".$desempeno->getId();
                             $statement = $em->getConnection()->prepare($sql);
                             $statement->execute();   
@@ -842,6 +847,11 @@ class MatrizRESTController extends AbstractController {
                         // borra las que no esten dentro del array que envio el usuario                  
                         if(count($existe_etab) > 0){ 
                             $existe_etab = implode(",", $existe_etab);
+
+                            $sql = "DELETE FROM matriz_indicadores_etab  WHERE matriz_indicador_etab_id not in($existe_etab) ";
+                            $statement = $em->getConnection()->prepare($sql);
+                            $statement->execute(); 
+
                             $sql = "DELETE FROM matriz_indicadores_etab  WHERE id not in($existe_etab) and id_desempeno = ".$desempeno->getId();
                             $statement = $em->getConnection()->prepare($sql);
                             $statement->execute();   
