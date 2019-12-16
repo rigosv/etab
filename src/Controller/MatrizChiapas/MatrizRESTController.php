@@ -848,7 +848,7 @@ class MatrizRESTController extends AbstractController {
                         if(count($existe_etab) > 0){ 
                             $existe_etab = implode(",", $existe_etab);
 
-                            $sql = "DELETE FROM matriz_indicadores_etab  WHERE matriz_indicador_etab_id not in($existe_etab) ";
+                            $sql = "DELETE FROM matriz_indicadores_etab_alertas  WHERE matriz_indicador_etab_id not in($existe_etab) ";
                             $statement = $em->getConnection()->prepare($sql);
                             $statement->execute(); 
 
