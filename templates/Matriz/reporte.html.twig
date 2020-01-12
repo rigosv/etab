@@ -60,6 +60,12 @@
         .pvtUnused, .pvtHorizList, .pvtVals, .pvtRows {
             display: none;
         }
+        .anio{
+            background: aliceblue;
+            font-weight: 900;
+            font-size: 20pt;
+            text-align: center;
+        }
     </style>
 
 {% endblock %}
@@ -73,7 +79,7 @@
                     <div class="container-fluid">
                         <div class="navbar-header">
                             <a class="navbar-brand" href="javascript:void(0)">
-                                <i class="glyphicon glyphicon-th"></i> <span id="tituloReporte">{{ '_matriz_seguimiento_' | trans }} ({{ '_reporte_' | trans }}) <% anio | date:'yyyy' %> </span>
+                                <i class="glyphicon glyphicon-th"></i> <span id="tituloReporte">{{ '_matriz_seguimiento_' | trans }} </span>
                             </a>
                             
                         </div>
@@ -115,6 +121,7 @@
                                         <span class="input-group-addon" id="basic-addon1">{{ '_anio_select_' | trans }}:</span>
                                         <input type="text" class="form-control" uib-datepicker-popup="<%format%>"
                                             ng-model="anio" is-open="status.opened"
+                                             multi-select='selectedDates'
                                             datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" ng-click="open($event)" />
                                         <span class="input-group-btn">
                                             <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
@@ -123,7 +130,8 @@
                                 </li>
                                 
                                 <li class="sonata-actions">
-                                    <button type="button" class="btn btn-info" ng-click="crearPlaneacion(ruta ,anio)"><i class="glyphicon glyphicon-refresh"></i></button>
+                                    <button type="button" class="btn btn-success" ng-click="crearPlaneacion(ruta ,anio)"><i class="glyphicon glyphicon-plus"></i></button>
+                                    <button type="button" class="btn btn-danger" ng-click="selectedDates = [];"><i class="glyphicon glyphicon-trash"></i></button>
                                     <button type="button" class="btn btn-info" ng-click="analisisGeneral()"><i class="fa fa-bar-chart" aria-hidden="true"></i></button>
                                 </li>
                             </ul>
@@ -142,147 +150,169 @@
                 <form class="form-horizontal" role="form" >
                     <div id="feedback_bar"></div>
                     <div class="row" ng-init="usuarios = []; cargarSelect('{{ path('listaUsuarios') }}', usuarios); listaColores = []; cargarSelect('{{ path('listaColores') }}', listaColores);">            
-                        <div class="col-sm-12"  style="height: 78vh; overflow:auto" >
-                            <div class="imprimir" id="exportable">
-                                <div class="panel panel-default" ng-repeat="item in dato.matriz">
-                                    <div class="panel-heading">
-                                        <h4>
-                                            <% item.nombre %>
-                                        </h4>
-                                    </div>
-                                    <div class="panel-body" >
-                                        <table border="1" class="table table-striped table-bordered matriz" >
-                                            <thead>
-                                                <tr>
-                                                    <th></th>
-                                                    <th> {{ '_inidcador_' | trans }} </th>
-                                                    <th> {{ '_fuente_' | trans }} </th>
-                                                    <th> {{ '_acumular_' | trans }} </th>
-                                                    <th> {{ '_meta_anual_' | trans }} </th>
-                                                    <th> {{ '_enero_' | trans }} </th>
-                                                    <th> {{ '_febrero_' | trans }} </th>
-                                                    <th> {{ '_marzo_' | trans }} </th>
-                                                    <th> {{ '_abril_' | trans }} </th>
-                                                    <th> {{ '_mayo_' | trans }} </th>
-                                                    <th> {{ '_junio_' | trans }} </th>
-                                                    <th> {{ '_julio_' | trans }} </th>
-                                                    <th> {{ '_agosto_' | trans }} </th>
-                                                    <th> {{ '_septiembre_' | trans }} </th>
-                                                    <th> {{ '_octubre_' | trans }} </th>
-                                                    <th> {{ '_noviembre_' | trans }} </th>
-                                                    <th> {{ '_diciembre_' | trans }} </th>
-                                                    <th class=""> {{ 'alertas' | trans }} </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr valign="middle" ng-repeat="inde in item.indicadores_etab">
-                                                    <TD>
-                                                        <A href="#" ng-click="graficar(inde)">
-                                                            <i class="fa fa-bar-chart" aria-hidden="true"></i>
-                                                        </A>
-                                                    </TD>
-                                                    <td class="nombre_matriz"><% inde.nombre %></td>
-                                                    <td class="nombre_matriz"><% inde.fuente %></td>
-                                                    <td> 
-                                                        <strong class="form-control" style="cursor:default" ng-click="acumular[($index + '_' + inde.id)] = !acumular[($index + '_' + inde.id)]; acumularAbsoluto(inde, $index, '_')"> 
-                                                            <i class="fa <% acumular[($index + '_' + inde.id)] ? 'fa-check-square' : 'fa-square-o' %>" style="font-size: 24px;color: dodgerblue;"></i> &nbsp;                                                                                                                                        
-                                                        </strong>
-                                                    </td>
-                                                    <td class="nombre_matriz" width="1%"><% inde.meta %></td>
-                                                    <td ng-repeat="k in meses" width="110px" ng-init="valorAbsoluto(inde, ($index + '_' + inde.id), k)" style="background: <% color[($index + '_' + inde.id)][k] %> !important; ">
-                                                        <table width="100%" class="list-group" ng-init="statusx[($index + '_' + inde.id)][k] = inde[k].real / inde[k].planificado * 100">
-                                                            <tbody style="border:none">
-                                                                <tr ng-if="inde[k].planificado >= 0 && inde[k].real <= 0 && verR && verP" class="list-group-item matriz-planeacion-texto" align="center"><th>&nbsp</th></tr>
-                                                                <tr style="background: darkgray;" ng-if="verR && inde[k].real >= 0" class="list-group-item matriz-planeacion-texto" align="center"><th><% inde[k].real | number : 2 %></th></tr>
-                                                                <tr style="background: cornflowerblue;" ng-if="verP && inde[k].planificado >= 0" class="list-group-item matriz-planeacion-texto" align="center">
-                                                                    <th><% inde[k].planificado | number : 2 %> </th>
-                                                                </tr>                                       
-                                                                <tr ng-show="statusx[($index + '_' + inde.id)][k] >= 0 && verRes" class="list-group-item" align="center" ">
-                                                                    <th>
-                                                                        <strong ng-if="statusx[($index + '_' + inde.id)][k] >= 0" style="font-weight:900; text-shadow: 1px 1px 1px #FFF;" >
-                                                                            <div align="center">
-                                                                                <% statusx[($index + '_' + inde.id)][k] | number : 0 %> %
-                                                                            </div>
-                                                                        </strong>
-                                                                    </th>
-                                                                </tr>
-                                                                
-                                                            </tbody>
-                                                        </table>    
-                                                                                            
-                                                    </td>
-                                                    <td style="padding: 0px;">
-                                                        <table width="100%">
-                                                            <tbody style="border:none">
-                                                                <tr ng-repeat="alerta in inde.alertas">
-                                                                    <th align="center" style="background:<% alerta.color.codigo %>; color: black;text-shadow: 2px 2px 2px white ; font-size: 11pt; width: 100%; padding: 3px;">
-                                                                        <div align="center"><% alerta.limite_inferior %> - <% alerta.limite_superior %></div>
-                                                                    </th>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </td>                                
-                                                </tr>
-                                            </tbody>
-                                            <tfoot>
-                                                <tr valign="middle" ng-repeat="inde in item.indicadores_relacion">
-                                                    <TD>
-                                                        <A href="#" ng-click="graficar(inde)" >
-                                                            <i class="fa fa-bar-chart" aria-hidden="true"></i>
-                                                        </A>
-                                                    </TD>
-                                                    <td class="nombre_matriz"><% inde.nombre %></td>
-                                                    <td class="nombre_matriz"><% inde.fuente %></td>
-                                                    <td> 
-                                                        <strong class="form-control" style="cursor:default" ng-click="acumular[($index + '-' + inde.id)] = !acumular[($index + '-' + inde.id)]; acumularAbsoluto(inde, $index, '-')"> 
-                                                            <i class="fa <% acumular[($index + '-' + inde.id)] ? 'fa-check-square' : 'fa-square-o' %>" style="font-size: 24px;color: dodgerblue;"></i> &nbsp;                                                                                                                                        
-                                                        </strong>
-                                                    <td class="nombre_matriz" width="1%"><% inde.meta ? inde.meta : '' %></td>
-                                                    <td ng-repeat="k in meses" width="110px" ng-init="valorAbsoluto(inde, ($index + '-' + inde.id), k)" style="background: <% color[($index + '-' + inde.id)][k] %> !important;">
-                                                        <table width="100%" class="list-group" ng-if="inde[k].planificado >= 0">
-                                                            <tbody style="border:none">
-                                                                
-                                                                <tr style="background: darkgray;" ng-if="verR && inde[k].real >= 0" class="list-group-item matriz-planeacion-texto" align="center">
-                                                                    <th ng-if="!inde.es_formula">
-                                                                        <% inde[k].real | number : 2 %>
-                                                                    </th>
-                                                                    <th ng-if="inde.es_formula">
-                                                                        <% inde[k].real | number : 2 %> / <% inde[k].real_denominador | number : 2 %>
-                                                                    </th>
-                                                                </tr>
-                                                                <tr style="background: cornflowerblue;" ng-if="verP && inde[k].planificado >= 0" class="list-group-item matriz-planeacion-texto" align="center">
-                                                                    <th><% inde[k].planificado ? (inde[k].planificado | number : 2) : '' %> </th>
-                                                                </tr>                                       
-                                                                <tr ng-show="statusx[($index + '-' + inde.id)][k] >= 0 && verRes" class="list-group-item" align="center">
-                                                                    <th>
-                                                                        <strong ng-if="statusx[($index + '-' + inde.id)][k] >= 0" style="font-weight:900; text-shadow: 1px 1px 1px #FFF;" >
-                                                                            <div align="center">
-                                                                                <% statusx[($index + '-' + inde.id)][k] | number : 0 %> <% inde[k].simbolo %>
-                                                                            </div>                                                                
-                                                                        </strong>
-                                                                    </th>
-                                                                </tr>
-                                                                <tr ng-show="false"><th></th></tr>
-                                                            </tbody>
-                                                        </table>                                  
-                                                    </td>
-                                                    <td style="padding: 0px;">
-                                                        <table width="100%">
-                                                            <tbody style="border:none">
-                                                                <tr ng-repeat="alerta in inde.alertas">
-                                                                    <th align="center" style="background:<% alerta.color.codigo %>; color: black;text-shadow: 2px 2px 2px white ; font-size: 11pt; width: 100%; padding: 3px;">
-                                                                        <div align="center"><% alerta.limite_inferior %> - <% alerta.limite_superior %></div>
-                                                                    </th>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </td>                                    
-                                                </tr>                        
-                                            </tfoot>
-                                        </table>
-                                    </div>
-                                </div> 
-                            </div>               
+                        <div class="col-sm-12"  style="height: 78vh; overflow:auto" class="imprimir" id="exportable">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td ng-repeat="(nim, matriz) in selectedDates | orderBy: 'anio'" valign="top" ng-init="acumular[matriz.anio] = []; ">
+                                            <div class="panel panel-default" ng-repeat="item in matriz.matriz">
+                                                <div class="panel-heading">
+                                                    <h4>
+                                                        <% item.nombre %>
+                                                    </h4>
+                                                </div>
+                                                <div class="panel-body" >
+
+                                                    <table border="1" class="table table-striped table-bordered matriz" ng-init="nom = $index">
+                                                    <caption class="anio">
+                                                    <strong ><% matriz.anio %></strong>
+                                                    <button style="float:right; margin-right: 14px;" type="button" class="btn btn-danger" ng-click="removeFromSelected($index)"><i class="glyphicon glyphicon-trash"></i></button>
+                                                    </caption>
+                                                        <thead>
+                                                            <tr>
+                                                                <th ng-if="nim==0"></th>
+                                                                <th></th>
+                                                                <th> {{ '_inidcador_' | trans }} </th>
+                                                                <th> {{ '_fuente_' | trans }} </th>
+                                                                <th> {{ '_acumular_' | trans }} </th>
+                                                                <th> {{ '_meta_anual_' | trans }} </th>
+                                                                <th> {{ '_enero_' | trans }} </th>
+                                                                <th> {{ '_febrero_' | trans }} </th>
+                                                                <th> {{ '_marzo_' | trans }} </th>
+                                                                <th> {{ '_abril_' | trans }} </th>
+                                                                <th> {{ '_mayo_' | trans }} </th>
+                                                                <th> {{ '_junio_' | trans }} </th>
+                                                                <th> {{ '_julio_' | trans }} </th>
+                                                                <th> {{ '_agosto_' | trans }} </th>
+                                                                <th> {{ '_septiembre_' | trans }} </th>
+                                                                <th> {{ '_octubre_' | trans }} </th>
+                                                                <th> {{ '_noviembre_' | trans }} </th>
+                                                                <th> {{ '_diciembre_' | trans }} </th>
+                                                                <th class=""> {{ 'alertas' | trans }} </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr valign="middle" ng-repeat="inde in item.indicadores_etab" ng-init="num = $index">
+                                                                <td ng-if="nim==0">
+                                                                    <strong  class="form-control" style="cursor:default" ng-click="incluir[inde.id] = !incluir[inde.id]; "> 
+                                                                        <i class="fa <% incluir[inde.id] ? 'fa-check-square' : 'fa-square-o' %>" style="font-size: 24px;color: dodgerblue;"></i> &nbsp;                                                                                                                                        
+                                                                    </strong>
+                                                                </td>
+                                                                <TD>
+                                                                    <A href="#" ng-click="graficar(inde)">
+                                                                        <i class="fa fa-bar-chart" aria-hidden="true"></i>
+                                                                    </A>
+                                                                </TD>
+                                                                <td class="nombre_matriz"><% inde.nombre %></td>
+                                                                <td class="nombre_matriz"><% inde.fuente %></td>
+                                                                <td> 
+                                                                    <strong class="form-control" style="cursor:default" ng-click="acumular[matriz.anio][(nom + '_' + inde.id)] = !acumular[matriz.anio][(nom + '_' + inde.id)]; acumularAbsoluto(matriz.anio, inde, nom, '_')"> 
+                                                                        <i class="fa <% acumular[matriz.anio][(nom + '_' + inde.id)] ? 'fa-check-square' : 'fa-square-o' %>" style="font-size: 24px;color: dodgerblue;"></i> &nbsp;                                                                                                                                        
+                                                                    </strong>
+                                                                </td>
+                                                                <td class="nombre_matriz" width="1%"><% inde.meta %></td>
+                                                                <td ng-repeat="k in meses" width="110px" ng-init="valorAbsoluto(inde, matriz.anio, (num + '_' + inde.id), k)" style="background: <% color[matriz.anio][(num + '_' + inde.id)][k] %> !important; ">
+                                                                    <table width="100%" class="list-group" ng-init="statusx[matriz.anio][(num + '_' + inde.id)][k] = inde[k].real / inde[k].planificado * 100">
+                                                                        <tbody style="border:none">
+                                                                            <tr ng-if="inde[k].planificado >= 0 && inde[k].real <= 0 && verR && verP" class="list-group-item matriz-planeacion-texto" align="center"><th>&nbsp</th></tr>
+                                                                            <tr style="background: darkgray;" ng-if="verR && inde[k].real >= 0" class="list-group-item matriz-planeacion-texto" align="center"><th><% inde[k].real | number : 2 %></th></tr>
+                                                                            <tr style="background: cornflowerblue;" ng-if="verP && inde[k].planificado >= 0" class="list-group-item matriz-planeacion-texto" align="center">
+                                                                                <th><% inde[k].planificado | number : 2 %> </th>
+                                                                            </tr>                                       
+                                                                            <tr ng-show="statusx[matriz.anio][(num + '_' + inde.id)][k] >= 0 && verRes" class="list-group-item" align="center" ">
+                                                                                <th>
+                                                                                    <strong ng-if="statusx[matriz.anio][(num + '_' + inde.id)][k] >= 0" style="font-weight:900; text-shadow: 1px 1px 1px #FFF;" >
+                                                                                        <div align="center">
+                                                                                            <% statusx[matriz.anio][(num + '_' + inde.id)][k] | number : 0 %> %
+                                                                                        </div>
+                                                                                    </strong>
+                                                                                </th>
+                                                                            </tr>
+                                                                            
+                                                                        </tbody>
+                                                                    </table>    
+                                                                                                        
+                                                                </td>
+                                                                <td style="padding: 0px;">
+                                                                    <table width="100%">
+                                                                        <tbody style="border:none">
+                                                                            <tr ng-repeat="alerta in inde.alertas">
+                                                                                <th align="center" style="background:<% alerta.color.codigo %>; color: black;text-shadow: 2px 2px 2px white ; font-size: 11pt; width: 100%; padding: 3px;">
+                                                                                    <div align="center"><% alerta.limite_inferior %> - <% alerta.limite_superior %></div>
+                                                                                </th>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </td>                                
+                                                            </tr>
+                                                        </tbody>
+                                                        <tfoot>
+                                                            <tr valign="middle" ng-repeat="inde in item.indicadores_relacion" ng-init="num = $index">
+                                                                <td ng-if="nim==0">
+                                                                    <strong class="form-control" style="cursor:default" ng-click="incluir[inde.id] = !incluir[inde.id]; "> 
+                                                                        <i class="fa <% incluir[inde.id] ? 'fa-check-square' : 'fa-square-o' %>" style="font-size: 24px;color: dodgerblue;"></i> &nbsp;                                                                                                                                        
+                                                                    </strong>
+                                                                </td>
+                                                                <TD>
+                                                                    <A href="#" ng-click="graficar(inde)" >
+                                                                        <i class="fa fa-bar-chart" aria-hidden="true"></i>
+                                                                    </A>
+                                                                </TD>
+                                                                <td class="nombre_matriz"><% inde.nombre %></td>
+                                                                <td class="nombre_matriz"><% inde.fuente %></td>
+                                                                <td> 
+                                                                    <strong class="form-control" style="cursor:default" ng-click="acumular[matriz.anio][(nom + '_' + inde.id)] = !acumular[matriz.anio][(nom + '_' + inde.id)]; acumularAbsoluto(matriz.anio, inde, nom, '_')"> 
+                                                                        <i class="fa <% acumular[matriz.anio][(nom + '_' + inde.id)] ? 'fa-check-square' : 'fa-square-o' %>" style="font-size: 24px;color: dodgerblue;"></i> &nbsp;                                                                                                                                        
+                                                                    </strong>
+                                                                <td class="nombre_matriz" width="1%"><% inde.meta ? inde.meta : '' %></td>
+                                                                <td ng-repeat="k in meses" width="110px" ng-init="valorAbsoluto(inde, matriz.anio, (num + '_' + inde.id), k)" style="background: <% color[matriz.anio][(num + '_' + inde.id)][k] %> !important;">
+                                                                    <table width="100%" class="list-group" ng-if="inde[k].planificado >= 0">
+                                                                        <tbody style="border:none">
+                                                                            
+                                                                            <tr style="background: darkgray;" ng-if="verR && inde[k].real >= 0" class="list-group-item matriz-planeacion-texto" align="center">
+                                                                                <th ng-if="!inde.es_formula">
+                                                                                    <% inde[k].real | number : 2 %>
+                                                                                </th>
+                                                                                <th ng-if="inde.es_formula">
+                                                                                    <% inde[k].real | number : 2 %> / <% inde[k].real_denominador | number : 2 %> = <% formula[matriz.anio][(num + '_' + inde.id)][k] | number : 2 %>
+                                                                                </th>
+                                                                            </tr>
+                                                                            <tr style="background: cornflowerblue;" ng-if="verP && inde[k].planificado >= 0" class="list-group-item matriz-planeacion-texto" align="center">
+                                                                                <th><% inde[k].planificado ? (inde[k].planificado | number : 2) : '' %> </th>
+                                                                            </tr>                                       
+                                                                            <tr ng-show="statusx[matriz.anio][(num + '_' + inde.id)][k] >= 0 && verRes" class="list-group-item" align="center">
+                                                                                <th>
+                                                                                    <strong ng-if="statusx[matriz.anio][(num + '_' + inde.id)][k] >= 0" style="font-weight:900; text-shadow: 1px 1px 1px #FFF;" >
+                                                                                        <div align="center">
+                                                                                            <% statusx[matriz.anio][(num + '_' + inde.id)][k] | number : 0 %> <% inde[k].simbolo %>                                                                                            
+                                                                                        </div>                                                                
+                                                                                    </strong>                                                                                    
+                                                                                </th>
+                                                                            </tr>
+                                                                            <tr ng-show="false"><th></th></tr>
+                                                                        </tbody>
+                                                                    </table>                                  
+                                                                </td>
+                                                                <td style="padding: 0px;">
+                                                                    <table width="100%">
+                                                                        <tbody style="border:none">
+                                                                            <tr ng-repeat="alerta in inde.alertas">
+                                                                                <th align="center" style="background:<% alerta.color.codigo %>; color: black;text-shadow: 2px 2px 2px white ; font-size: 11pt; width: 100%; padding: 3px;">
+                                                                                    <div align="center"><% alerta.limite_inferior %> - <% alerta.limite_superior %></div>
+                                                                                </th>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </td>                                    
+                                                            </tr>                        
+                                                        </tfoot>
+                                                    </table>
+                                                </div>
+                                            </div> 
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>            
                         </div> 
                     </div>
 

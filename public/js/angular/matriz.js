@@ -27,8 +27,13 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
     $scope.dateOptions = {
         formatYear: 'yyyy',
         startingDay: 1,
-        minMode: 'year'
+        minMode: 'year',
+        multidate: true
     };
+    $scope.selectedDates = [];
+    $scope.removeFromSelected = function (dt) {
+        $scope.selectedDates.splice(dt, 1);
+    }
 
     $scope.verP = false;
     $scope.verR = false;
@@ -53,13 +58,13 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
         $scope.tamanoHeight = value / 1.5;
     });
 
-    $scope.$watch(function() {
-        return $scope.anio;
-    }, function(value) {
-        var anio = $filter('date')(value, "yyyy");    
+    $scope.selectedDates = [];
+
+    $scope.agregarAnios = function(){        
+        var anio = $filter('date')(value, "yyyy");        
         $scope.cargarCatalogo($scope.ruta + "?anio=" + anio + "&matrix=" + $scope.matriz, $scope.dato.matriz);
-        $scope.intento = 0;
-    });
+    }
+
     $scope.dato = {};
     $scope.intento = 0;
     $scope.noPlaneacion = false;
@@ -77,8 +82,7 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
      */
     $scope.cargarCatalogo = function(url, modelo) {
         $scope.cargando = true;
-        $scope.dato.matriz = [];
-        $scope.statusx = [];
+        $scope.dato.matriz = [];        
         var anio = $filter('date')($scope.anio, "yyyy");
         if ($scope.matriz && anio != '')
         {
@@ -88,6 +92,8 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
                     $scope.intento = 0;
                     $scope.dato.matriz = data.data;
                     var cambiar_mes = false;
+                    
+                    
                     angular.forEach($scope.dato.matriz, function (v1, k1) {
                         if (v1.indicadores_etab.length > 0) {
                             angular.forEach(v1.indicadores_etab, function (v2, k2) {
@@ -121,6 +127,14 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
                         "december"
                         ];
                     } 
+                    var existe = false;
+                    angular.forEach($scope.selectedDates, function(valor){
+                        if(anio == valor.anio)
+                            existe = true;
+                    });
+                    if(!existe)
+                        $scope.selectedDates.push({ "anio": anio, "matriz": $scope.dato.matriz});
+                    
                     $scope.noPlaneacion = false;
                     $scope.imprimir_mensaje(data.mensaje, 'success');
                 } else {
@@ -224,7 +238,8 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
     $scope.simbolo = [];
     $scope.statusx = [];
     $scope.acumular = [];
-
+    $scope.incluir = [];
+    $scope.formula = [];
     /**
      * @ngdoc method
      * @name Matriz.MatrizCtrl#valorAbsoluto
@@ -236,52 +251,63 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
      * @param {id} id del indicador
      * @param {k} k bandera para el mes
      */
-    $scope.valorAbsoluto = function(inde, id, k) {
+    $scope.valorAbsoluto = function(inde, anio, id, k) {
         if (!angular.isUndefined(inde[k])) {
-            if (angular.isUndefined($scope.statusx[id])) {
-                $scope.statusx[id] = [];
-                $scope.color[id] = [];
-                $scope.simbolo[id] = [];
-                $scope.acumular[id] = false;
+            if (angular.isUndefined($scope.statusx[anio])) {
+                $scope.statusx[anio] = [];
+                $scope.color[anio] = [];
+                $scope.simbolo[anio] = [];
+                $scope.acumular[anio] = false;
+                $scope.formula[anio] = [];
             }
-            if (angular.isUndefined($scope.statusx[id][k])) {
-                $scope.statusx[id][k] = '';
-                $scope.color[id][k] = "white";
-                $scope.simbolo[id][k] = '';
+
+            if (angular.isUndefined($scope.statusx[anio][id])) {
+                $scope.statusx[anio][id] = [];
+                $scope.color[anio][id] = [];
+                $scope.simbolo[anio][id] = [];
+                $scope.acumular[anio][id] = false;
+                $scope.formula[anio][id] = [];
+            }
+            if (angular.isUndefined($scope.statusx[anio][id][k])) {
+                $scope.statusx[anio][id][k] = '';
+                $scope.color[anio][id][k] = "white";
+                $scope.simbolo[anio][id][k] = '';
                 inde[k].simbolo = '';
+                $scope.formula[anio][id][k] = 0;
             }
             if (inde[k].real != null && inde[k].real != '') {  
                 if (inde[k].planificado == null || inde[k].planificado == '') {
-                    $scope.statusx[id][k] = null;
+                    $scope.statusx[anio][id][k] = null;
                 } else if (inde[k].planificado == 0 ){                    
-                    $scope.statusx[id][k] = inde[k].real;                    
+                    $scope.statusx[anio][id][k] = inde[k].real;                    
                 } else{
                     var numerador = inde[k].real;
                     if(inde.es_formula){
                         numerador = (inde[k].real / inde[k].real_denominador) * 100;
+                        $scope.formula[anio][id][k] = numerador;
                     }
-                    $scope.statusx[id][k] = (numerador / inde[k].planificado) * 100;  
-                    $scope.simbolo[id][k] = '%';   
+                    $scope.statusx[anio][id][k] = (numerador / inde[k].planificado) * 100;  
+                    $scope.simbolo[anio][id][k] = '%';   
                     inde[k].simbolo = '%';
                 }
                 
             } else {
-                $scope.statusx[id][k] = -1;
+                $scope.statusx[anio][id][k] = -1;
             }
-            if (isNaN($scope.statusx[id][k]))
-                $scope.statusx[id][k] = -1;
-            var color = color = $scope.statusx[id][k] > 100 ? "#0a3b0a" : "white";
+            if (isNaN($scope.statusx[anio][id][k]))
+                $scope.statusx[anio][id][k] = -1;
+            var color = color = $scope.statusx[anio][id][k] > 100 ? "#0a3b0a" : "white";
             if (inde[k].planificado == null || inde[k].planificado == '') {                
                 color = "gainsboro";
             } else {                
                 angular.forEach(inde.alertas, function (v1, k1) {
-                    if ($scope.statusx[id][k] >= v1.limite_inferior && $scope.statusx[id][k] <= v1.limite_superior ) {
+                    if ($scope.statusx[anio][id][k] >= v1.limite_inferior && $scope.statusx[anio][id][k] <= v1.limite_superior ) {
                     color = v1.color.codigo;
                     }
                 });
             }
-            $scope.color[id][k] = color;                    
-        }
+            $scope.color[anio][id][k] = color;                                
+        }        
     };
     $scope.temporal = [];
     var temporal = [];
@@ -299,7 +325,7 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
      * @param {index} identificador de la posicion 
      * @param {id} id bandera para la posicion
      */
-    $scope.acumularAbsoluto = function(ind, index, id) {
+    $scope.acumularAbsoluto = function(anio, ind, index, id) {
         var indTemp = {};
         indTemp.fuente = ind.fuente;
         indTemp.id = ind.id;
@@ -314,12 +340,18 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
             }                        
         });
         indTemp.meses = meses;
-        if ($scope.acumular[index + id + ind.id]) {
+        if (angular.isUndefined(temporal[anio])){
+            temporal[anio] = [];
+            temporalK[anio] = [];
+            temporald[anio] = [];
+        }
+        
+        if ($scope.acumular[anio][index + id + ind.id]) {
             var acumulado = 0;
             var acumuladod = 0;
-            temporal[index + id + ind.id] = ind;
-            temporalK[index + id + ind.id] = [];
-            temporald[index + id + ind.id] = [];
+            temporal[anio][index + id + ind.id] = ind;
+            temporalK[anio][index + id + ind.id] = [];
+            temporald[anio][index + id + ind.id] = [];
             
             angular.forEach(indTemp.meses, function(m, c) {
                 var k = $scope.meses[c];
@@ -337,14 +369,14 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
                         v.planificado = 0;
                     }
                     
-                    temporalK[index + id + ind.id][k] = v.real;
+                    temporalK[anio][index + id + ind.id][k] = v.real;
                     acumulado = acumulado + (v.real * 1);
                     if(v.real != null){
                         v.real = acumulado;
                         ind[k].real = acumulado;
                     }
                     if (!angular.isUndefined(v.real_denominador)) {
-                        temporald[index + id + ind.id][k] = v.real_denominador;
+                        temporald[anio][index + id + ind.id][k] = v.real_denominador;
                         acumuladod = acumuladod + (v.real_denominador * 1);
                         if (v.real_denominador != null) {
                             v.real_denominador = acumuladod;
@@ -352,23 +384,23 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
                         }
                     }
                                  
-                    $scope.valorAbsoluto(ind, (c + id + ind.id), k);
+                    $scope.valorAbsoluto(ind, anio, (c + id + ind.id), k);
                 }
             });
         } else {
             var indid = ind.id;
             ind = [];
             
-            for (k in temporalK[index + id + indid]) {  
+            for (k in temporalK[anio][index + id + indid]) {  
                 var x = $scope.meses.indexOf(k);                
-                temporal[index + id + indid][k].real = temporalK[index + id + indid][k];                
+                temporal[anio][index + id + indid][k].real = temporalK[anio][index + id + indid][k];                
                 
-                if (!angular.isUndefined(temporal[index + id + indid][k].real_denominador)) {
-                    temporal[index + id + indid][k].real_denominador = temporald[index + id + indid][k];
+                if (!angular.isUndefined(temporal[anio][index + id + indid][k].real_denominador)) {
+                    temporal[anio][index + id + indid][k].real_denominador = temporald[anio][index + id + indid][k];
                 }
-                $scope.valorAbsoluto(temporal[index + id + indid], (x + id + temporal[index + id + indid].id), k);  
+                $scope.valorAbsoluto(temporal[anio][index + id + indid], anio, (x + id + temporal[anio][index + id + indid].id), k);  
             };
-            ind = temporal[index + id + indid];
+            ind = temporal[anio][index + id + indid];
         }
     }
 
@@ -532,22 +564,27 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
         $scope.mostrarexportarpivot = true;
         $("#tendencia").html('');
         let datos = [];
-        angular.forEach($scope.dato.matriz, function(item, k) {
-            angular.forEach(item.indicadores_relacion, function(ind, kk) {
-                angular.forEach($scope.meses, function(v, k) {
-                    estatus = null;
-                    if (!angular.isUndefined(ind[v])) {
-                        if ( ind[v] != undefined && ind[v].real != null && ind[v].planificado != null && ind[v].real != '' && ind[v].planificado != '') {
-                            if (($scope.verR || $scope.verP) && !$scope.verRes) {
-                                estatus = $scope.verR ? ind[v].real : ind[v].planificado;
-                            }else{
-                                estatus = (ind[v].planificado == 0) ? ind[v].real :  ind[v].real / ind[v].planificado * 100;
-                            }
-                            v = (k + 1) + " - " + v;
-                            
-                            datos.push({'indicador': ind.nombre, 'mes': v, 'resultado': estatus});
+        angular.forEach($scope.selectedDates, function (dato, k1) {
+            angular.forEach(dato.matriz, function(item, k) {
+                angular.forEach(item.indicadores_relacion, function(ind, kk) {
+                    angular.forEach($scope.meses, function(v, k) {
+                        estatus = null;
+                        if (angular.isUndefined($scope.incluir[ind.id])) {
+                            $scope.incluir[ind.id] = false;
                         }
-                    }
+                        if (!angular.isUndefined(ind[v])) {
+                            if ( ind[v] != undefined && ind[v].real != null && ind[v].planificado != null && ind[v].real != '' && ind[v].planificado != '') {
+                                if (($scope.verR || $scope.verP) && !$scope.verRes) {
+                                    estatus = $scope.verR ? ind[v].real : ind[v].planificado;
+                                }else{
+                                    estatus = (ind[v].planificado == 0) ? ind[v].real :  ind[v].real / ind[v].planificado * 100;
+                                }
+                                v = (k + 1) + " - " + v;
+                                if ($scope.incluir[ind.id])
+                                    datos.push({'indicador': ind.nombre, 'mes': v, 'anio': dato.anio, 'resultado': estatus});
+                            }
+                        }
+                    });
                 });
             });
         });
@@ -561,7 +598,7 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
             aggregatorName: 'Average',
             vals : ['resultado'],
             rows: ['indicador'],
-            cols: ['mes'],
+            cols: ['mes', 'anio'],
             sorters: null,
             rendererOptions: {
                 plotlyConfig : configPlotly,
