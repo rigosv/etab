@@ -285,7 +285,7 @@
                                                                                 </th>
                                                                             </tr>
                                                                             <tr style="background: cornflowerblue;" ng-if="verP && inde[k].planificado >= 0" class="list-group-item matriz-planeacion-texto" align="center">
-                                                                                <th><% inde[k].planificado ? (inde[k].planificado | number : 2) : '' %> </th>
+                                                                                <th><% inde[k].planificado | number : 2 %> </th>
                                                                             </tr>                                       
                                                                             <tr ng-show="inde[k].resultado >= 0 && verRes" class="list-group-item" align="center">
                                                                                 <th>
