@@ -416,6 +416,7 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
         angular.forEach($scope.meses, function(v, k) {
             estatus = null;
             if(angular.isUndefined(ind[v])){
+                ind[v] = {};
                 ind[v].real = '';
                 ind[v].planificado = '';
 
@@ -524,6 +525,7 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
                             $scope.incluir[ind.id] = false;
                         }
                         if (angular.isUndefined(ind[v])) {
+                            ind[v] = {};
                             ind[v].real = '';
                             ind[v].planificado = '';
 
