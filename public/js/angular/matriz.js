@@ -91,8 +91,7 @@ App.controller('MatrizCtrl', function($scope, $http, $localStorage, $window, $fi
                 if (data.status == 200) {
                     $scope.intento = 0;
                     $scope.dato.matriz = data.data;
-                    var cambiar_mes = false;
-                    
+                    var cambiar_mes = false;                    
                     
                     angular.forEach($scope.dato.matriz, function (v1, k1) {
                         if (v1.indicadores_etab.length > 0) {

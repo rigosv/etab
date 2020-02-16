@@ -159,7 +159,7 @@
                             <table>
                                 <tbody>
                                     <tr>
-                                        <td ng-repeat="(nim, matriz) in selectedDates | orderBy: 'anio'" valign="top" ng-init="acumular[matriz.anio] = []; ">
+                                        <td ng-repeat="(nim, matriz) in selectedDates | orderBy: 'anio'" valign="top" >
                                             <div class="panel panel-default" ng-repeat="item in matriz.matriz">
                                                 <div class="panel-heading">
                                                     <h4>
@@ -272,7 +272,7 @@
                                                                         <i class="fa <% inde.acumular ? 'fa-check-square' : 'fa-square-o' %>" style="font-size: 24px;color: dodgerblue;"></i> &nbsp;                                                                                                                                        
                                                                     </strong>
                                                                 <td class="nombre_matriz" width="1%"><% inde.meta ? inde.meta : '' %></td>
-                                                                <td ng-repeat="k in meses" width="110px" ng-init="valorAbsoluto(inde, k)" style="background: <% inde[k].color %> !important;">
+                                                                <td ng-repeat="k in meses" width="110px" ng-init="valorAbsoluto(inde, k)" style="background: <% inde[k].color %> !important;">                                                                
                                                                     <table width="100%" class="list-group" ng-if="inde[k].planificado >= 0">
                                                                         <tbody style="border:none">
                                                                             

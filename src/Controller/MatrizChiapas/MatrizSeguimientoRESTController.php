@@ -1028,7 +1028,21 @@ class MatrizSeguimientoRESTController extends Controller {
                         $indicators[$i]["alertas"] = $alertas;      
 
                         foreach ($meses as $km => $vm) {
-                            $vm = (object) $vm; 
+                            $vm = (object) $vm;
+
+                            if ($vm->mes == 'january') $vm->mes = 'enero';
+                            if ($vm->mes == 'february') $vm->mes = 'febrero';
+                            if ($vm->mes == 'march') $vm->mes = 'marzo';
+                            if ($vm->mes == 'april') $vm->mes = 'abril';
+                            if ($vm->mes == 'may') $vm->mes = 'mayo';
+                            if ($vm->mes == 'june') $vm->mes = 'junio';
+                            if ($vm->mes == 'july') $vm->mes = 'julio';
+                            if ($vm->mes == 'august') $vm->mes = 'agosto';
+                            if ($vm->mes == 'september') $vm->mes = 'septiembre';
+                            if ($vm->mes == 'october') $vm->mes = 'octubre';
+                            if ($vm->mes == 'november') $vm->mes = 'noviembre';
+                            if ($vm->mes == 'december') $vm->mes = 'diciembre';
+
                             
                             if($vm->mes != 'fuente'){                                
                                 $indicators[$i][$vm->mes]["planificado"] = floatVal($vm->planificado);  
