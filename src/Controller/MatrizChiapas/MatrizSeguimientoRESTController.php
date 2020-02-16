@@ -1031,9 +1031,9 @@ class MatrizSeguimientoRESTController extends Controller {
                             $vm = (object) $vm; 
                             
                             if($vm->mes != 'fuente'){                                
-                                $indicators[$i][$vm->mes]["planificado"] = $vm->planificado;                            
-                                $indicators[$i][$vm->mes]["real"] = $vm->real;
-                                $indicators[$i][$vm->mes]["real_denominador"] = $vm->real_denominador;                                                     
+                                $indicators[$i][$vm->mes]["planificado"] = floatVal($vm->planificado);  
+                                $indicators[$i][$vm->mes]["real"] = floatVal($vm->real);
+                                $indicators[$i][$vm->mes]["real_denominador"] = floatVal($vm->real_denominador); 
                             }
                         }
                         $i++;
@@ -1097,8 +1097,8 @@ class MatrizSeguimientoRESTController extends Controller {
                         foreach ($meses as $km => $vm) {
                             $vm = (object) $vm;
                             if($vm->mes != 'fuente'){
-                                $etab[$i][$vm->mes]["planificado"] = $vm->planificado;
-                                $etab[$i][$vm->mes]["real"] = $vm->real;
+                                $etab[$i][$vm->mes]["planificado"] = floatVal($vm->planificado);
+                                $etab[$i][$vm->mes]["real"] = floatVal($vm->real);
                                                        
                                 try{
                                     $ttm++; 
@@ -1113,7 +1113,7 @@ class MatrizSeguimientoRESTController extends Controller {
                                             $measure = '';
                                             if(isset($data_indicador[0]))
                                                 $measure = $data_indicador[0]["measure"];
-                                            $etab[$i][$vm->mes]["real"] = $measure;
+                                            $etab[$i][$vm->mes]["real"] = floatVal($measure);
                                         }
                                         $id_siguiente++;
                                         $representa = 0; 
