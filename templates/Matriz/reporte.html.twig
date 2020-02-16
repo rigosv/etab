@@ -133,6 +133,11 @@
                                     <button type="button" class="btn btn-success" ng-click="crearPlaneacion(ruta ,anio)"><i class="glyphicon glyphicon-plus"></i></button>
                                     <button type="button" class="btn btn-danger" ng-click="selectedDates = [];"><i class="glyphicon glyphicon-trash"></i></button>
                                     <button type="button" class="btn btn-info" ng-click="analisisGeneral()"><i class="fa fa-bar-chart" aria-hidden="true"></i></button>
+
+                                    <button type="button" class="btn btn-primary" exportar-tabla title="{{ '_exportar_' | trans }}">
+                                        <i class="glyphicon glyphicon-file"></i> 
+                                    </button>
+
                                 </li>
                             </ul>
                         </div>
@@ -192,39 +197,41 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr valign="middle" ng-repeat="inde in item.indicadores_etab" ng-init="num = $index">
+                                                            <tr valign="middle" ng-repeat="inde in item.indicadores_etab" ng-init="num = $index" style="height: <% (verR  ? 56 : 0) +  (verP  ? 56 : 0) +  (verRes  ? 56 : 0) %>px">
                                                                 <td ng-if="nim==0">
                                                                     <strong  class="form-control" style="cursor:default" ng-click="incluir[inde.id] = !incluir[inde.id]; "> 
                                                                         <i class="fa <% incluir[inde.id] ? 'fa-check-square' : 'fa-square-o' %>" style="font-size: 24px;color: dodgerblue;"></i> &nbsp;                                                                                                                                        
                                                                     </strong>
                                                                 </td>
-                                                                <TD>
+                                                                <td>
                                                                     <A href="#" ng-click="graficar(inde)">
                                                                         <i class="fa fa-bar-chart" aria-hidden="true"></i>
                                                                     </A>
-                                                                </TD>
+                                                                </td>
                                                                 <td class="nombre_matriz"><% inde.nombre %></td>
                                                                 <td class="nombre_matriz"><% inde.fuente %></td>
                                                                 <td> 
-                                                                    <strong class="form-control" style="cursor:default" ng-click="acumular[matriz.anio][(nom + '_' + inde.id)] = !acumular[matriz.anio][(nom + '_' + inde.id)]; acumularAbsoluto(matriz.anio, inde, nom, '_')"> 
-                                                                        <i class="fa <% acumular[matriz.anio][(nom + '_' + inde.id)] ? 'fa-check-square' : 'fa-square-o' %>" style="font-size: 24px;color: dodgerblue;"></i> &nbsp;                                                                                                                                        
+                                                                    <strong class="form-control" style="cursor:default" ng-click="inde.acumular = !inde.acumular; acumularAbsoluto( inde)"> 
+                                                                        <i class="fa <% inde.acumular ? 'fa-check-square' : 'fa-square-o' %>" style="font-size: 24px;color: dodgerblue;"></i> &nbsp;                                                                                                                                        
                                                                     </strong>
                                                                 </td>
                                                                 <td class="nombre_matriz" width="1%"><% inde.meta %></td>
-                                                                <td ng-repeat="k in meses" width="110px" ng-init="valorAbsoluto(inde, matriz.anio, (num + '_' + inde.id), k)" style="background: <% color[matriz.anio][(num + '_' + inde.id)][k] %> !important; ">
-                                                                    <table width="100%" class="list-group" ng-init="statusx[matriz.anio][(num + '_' + inde.id)][k] = inde[k].real / inde[k].planificado * 100">
+                                                                <td ng-repeat="k in meses" width="110px" ng-init="valorAbsoluto(inde, k)" style="background: <% inde[k].color %> !important; ">
+                                                                    <table width="100%" class="list-group" ng-init="inde[k].resultado = inde[k].real / inde[k].planificado * 100">
                                                                         <tbody style="border:none">
                                                                             <tr ng-if="inde[k].planificado >= 0 && inde[k].real <= 0 && verR && verP" class="list-group-item matriz-planeacion-texto" align="center"><th>&nbsp</th></tr>
-                                                                            <tr style="background: darkgray;" ng-if="verR && inde[k].real >= 0" class="list-group-item matriz-planeacion-texto" align="center"><th><% inde[k].real | number : 2 %></th></tr>
+                                                                            <tr style="background: darkgray;" ng-if="verR && inde[k].real >= 0" class="list-group-item matriz-planeacion-texto" align="center">
+                                                                                <th>
+                                                                                    <% inde[k].real | number : 2 %>
+                                                                                </th>
+                                                                            </tr>
                                                                             <tr style="background: cornflowerblue;" ng-if="verP && inde[k].planificado >= 0" class="list-group-item matriz-planeacion-texto" align="center">
                                                                                 <th><% inde[k].planificado | number : 2 %> </th>
                                                                             </tr>                                       
-                                                                            <tr ng-show="statusx[matriz.anio][(num + '_' + inde.id)][k] >= 0 && verRes" class="list-group-item" align="center" ">
+                                                                            <tr ng-show="inde[k].resultado >= 0 && verRes" class="list-group-item" align="center" ">
                                                                                 <th>
-                                                                                    <strong ng-if="statusx[matriz.anio][(num + '_' + inde.id)][k] >= 0" style="font-weight:900; text-shadow: 1px 1px 1px #FFF;" >
-                                                                                        <div align="center">
-                                                                                            <% statusx[matriz.anio][(num + '_' + inde.id)][k] | number : 0 %> %
-                                                                                        </div>
+                                                                                    <strong ng-if="inde[k].resultado >= 0" style="font-weight:900; text-shadow: 1px 1px 1px #FFF;" >
+                                                                                        <div align="center"> <% inde[k].resultado | number : 0 %> % </div>
                                                                                     </strong>
                                                                                 </th>
                                                                             </tr>
@@ -247,25 +254,25 @@
                                                             </tr>
                                                         </tbody>
                                                         <tfoot>
-                                                            <tr valign="middle" ng-repeat="inde in item.indicadores_relacion" ng-init="num = $index">
+                                                            <tr valign="middle" ng-repeat="inde in item.indicadores_relacion" ng-init="num = $index" style="height: <% (verR ? 56 : 0) +  (verP  ? 56 : 0) +  (verRes  ? 56 : 0) + (inde.es_formula ? 75 : 0) %>px">
                                                                 <td ng-if="nim==0">
                                                                     <strong class="form-control" style="cursor:default" ng-click="incluir[inde.id] = !incluir[inde.id]; "> 
                                                                         <i class="fa <% incluir[inde.id] ? 'fa-check-square' : 'fa-square-o' %>" style="font-size: 24px;color: dodgerblue;"></i> &nbsp;                                                                                                                                        
                                                                     </strong>
                                                                 </td>
-                                                                <TD>
+                                                                <td>
                                                                     <A href="#" ng-click="graficar(inde)" >
                                                                         <i class="fa fa-bar-chart" aria-hidden="true"></i>
                                                                     </A>
-                                                                </TD>
+                                                                </td>
                                                                 <td class="nombre_matriz"><% inde.nombre %></td>
                                                                 <td class="nombre_matriz"><% inde.fuente %></td>
                                                                 <td> 
-                                                                    <strong class="form-control" style="cursor:default" ng-click="acumular[matriz.anio][(nom + '_' + inde.id)] = !acumular[matriz.anio][(nom + '_' + inde.id)]; acumularAbsoluto(matriz.anio, inde, nom, '_')"> 
-                                                                        <i class="fa <% acumular[matriz.anio][(nom + '_' + inde.id)] ? 'fa-check-square' : 'fa-square-o' %>" style="font-size: 24px;color: dodgerblue;"></i> &nbsp;                                                                                                                                        
+                                                                    <strong class="form-control" style="cursor:default" ng-click="inde.acumular = !inde.acumular; acumularAbsoluto( inde)"> 
+                                                                        <i class="fa <% inde.acumular ? 'fa-check-square' : 'fa-square-o' %>" style="font-size: 24px;color: dodgerblue;"></i> &nbsp;                                                                                                                                        
                                                                     </strong>
                                                                 <td class="nombre_matriz" width="1%"><% inde.meta ? inde.meta : '' %></td>
-                                                                <td ng-repeat="k in meses" width="110px" ng-init="valorAbsoluto(inde, matriz.anio, (num + '_' + inde.id), k)" style="background: <% color[matriz.anio][(num + '_' + inde.id)][k] %> !important;">
+                                                                <td ng-repeat="k in meses" width="110px" ng-init="valorAbsoluto(inde, k)" style="background: <% inde[k].color %> !important;">
                                                                     <table width="100%" class="list-group" ng-if="inde[k].planificado >= 0">
                                                                         <tbody style="border:none">
                                                                             
@@ -274,18 +281,16 @@
                                                                                     <% inde[k].real | number : 2 %>
                                                                                 </th>
                                                                                 <th ng-if="inde.es_formula">
-                                                                                    <% inde[k].real | number : 2 %> / <% inde[k].real_denominador | number : 2 %> = <% formula[matriz.anio][(num + '_' + inde.id)][k] | number : 2 %>
+                                                                                    <% inde[k].real | number : 2 %> / <% inde[k].real_denominador | number : 2 %> = <% inde[k].formula | number : 2 %>
                                                                                 </th>
                                                                             </tr>
                                                                             <tr style="background: cornflowerblue;" ng-if="verP && inde[k].planificado >= 0" class="list-group-item matriz-planeacion-texto" align="center">
                                                                                 <th><% inde[k].planificado ? (inde[k].planificado | number : 2) : '' %> </th>
                                                                             </tr>                                       
-                                                                            <tr ng-show="statusx[matriz.anio][(num + '_' + inde.id)][k] >= 0 && verRes" class="list-group-item" align="center">
+                                                                            <tr ng-show="inde[k].resultado >= 0 && verRes" class="list-group-item" align="center">
                                                                                 <th>
-                                                                                    <strong ng-if="statusx[matriz.anio][(num + '_' + inde.id)][k] >= 0" style="font-weight:900; text-shadow: 1px 1px 1px #FFF;" >
-                                                                                        <div align="center">
-                                                                                            <% statusx[matriz.anio][(num + '_' + inde.id)][k] | number : 0 %> <% inde[k].simbolo %>                                                                                            
-                                                                                        </div>                                                                
+                                                                                    <strong ng-if="inde[k].resultado >= 0" style="font-weight:900; text-shadow: 1px 1px 1px #FFF;" >                                                                                                                                                 
+                                                                                        <div align="center" > <% inde[k].resultado | number : 0 %> % </div>   
                                                                                     </strong>                                                                                    
                                                                                 </th>
                                                                             </tr>
@@ -316,15 +321,6 @@
                         </div> 
                     </div>
 
-                    <div class="sonata-ba-form-actions well well-small form-actions stuck">
-                        <button type="button" class="btn btn-primary" exportar-tabla>
-                            <i class="glyphicon glyphicon-file"></i> {{ '_exportar_' | trans }}
-                        </button>
-
-                        <button type="button" class="btn btn-info" imprimir-div=".imprimir" ruta="{{ app.request.getSchemeAndHttpHost() }}">
-                            <i class="glyphicon glyphicon-print"></i> {{ '_imprimir_' | trans }}
-                        </button>
-                    </div>
                 </form>
             </div>
         </section>

@@ -711,9 +711,10 @@ class MatrizRESTController extends AbstractController {
                                     if(is_array($valor2)) {
                                         $valor2 = (object) $valor2;
                                     }
-                                    if(property_exists($valor2, 'id') && $tipo == 2){
-                                        $alerta = $em->getRepository(MatrizIndicadoresRelAlertas::class)->find($valor2->id);
-                                    } else{
+                                   
+                                    $alerta = $em->getRepository(MatrizIndicadoresRelAlertas::class)->findBy(array('matriz_indicador' => $relacion->getId(), 'color' => $valor2->color));
+                                    
+                                    if(!$alerta) {                                        
                                         $alerta = new MatrizIndicadoresRelAlertas();
                                     }
 
@@ -750,9 +751,18 @@ class MatrizRESTController extends AbstractController {
                         if(count($existe_relacion) > 0){
                             $existe_relacion = implode(",", $existe_relacion);
 
-                            $sql = "DELETE FROM matriz_indicadores_relacion_alertas  WHERE matriz_indicador_relacion_id not in($existe_relacion) ";
+                            $sql = "SELECT * FROM matriz_indicadores_relacion  WHERE id not in($existe_relacion) and id_desempeno = " . $desempeno->getId();
                             $statement = $em->getConnection()->prepare($sql);
-                            $statement->execute(); 
+                            $statement->execute();
+                            $variable = $statement->fetchAll();
+                            if(count($variable) > 0){
+                                foreach ($variable as $clavex => $valorx) {                                 
+                                    $sqld = "DELETE FROM matriz_indicadores_relacion_alertas  WHERE matriz_indicador_relacion_id = ". $valorx["id"];
+                                    $statement = $em->getConnection()->prepare($sqld);
+                                    $statement->execute(); 
+                                }             
+                            }              
+                            
                             
                             $sql = "DELETE FROM matriz_indicadores_relacion  WHERE id not in($existe_relacion) and id_desempeno = ".$desempeno->getId();
                             $statement = $em->getConnection()->prepare($sql);
@@ -809,9 +819,9 @@ class MatrizRESTController extends AbstractController {
                                     if(is_array($valor2)) {
                                         $valor2 = (object) $valor2;
                                     }
-                                    if(property_exists($valor2, 'id') && $tipo == 2){
-                                        $alerta = $em->getRepository(MatrizIndicadoresEtabAlertas::class)->find($valor2->id);
-                                    } else{
+                                    
+                                    $alerta = $em->getRepository(MatrizIndicadoresEtabAlertas::class)->findBy(array('matriz_indicador' => $etab->getId(), 'color' => $valor2->color));                                    
+                                    if(!$alerta) {
                                         $alerta = new MatrizIndicadoresEtabAlertas();
                                     }
 
@@ -845,12 +855,20 @@ class MatrizRESTController extends AbstractController {
                         }
                         
                         // borra las que no esten dentro del array que envio el usuario                  
-                        if(count($existe_etab) > 0){ 
+                        if(count($existe_etab) > 0){
                             $existe_etab = implode(",", $existe_etab);
 
-                            $sql = "DELETE FROM matriz_indicadores_etab_alertas  WHERE matriz_indicador_etab_id not in($existe_etab) ";
+                            $sql = "SELECT * FROM matriz_indicadores_etab  WHERE id not in($existe_relacion) and id_desempeno = " . $desempeno->getId();
                             $statement = $em->getConnection()->prepare($sql);
-                            $statement->execute(); 
+                            $statement->execute();
+                            $variable = $statement->fetchAll();
+                            if (count($variable) > 0) {
+                                foreach ($variable as $clavex => $valorx) {
+                                    $sqld = "DELETE FROM matriz_indicadores_etab_alertas  WHERE matriz_indicador_etab_id = ".$valorx["id"];
+                                    $statement = $em->getConnection()->prepare($sqld);
+                                    $statement->execute();
+                                }
+                            }                          
 
                             $sql = "DELETE FROM matriz_indicadores_etab  WHERE id not in($existe_etab) and id_desempeno = ".$desempeno->getId();
                             $statement = $em->getConnection()->prepare($sql);
