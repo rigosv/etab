@@ -446,10 +446,13 @@ class FichaTecnicaRepository extends ServiceEntityRepository {
                 FROM $tabla_indicador A" ;
             $sql .= ' WHERE 1=1 ' . $evitar_div_0 . ' ' . $filtros .' '. $otros_filtros;
 
+        $orderid = "";
+        if (stripos(strtoupper($sql), "CTL_MES") || stripos(strtoupper($sql), "CTL_MESES"))
+            $orderid = "id, ";
                     
             $sql .= " GROUP BY " . $dimension . $grupo_tendencia;
             //$sql .=  " HAVING (($formula)::numeric) >= 0 ";
-            $sql .= " ORDER BY $dimension $orden_tendencia";
+            $sql .= " ORDER BY $orderid $dimension $orden_tendencia";
         
         try {
             if ($ver_sql == true)
