@@ -1052,6 +1052,10 @@ class TableroController extends AbstractController {
                 $statement->execute();
                 $comentarios = $statement->fetchAll();
 
+                $statement = $connection->prepare("DELETE  FROM social WHERE  sala = '" . $grupoIndicadores->getId() . "'");
+                $statement->execute();
+                $social = $statement->fetchAll();
+
                 $lasala=$em->find(GrupoIndicadores::class, $sala);
                 $em->remove($lasala);
                     
