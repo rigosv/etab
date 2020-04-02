@@ -447,7 +447,7 @@ class FichaTecnicaRepository extends ServiceEntityRepository {
             $sql .= ' WHERE 1=1 ' . $evitar_div_0 . ' ' . $filtros .' '. $otros_filtros;
 
         $orderid = "";
-        if (stripos(strtoupper($sql), "CTL_MES") || stripos(strtoupper($sql), "CTL_MESES"))
+        if (stripos(strtoupper($sql), "CTL_MES") || stripos(strtoupper($sql), "CTL_MESES") || stripos(strtoupper($sql), "CTL_MONTH"))
             $orderid = "id, ";
                     
             $sql .= " GROUP BY " . $dimension . $grupo_tendencia;

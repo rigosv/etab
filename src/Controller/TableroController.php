@@ -613,23 +613,35 @@ class TableroController extends AbstractController {
             $almacenamiento->crearIndicador($fichaTec, $dimension, $filtros);
             $data = $almacenamiento->calcularIndicador($fichaTec, $dimension, $filtros, $datos->ver_sql, $otros_filtros, $datos->tendencia);                        
             if($data){
-                if($datos->tendencia){
-                    $info = []; $valores = [];
+                if($datos->tendencia || !empty($datos->linea)){
+                    $info = []; $valores = []; 
                     foreach ($data as $key => $value) {
                         if(is_array($value)) $value = (object) $value;
                         if(!array_key_exists($value->category, $info)){
                             $info[$value->category] = array(
                                 "values" => [],
-                                "key" => $value->category
+                                "key" => $value->category,
+                                "category" => $value->category
                             );
                             $valores[$value->category] = [];
                         }
-                        $time = new \DateTime($value->fecha.'-01', new \DateTimeZone('America/Mexico_City'));
-                        array_push($valores[$value->category], array(
-                            "x" => $time->getTimestamp() * 1000,  // Fecha en milisegundos
-                            "y" => ($value->measure) * 1,      // Valor 
-                            "fecha" => $value->fecha              // fecha del evento opcional 
-                        ));
+                        if($datos->tendencia){
+                            $time = new \DateTime($value->fecha, new \DateTimeZone('America/Mexico_City'));
+                            $time = $time->format('m');
+
+                            array_push($valores[$value->category], array(
+                                "x" => $time,    
+                                "y" => ($value->measure) * 1,           
+                                "fecha" => $value->fecha                
+                            ));
+                        }else{
+                            array_push($valores[$value->category], array(
+                                "x" => ($key + 1),    
+                                "y" => ($value->measure) * 1,           
+                                "fecha" => $value->category                
+                            ));
+                        }
+                        
                         $info[$value->category]["values"] = $valores[$value->category];
                     }
                     $dataTemp = [];
