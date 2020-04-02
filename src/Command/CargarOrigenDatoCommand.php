@@ -5,7 +5,7 @@ namespace App\Command;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Console\Input\InputArgument;
 
 use App\Entity\FichaTecnica;
 use App\Entity\OrigenDatos;
@@ -19,16 +19,31 @@ class CargarOrigenDatoCommand extends ContainerAwareCommand
         $this
             ->setName('origen-dato:cargar')
             ->setDescription('Cargar datos especificados en los orígenes')
+            ->addArgument(
+                'origenes',
+                InputArgument::IS_ARRAY,
+                'Id de orígenes a cargar, separados por espacios'
+            )
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $em = $this->getContainer()->get('doctrine')->getManager();
-        $bus = $this->getContainer()->get('message_bus');
 
         //Recuperar todos las fichas técnicas de indicadores
-        $indicadores = $em->getRepository(FichaTecnica::class)->findAll();
+        $origenes = $input->getArgument('origenes');
+        $indicadores = [];
+        if (count($origenes) > 0) {
+            foreach( $origenes as $o ){
+                $origen = $em->find(OrigenDatos::class, $o);
+                if ( $origen != null ){
+                    $this->cargarOrigen($origen);
+                }
+            }
+        } else {
+            $indicadores = $em->getRepository(FichaTecnica::class)->findAll();
+        }
 
         $fecha = new \DateTime("now");
         $ahora = $fecha;
@@ -68,22 +83,32 @@ class CargarOrigenDatoCommand extends ContainerAwareCommand
                     $origenDato = $var->getOrigenDatos();
                     // Solo los orígenes desde base de datos se cargarán periodicamente
                     // los que sean de archivos solo a demanda
-                    if ($origenDato->getSentenciaSql() != '') {
-
-                        $carga_directa = $origenDato->getEsCatalogo();
-                        // No mandar a la cola de carga los que son catálogos, Se cargarán directamente
-                        if ($carga_directa){
-                            $em->getRepository(OrigenDatos::class)->cargarCatalogo($origenDato);
-                            $ind->setUltimaLectura($ahora);
-                        }
-                        else {
-                            $bus->dispatch(new SmsCargarOrigenDatos($origenDato->getId()));
-                        }
+                    if ( $origenDato->getEscatalogo() ){
+                        $ind->setUltimaLectura($ahora);
                     }
+                    $this->cargarOrigen($origenDato);
+                    
                 }
             }
         }
         $em->flush();
+    }
+    
+    public function cargarOrigen(OrigenDatos $origenDato ) {
+        $em = $this->getContainer()->get('doctrine')->getManager();
+        $bus = $this->getContainer()->get('message_bus');
+        
+        if ($origenDato->getSentenciaSql() != '') {
+
+            $carga_directa = $origenDato->getEsCatalogo();
+            // No mandar a la cola de carga los que son catálogos, Se cargarán directamente
+            if ($carga_directa){
+                $em->getRepository(OrigenDatos::class)->cargarCatalogo($origenDato);
+            }
+            else {
+                $bus->dispatch(new SmsCargarOrigenDatos($origenDato->getId()));
+            }
+        }
     }
 
 }
