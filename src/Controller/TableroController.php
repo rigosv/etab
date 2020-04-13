@@ -599,8 +599,11 @@ class TableroController extends AbstractController {
                 
                 foreach ($datos->filtros as $f) 
                 {  
-                    $f = (object) $f;
-                    $filtros[$f->codigo] = $f->valor;
+                    if($f){
+                        $f = (object) $f;
+                        if(!empty($f->codigo))
+                            $filtros[$f->codigo] = $f->valor;
+                    }
                 }                 
             }
             $otros_filtros = '';
