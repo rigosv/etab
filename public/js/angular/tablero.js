@@ -272,6 +272,7 @@ App.controller("TableroCtrl", function(
       angular.forEach(item.indicadores, function(element, key) {        
         $scope.indicadores.push({
           cargando: true,
+          tendencia: false,
           filtros: [],
           error: "",
           informacion: {},
@@ -311,23 +312,19 @@ App.controller("TableroCtrl", function(
           $scope.indicadores[index].configuracion = JSON.parse(element.orden);
         }
         $scope.indicadores[index].index = index;
-        $scope.indicadores[index].filtros =
-          element.filtro != "" ? JSON.parse(element.filtro) : "";
+        $scope.indicadores[index].filtros = element.filtro != "" ? JSON.parse(element.filtro) : "";
         $scope.indicadores[index].otros_filtros = {
           desde: element.filtro_posicion_desde,
           hasta: element.filtro_posicion_hasta,
-          elementos:
-            element.filtro_elementos != "" && element.filtro_elementos != null
-              ? element.filtro_elementos.split(",")
-              : []
+          elementos: element.filtro_elementos != "" && element.filtro_elementos != null ? element.filtro_elementos.split(",") : []
         };
         
         $scope.opcionesGraficas(index, $scope.indicadores[index].configuracion.tipo_grafico, element.dimension, "#", $scope.indicadores[index].configuracion.height);
-
+        
         var json = {
           filtros: $scope.indicadores[index].filtros,
           ver_sql: false,
-          tendencia: $scope.indicadores[index].tendencia
+          tendencia: angular.isUndefined($scope.indicadores[index].tendencia) ? false : $scope.indicadores[index].tendencia
         };
         if ($scope.indicadores[index].hasOwnProperty('linea')){
           json.linea = true;
@@ -358,10 +355,8 @@ App.controller("TableroCtrl", function(
                 pos++;
               });
 
-              $scope.indicadores[index].nombre =
-                data.informacion.nombre_indicador;
-              $scope.indicadores[index].es_favorito =
-                data.informacion.es_favorito;
+              $scope.indicadores[index].nombre = data.informacion.nombre_indicador;
+              $scope.indicadores[index].es_favorito = data.informacion.es_favorito;
               $scope.indicadores[index].dimensiones = dimensiones;
               $scope.indicadores[index].dimension = dimension;
               $scope.indicadores[index].sql = "";
@@ -369,13 +364,13 @@ App.controller("TableroCtrl", function(
               $scope.indicadores[index].full_screen = false;
 
               $scope.indicadores[index].informacion = data.informacion;
-              $scope.indicadores[index].informacion.nombre =
-                data.informacion.nombre_indicador;
+              $scope.indicadores[index].informacion.nombre = data.informacion.nombre_indicador;
             }
 
             $scope.repuestaIndicador(data, dimension, index);
             $scope.indicadores[index].cargando = false;
-            $scope.actualizarsGrafica(index, false);
+            $scope.indicadores[index].tendencia = json.tendencia;
+            $scope.actualizarsGrafica(index, false, json.tendencia);
           },
           function(e) {
             $scope.indicadores[index].error = "Error";
@@ -903,6 +898,7 @@ App.controller("TableroCtrl", function(
     $scope.indicadores[index].radial = false;
     $scope.indicadores[index].termometro = false;
     $scope.indicadores[index].mapa = false;
+    
     if ($scope.indicadores[index].tendencia && (tipo != 'LINECHART' && tipo != 'LINEA' && tipo != 'LINEAS')){
       $scope.indicadores[index].tendencia = tendencia;
       $scope.agregarIndicadorDimension(dimension, index);
@@ -1056,10 +1052,13 @@ App.controller("TableroCtrl", function(
       if (tipo == 'MAPA' || tipo == 'GEOLOCATION' || tipo == 'MAP') {
         $scope.dibujarMapa(index, true);
       } else{
-        if ($scope.indicadores[index].tendencia || $scope.indicadores[index].hasOwnProperty('linea'))
-        $scope.opcionesGraficasTendencias(index, $scope.indicadores[index].configuracion.tipo_grafico, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, tamano);
-      else
-        $scope.opcionesGraficas(index, $scope.indicadores[index].configuracion.tipo_grafico, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, tamano);   
+        var linea = $scope.indicadores[index].hasOwnProperty('linea') ? $scope.indicadores[index].linea : false;
+        if ($scope.indicadores[index].tendencia || linea){
+          $scope.opcionesGraficasTendencias(index, $scope.indicadores[index].configuracion.tipo_grafico, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, tamano);
+        }
+        else {
+          $scope.opcionesGraficas(index, $scope.indicadores[index].configuracion.tipo_grafico, $scope.indicadores[index].dimensiones[dimension], $scope.indicadores[index].informacion.unidad_medida, tamano);   
+        }
       }
       document.getElementById("update" + index).click();
     }, 200);
@@ -1483,7 +1482,7 @@ App.controller("TableroCtrl", function(
           } 
         }
       };
-    } else if (tipo == 'DISCRETEBARCHART' || tipo == 'BARRA' || tipo == 'BARRAS' || tipo == 'COLUMNAS' || tipo == 'COLUMNA' || tipo == 'LINECHART' || tipo == 'LINEA' || tipo == 'LINEAS'){
+    } else if (tipo == 'DISCRETEBARCHART' || tipo == 'BARRA' || tipo == 'BARRAS' || tipo == 'COLUMNAS' || tipo == 'COLUMNA' || tipo == 'LINECHART' || tipo == 'LINEA' || tipo == 'LINEAS'){      
       options = {
         chart: {
           type: 'discreteBarChart',
