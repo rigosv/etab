@@ -47,7 +47,7 @@
                                         <i class="glyphicon glyphicon-search" ng-if="!cc_uso"></i>
                                         <img src="{{ app.request.schemeAndHttpHost ~ asset('images/ajax-loader.gif') }}" style="width:20px" ng-if="cc_uso"/>                                        
                                     </span>
-                                    <select class="form-control" id="clasificacion_uso" ng-model="clasificacion_uso" ng-change="clasificaciones_tecnicas = []; inidcadores_clasificados = []; comboDependiente('../api/v1/tablero/clasificacionTecnica', clasificaciones_tecnicas, clasificacion_uso, 'cc_tecnica')">
+                                    <select class="form-control" id="clasificacion_uso" ng-model="clasificacion_uso" ng-change="clasificacion_tecnica = ''; clasificaciones_tecnicas = []; inidcadores_clasificados = []; comboDependiente('../api/v1/tablero/clasificacionTecnica', clasificaciones_tecnicas, clasificacion_uso, 'cc_tecnica')">
                                         <option ng-repeat="item in clasificaciones_usos" value="<% item.id %>"><% item.descripcion | uppercase %></option>                                
                                     </select>
                                 </div>
