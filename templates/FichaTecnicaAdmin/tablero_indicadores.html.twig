@@ -47,7 +47,7 @@
                                         <i class="glyphicon glyphicon-search" ng-if="!cc_uso"></i>
                                         <img src="{{ app.request.schemeAndHttpHost ~ asset('images/ajax-loader.gif') }}" style="width:20px" ng-if="cc_uso"/>                                        
                                     </span>
-                                    <select class="form-control" id="clasificacion_uso" ng-model="clasificacion_uso" ng-change="comboDependiente('../api/v1/tablero/clasificacionTecnica', clasificaciones_tecnicas, clasificacion_uso, 'cc_tecnica')">
+                                    <select class="form-control" id="clasificacion_uso" ng-model="clasificacion_uso" ng-change="clasificaciones_tecnicas = []; inidcadores_clasificados = []; comboDependiente('../api/v1/tablero/clasificacionTecnica', clasificaciones_tecnicas, clasificacion_uso, 'cc_tecnica')">
                                         <option ng-repeat="item in clasificaciones_usos" value="<% item.id %>"><% item.descripcion | uppercase %></option>                                
                                     </select>
                                 </div>
@@ -64,7 +64,7 @@
                                         <img src="{{ app.request.schemeAndHttpHost ~ asset('images/ajax-loader.gif') }}" style="width:20px" ng-if="cc_tecnica"/>
                                     </span>
                                     <select class="form-control" id="clasificacion_tecnica" ng-model="clasificacion_tecnica" 
-                                    ng-change="cargarIndicadores('../api/v1/tablero/listaIndicadores?tipo=clasificados&uso=' + clasificacion_uso + '&tecnica=' + clasificacion_tecnica, inidcadores_clasificados, 'cc_cindicador')">
+                                    ng-change="inidcadores_clasificados = []; cargarIndicadores('../api/v1/tablero/listaIndicadores?tipo=clasificados&uso=' + clasificacion_uso + '&tecnica=' + clasificacion_tecnica, inidcadores_clasificados, 'cc_cindicador')">
                                         <option ng-repeat="item in clasificaciones_tecnicas" value="<% item.id %>"><% item.descripcion | uppercase %></option>                                
                                     </select>
                                 </div>
