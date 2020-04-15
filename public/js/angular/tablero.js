@@ -2319,7 +2319,9 @@ App.controller("TableroCtrl", function(
           );
       }
   };
-
+  $scope.limpiarSelect = function(){
+    document.getElementById('select2-chosen-2').innerHTML = '';
+  }
   $scope.aplicarFiltroGeneral = () => {
       
       let nuevosFiltros = [];
