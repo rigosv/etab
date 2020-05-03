@@ -5,7 +5,7 @@ _inicio:
 indicadores_rest:
     type:     rest
     resource: App\RESTController\IndicadorRESTController
-    prefix: /indicadores/api/
+    prefix: /
 
 indicadores_rest_public:
     type:     rest
