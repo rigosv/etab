@@ -21,7 +21,7 @@ class IndicadorRESTController extends Controller {
     /**
      * @param integer $fichaTec
      * @param string $dimension
-     * @Get("/indicador/{id}/data/dimension/{dimension}", options={"expose"=true})
+     * @Get("/rest-service/indicador/{id}/data/dimension/{dimension}", options={"expose"=true})
      * @Rest\View
      */
     public function getIndicadorAction(FichaTecnica $fichaTec, $dimension, Request $request, AlmacenamientoProxy $almacenamiento) {
@@ -236,7 +236,7 @@ class IndicadorRESTController extends Controller {
      * @Get("/rest-service/indicador/{id}/campos", options={"expose"=true})
      * @Rest\View
      */
-    public function getCamposVariablesIndicadorAction(FichaTecnica $fichaTec) {
+    public function getCamposVariablesIndicadorAction(FichaTecnica $fichaTec, Request $request) {
         $em = $this->getDoctrine()->getManager();
         $campos = explode(', ', $fichaTec->getCamposIndicador() );
         $campos_ = [];
@@ -250,6 +250,12 @@ class IndicadorRESTController extends Controller {
             $campos_[ '__' . strtolower( $v->getIniciales() ) . '__'] = $v->getNombre();
         }
 
-        return new JsonResponse($campos_);
+        $callback = $request->get('callback');
+        $response = new JsonResponse($campos_, 200);
+        if ( $callback != null ) {
+            $response->setCallback($callback);
+        }
+        
+        return $response;
     }
 }

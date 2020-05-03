@@ -2,17 +2,20 @@
 
 namespace App\RESTController;
 
-use App\AlmacenamientoDatos\AlmacenamientoProxy;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use App\Entity\FichaTecnica;
+use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use App\Entity\Agencia;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Nelmio\ApiDocBundle\Annotation\Security;
 use Swagger\Annotations as SWG;
 
+use App\AlmacenamientoDatos\AlmacenamientoProxy;
+use App\Entity\FichaTecnica;
+use App\Entity\ConfiguracionPivotTable;
+use App\Entity\Agencia;
 
 class ApiRESTController extends Controller {
 
@@ -90,10 +93,9 @@ class ApiRESTController extends Controller {
      *
      * @SWG\Tag(name="Indicadores")
      */
-    public function getIndicadorAction($cod_agencia, $id, AlmacenamientoProxy $almacenamiento ) {
+    public function getIndicadorAction($cod_agencia, $id, AlmacenamientoProxy $almacenamiento, Request $request ) {
         $em = $this->getDoctrine()->getManager();
-
-        $response = new Response();
+        
         $respuesta = array('state' => 'ok');
 
         $fichaRepository = $em->getRepository(FichaTecnica::class);
@@ -121,7 +123,58 @@ class ApiRESTController extends Controller {
         } else {
             $respuesta = array('state' => 'fail', 'message' => 'Indicador no existe');
         }
-        $response->setContent(json_encode($respuesta));
+        
+        $callback = $request->get('callback');            
+        $response = new JsonResponse($respuesta, 200);
+        if ( $callback != null ) {
+            $response->setCallback($callback);
+        }
+        
+        return $response;
+    }
+
+    /**
+     * Obtener el escenario de una tabla dinámica
+     *
+
+     * @REST\Get("/api/pivottable/escenario/{id}", name="api_get_escenario_tabla-dinamica", options={"expose"=true})
+     * @Rest\View
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Retorna el escenario de una tabla dinámica",
+     *     @SWG\Schema(ref="#/definitions/EscenarioTablaDinamica")
+     * )
+     *
+     *
+     * @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="integer",
+     *     description="El número identificador del escenario"
+     * )
+     *
+     * @SWG\Tag(name="TablaDinamica")
+     */
+    public function getEscenarioTablaDinamicaAction($id,  Request $request ) {
+        $em = $this->getDoctrine()->getManager();
+        
+        $respuesta = array('state' => 'ok');
+
+        $escenario = $em->find(ConfiguracionPivotTable::class, $id);
+
+        if ( $escenario !== null ) {
+            $respuesta['escenario'] = $escenario->getConfiguracion();    
+        } else {
+            $respuesta = array('state' => 'error');
+        }
+        
+        $callback = $request->get('callback');            
+        $response = new JsonResponse($respuesta, 200);
+        if ( $callback != null ) {
+            $response->setCallback($callback);
+        }
+        
         return $response;
     }
 
