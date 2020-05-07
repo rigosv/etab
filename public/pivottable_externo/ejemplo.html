@@ -37,7 +37,8 @@
     <script>
         $(document).ready(function() {
             var idContenedorTabla = 'output';
-            var urlDatos = 'http://127.0.0.1:8000/api/PNVIH/indicador/388/data';
+            var urlBase = 'https://etab-dev.salud.gob.sv'; 
+            var urlDatos = urlBase+'/api/PNVIH/indicador/388/data';
             /* Utilizar solo una de las siguientes variables
              * utilizar 'urlEscenario' si el indicador tiene un escenario guardado
              * si desea utilizar una configuración particular utilice la variable
@@ -46,12 +47,12 @@
              * 
              * Si usa 'confEscenario', se ignorará 'urlEscenario'
              * */
-            var urlEscenario = 'http://localhost:8000/api/pivottable/escenario/6';            
+            var urlEscenario = urlBase+'/api/pivottable/escenario/6';            
             var confEscenario = {'vals': ['Número de muertes por VIH/SIDA'], 'rows': ['Año'], 'cols': ['Departamento', 'Sexo'], 
                                 'aggregatorName': 'Suma', 'rendererName': 'Table', 'exclusions': {}, 'inclusions': {},
                                 'rowOrder': 'key_a_to_z', 'colOrder': 'key_a_to_z'};
             
-            cargarTablaDinamica(idContenedorTabla, urlDatos, urlEscenario, confEscenario  );
+            cargarTablaDinamica(idContenedorTabla, urlBase, urlDatos, urlEscenario, confEscenario  );
             
         });
     </script>
@@ -100,7 +101,8 @@
     &lt;script>
         $(document).ready(function() {
             var idContenedorTabla = 'output';
-            var urlDatos = 'http://127.0.0.1:8000/api/PNVIH/indicador/388/data';
+            var urlBase = 'https://etab-dev.salud.gob.sv'; 
+            var urlDatos = urlBae+'/api/PNVIH/indicador/388/data';
             /* Utilizar solo una de las siguientes variables
              * utilizar 'urlEscenario' si el indicador tiene un escenario guardado
              * si desea utilizar una configuración particular utilice la variable
@@ -109,12 +111,12 @@
              * 
              * Si usa 'confEscenario', se ignorará 'urlEscenario'
              * */
-            var urlEscenario = 'http://localhost:8000/api/pivottable/escenario/6';            
+            var urlEscenario = urlBase+'/api/pivottable/escenario/6';            
             var confEscenario = {'vals': ['Número de muertes por VIH/SIDA'], 'rows': ['Año'], 'cols': ['Departamento', 'Sexo'], 
                                 'aggregatorName': 'Suma', 'rendererName': 'Table', 'exclusions': {}, 'inclusions': {},
                                 'rowOrder': 'key_a_to_z', 'colOrder': 'key_a_to_z'};
             
-            cargarTablaDinamica(idContenedorTabla, urlDatos, urlEscenario, confEscenario  );
+            cargarTablaDinamica(urlBase, idContenedorTabla, urlDatos, urlEscenario, confEscenario  );
         });
     &lt;/script>
     </code></pre>

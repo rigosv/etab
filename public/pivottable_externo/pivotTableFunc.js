@@ -1,6 +1,6 @@
 
 var nombre;
-var cargarTablaDinamica = (function (idContenedorTabla, urlDatos, urlEscenario = null, configuracion = null) {
+var cargarTablaDinamica = (function (idContenedorTabla, urlBase, urlDatos, urlEscenario = null, configuracion = null) {
 
     var conf = (configuracion !== null) ? configuracion : {'vals': [], 'rows': [], 'cols': [], 'aggregatorName': 'Suma',
         'rendererName': 'Table', 'exclusions': {}, 'inclusions': {},
@@ -10,14 +10,14 @@ var cargarTablaDinamica = (function (idContenedorTabla, urlDatos, urlEscenario =
             if (resp.state === 'ok') {
                 conf = JSON.parse(resp.escenario);
             }
-            cargarDatosTabla(urlDatos, idContenedorTabla, conf);
+            cargarDatosTabla(idContenedorTabla, urlBase, urlDatos, conf);
         });
     } else {
-        cargarDatosTabla(urlDatos, idContenedorTabla, conf);
+        cargarDatosTabla(idContenedorTabla, urlBase, urlDatos, conf);
     }
 });
 
-var cargarDatosTabla = (function (urlDatos, idContenedorTabla, cfg) {
+var cargarDatosTabla = (function (idContenedorTabla, urlBase, urlDatos, cfg) {
     var renderers = $.extend($.pivotUtilities.renderers, $.pivotUtilities.plotly_renderers, $.pivotUtilities.export_renderers);
 
     var xaggregatorName = "Suma";
@@ -30,7 +30,7 @@ var cargarDatosTabla = (function (urlDatos, idContenedorTabla, cfg) {
             idIndicador = mps.datos[0].indicador_id;
             nombre = mps.datos[0].nombre;
 
-            $.getJSON('/rest-service/indicador/' + idIndicador + '/campos' + '?callback=?', function (nombres) {
+            $.getJSON(urlBase + '/rest-service/indicador/' + idIndicador + '/campos' + '?callback=?', function (nombres) {
                 var datos_ = JSON.stringify( datos );
                 var cfg_ = JSON.stringify( cfg );
                 var desc = '';
