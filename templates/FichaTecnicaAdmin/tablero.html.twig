@@ -163,13 +163,14 @@
 
                                                         <li><a title="{{ '_refresh_' | trans }}" ng-click="item.filtros = []; item.dimension = 0; agregarIndicadorDimension(0, $index)"> <i class="glyphicon glyphicon-refresh"></i> </a></li>
                                                         <li><a title="{{ '_full_screen_' | trans }}" ng-click="actualizarsGrafica($index);"> <i class="glyphicon glyphicon-<% item.full_screen ? 'resize-small' : 'resize-full' %>"></i> </a></li>
-
+                                                        <!--
                                                         <li>
                                                             <a title="{{ item.tendencia ? '_ver_tendencia_' : '_ver_grafica_' | trans }}" ng-click="item.tendencia = !item.tendencia; agregarIndicadorDimension(indicadores[$index].dimension, $index)"> 
                                                                 <img src="{{ app.request.schemeAndHttpHost ~ asset('images/chart-line-solid.svg') }}" style="width: 17px;" ng-if="!item.tendencia"/>
                                                                 <i class="glyphicon glyphicon-stats" ng-if="item.tendencia"></i>  
                                                             </a>
                                                         </li>
+                                                        -->
                                                         
                                                     </ul>
                                                 </div><!-- /.navbar-collapse -->
