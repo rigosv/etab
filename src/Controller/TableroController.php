@@ -616,7 +616,7 @@ class TableroController extends AbstractController {
             $almacenamiento->crearIndicador($fichaTec, $dimension, $filtros);
             $data = $almacenamiento->calcularIndicador($fichaTec, $dimension, $filtros, $datos->ver_sql, $otros_filtros, $datos->tendencia);                        
             if($data){
-                if($datos->tendencia || !empty($datos->linea)){
+                if($datos->tendencia ){
                     $info = []; $valores = []; 
                     foreach ($data as $key => $value) {
                         if(is_array($value)) $value = (object) $value;

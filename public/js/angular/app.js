@@ -13,7 +13,7 @@
     </example>
  */
 
-var App = angular.module("App", ["ui.bootstrap", "ngStorage", "ngRadialGauge", "nvd3"], function (
+var App = angular.module("App", ["ui.bootstrap", "ngStorage", "ngRadialGauge", "nvd3", "chart.js"], function (
     $interpolateProvider
 ) {
     $interpolateProvider.startSymbol("<%");
