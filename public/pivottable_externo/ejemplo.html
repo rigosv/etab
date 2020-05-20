@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.2/highlight.min.js" ></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.2/styles/default.min.css" />
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+    <!-- Librerías a incluir, verificar si el sitio donde se usará la tabla dinámica, ya carga algunas de esas, para
+    no cargarla de nuevo, en comentario se muestran las librerías en la ubicación del servidor del etab -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js" ></script>
+    <!-- <script src="/bundles/sonataadmin/vendor/jquery/dist/jquery.min.js" type="text/javascript"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <!-- -<script src="/bundles/sonataadmin/vendor/jqueryui/ui/minified/jquery-ui.min.js" type="text/javascript"></script> -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/1.51.1/plotly.min.js"></script>
+    <!-- <script src="/js/plotly/plotly-latest.min.js" type="text/javascript"></script> -->    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pivottable/2.23.0/pivot.min.js"></script>
+    <!-- <script src="/js/pivotTable/pivot.min.js" type="text/javascript"></script> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pivottable/2.23.0/pivot.min.css" />
+    <!-- <link rel="stylesheet" href="/js/pivotTable/pivot.min.css" type="text/css" media="all" /> -->    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pivottable/2.23.0/plotly_renderers.min.js"></script>
+    <!-- <script src="/js/pivotTable/plotly_renderers.min.js" type="text/javascript"></script> -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+    <!-- <script src="/js/jquery.ui.touch-punch.js" type="text/javascript"></script> -->    
+    
+    <!-- Archivos que solo están en el etab, copiarlos al sitio que use la tabla dinámica, actualizar según la ruta donde se coloquen -->
+    <script src="/vendor/table2excel/jquery.table2excel.min.js" type="text/javascript"></script>
+    <script src="/js/plotly/plotly-locale-es-latest.js" type="text/javascript"></script>
+    <script src="/js/pivotTable/pivot.es-sv.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="/css/PivotTable/pivotTable.css" type="text/css" media="all" />
+    <script src="/pivottable_externo/pivotTableFunc.js" type="text/javascript"></script>
+    
+    <script>
+        $(document).ready(function() {
+            var idContenedorTabla = 'output';
+            var urlBase = 'https://etab-dev.salud.gob.sv'; 
+            var urlDatos = urlBase+'/api/PNVIH/indicador/388/data';
+            /* Utilizar solo una de las siguientes variables
+             * utilizar 'urlEscenario' si el indicador tiene un escenario guardado
+             * si desea utilizar una configuración particular utilice la variable
+             * 'confEscenario' para colocar los parámetros de configuración de la tabla.
+             * y utilice 'null'como parámetro en lugar de urlEscenario.
+             * 
+             * Si usa 'confEscenario', se ignorará 'urlEscenario'
+             * */
+            var urlEscenario = urlBase+'/api/pivottable/escenario/6';            
+            var confEscenario = {'vals': ['Número de muertes por VIH/SIDA'], 'rows': ['Año'], 'cols': ['Departamento', 'Sexo'], 
+                                'aggregatorName': 'Suma', 'rendererName': 'Table', 'exclusions': {}, 'inclusions': {},
+                                'rowOrder': 'key_a_to_z', 'colOrder': 'key_a_to_z'};
+            
+            cargarTablaDinamica(idContenedorTabla, urlBase, urlDatos, urlEscenario, confEscenario  );
+            
+        });
+    </script>
+</head>
+<body>
+    <H1>Utilizar la tabla dinámica con datos del etab, en un sitio externo</h1>
+    <h2>Primero: Verificar que están incluidas las librerías necesarias</h2>
+    <pre><code class="html">
+        &lt;!-- Librerías a incluir, verificar si el sitio donde se usará la tabla dinámica, ya carga algunas de esas, para
+        no cargarla de nuevo, en comentario se muestran las librerías en la ubicación del servidor del etab -->
+        &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js" >&lt;/script>
+        &lt;!-- &lt;script src="/bundles/sonataadmin/vendor/jquery/dist/jquery.min.js" type="text/javascript">&lt;/script> -->
+        &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js">&lt;/script>
+        &lt;!-- -&lt;script src="/bundles/sonataadmin/vendor/jqueryui/ui/minified/jquery-ui.min.js" type="text/javascript">&lt;/script> -->
+
+        &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/1.51.1/plotly.min.js">&lt;/script>
+        &lt;!-- &lt;script src="/js/plotly/plotly-latest.min.js" type="text/javascript">&lt;/script> -->    
+
+        &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/pivottable/2.23.0/pivot.min.js">&lt;/script>
+        &lt;!-- &lt;script src="/js/pivotTable/pivot.min.js" type="text/javascript">&lt;/script> -->
+        &lt;link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pivottable/2.23.0/pivot.min.css" />
+        &lt;!-- &lt;link rel="stylesheet" href="/js/pivotTable/pivot.min.css" type="text/css" media="all" /> -->    
+        &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/pivottable/2.23.0/plotly_renderers.min.js">&lt;/script>
+        &lt;!-- &lt;script src="/js/pivotTable/plotly_renderers.min.js" type="text/javascript">&lt;/script> -->
+
+        &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js">&lt;/script>
+        &lt;!-- &lt;script src="/js/jquery.ui.touch-punch.js" type="text/javascript">&lt;/script> -->    
+
+        &lt;!-- Archivos que solo están en el etab, copiarlos al sitio que use la tabla dinámica, actualizar según la ruta donde se coloquen -->
+        &lt;script src="/vendor/table2excel/jquery.table2excel.min.js" type="text/javascript">&lt;/script>
+        &lt;script src="/js/plotly/plotly-locale-es-latest.js" type="text/javascript">&lt;/script>
+        &lt;script src="/js/pivotTable/pivot.es-sv.min.js" type="text/javascript">&lt;/script>
+        &lt;link rel="stylesheet" href="/css/PivotTable/pivotTable.css" type="text/css" media="all" />
+        &lt;script src="pivotTableFunc.js" type="text/javascript">&lt;/script>
+    </code></pre>
+    <h2>Segundo: Agregar un elemento contenedor de la tabla dinámica</h2>
+    <pre><code class="html">
+        &lt;body>
+            &lt;div id="output">&lt;/div>
+        &lt;/body>
+    </code></pre>
+    
+    <h2>Tercero: Agregar el código javascript, se necesita el id del contenedor de la tabla, la urlBase, la url para obtener datos, la url del escenario (null si no existe) 
+    y alternativamente a urlEscenario se puede configurar la variable confEscenario según se muestra en el ejemplo</h2>
+    <pre><code class="JavaScript">
+    &lt;script>
+        $(document).ready(function() {
+            var idContenedorTabla = 'output';
+            var urlBase = 'https://etab-dev.salud.gob.sv'; 
+            var urlDatos = urlBae+'/api/PNVIH/indicador/388/data';
+            /* Utilizar solo una de las siguientes variables
+             * utilizar 'urlEscenario' si el indicador tiene un escenario guardado
+             * si desea utilizar una configuración particular utilice la variable
+             * 'confEscenario' para colocar los parámetros de configuración de la tabla
+             * y utilice 'null'como parámetro en lugar de urlEscenario.
+             * 
+             * Si usa 'confEscenario', se ignorará 'urlEscenario'
+             * */
+            var urlEscenario = urlBase+'/api/pivottable/escenario/6';            
+            var confEscenario = {'vals': ['Número de muertes por VIH/SIDA'], 'rows': ['Año'], 'cols': ['Departamento', 'Sexo'], 
+                                'aggregatorName': 'Suma', 'rendererName': 'Table', 'exclusions': {}, 'inclusions': {},
+                                'rowOrder': 'key_a_to_z', 'colOrder': 'key_a_to_z'};
+            
+            cargarTablaDinamica(urlBase, idContenedorTabla, urlDatos, urlEscenario, confEscenario  );
+        });
+    &lt;/script>
+    </code></pre>
+    
+    <h2>Salida: </h2>
+    <div id="output"></div>
+</body>
+</html>

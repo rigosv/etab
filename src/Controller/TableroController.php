@@ -1063,7 +1063,7 @@ class TableroController extends AbstractController {
                 $statement->execute();
                 $acciones = $statement->fetchAll();
 
-                $statement = $connection->prepare("DELETE  FROM sala_comentarios WHERE  id_origen_datos = '" . $grupoIndicadores->getId() . "'");
+                $statement = $connection->prepare("DELETE  FROM sala_comentarios WHERE  grupo_indicadores_id = '" . $grupoIndicadores->getId() . "'");
                 $statement->execute();
                 $comentarios = $statement->fetchAll();
 
