@@ -655,7 +655,7 @@ class TableroController extends AbstractController {
             if($data){
                 if($datos->tendencia ){
                     $info = []; $valores = []; 
-                    $meses = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+                    $meses = [];
                     foreach ($data as $key => $value) {
                         if(is_array($value)) $value = (object) $value;
                         if(!array_key_exists($value->category, $info)){
@@ -669,7 +669,7 @@ class TableroController extends AbstractController {
                         if($datos->tendencia){
                             $time = new \DateTime($value->fecha, new \DateTimeZone('America/Mexico_City'));
                             $time = $time->format('m');
-                            
+                            $mes = $time;
                             array_push($valores[$value->category], array(
                                 "x" => $time,    
                                 "y" => ($value->measure) * 1, 
@@ -677,6 +677,7 @@ class TableroController extends AbstractController {
                                 "category" => $value->category                
                             ));
                         }else{
+                            $mes = ($key + 1);
                             array_push($valores[$value->category], array(
                                 "x" => ($key + 1),    
                                 "y" => ($value->measure) * 1,           
@@ -684,8 +685,11 @@ class TableroController extends AbstractController {
                             ));
                         }
                         
+                        if(!in_array($mes, $meses))
+                            array_push($meses, $mes);                       
                         $info[$value->category]["values"] = $valores[$value->category];
                     }
+                    sort($meses);
                     $dataTemp = []; $unico = [];
                     foreach ($info as $key => $value) {
                         $valor = [];
@@ -694,17 +698,17 @@ class TableroController extends AbstractController {
                             foreach($value["values"] as $val1){
                                 
                                 if($val1["x"] == $item){
-                                    $val1["x"] = $value["values"][0]["z"]."-".$val1["x"];
+                                    $val1["x"] = $val1["x"];
                                     array_push($valor, $val1);
                                     $existe = 1;
                                 }
                             }
                             if($existe == 0){
                                 array_push($valor, array(
-                                    "x" => $value["values"][0]["z"]."-".$item,    
+                                    "x" => $item,    
                                     "y" => 0,  
                                     "z" => 'NA',         
-                                    "category" => $value["values"][0]["category"].'-'.$item.'-01'              
+                                    "category" => $value["values"][0]["category"]              
                                 ));
                             }
                         }

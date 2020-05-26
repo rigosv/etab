@@ -743,14 +743,14 @@ App.controller("TableroCtrl", function(
               }
             });
             if(color == '')
-              color = "rgba(" + Math.random(255) + "," + Math.random(255) + "," + Math.random(255) +",0.5)";
+              color = "rgba(" + Math.floor(Math.random()*256) + "," + Math.floor(Math.random()*256) + ", 255, 0.9)";
             else{
               var rgba = $scope.hexToRgb(color);
               color = "rgba(" + rgba[0] + "," + rgba[1] + "," + rgba[2] +"," + rgba[3] +")";
             }
             $scope.indicadores[index].colors.push(
               {
-                backgroundColor: "rgba(254,254,254, 0.9)",
+                backgroundColor: color,
                 pointBackgroundColor: color,
                 pointHoverBackgroundColor: "rgba(159,204,0, 0.8)",
                 borderColor: color,
@@ -1625,7 +1625,7 @@ App.controller("TableroCtrl", function(
             }
           });
           if(color == '')
-            color = "rgba(" + Math.random(255) + "," + Math.random(255) + "," + Math.random(255) +",0.5)";
+            color = "rgba(" + Math.floor(Math.random()*256) + "," + Math.floor(Math.random()*256) + "," + Math.floor(Math.random()*256) +",0.9)";
           else{
             var rgba = $scope.hexToRgb(color);
             color = "rgba(" + rgba[0] + "," + rgba[1] + "," + rgba[2] +"," + rgba[3] +")";
@@ -1803,98 +1803,80 @@ App.controller("TableroCtrl", function(
 
     var mayor = 0;
         $scope.indicadores[index].labels = [];
-        $scope.indicadores[index].series = ['INDICADOR'];
-        $scope.indicadores[index].colors = [
-          {
-            backgroundColor: "rgba(159,204,0, 0.2)",
-            pointBackgroundColor: "rgba(159,204,0, 1)",
-            pointHoverBackgroundColor: "rgba(159,204,0, 0.8)",
-            borderColor: "rgba(159,204,0, 1)",
-            pointBorderColor: '#fff',
-            pointHoverBorderColor: "rgba(159,204,0, 1)",
-            fill: false
-          }
-        ];
+        $scope.indicadores[index].series = [];
+        $scope.indicadores[index].colors = [];
         $scope.indicadores[index].valores = [];
         
         var datos_linea = [];
-        angular.forEach($scope.indicadores[index].data, function(valor){
-          
-          $scope.indicadores[index].series.push(valor.category);
-          var label = valor.category + " (" + valor.anio + '-' + valor.mes + ")";
-          if(!$scope.indicadores[index].labels.includes(label))
-          $scope.indicadores[index].labels.push(label);
-          
-          if(angular.isUndefined(datos_linea[valor.category]))
-            datos_linea[valor.category] = [];
-          
-          datos_linea[valor.category].push(valor.measure);
-          color = ""; 
-          angular.forEach($scope.indicadores[index].informacion.rangos, function(v1, k1) {
-            if (valor.measure >= v1.limite_inf && valor.measure <= v1.limite_sup) {
-              color = v1.color;
-            }
+        if(!angular.isUndefined($scope.indicadores[index]['data_tendencia'])) {
+          angular.forEach($scope.indicadores[index]["data_tendencia"][0].values, function(valor){
+            if(!$scope.indicadores[index].series.includes(valor.category))
+              $scope.indicadores[index].series.push(valor.category);
+
+            var label = valor.x;
+            if(!$scope.indicadores[index].labels.includes(label))
+              $scope.indicadores[index].labels.push(label);
+            
+            if(angular.isUndefined(datos_linea[valor.category]))
+              datos_linea[valor.category] = [];
+            
+            datos_linea[valor.category].push(valor.y);
+            
           });
-          if(color == '')
-            color = "rgba(" + Math.random(255) + "," + Math.random(255) + "," + Math.random(255) +",0.5)";
-          else{
-            var rgba = $scope.hexToRgb(color);
-            color = "rgba(" + rgba[0] + "," + rgba[1] + "," + rgba[2] +"," + rgba[3] +")";
+        
+          var newvalor = [];
+          for(v in datos_linea ){
+            var valor = datos_linea[v];
+            newvalor.push(valor);
+            var total  = 0;
+            angular.forEach(valor, function(v){
+              total += v;
+            });
+            total = total / 12;
+
+            color = "rgba(" + Math.floor(Math.random()*180) + "," + Math.floor(Math.random()*180) + ", " + Math.floor(Math.random()*180) + ", 0.9)";
+            
+            $scope.indicadores[index].colors.push(
+              {
+                backgroundColor: color,
+                pointBackgroundColor: color,
+                pointHoverBackgroundColor: "rgba(159,204,0, 0.8)",
+                borderColor: color,
+                pointBorderColor: '#fff',
+                pointHoverBorderColor: color,
+                fill: false
+              }
+            );
           }
-          $scope.indicadores[index].colors.push(
-            {
-              backgroundColor: "rgba(254,254,254, 0.9)",
-              pointBackgroundColor: color,
-              pointHoverBackgroundColor: "rgba(159,204,0, 0.8)",
-              borderColor: color,
-              pointBorderColor: '#fff',
-              pointHoverBorderColor: color,
-              fill: false
-            }
-          );
-        });
-        var newvalor = [];
-        if(angular.isObject(datos_linea)){
-          var values = [];
-          for (var key in datos_linea) {
-            values.push(datos_linea[key])
-          }
-          datos_linea = values;
-        }
-        angular.forEach(datos_linea, function(valor, clave){
+          $scope.indicadores[index].valores = newvalor;
           
-          angular.forEach(valor, function(v){
-            newvalor.push(v);
-          })
-        });
+          
+          $scope.indicadores[index].options = {
+            legend: {
+              display: true
+            },
+            elements: {
+              line: {
+                  tension: 0
+              }
+            },
+            scales: {
+            yAxes: [{
+              scaleLabel: {
+                display: true,
+                labelString: $scope.indicadores[index].informacion.unidad_medida
+              }
+            }],
+            xAxes: [{
+              scaleLabel: {
+                display: true,
+                labelString: $scope.indicadores[index].dimensiones[$scope.indicadores[index].dimension]
+              }
+            }] 
+            }
+          };
+        }
         console.log($scope.indicadores[index]);
-        $scope.indicadores[index].valores.push(newvalor);
-        
-        
-        $scope.indicadores[index].options = {
-          legend: {
-            display: true
-          },
-          elements: {
-            line: {
-                tension: 0
-            }
-          },
-          scales: {
-          yAxes: [{
-            scaleLabel: {
-              display: true,
-              labelString: $scope.indicadores[index].informacion.unidad_medida
-            }
-          }],
-          xAxes: [{
-            scaleLabel: {
-              display: true,
-              labelString: $scope.indicadores[index].dimensiones[$scope.indicadores[index].dimension]
-            }
-          }] 
-          }
-        };
       
     /*
     $scope.indicadores[index].options = {
