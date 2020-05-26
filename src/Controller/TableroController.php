@@ -29,6 +29,7 @@ use App\Entity\UsuarioGrupoIndicadores;
 use App\Entity\SignificadoCampo;
 use App\Entity\OrigenDatos;
 use App\Entity\TipoGrafico;
+use App\Entity\Social;
 
 
 /**
@@ -64,6 +65,17 @@ class TableroController extends AbstractController {
        
         // iniciar el manager de doctrine
         $em = $this->getDoctrine()->getManager();
+        
+        // Si se está utilizando en una sala pública
+        if ( $this->getUser() == null ){
+            return new JsonResponse($response = [
+                'status' => 200,
+                'messages' => "Ok",
+                'data' => [],
+                'total' => 0
+            ]);
+        }
+    
         try{ 
             $datos = (object) $request->query->all();           
 
@@ -237,6 +249,16 @@ class TableroController extends AbstractController {
      */
     public function listaIndicadores(Request $request){
        
+        // Si se está utilizando en una sala pública
+        if ( $this->getUser() == null ){
+            return new JsonResponse($response = [
+                'status' => 200,
+                'messages' => "Ok",
+                'data' => [],
+                'total' => 0
+            ]);
+        }
+        
         // iniciar el manager de doctrine
         $em = $this->getDoctrine()->getManager();
         $encoders = array(new JsonEncoder());
@@ -406,34 +428,49 @@ class TableroController extends AbstractController {
      *     description="Regresa un error ocurrido en el servidor"     
      *  ),
      */
-    public function listaSalas(Request $request){
-       
+    public function listaSalas(Request $request){        
+        
         // iniciar el manager de doctrine
         $em = $this->getDoctrine()->getManager();
-        try{ 
+        try{             
             $usuario = $this->getUser();
-            $datos = (object) $request->query->all();  
-            $where = '';
-            $salas_permitidos = [];
-                
-            foreach ($usuario->getGruposIndicadores() as $sala) {
-                array_push($salas_permitidos, $sala->getGrupoIndicadores()->getId());
-            }
-
-            //Salas asignadas al grupo al que pertenece el usuario
             $grupos = [];
-            foreach ($usuario->getGroups() as $grp) {
-                foreach ($grp->getSalas() as $sala) {
-                    array_push($salas_permitidos, $sala->getId());
-                    array_push($grupos, $sala->getId());
+            $where = '';
+            if ( $this->getUser() !== null ){
+                $usuarioId = $usuario->getId();
+                $datos = (object) $request->query->all();                  
+                $salas_permitidos = [];
+
+                foreach ($usuario->getGruposIndicadores() as $sala) {
+                    array_push($salas_permitidos, $sala->getGrupoIndicadores()->getId());
+                }
+
+                //Salas asignadas al grupo al que pertenece el usuario
+                foreach ($usuario->getGroups() as $grp) {
+                    foreach ($grp->getSalas() as $sala) {
+                        array_push($salas_permitidos, $sala->getId());
+                        array_push($grupos, $sala->getId());
+                    }
+                }
+                array_unique($salas_permitidos);            
+
+                if (count($salas_permitidos) > 0) {
+                    $salas_permitidos = implode(",", $salas_permitidos);
+                    $where = "and id in($salas_permitidos)";
+                }
+            } else {
+                $usuarioId = -1;
+                //Verificar si es una sala pública
+                $token = $request->get('token');
+                $idSala = $request->get('id');
+                $where = " AND id = -1 ";
+                if ( $token !== null and $idSala !== null ) {
+                    $sa = $em->getRepository(Social::class)->getRuta($idSala,$token);                    
+                    if ($sa and $sa != "Error") {
+                        $where = " AND id = $idSala ";
+                    }
                 }
             }
-            array_unique($salas_permitidos);            
-
-            if (count($salas_permitidos) > 0) {
-                $salas_permitidos = implode(",", $salas_permitidos);
-                $where = "and id in($salas_permitidos)";
-            }            
 
             // devolver todos los datos si lo requiere   
             $conn = $em->getConnection();
@@ -457,7 +494,7 @@ class TableroController extends AbstractController {
 
             $sql = "SELECT g.* FROM usuario_grupo_indicadores u
             left join grupo_indicadores g on g.id = grupo_indicadores_id
-            where u.es_duenio = true and u.usuario_id = ".$usuario->getId()." order by g.nombre; ";
+            where u.es_duenio = true and u.usuario_id = ".$usuarioId." order by g.nombre; ";
             
             $statement = $conn->prepare($sql);
             $statement->execute();
