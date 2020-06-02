@@ -1592,7 +1592,7 @@ App.controller("TableroCtrl", function(
       }
       if (tipo == 'LINECHART' || tipo == 'LINEA' || tipo == 'LINEAS'){
         var mayor = 0;
-        $scope.indicadores[index].labels = [0];
+        $scope.indicadores[index].labels = [];
         $scope.indicadores[index].series = ['INDICADOR'];
         $scope.indicadores[index].colors = [
           {
