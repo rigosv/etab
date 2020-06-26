@@ -223,23 +223,26 @@
                                                                 <td ng-repeat="k in meses" width="110px" ng-init="valorAbsoluto(inde, k)" style="background: <% inde[k].color %> !important; ">
                                                                     <table width="100%" class="list-group" ng-init="inde[k].resultado = inde[k].real / inde[k].planificado * 100">
                                                                         <tbody style="border:none">
-                                                                            <tr ng-if="inde[k].planificado >= 0 && inde[k].real <= 0 && verR && verP" class="list-group-item matriz-planeacion-texto" align="center"><th>&nbsp</th></tr>
+                                                                            
                                                                             <tr style="background: darkgray;" ng-if="verR && inde[k].real >= 0" class="list-group-item matriz-planeacion-texto" align="center">
-                                                                                <th>
+                                                                                <th ng-if="!inde.es_formula">
                                                                                     <% inde[k].real | number : 2 %>
+                                                                                </th>
+                                                                                <th ng-if="inde.es_formula">
+                                                                                    <% inde[k].real | number : 2 %> / <% inde[k].real_denominador | number : 2 %> = <% inde[k].formula | number : 2 %>
                                                                                 </th>
                                                                             </tr>
                                                                             <tr style="background: cornflowerblue;" ng-if="verP && inde[k].planificado >= 0" class="list-group-item matriz-planeacion-texto" align="center">
                                                                                 <th><% inde[k].planificado | number : 2 %> </th>
                                                                             </tr>                                       
-                                                                            <tr ng-show="inde[k].resultado >= 0 && verRes" class="list-group-item" align="center" ">
+                                                                            <tr ng-show="inde[k].resultado >= 0 && verRes" class="list-group-item" align="center">
                                                                                 <th>
-                                                                                    <strong ng-if="inde[k].resultado >= 0" style="font-weight:900; text-shadow: 1px 1px 1px #FFF;" >
-                                                                                        <div align="center"> <% inde[k].resultado | number : 0 %> % </div>
-                                                                                    </strong>
+                                                                                    <strong ng-if="inde[k].resultado >= 0" style="font-weight:900; text-shadow: 1px 1px 1px #FFF;" >                                                                                                                                                 
+                                                                                        <div align="center" > <% inde[k].resultado | number : 0 %> % </div>   
+                                                                                    </strong>                                                                                    
                                                                                 </th>
                                                                             </tr>
-                                                                            
+                                                                            <tr ng-show="false"><th></th></tr>
                                                                         </tbody>
                                                                     </table>    
                                                                                                         
