@@ -163,14 +163,14 @@
 
                                                         <li><a title="{{ '_refresh_' | trans }}" ng-click="item.filtros = []; item.dimension = 0; agregarIndicadorDimension(0, $index)"> <i class="glyphicon glyphicon-refresh"></i> </a></li>
                                                         <li><a title="{{ '_full_screen_' | trans }}" ng-click="actualizarsGrafica($index);"> <i class="glyphicon glyphicon-<% item.full_screen ? 'resize-small' : 'resize-full' %>"></i> </a></li>
-                                                        <!--
+                                                        
                                                         <li>
                                                             <a title="{{ item.tendencia ? '_ver_tendencia_' : '_ver_grafica_' | trans }}" ng-click="item.tendencia = !item.tendencia; agregarIndicadorDimension(indicadores[$index].dimension, $index)"> 
                                                                 <img src="{{ app.request.schemeAndHttpHost ~ asset('images/chart-line-solid.svg') }}" style="width: 17px;" ng-if="!item.tendencia"/>
                                                                 <i class="glyphicon glyphicon-stats" ng-if="item.tendencia"></i>  
                                                             </a>
                                                         </li>
-                                                        -->
+                                                        
                                                         
                                                     </ul>
                                                 </div><!-- /.navbar-collapse -->
@@ -196,10 +196,10 @@
                                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ '_grafico_aprecia_mejor_meta' | trans }}</div>
 
                                                 <!-- para graficos de pastel, barra y tendencia-->
-                                                <nvd3 options="item.options" data="item.grafica" id="svg<% $index %>" ng-if="(!item.radial && !item.termometro && !item.mapa && !item.linea) || item.tendencia"></nvd3>
+                                                <nvd3 options="item.options" data="item.grafica" id="svg<% $index %>" ng-if="(!item.radial && !item.termometro && !item.mapa && !item.linea) && !item.tendencia"></nvd3>
                                                 
                                                 <!-- para el grafico de lineal -->
-                                                <canvas id="line" class="chart chart-line" ng-if="item.linea && !item.tendencia" 
+                                                <canvas id="line" class="chart chart-line" ng-if="item.linea || item.tendencia" style="cursor: default;"
                                                     chart-data="item.valores"
                                                     chart-labels="item.labels" 
                                                     chart-series="item.series" 

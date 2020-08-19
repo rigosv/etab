@@ -430,10 +430,10 @@ class FichaTecnicaRepository extends ServiceEntityRepository {
             foreach ($existe_fecha[0] as $key1 => $value1) {
                 
                 $cv1 = strtoupper($key1);
-                if($cv1 == 'MES' || $cv1 == 'MONTH' || $cv1 == 'ID_MES' || $cv1 == 'IDMES' || $cv1 == 'MES_ID' || $cv1 == 'MESID'){
+                if($cv1 == 'MES' || $cv1 == 'MONTH' || $cv1 == 'ID_MES' || $cv1 == 'IDMES' || $cv1 == 'MES_ID' || $cv1 == 'MESID' || $cv1 == 'QUARTER'){
                     $mes = $key1;
                 }
-                if($cv1 == 'ANIO' || $cv1 == 'YEAR' || $cv1 == 'ID_ANIO' || $cv1 == 'IDANIO' || $cv1 == 'ANIO_ID' || $cv1 == 'ANIOID'){
+                if($cv1 == 'ANIO' || $cv1 == 'YEAR' || $cv1 == 'ID_ANIO' || $cv1 == 'IDANIO' || $cv1 == 'ANIO_ID' || $cv1 == 'ANIOID' || $cv1 == 'QUARTER'){
                     $anio = $key1;
                 }
             }

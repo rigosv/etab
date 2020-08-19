@@ -693,19 +693,23 @@ class MatrizSeguimientoRESTController extends Controller {
                         $connection = $em->getConnection();
                         $statement = $connection->prepare("SELECT msd.mes, msd.planificado, msd.real FROM matriz_seguimiento ms 
                             LEFT JOIN matriz_seguimiento_dato msd ON msd.id_matriz = ms.id   
-                            WHERE ms.anio = '$anio' and ms.etab = true and ms.id_desempeno = '".$value->id_desempeno."' and indicador = '".$indrs["id_ficha_tecnica"]."'");
+                            WHERE ms.anio = '$anio' and ms.etab = true and ms.id_desempeno = '".$value->id_desempeno."' and indicador = '".$indrs["id"]."'");
                         $statement->execute();
+                        
                         $meses = $statement->fetchAll();
-                        $ttm = 0; $representa = 0; $id_siguiente = 0;
+                        $ttm = 0; $representa = 0; $id_siguiente = 0; 
                         foreach ($meses as $km => $vm) {
                             $vm = (object) $vm;
-                            if($vm->mes != 'fuente'){
+                            if($vm->mes != 'fuente'){ 
                                 $etab[$i][$vm->mes]["planificado"] = $vm->planificado;                                
-                                try{
-                                    $ttm++; 
-                                    // obtener datos de los indicadores de etab
-                                    $representa++;                                
-                                    if($representa == $otros_filtros["representa"]){   
+                            
+                                $ttm++; 
+                                // obtener datos de los indicadores de etab
+                                if(count($meses) < 12)
+                                    $representa = intval($otros_filtros["representa"]) - 1;
+                                $representa++;       
+                                if($representa == intval($otros_filtros["representa"])){ 
+                                    try{
                                         $data_indicador = $this->obtenerDatosetab($ttm, $vm, $dimension, $keyanio, $anio, $fichaRepository, $fichaTec, $otros_filtros, $id_siguiente);
                                         if(count($data_indicador) == 0){
                                             $errores.= "<br>No se cargo linea: $ci mes: ".$vm->mes;
@@ -714,14 +718,16 @@ class MatrizSeguimientoRESTController extends Controller {
                                             $measure = '';
                                             if(isset($data_indicador[0]))
                                                 $measure = $data_indicador[0]["measure"];
+                                            
                                             $etab[$i][$vm->mes]["real"] = $measure;
                                         }
                                         $id_siguiente++;
                                         $representa = 0;
-                                    }                                                                        
-                                }
-                                catch(\Exception $e){
-                                }                            
+                                    }
+                                    catch(\Exception $e){
+                                    }  
+                                }   
+                                                    
                             }
                         }
                         $i++;
@@ -1062,13 +1068,6 @@ class MatrizSeguimientoRESTController extends Controller {
                     $etabes = $statement->fetchAll();
                     foreach($etabes as $ci => $indrs){  
                         
-                        $statement = $connection->prepare("SELECT * FROM matriz_indicadores_etab_alertas WHERE matriz_indicador_etab_id = '".$indrs["id"]."'");
-                        $statement->execute();
-                        $alertas = $statement->fetchAll();     
-                        foreach ($alertas as $a1 => $alerta) {
-                            $alertas[$a1]["color"] = json_decode($alerta["color"]);
-                        }                 
-
                         $fichaTec = $fichaRepository->find($indrs["id_ficha_tecnica"]);
                         $filtros = json_decode($indrs["filtros"]); 
                         if($filtros){
@@ -1083,42 +1082,39 @@ class MatrizSeguimientoRESTController extends Controller {
                                     $keyanio = trim($dim);
                                 }                            
                             }
-                            // agregar la dimension para el filtro en otros 
-                            if($otros_filtros["dimension_mostrar"] != '')                                                                           
+                            // agregar la dimension para el filtro en otros  
+                            if($otros_filtros["dimension_mostrar"] != "")                                                                          
                                 $dimension = trim($filtros->dimensiones[$otros_filtros["dimension_mostrar"]]);
                             else
                                 $dimension = "MES";
                             $otros_filtros["dimension"] = trim($filtros->dimensiones[$filtros->dimension]);
                         }
-
                         $filtrar = [$keyanio => $anio]; 
-                        $almacenamiento->crearIndicador($fichaTec, $otros_filtros["dimension"], $filtrar);   
-                                               
-                        $statement = $connection->prepare("SELECT msd.mes, msd.planificado, msd.real, ms.meta FROM matriz_seguimiento ms 
-                            LEFT JOIN matriz_seguimiento_dato msd ON msd.id_matriz = ms.id   
-                            WHERE ms.anio = '$anio' and ms.etab = true and ms.id_desempeno = '".$value->id_desempeno."' and indicador = '".$indrs["id_ficha_tecnica"]."'");
-                        $statement->execute();
-                        $meses = $statement->fetchAll();
-                        $meta = '';
-                        if(isset($meses[0]))
-                            $meta = $meses[0]["meta"];
+                        $almacenamiento->crearIndicador($fichaTec, $otros_filtros["dimension"], $filtrar);                        
 
-                        $etab[$i] = array('id'=>$indrs["id_ficha_tecnica"], 'nombre'=>$indrs["nombre"],  'fuente' => ' eTAB', 'meta' => $meta);
-                        $etab[$i]["alertas"] = $alertas;
-                        $representa = 0; $id_siguiente = 0;
-                        $errores = '';
-                        $ttm = 0;
+                        $ci++;
+                        $etab[$i] = array('id'=>$indrs["id_ficha_tecnica"], 'nombre'=>$indrs["nombre"], 'fuente' => ' eTAB');
+
+                        $connection = $em->getConnection();
+                        $statement = $connection->prepare("SELECT msd.mes, msd.planificado, msd.real FROM matriz_seguimiento ms 
+                            LEFT JOIN matriz_seguimiento_dato msd ON msd.id_matriz = ms.id   
+                            WHERE ms.anio = '$anio' and ms.etab = true and ms.id_desempeno = '".$value->id_desempeno."' and indicador = '".$indrs["id"]."'");
+                        $statement->execute();
+                        
+                        $meses = $statement->fetchAll();
+                        $ttm = 0; $representa = 0; $id_siguiente = 0; 
                         foreach ($meses as $km => $vm) {
                             $vm = (object) $vm;
-                            if($vm->mes != 'fuente'){
-                                $etab[$i][$vm->mes]["planificado"] = floatVal($vm->planificado);
-                                $etab[$i][$vm->mes]["real"] = floatVal($vm->real);
-                                                       
-                                try{
-                                    $ttm++; 
-                                    // obtener datos de los indicadores de etab    
-                                    $representa++;                                
-                                    if($representa == $otros_filtros["representa"]){                                        
+                            if($vm->mes != 'fuente'){ 
+                                $etab[$i][$vm->mes]["planificado"] = $vm->planificado;                                
+                            
+                                $ttm++; 
+                                // obtener datos de los indicadores de etab
+                                if(count($meses) < 12)
+                                    $representa = intval($otros_filtros["representa"]) - 1;
+                                $representa++;       
+                                if($representa == intval($otros_filtros["representa"])){ 
+                                    try{
                                         $data_indicador = $this->obtenerDatosetab($ttm, $vm, $dimension, $keyanio, $anio, $fichaRepository, $fichaTec, $otros_filtros, $id_siguiente);
                                         if(count($data_indicador) == 0){
                                             $errores.= "<br>No se cargo linea: $ci mes: ".$vm->mes;
@@ -1127,16 +1123,17 @@ class MatrizSeguimientoRESTController extends Controller {
                                             $measure = '';
                                             if(isset($data_indicador[0]))
                                                 $measure = $data_indicador[0]["measure"];
-                                            $etab[$i][$vm->mes]["real"] = floatVal($measure);
+                                            
+                                            $etab[$i][$vm->mes]["real"] = $measure;
                                         }
                                         $id_siguiente++;
-                                        $representa = 0; 
-                                    }                                    
-                                }
-                                catch(\Exception $e){
-                                    
-                                } 
-                            }                         
+                                        $representa = 0;
+                                    }
+                                    catch(\Exception $e){
+                                    }  
+                                }   
+                                                    
+                            }
                         }
                         $i++;
                     }
@@ -1306,32 +1303,47 @@ class MatrizSeguimientoRESTController extends Controller {
     }
 
     private function obtenerDatosetab($ttm, $vm, $dimension, $keyanio, $anio, $fichaRepository, $fichaTec, $otros_filtros, $id_siguiente){
+        $data_indicador = [];
+        $catalogo = $this->obtenerIdCatalogo($dimension, strtoupper($vm->mes), $id_siguiente);
         // Buscar datos por el nombre del mes ejemplo ENERO y que corresponda a un catalogo (significado de campo)
-        $filtrar = [$dimension => $this->obtenerIdCatalogo($dimension, strtoupper($vm->mes), $id_siguiente), $keyanio => $anio];                                                                       
-        $data_indicador = $fichaRepository->calcularIndicador($fichaTec, $dimension, $filtrar, false, $otros_filtros, false);
+        if($catalogo){
+            $filtrar = [$dimension => $catalogo, $keyanio => $anio];                                                                       
+            $data_indicador = $fichaRepository->calcularIndicador($fichaTec, $dimension, $filtrar, false, $otros_filtros, false);
+        }
         
+        // Buscar datos por el nombre de la dimension ejemplo Trimestre 1
+        if(count($data_indicador) == 0){
+            $filtrar = [$dimension => $id_siguiente + 1, $keyanio => $anio]; 
+            $data_indicador = $fichaRepository->calcularIndicador($fichaTec, $dimension, $filtrar, false, $otros_filtros, false);                                         
+        } 
+        
+        // Buscar datos por el nombre la clave del mes ejemplo 1
+        if(count($data_indicador) == 0){
+            $filtrar = [$dimension => $ttm, $keyanio => $anio];                                                                                                                                                           
+            $data_indicador = $fichaRepository->calcularIndicador($fichaTec, $dimension, $filtrar, false, $otros_filtros, false);                                         
+        }
+
         // Buscar datos por el nombre del mes concatenado con el indice ejemplo 01.Enero y que pertenesca a un catalogo (significado de campo)
         if(count($data_indicador) == 0){
-            $filtrar = [$dimension => $this->obtenerIdCatalogo($dimension, str_pad($ttm, 2, "0", STR_PAD_LEFT).'.'.ucfirst($vm->mes), $id_siguiente), $keyanio => $anio];                                                                        
-            $data_indicador = $fichaRepository->calcularIndicador($fichaTec, $dimension, $filtrar, false, $otros_filtros, false);                                         
+            $catalogo = $this->obtenerIdCatalogo($dimension, str_pad($ttm, 2, "0", STR_PAD_LEFT).'.'.ucfirst($vm->mes), $id_siguiente);
+            if($catalogo){
+                $filtrar = [$dimension => $catalogo, $keyanio => $anio];                                                                        
+                $data_indicador = $fichaRepository->calcularIndicador($fichaTec, $dimension, $filtrar, false, $otros_filtros, false);    
+            }                                     
         }  
 
         // Buscar datos por el nombre de la dimension mas el numero ejemplo Trimestre 1
         if(count($data_indicador) == 0){
             $filtrar = [$dimension => ucfirst($dimension).' '.($id_siguiente + 1), $keyanio => $anio]; 
             $data_indicador = $fichaRepository->calcularIndicador($fichaTec, $dimension, $filtrar, false, $otros_filtros, false);                                         
-        }  
+        } 
 
         // Buscar datos por el nombre del mes ejemplo ENERO
         if(count($data_indicador) == 0){
             $filtrar = [$dimension => strtoupper($vm->mes), $keyanio => $anio];                                                                       
             $data_indicador = $fichaRepository->calcularIndicador($fichaTec, $dimension, $filtrar, false, $otros_filtros, false);                                         
         }   
-        // Buscar datos por el nombre la clave del mes ejemplo 1
-        if(count($data_indicador) == 0){
-            $filtrar = [$dimension => $ttm, $keyanio => $anio];                                                                                                                                                           
-            $data_indicador = $fichaRepository->calcularIndicador($fichaTec, $dimension, $filtrar, false, $otros_filtros, false);                                         
-        }
+        
         // Buscar datos por el nombre del mes concatenado a la clave ejemplo 01.Enero
         if(count($data_indicador) == 0){
             $filtrar = [$dimension => str_pad($ttm, 2, "0", STR_PAD_LEFT).'.'.ucfirst($vm->mes), $keyanio => $anio];                                                                                                                     
@@ -1341,11 +1353,13 @@ class MatrizSeguimientoRESTController extends Controller {
         return $data_indicador;
     }
     private function obtenerIdCatalogo($campo, $valor, $id_siguiente){
+        $catalogo = '';
         $em = $this->getDoctrine()->getEntityManager();
         //Si el filtro es un catálogo, buscar su id correspondiente
         $significado = $em->getRepository(SignificadoCampo::class)
             ->findOneBy(array('codigo' => $campo));
-        $catalogo = $significado->getCatalogo();
+        if($significado)
+            $catalogo = $significado->getCatalogo();
 
         if ($catalogo != '') {
             $sql_ctl = "SELECT id FROM $catalogo WHERE descripcion ='$valor'";
