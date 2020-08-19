@@ -511,3 +511,7 @@ md-content.md-default-theme, md-content {
 .tab-pane {
     height: 75vh;
 }
+
+.pvtFilterBox .count {
+    display: none;
+}
