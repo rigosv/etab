@@ -47,9 +47,10 @@
              * 
              * Si usa 'confEscenario', se ignorará 'urlEscenario'
              * */
-            var urlEscenario = urlBase+'/api/pivottable/escenario/6';            
+            var urlEscenario = urlBase+'/api/pivottable/escenario/6';
             var confEscenario = {'vals': ['Número de muertes por VIH/SIDA'], 'rows': ['Año'], 'cols': ['Departamento', 'Sexo'], 
-                                'aggregatorName': 'Suma', 'rendererName': 'Table', 'exclusions': {}, 'inclusions': {},
+                                'aggregatorName': 'Suma', 'rendererName': 'Tabla', 'exclusions': {}, 'inclusions': {},
+                                'xhiddenFromDragDrop' : ['id_mes_'], 'xfilter': "obj.Año != '2012'", 
                                 'rowOrder': 'key_a_to_z', 'colOrder': 'key_a_to_z'};
             
             cargarTablaDinamica(idContenedorTabla, urlBase, urlDatos, urlEscenario, confEscenario  );
@@ -113,7 +114,8 @@
              * */
             var urlEscenario = urlBase+'/api/pivottable/escenario/6';            
             var confEscenario = {'vals': ['Número de muertes por VIH/SIDA'], 'rows': ['Año'], 'cols': ['Departamento', 'Sexo'], 
-                                'aggregatorName': 'Suma', 'rendererName': 'Table', 'exclusions': {}, 'inclusions': {},
+                                'aggregatorName': 'Suma', 'rendererName': 'Tabla', 'exclusions': {}, 'inclusions': {},
+                                'xhiddenFromDragDrop' : ['id_mes_'], 'xfilter': "obj.Año != '2012'", 
                                 'rowOrder': 'key_a_to_z', 'colOrder': 'key_a_to_z'};
             
             cargarTablaDinamica(urlBase, idContenedorTabla, urlDatos, urlEscenario, confEscenario  );

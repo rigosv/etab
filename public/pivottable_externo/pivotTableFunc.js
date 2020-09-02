@@ -3,7 +3,7 @@ var nombre;
 var cargarTablaDinamica = (function (idContenedorTabla, urlBase, urlDatos, urlEscenario = null, configuracion = null) {
 
     var conf = (configuracion !== null) ? configuracion : {'vals': [], 'rows': [], 'cols': [], 'aggregatorName': 'Suma',
-        'rendererName': 'Table', 'exclusions': {}, 'inclusions': {},
+        'rendererName': 'Tabla', 'exclusions': {}, 'inclusions': {},
         'rowOrder': 'key_a_to_z', 'colOrder': 'key_a_to_z'};
     if (configuracion === null && urlEscenario !== null) {
         $.getJSON(urlEscenario + '?callback=?', function (resp) {
@@ -18,10 +18,26 @@ var cargarTablaDinamica = (function (idContenedorTabla, urlBase, urlDatos, urlEs
 });
 
 var cargarDatosTabla = (function (idContenedorTabla, urlBase, urlDatos, cfg) {
-    var renderers = $.extend($.pivotUtilities.renderers, $.pivotUtilities.plotly_renderers, $.pivotUtilities.export_renderers);
+    //var renderers = $.extend($.pivotUtilities.renderers, $.pivotUtilities.plotly_renderers, $.pivotUtilities.export_renderers);
+    var renderers= {
+        "Tabla": $.pivotUtilities.renderers['Table'],
+        "Tabla con barras": $.pivotUtilities.renderers['Table Barchart'],
+        "Mapa de calor": $.pivotUtilities.renderers['Heatmap'],
+        "Mapa de calor por filas": $.pivotUtilities.renderers['Row Heatmap'],
+        "Mapa de calor por columnas": $.pivotUtilities.renderers['Col Heatmap'],
+        "Gráfico de líneas": $.pivotUtilities.plotly_renderers['Line Chart'],
+        "Gráfico de barras": $.pivotUtilities.plotly_renderers['Bar Chart'],
+        "Gráfico de barras apiladas": $.pivotUtilities.plotly_renderers['Stacked Bar Chart'],
+        "Barras horizontales": $.pivotUtilities.plotly_renderers['Horizontal Bar Chart'],
+        "Barras horizontales apiladas": $.pivotUtilities.plotly_renderers['Horizontal Stacked Bar Chart'],
+        "Gráfico de área": $.pivotUtilities.plotly_renderers['Area Chart'],
+        "Gráfico de pastel": $.pivotUtilities.plotly_renderers['Multiple Pie Chart']
+    };
 
     var xaggregatorName = "Suma";
     var idIndicador;
+    cfg.xhiddenFromDragDrop = ( cfg.xhiddenFromDragDrop == undefined ) ? [] : cfg.xhiddenFromDragDrop;
+    cfg.xfilter = ( cfg.xfilter == undefined ) ? '1==1' : cfg.xfilter;
 
     $.getJSON(urlDatos + '?callback=?', function (mps) {
         var datos = [];
@@ -53,6 +69,10 @@ var cargarDatosTabla = (function (idContenedorTabla, urlBase, urlDatos, cfg) {
                     inclusions: cfg.inclusions,
                     rowOrder: cfg.rowOrder,
                     colOrder: cfg.colOrder,
+                    hiddenFromDragDrop: cfg.xhiddenFromDragDrop,
+                    filter: function (obj) {
+                                    return eval (cfg.xfilter);
+                                },
                     renderers: renderers,
                     menuLimit: 1000,
                     unusedAttrsVertical: false,
