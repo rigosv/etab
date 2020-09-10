@@ -139,10 +139,6 @@
     margin-top: 5px;
 }
 
-.pvtFilterBox {
-    font-family: 'Oswald', sans-serif;
-}
-
 .pvtFilterBox button {
     padding: 3px !important;
     border-radius: 4px;
@@ -172,6 +168,8 @@
     background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(246, 246, 246, 1) 47%, rgba(237, 237, 237, 1) 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed', GradientType=1);
     color: #000;
+    font-family: 'Oswald', sans-serif;
+    top: auto !important;
 }
 
 #states .active {
@@ -264,10 +262,6 @@ div.popover-content, div.popover-title {
 .pvtFilteredAttribute {
     color: green;
     font-weight: bold;
-}
-
-.pvtFilterBox {
-    top: 130px !important;
 }
 
 #myModal2 .modal-dialog, #fichaTecnica .modal-dialog {
@@ -477,7 +471,10 @@ md-content.md-default-theme, md-content {
 
 .pvtCheckContainer {
     overflow: auto;
+}
 
+.pvtCheckContainer p {
+    margin: 10px auto !important;
 }
 
 .pvtTableContainer {
