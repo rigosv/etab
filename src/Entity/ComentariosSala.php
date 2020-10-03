@@ -24,7 +24,7 @@ class ComentariosSala
     /**
      * @var $sala
      *
-     * @ORM\ManyToOne(targetEntity="GrupoIndicadores", inversedBy="sala", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="GrupoIndicadores", inversedBy="comentarios", cascade={"persist"})
      * @ORM\JoinColumn(name="grupo_indicadores_id", referencedColumnName="id", nullable=false)
      *
      */
@@ -32,7 +32,7 @@ class ComentariosSala
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="gruposIndicadores")
+     * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="usuario_id", referencedColumnName="id")
      */
     private $usuario;

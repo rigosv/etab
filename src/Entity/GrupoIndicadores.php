@@ -64,7 +64,7 @@ class GrupoIndicadores
      * @ORM\OneToMany(targetEntity="ComentariosSala", mappedBy="sala", cascade={"all"}, orphanRemoval=true)
      *
      */
-    private $sala;
+    private $comentarios;
     
 
     /**
@@ -245,6 +245,39 @@ class GrupoIndicadores
     public function getAcciones()
     {
         return $this->acciones;
+    }
+
+    /**
+     * Add comentario
+     *
+     * @param \App\Entity\ComentariosSala $comentarios
+     * @return GrupoIndicadores
+     */
+    public function addComentario(\App\Entity\ComentariosSala $comentario)
+    {
+        $this->comentarios[] = $comentario;
+
+        return $this;
+    }
+
+    /**
+     * Remove comentario
+     *
+     * @param \App\Entity\ComentariosSala $comentario
+     */
+    public function removeComentario(\App\Entity\ComentariosSala $comentario)
+    {
+        $this->comentarios->removeElement($comentario);
+    }
+
+    /**
+     * Get comentarios
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getComentarios()
+    {
+        return $this->comentarios;
     }
 
     /**
