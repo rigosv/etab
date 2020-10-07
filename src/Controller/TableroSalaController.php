@@ -257,18 +257,25 @@ class TableroSalaController extends AbstractController
                 WHERE c.sala = :sala AND c.fecha > :fecha ORDER  BY c.fecha ASC')
             ->setParameter('sala', $idSala)->setParameter('fecha', $session->get('ultima_lectura_comentarios_sala'))->getResult();                        
         }
+        if ( count($comentarios) == 0 ){
+            $comentarios = $em->createQuery('SELECT c, u FROM App\Entity\ComentariosSala c 
+                LEFT JOIN c.usuario u  
+                WHERE c.sala = :sala ORDER  BY c.fecha DESC')
+            ->setParameter('sala', $idSala)->setMaxResults(20)->getResult();
+        }
         
         $session->set('ultima_lectura_comentarios_sala', new \DateTime("now"));
         
         $ret = ''; $data = [];
         foreach($comentarios as $comentario){
             $u = $comentario->getUsuario();
-            $photo  = $u->getPhoto() != "" ? $u->getPhoto() : $this->container->get('templating.helper.assets')->getUrl('bundles/indicadores/images/user.png');
+            $photo = '';
+            //$photo  = $u->getPhoto() != "" ? $u->getPhoto() : $this->container->get('templating.helper.assets')->getUrl('bundles/indicadores/images/user.png');
             $name = $u->getFirstname().$u->getLastname() == "" ? $u->getUsername() : $u->getFirstname().' '.$u->getLastname();
             $ret .= '<li>
                         <div class="comment-main-level"> 
                             <!-- Avatar -->
-                            <div class="comment-avatar"><img src="'.$photo.'"></div>                                               
+                            <!-- <div class="comment-avatar"><img src="'.$photo.'"></div> -->
                             <!-- Contenedor del Comentario -->
                             <div class="comment-box">
                                 <div class="comment-head">
@@ -386,7 +393,7 @@ class TableroSalaController extends AbstractController
                             </div>
                         </div>
                         
-                    </li>';
+                    </li>';            
         }
         if(count($req->get("usuarios_con_cuenta")))
         {
