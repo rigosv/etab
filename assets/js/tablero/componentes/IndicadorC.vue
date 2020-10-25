@@ -1,224 +1,303 @@
 <template>
-    <b-card-group
-        deck
-        :style="(indicador.full_screen) ? 'width: 100vw; flex: none; margin: 0' : 'padding-bottom: 10px;' "
-    >
-        <b-card
-          class="indicador-container"
-          :border-variant="( indicador.full_screen) ? 'success' : '' "
-          :style="(indicador.full_screen) ? 'margin: 1px; padding: 0; height: 99vh;' : '' "
-          :class="(indicador.mostrar_configuracion) ? ' d-none d-md-block col-md-8 col-lg-8 col-xl8' : '' "
-          header-tag="header"
-          footer-tag="footer"
+    <fullscreen ref="fullscreen" class="fullscreen-wrapper" v-if="indicador != undefined"
+        @change="fullscreenChange" :style="(indicador.full_screen) ? '' : 'height: 100%' ">
+        <b-card-group
+            deck
+            :style="(indicador.full_screen) ? 'width: 100vw; flex: none; margin: 0' : 'height: 100%' "
         >
-            <div slot="header">
-                <h4 style="font-size: 18px;">{{ indicador.nombre.toUpperCase() }}</h4>
-                <button
-                    type="button"
-                    class="close close_indicador"
-                    aria-label="Close"
-                    @click="quitarIndicador"
-                    v-if="!indicador.full_screen"
-                >
-                    <span aria-hidden="true">&times;</span>
-                </button>
-
-                <span
-                    aria-hidden="true"
-                    @click="fullscreen"
-                    v-else
-                    class="close restaurar-tamanio-indicador"
-                    aria-label="Close"
-                    :title=" $t('_restaurar_tamanio_')"
-                >
-                    <i class="fas fa-compress-arrows-alt"></i>
-                </span>
-            </div>
-
-          <IndicadorBarraOpciones
-              :indicador="indicador"
-              :index="index"
-              @agregar-favorito="agregarFavorito"
-              @full-screen="fullscreen"
-          />
-
-          <IndicadorBreadcum :indicador="indicador" :index="index" />
-
-          <IndicadorMensajes :indicador="indicador" :index="index" />
-
-          <GraficoBasico
-              v-if="['BARRA', 'BARRAS', 'COLUMNAS', 'COLUMNA', 'DISCRETEBARCHART', 'LINECHART', 'LINEA', 'LINEAS', 'PIECHART', 'PIE', 'PASTEL', 'TORTA'].includes(indicador.configuracion.tipo_grafico.toUpperCase() ) 
-                      && indicador.cargando == false "
-              :indicador="indicador"
-              :index="index"
-              @filtar-posicion="filtrarPosicion($event)"
-              @quitar-filtros="quitarFiltros()"
-              @click-plot="clicGrafico($event)"
-          ></GraficoBasico>
-          <Mapa
-              v-if="[ 'MAPA', 'GEOLOCATION', 'MAP' ].includes(indicador.configuracion.tipo_grafico.toUpperCase() ) 
-                      && indicador.cargando == false "
-              :indicador="indicador"
-              :index="index"
-              @filtar-posicion="filtrarPosicion($event)"
-              @quitar-filtros="quitarFiltros()"
-              @click-plot="clicGrafico($event)"
-          ></Mapa>
-
-          <div slot="footer">
-              <div>
-                  <div
-                      class="float-left"
-                      :title=" $t('_fecha_ultima_lectura_')"
-                  >[{{ indicador.informacion.ultima_lectura }}]</div>
-                  <div class="float-right">{{ $t('_meta_') }}: {{ indicador.informacion.meta }}</div>
-              </div>
-          </div>
-
-          <div class="container-fluid div_carga" align="center" v-if="indicador.cargando">
-              <button
-                type="button"
-                class="close close_indicador"
-                style="margin-top:9px"
-                aria-label="Close"
-                ng-click="indicador.cargando = false"
-              >
-                  <span aria-hidden="true">&times;</span>
-              </button>
-              <div align="center">
-                  <h4>{{ $t('_cargando_indicador_') }}</h4>
-                  <i class="fas fa-sync fa-spin fa-2x"></i>
-              </div>
-          </div>
-        </b-card>
-        <b-card
+            <b-card
+            class="indicador-container"
+            :border-variant="( indicador.full_screen) ? 'success' : '' "
+            :style="(indicador.full_screen) ? 'margin: 1px; padding: 0; height: 99vh; z-index: 1010; ' : 'z-index:100; ' "
+            :class="(indicador.mostrar_configuracion) ? ' d-none d-md-block col-xs-2 col-sm-2 col-md-8 col-lg-8 col-xl-8' : '' "
             header-tag="header"
-            border-variant="primary"
-            header-bg-variant="primary"
-            header-text-variant="white"
-            v-if="indicador.full_screen && indicador.mostrar_configuracion"
-            :style="(indicador.mostrar_configuracion) ? 'margin: 1px; padding: 0; flex: none; height: 99vh' : '' "
-            :class="(indicador.mostrar_configuracion) ? 'col-sm-12 col-xs-12 col-md-4 col-lg-4 col-xl4' : '' "
-        >
-            <DIV slot="header">
-                <i class="fas fa-cogs fa-2x"></i>
-                <span style="font-size: 20pt;">
-                    <B>{{ $t("_configuracion_grafico_") }}</B>
-                </span>
-                <button
-                    type="button"
-                    class="close close_configuracion"
-                    aria-label="Close"
-                    @click="cerrarConfiguracion"
-                >
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </DIV>
-            <ConfiguracionIndicador :indicador="indicador" :index="index" />
-        </b-card>
-    </b-card-group>
+            footer-tag="footer"
+            >
+                <div slot="header" :class="'draggable-handler'">
+                    <h4 style="font-size: 18px;">{{ indicador.nombre.toUpperCase() }} 
+                        <span class='dimensionTitulo' v-if=" getConteo(indicador.id) > 1 
+                                && indicador.informacion.dimensiones != undefined 
+                                && indicador.informacion.dimensiones[indicador.dimension] != undefined""
+                        >
+                            ({{ indicador.informacion.dimensiones[indicador.dimension].descripcion }})
+                        </span>
+                    </h4>
+                    <button
+                        type="button"
+                        class="close close_indicador"
+                        aria-label="Close"
+                        @click="quitarIndicador"
+                        v-if="!indicador.full_screen"
+                    >
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+
+                    <span
+                        aria-hidden="true"
+                        @click="fullscreen"
+                        v-else
+                        class="close restaurar-tamanio-indicador"
+                        aria-label="Close"
+                        :title=" $t('_restaurar_tamanio_')"
+                    >
+                        <font-awesome-icon icon="compress-arrows-alt" />
+                    </span>
+                </div>
+                
+                <IndicadorBarraOpciones
+                    :indicador="indicador"
+                    :index="index"
+                    @agregar-favorito="agregarFavorito"
+                    @full-screen="fullscreen"
+                    @descargar-grafico="descargarGrafico"
+                />
+
+                <IndicadorBreadcum :indicador="indicador" :index="index" />
+
+                <IndicadorMensajes :indicador="indicador" :index="index" />
+                <InfoTablaDatosContenido :indicador="indicador" :sustituyeGrafico="true" v-if="indicador.configuracion.mostrarTablaDatos" />
+                <div class="contenedor-grafico" v-if="!indicador.configuracion.mostrarTablaDatos">
+                    <GraficoBasico
+                        v-if="['BOX', 'BURBUJA', 'BUBBLE', 'BARRA', 'BARRAS', 'COLUMNAS', 'COLUMNA', 'DISCRETEBARCHART', 'LINECHART', 'LINEA', 'LINEAS', 'PIECHART', 'PIE', 'PASTEL', 'TORTA'].includes(indicador.configuracion.tipo_grafico.toUpperCase() )
+                                && indicador.data.length > 0 "
+                        :indicador="indicador"
+                        :index="index"
+                        @filtar-posicion="filtrarPosicion($event)"
+                        @quitar-filtros="quitarFiltros()"
+                        @click-plot="clicGrafico($event)"
+                        ref="grafico"
+                    ></GraficoBasico>
+                    <Mapa
+                        v-if="[ 'MAPA', 'GEOLOCATION', 'MAP' ].includes(indicador.configuracion.tipo_grafico.toUpperCase() )
+                                && indicador.data.length > 0 "
+                        :indicador="indicador"
+                        :index="index"
+                        @filtar-posicion="filtrarPosicion($event)"
+                        @quitar-filtros="quitarFiltros()"
+                        @click-plot="clicGrafico($event)"
+                    ></Mapa>
+                </div>
+                <div slot="footer">
+                    <div>                  
+                        <div
+                            class="float-left"
+                            :title=" $t('_fecha_ultima_lectura_')"
+                        >[{{ indicador.informacion.ultima_lectura }}]</div>                  
+                        <div class="float-right">{{ $t('_meta_') }}: {{ indicador.informacion.meta }}</div>
+                    </div>
+                </div>
+
+                <div class="container-fluid div_carga" align="center" v-if="indicador.cargando">
+                    <button
+                        type="button"
+                        class="close close_indicador"
+                        style="margin-top:9px"
+                        aria-label="Close"
+                        @click="indicador.cargando = false"
+                    >
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <div align="center">
+                        <h4>{{ $t('_cargando_indicador_') }}</h4>
+                        <font-awesome-icon icon="sync" spin size="2x" />
+                    </div>
+                </div>
+            </b-card>
+            <b-card
+                header-tag="header"
+                border-variant="primary"
+                header-bg-variant="primary"
+                header-text-variant="white"
+                v-if=" indicador.full_screen && indicador.mostrar_configuracion"
+                :style="(indicador.mostrar_configuracion) ? 'margin: 1px; padding: 0; flex: none; height: 99vh' : '' "
+                :class="(indicador.mostrar_configuracion) ? 'col-sm-12 col-xs-12 col-md-4 col-lg-4 col-xl-4' : '' "
+            >
+                <DIV slot="header">
+                    <i class="fas fa-cogs fa-2x"></i>
+                    <span style="font-size: 20pt;">
+                        <B>{{ $t("_configuracion_grafico_") }}</B>
+                    </span>
+                    <button
+                        type="button"
+                        class="close close_configuracion"
+                        aria-label="Close"
+                        @click="cerrarConfiguracion"
+                    >
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </DIV>
+                <ConfiguracionIndicador :indicador="indicador" :index="index" />
+            </b-card>
+        </b-card-group>
+    </fullscreen>
 </template>
 
 <script>
-
-  import GraficoBasico from "../Graficos/GraficoBasico";
-  import Mapa from "../Graficos/Mapa";
-  import IndicadorBarraOpciones from "./IndicadorBarraOpciones";
-  import IndicadorBreadcum from "./IndicadorBreadcum";
-  import IndicadorMensajes from "./IndicadorMensajes";
-  import ConfiguracionIndicador from "./ConfiguracionIndicador";
-
-  import IndicadorMixin from "../Mixins/IndicadorMixin";
-
-  export default {
-      props: {
-          indicador: Object,
-          index: Number
-      },
-      components: {
-          GraficoBasico,
-          IndicadorBarraOpciones,
-          IndicadorBreadcum,
-          IndicadorMensajes,
-          ConfiguracionIndicador,
-          Mapa
-      },
-      mixins: [IndicadorMixin],
-      methods : {
-          quitarIndicador : function() {
-            this.$store.commit("quitarIndicador", this.index);
-          },
-
-          clicGrafico : function (valor) {
-              let vm = this;
-              if ( parseInt(this.indicador.dimensionIndex) + 1 == this.indicador.dimensiones.length ) {
-                  vm.$snotify.warning(vm.$t("_ultima_dimension_"), vm.$t("_alerta_"), {
-                    position: "rightTop",
-                    timeout: 5000
-                  });
-              } else {
-                  this.indicador.otros_filtros.elementos = [];
-                  //Agregar la dimensión actual como un filtro
-                  let datos_dimension = this.indicador.informacion.dimensiones[this.indicador.dimension];
-                  this.indicador.filtros.push({
-                      codigo: this.indicador.dimension,
-                      etiqueta: datos_dimension.descripcion,
-                      valor: valor
-                  });
-
-                  //Moverse a la siguiente dimension
-                  this.indicador.dimensionIndex++;
-                  this.indicador.dimension = this.indicador.dimensiones[this.indicador.dimensionIndex];
-
-                  //Recargar datos del gráfico
-                  this.cargarDatosIndicador(this.indicador, this.index);
-              }
-          },
-
-          filtrarPosicion : function (elementos) {
-              if (elementos.length > 0) {
-                  elementos.map(e => { this.indicador.otros_filtros.elementos.push(e.x) });
-                  
-                  this.$snotify.info(this.$t("_se_ha_aplicado_filtro_info_"), {
-                      position: "rightTop",
-                      timeout: 10000
-                  });
-              } else {
-                  this.indicador.otros_filtros.elementos = [];
-              }
-          },
-
-          quitarFiltros : function() {
-              this.indicador.otros_filtros.elementos = [];
-          },
-
-          cerrarConfiguracion : function(index) {
-              this.indicador.mostrar_configuracion = false;
-              this.indicador.full_screen = false;
-          },
-
-          fullscreen : function() {
-              this.indicador.full_screen = !this.indicador.full_screen;
-              this.indicador.mostrar_configuracion = this.indicador.full_screen ? this.indicador.mostrar_configuracion : false;
-          },
-
-          agregarFavorito: function () {
-              let vm = this;
-              axios.post("/api/v1/tablero/indicadorFavorito", { id: vm.indicador.id, es_favorito: vm.indicador.es_favorito })
-                  .then(function(response) {
-                      if (response.data.status == 200) {
-                          vm.indicador.es_favorito = response.data.data;
-                      }
-                  })
-                  .catch(function(error) {
-                      console.log(error);
-                      vm.$snotify.error(vm.$t("_error_conexion_"), "Error", {
-                          position: "rightTop",
-                          timeout: 10000
-                  });
-              });
-          }
-      }
     
-  }
+    import GraficoBasico from "../Graficos/GraficoBasico";
+    import Mapa from "../Graficos/Mapa";
+    import IndicadorBarraOpciones from "./IndicadorBarraOpciones";
+    import IndicadorBreadcum from "./IndicadorBreadcum";
+    import IndicadorMensajes from "./IndicadorMensajes";
+    import ConfiguracionIndicador from "./ConfiguracionIndicador";
+    import InfoTablaDatosContenido from "./InfoTablaDatosContenido";
+    import IndicadorMixin from "../Mixins/IndicadorMixin";
+
+    import domtoimage from 'dom-to-image';
+    
+
+
+
+    export default {
+        props: {
+            indicador: Object,
+            index: Number
+        },
+        components: {
+            GraficoBasico,
+            IndicadorBarraOpciones,
+            IndicadorBreadcum,
+            IndicadorMensajes,
+            ConfiguracionIndicador,
+            Mapa,
+            InfoTablaDatosContenido
+        },
+        mixins: [IndicadorMixin],        
+        computed : {
+            anchopx : function (){
+                return parseFloat( this.ancho ) * window.width / 12 ;
+            },
+            
+            ancho : function () { return this.indicador.configuracion.width.split('-')[2] },
+            alto : function () { return this.$store.state.layout[this.index].h * 30 }
+
+        },
+        methods : {
+            quitarIndicador : function() {
+                this.$store.commit("quitarIndicador", this.index);
+            },
+
+            clicGrafico : function (valor) {
+                let vm = this;
+                if ( parseInt(this.indicador.dimensionIndex) + 1 == this.indicador.dimensiones.length ) {
+                    this.indicador.error = 'Success';
+                } else {
+                    this.indicador.otros_filtros.elementos = [];
+                    //Agregar la dimensión actual como un filtro
+                    let datos_dimension = this.indicador.informacion.dimensiones[this.indicador.dimension];
+                    this.indicador.filtros.push({
+                        codigo: this.indicador.dimension,
+                        etiqueta: datos_dimension.descripcion,
+                        valor: valor
+                    });
+
+                    //Moverse a la siguiente dimension
+                    this.indicador.dimensionIndex++;
+                    this.indicador.dimension = this.indicador.dimensiones[this.indicador.dimensionIndex];
+
+                    //Recargar datos del gráfico
+                    this.cargarDatosIndicador(this.indicador, this.index);
+
+                    this.cargarDatosComparacion();
+                }
+            },
+
+            filtrarPosicion : function (elementos) {
+
+                if (elementos.length > 0) {
+                    this.indicador.otros_filtros.elementos = [];
+                    elementos.map(e => { 
+                        this.indicador.otros_filtros.elementos.push(e.x) 
+                    });
+
+                    this.$snotify.info(this.$t("_se_ha_aplicado_filtro_info_"), {
+                        position: "rightTop",
+                        timeout: 5000
+                    });
+                } else {
+                    this.indicador.otros_filtros.elementos = [];
+                }
+            },
+
+            quitarFiltros : function() {
+                this.indicador.otros_filtros.elementos = [];
+            },
+
+            cerrarConfiguracion : function(index) {
+                this.indicador.mostrar_configuracion = false;
+                //this.indicador.full_screen = false;
+            },
+
+            fullscreen : function() {
+                this.$refs['fullscreen'].toggle();
+            },
+
+            fullscreenChange (fullscreen) {
+                //this.fullscreen = fullscreen
+                this.indicador.full_screen = fullscreen;
+                this.indicador.mostrar_configuracion = this.indicador.full_screen ? this.indicador.mostrar_configuracion : false;
+            },
+
+            agregarFavorito: function () {
+                let vm = this;
+                axios.post("/api/v1/tablero/indicadorFavorito", { id: vm.indicador.id, es_favorito: vm.indicador.es_favorito })
+                    .then(function(response) {
+                        if (response.data.status == 200) {
+                            vm.indicador.es_favorito = response.data.data;
+                        }
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                        vm.$snotify.error(vm.$t("_error_conexion_"), "Error", { timeout: 10000 });
+                });
+            },
+
+            move : function(data) {
+                this.height = data.height;
+            },
+
+            end : function() {
+                this.indicador.configuracion.height = this.height;
+            },
+
+            graficoImagen : function ( options ) {
+                if ( ![ 'MAPA', 'GEOLOCATION', 'MAP' ].includes( this.indicador.configuracion.tipo_grafico.toUpperCase() ) ) {
+                    return this.$refs.grafico.toImage(options);
+                } else {
+                    return domtoimage.toPng(document.querySelector("#grafico-" + this.index), options)
+                }
+            },
+
+            descargarGrafico : function () {
+                if ( [ 'MAPA', 'GEOLOCATION', 'MAP' ].includes( this.indicador.configuracion.tipo_grafico.toUpperCase() ) ) {
+                    let vm = this;
+                    domtoimage.toPng(document.querySelector("#grafico-"+this.index), {width: 800, height: 600}).
+                        then( dataUrl => {
+                            let filename = vm.indicador.nombre;
+                            let link = document.createElement('a');
+
+                            if (typeof link.download === 'string') {
+                                link.href = dataUrl;
+                                link.download = filename;
+                                document.body.appendChild(link);
+                                link.click();
+                                document.body.removeChild(link);
+                            } else {
+                                window.open(uri);
+                            }
+                        })
+                        .catch(function (error) {
+                            console.error('oops, something went wrong!', error);
+                        });
+                } else {
+                    this.$refs.grafico.downloadImage({format: 'png', width: 800, height: 600, filename: this.indicador.nombre});
+                }
+            },
+
+            getConteo : function ( id ){
+                return this.$store.state.indicadores.filter( x => { return x.id == id}).length
+            }
+        }
+        
+    }
 </script>

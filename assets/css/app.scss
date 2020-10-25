@@ -1,0 +1,274 @@
+@import '~bootstrap/scss/bootstrap';
+/*@import '~bootstrap-vue/src/index.scss';*/
+@import "~vue-snotify/styles/material";
+@import '~leaflet/dist/leaflet.css';
+@import '~highlight.js/styles/default.css';
+@import "~vue-select/src/scss/vue-select.scss";
+
+
+
+td{
+  min-width: 30px;
+  min-height: 90px;
+}
+td.valores{
+  text-align: right;
+}
+td.nombre_variable{
+  vertical-align: middle !important;
+}
+table{
+  background-color: white;
+  border-color: black !important;
+}
+.content-header {
+  padding: 0px;
+}
+div.tooltip {
+  position: absolute;
+  text-align: center;
+  padding: 8px;
+  background: #4a4a44;
+  color: white;
+  font-size: 10pt;
+  border: 1px;
+  border-radius: 8px;
+  pointer-events: none;
+}
+.nav>li>a {
+  position: relative;
+  display: block;
+  padding: 10px 15px;
+  padding-top: 10px;
+  padding-right: 15px;
+  padding-bottom: 10px;
+  padding-left: 15px;
+}
+.flip-list-move {
+  transition: transform 0.5s;
+}
+
+.indicador-container .card-body {
+  padding: 0 !important;
+}
+
+.content-header {
+  padding: 0 !important;
+}
+.modal {
+  background-color: rgba(0,0,0,0.1) !important;
+}
+.modal-backdrop {
+    background-color: rgba(0,0,0,0.5) !important;
+}
+
+.ancho-total {
+  height: 40px;
+}
+
+.ancho-columna {
+  border: 1px solid red;
+}
+
+.ancho-seleccionado {
+  background-color: forestgreen;
+}
+
+.restaurar-tamanio-indicador {
+  color: blue;
+  margin-top: -30px;
+}
+
+.close_configuracion {
+  font-size: 30pt;
+}
+.info {
+  padding: 6px 8px;
+  font-size: 14px;
+  background: white;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+}
+.info h4 {
+  font-size: 16px;
+  margin: 0 0 5px;
+  color: #777;
+}
+
+.div_carga {
+  z-index: 1005;
+}
+
+div.tamanio-grafico{
+  background-color: yellow;
+}
+
+#app {
+  background: #fff;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+}
+
+#content {
+  padding: 0px 20px;
+  min-height: 100vh;
+  transition: all 0.3s;
+  width: 100%;
+}
+
+.vue-grid-item .vue-resizable-handle {
+  border-right : 3px double black !important;
+  border-bottom : 3px double black !important;
+  background: none !important;
+}
+
+.indicador-container {
+  height: 100%;
+}
+
+.grid-item {
+  padding: 0px 3px 3px 0px;
+  overflow-y: auto;
+  overflow-x: hidden; 
+}
+
+.indicador-container .breadcrumb {
+  padding: 2px;
+  font-size: 10pt;
+}
+
+
+.tipos_graficos .custom-control-label::before, .tipos_graficos .custom-control-label::after{
+  position: absolute !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  border: none !important;
+}
+
+/* IMAGE STYLES */
+.tipos_graficos input[type='radio'] + .custom-control-label img {
+  cursor: pointer;
+}
+
+/* CHECKED STYLES */
+.tipos_graficos input[type='radio']:checked + .custom-control-label img {
+  outline: 2px solid #f00;
+  box-shadow: 10px 10px 5px rgba(0, 0, 0, .5);
+}
+
+.leaflet-control {
+    clear: none;
+}
+
+#titulo_sala {
+    .page-header {
+        margin: 2px;
+    }
+}
+
+.indicador-container{
+    h1, h4 {
+        margin-bottom: 0px;
+    }
+}
+
+a {
+    color: black;
+}
+
+.bounce-enter-active {
+  animation: bounce-in .5s;
+}
+.bounce-leave-active {
+  animation: bounce-in .5s reverse;
+}
+@keyframes bounce-in {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Enter and leave animations can use different */
+/* durations and timing functions.              */
+.slide-fade-enter-active {
+  transition: all .3s ease;
+}
+.slide-fade-leave-active {
+  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active below version 2.1.8 */ {
+  transform: translateX(-400px);
+  opacity: 0;
+}
+
+.far, .fas, .svg-inline--fa {
+    margin-right: 3px;
+    margin-left: 3px;
+}
+
+#sala .close_indicador {
+  margin-top: -41px;
+  color: red;
+  font-size: 30pt;
+  text-shadow: 1px 1px 1px #000;
+  opacity: 0.7;
+}
+
+.div_carga {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, .7);
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#886287a7', endColorstr='#886287a7');
+  -ms-filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#886287a7', endColorstr='#886287a7');
+}
+
+.div_carga div {
+  margin-top: 30%;
+  color: white;
+}
+
+.bounce-enter-active {
+  animation: bounce-in .5s;
+}
+.bounce-leave-active {
+  animation: bounce-in .5s reverse;
+}
+@keyframes bounce-in {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(3.5);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.indicador-container .nav-item :hover{
+    color: red;
+}
+
+.dimensionTitulo {
+  color: red;
+}
