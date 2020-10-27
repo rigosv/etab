@@ -25,9 +25,32 @@ class IndicadorController extends AbstractController {
      *
      * @Route("/indicadores/tablero", name="indicadores_tablero")
      */
-    public function tablero() {               
-        return $this->render('FichaTecnicaAdmin/tablero.html.twig');
-    }   
+    public function tablero() {
+        try {
+            return $this->redirectToRoute($this->getParameter('app.tablero_name_url'));
+        } catch(\InvalidArgumentException $e) {
+            return $this->render('FichaTecnicaAdmin/tablero.html.twig');
+        }
+        
+    }
+
+    /**
+     * @return Response
+     *
+     * @Route("/indicadores/tableroold", name="indicadores_tableroold")
+     */
+    public function tableroold() {
+        return $this->render('FichaTecnicaAdmin/tablero.html.twig');   
+    }
+    
+    /**
+     * @return Response
+     *
+     * @Route("/tablero2", name="indicadores_tablero2")
+     */
+    public function tablero2() {               
+        return $this->render('tablero_index.html.twig');
+    }
 
     /**
      * @return Response

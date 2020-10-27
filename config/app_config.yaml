@@ -8,6 +8,7 @@ parameters:
     app.datos.tipo_almacenamiento: 'PostgreSQL'
     app.maindefault: '/indicadores/tablero'
     app.admindefault: '/indicadores/tablero'
+    app.tablero_name_url: 'indicadores_tablero2'
     couchbase_url: '%env(resolve:COUCHBASE_URL)%'
     couchbase_user: '%env(resolve:COUCHBASE_USER)%'
     couchbase_password: '%env(resolve:COUCHBASE_PASSWORD)%'
