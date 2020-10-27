@@ -507,7 +507,9 @@ class TableroController extends AbstractController {
             if($data){ 
                 $data1 = []; $data2 = []; $data3 = [];
                 foreach ($data as $key => $value) {                    
-                    $sql = "SELECT * FROM grupo_indicadores_indicador
+                    $sql = "SELECT id, indicador_id, grupo_indicadores_id, trim(dimension) AS dimension, filtro, filtro_posicion_desde, filtro_posicion_hasta, 
+                                        filtro_elementos, posicion, tipo_grafico, vista, orden  
+                         FROM grupo_indicadores_indicador
                     where grupo_indicadores_id = ".$value["id"]." order by posicion asc; ";
                     
                     $statement = $conn->prepare($sql);
@@ -607,7 +609,6 @@ class TableroController extends AbstractController {
        
         // iniciar el manager de doctrine
         $em = $this->getDoctrine()->getManager();
-
         $dimension = ( $dimension == 'null') ? null : trim($dimension);
         try{
             $datos = (object) $request->request->all(); 
@@ -633,7 +634,6 @@ class TableroController extends AbstractController {
                 $filtros_dimensiones = [];
                 $filtros_valores = [];
                 $filtros = [];
-                
                 foreach ($datos->filtros as $f) 
                 {  
                     if($f){
@@ -1302,7 +1302,7 @@ class TableroController extends AbstractController {
                     if ( array_key_exists($grafico->dimension, $grafico->dimensiones) ) {
                         $indG->setDimension($grafico->dimensiones[$grafico->dimension]);
                     } else {
-                        $indG->setDimension($grafico->dimension);
+                        $indG->setDimension(trim($grafico->dimension));
                     }
                     
                     $indG->setFiltro(json_encode($grafico->filtros));
