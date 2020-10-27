@@ -70,7 +70,7 @@ class TokenController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $sa = $em->getRepository(Social::class)->getRuta($sala,$token);
-
+        
         if (!$sa) 
             return $this->render('Page/error.html.twig', array(
                 'error' => "No existe la sala: $sala",
@@ -100,7 +100,16 @@ class TokenController extends Controller
                 array_push($data1, $value);                   
             } 
 
-            return $this->render('FichaTecnicaAdmin/tablero_publico.html.twig', array('data' => json_encode($data1[0])));
+            //return $this->render('FichaTecnicaAdmin/tablero_publico.html.twig', array('data' => json_encode($data1[0])));
+            try {
+                if ( $this->getParameter('app.tablero_name_url') == 'indicadores_tablero2') {
+                    return $this->render('tablero_index.html.twig', array('data' => json_encode($data1[0]) , 'idSala' =>  $sala, 'token' => $token));
+                } else {
+                    return $this->render('FichaTecnicaAdmin/tablero_publico.html.twig', array('data' => json_encode($data1[0])));
+                }
+            } catch(\InvalidArgumentException $e) {
+                return $this->render('FichaTecnicaAdmin/tablero_publico.html.twig', array('data' => json_encode($data1[0])));
+            }            
         }
         
     }
