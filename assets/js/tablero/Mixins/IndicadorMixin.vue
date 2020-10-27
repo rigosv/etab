@@ -44,7 +44,7 @@
                     nombre: "",
                     es_favorito: false,
                     dimensiones: [],
-                    dimension: indicador.dimension,
+                    dimension: indicador.dimension.trim(),
                     radial: false,
                     termometro: false,
                     mapa: false,

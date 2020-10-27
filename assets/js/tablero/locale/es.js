@@ -11,6 +11,7 @@ const messages = {
         _buscar_: 'Buscar',
         _borrar_: 'Borrar',
         _error_conexion_: 'Verifique su conexión, si el problema persiste contacte con el administrador del sistema',
+        _error_conexion_comentarios_sala_: 'Ocurrió un error al cargar los comentarios de las salas',
         _salas_cargadas_: 'Se han cargado las salas situacionales disponibles',
         _error_: 'Error',
         _favoritos_: 'Favoritos',

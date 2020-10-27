@@ -169,7 +169,7 @@
                     .then(function (response) {
                         vm.$store.state.sala_comentarios = response.data.data;
                     }).catch( function( error)  {
-                        vm.$snotify.error(vm.$t("_error_conexion_"), "Error");
+                        vm.$snotify.error(vm.$t("_error_conexion_comentarios_sala_"), "Error");
                     });
             },   
             filtrar : function (listado, filtro) {                

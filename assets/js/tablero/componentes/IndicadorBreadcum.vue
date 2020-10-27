@@ -5,7 +5,7 @@
                 v-for="(link, indexF) in indicador.filtros" 
                 :key="indexF"
             >
-                <a href="#" @click.prevent="breadcum(indexF)">{{ link.etiqueta.toUpperCase() }}: {{ link.valor }}</a>
+                <a href="#" @click.prevent="breadcum(indexF)">{{ link.codigo.toUpperCase() }}: {{ link.valor }}</a>
             </li>
             <li class="breadcrumb-item" v-if="indicador.filtros.length == 0 " style="color: white">_</li>
         </ol>
