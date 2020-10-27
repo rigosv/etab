@@ -8,8 +8,10 @@
             inicializarIndicador : function(indicador, index) {
 
                 let filtros = indicador.filtro != "" ? JSON.parse(indicador.filtro) : [];
-                let conf = ( indicador.orden != "" && indicador.orden != null && indicador.orden.hasOwnProperty('layout')) ? JSON.parse(indicador.orden) :
+                 
+                let conf = ( indicador.orden != "" && indicador.orden != null ) ? JSON.parse(indicador.orden) :
                     { width: "col-sm-4", height: "280", orden_x: "asc", orden_y: "", tipo_grafico: indicador.tipo_grafico, maximo: "", maximo_manual: "" };
+                
                 // si no tiene tipo de gráfico poner columnas por defecto
                 conf.tipo_grafico = ( !conf.hasOwnProperty('tipo_grafico') || conf.tipo_grafico == '' || conf.tipo_grafico == undefined) ? 'columnas' :  conf.tipo_grafico;                            
                 conf.filtro_inicial = filtros;
@@ -180,11 +182,15 @@
                                             
                                             if (cargadas == mps.total_partes){
                                                 vm.$store.state.indicadoresAllData.push ( {id : indicador.id, data: datos});
+                                                console.log(indicador.configuracion.dimensionComparacion);
                                             }
                                     });
                                 }
                             } else {
-                                vm.$store.state.indicadoresAllData.push ( {id : indicador.id, data: datos});                                
+                                vm.$store.state.indicadoresAllData.push ( {id : indicador.id, data: datos});
+                                if (indicador.configuracion.dimensionComparacion != '') {
+                                    vm.cargarFromLocal(indicador, datos);
+                                }
                             }
                         });
                 }

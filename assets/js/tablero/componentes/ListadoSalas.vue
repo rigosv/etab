@@ -51,7 +51,7 @@
         },        
 
         methods : { 
-            activarSala : function ( sala ){
+            activarSala : function ( sala ){                
                 this.sala_activa = sala.id;
                 this.$bvModal.hide('modalSalas');
                 this.$emit("activarSala", sala);

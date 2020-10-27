@@ -116,7 +116,7 @@
 
             guardarSala : function ( tipo ) {
                 let salaDatos = (tipo == 'guardar') ? this.$store.state.sala: {id : '', nombre: this.$store.state.sala.nombre };
-                let json = { sala: salaDatos, indicadores: this.$store.state.indicadores };
+                let json = { sala: salaDatos, indicadores: this.$store.state.indicadores };                
                 this.$store.state.sala_cargando = true;
                 let vm = this;
 

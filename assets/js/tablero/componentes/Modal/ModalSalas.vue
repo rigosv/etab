@@ -76,7 +76,6 @@
                     let params = {'id' : idSala, 'token': token};
                     return axios.get( url , { params: params })
                         .then(function (response) {
-                                                        
                             vm.salas = response.data.data;
                             vm.salas_propias = response.data.salas_propias;
                             
@@ -139,6 +138,10 @@
                 let indicadores = sala.indicadores.map((indicador, index) => {
                     return this.inicializarIndicador(indicador, index);
                 });
+                // Cargar los datos de los indicadores de la sala
+                indicadores.forEach((indicador, index) => {
+                    this.cargarDatosIndicador(indicador, index);
+                });
 
                 this.$store.commit('setIndicadores', indicadores);
                 this.$store.state.indicadoresAllData = [];
@@ -151,11 +154,6 @@
                             vm.$store.state.sala_acciones = response.data.data;
                         }
                     });
-                
-                // Cargar los datos de los indicadores de la sala
-                indicadores.forEach((indicador, index) => {
-                    this.cargarDatosIndicador(indicador, index);
-                });
 
                 //Cargar usuarios de la sala
                 axios.get( '/api/v1/tablero/usuariosSala/'+this.$store.state.sala.id )
