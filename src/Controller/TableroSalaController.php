@@ -418,12 +418,23 @@ class TableroSalaController extends AbstractController
                 $users = $qb->getQuery()->getResult();
             }            
 
-            foreach($users as $user)
+            foreach($users as $usuario)
             {  
-                $userId = $user->getId();
-                $usuario = $em->getRepository(User::class)->findOneBy(array('id' => $userId));     
+                //$userId = $user->getId();
+                //$usuario = $em->getRepository(User::class)->findOneBy(array('id' => $userId));
+                
                 if($usuario->isEnabled())
                 { 
+                    //Verificar que no esté ya asignado
+                    $userSala = $em->getRepository(UsuarioGrupoIndicadores::class)->findOneBy(['grupoIndicadores' => $sala, 'usuario' => $usuario]);
+                    if ( $userSala === null ){
+                        $userSala = new UsuarioGrupoIndicadores();
+                        $userSala->setEsDuenio(false);
+                        $userSala->setGrupoIndicadores($sala);
+                        $userSala->setUsuario($usuario);
+                        $userSala->setUsuarioAsigno($this->getUser());
+                        $em->persist($userSala);
+                    }
                     $name = $usuario->getFirstname().$usuario->getLastname() == "" ? $usuario->getUsername() : $usuario->getFirstname().' '.$usuario->getLastname();                      
                     $array = array(array
                     (
@@ -444,7 +455,8 @@ class TableroSalaController extends AbstractController
                      $mailer->send($message);
                     $msg.="se envió correo a: ".$name." (".$usuario->getEmail().")\n\n";
                 }
-            }            
+            }
+            $em->flush();
         }
         $token  = md5(time());
         if($req->get("usuarios_sin_cuenta")!="")
