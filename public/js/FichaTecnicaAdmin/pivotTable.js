@@ -246,7 +246,7 @@ $(document).ready(function() {
             }
             alertas = mps.alertas;
             formula = mps.formula;
-            cargarDescripcionAtributos(id_indicador);
+            //cargarDescripcionAtributos(id_indicador);
         });
     });
 
@@ -319,7 +319,7 @@ $(document).ready(function() {
     function cargarDescripcionAtributos(id_indicador) {
         $.getJSON(Routing.generate('get_campos_variables_indicador', {id: id_indicador}), function(datos) {
             $.each( datos, function(idx, descripcion){
-
+        
                 $('.pvtAttr:contains('+idx+')').attr('title', descripcion);
             });
         })
@@ -362,9 +362,10 @@ $(document).ready(function() {
                 var cfgInclusions = {};
                 var cfgRowOrder = 'key_a_to_z';
                 var cfgColOrder = 'key_a_to_z';
+                var conf='';
 
                 if (resp !== '{}'){
-                    let conf = JSON.parse(resp);
+                    conf = JSON.parse(resp);
                     cfgVals = conf.vals;
                     cfgRows = conf.rows;
                     cfgCols = conf.cols;
@@ -375,7 +376,7 @@ $(document).ready(function() {
                     cfgRowOrder = conf.rowOrder;
                     cfgColOrder = conf.colOrder;
                 }
-
+                
                 if (esCalidad){
 
                     $("#output").pivotUI(datos, {
@@ -433,55 +434,68 @@ $(document).ready(function() {
                             xvals =  [operandos[0]];
                         }
                     }
+                    $.getJSON(Routing.generate('get_campos_variables_indicador', {id: identificadorElemento}), function(nombres) {
+                        var datos_ = JSON.stringify( datos );
+                        var cfg_ = JSON.stringify( conf );
+                        var desc = '';
+                        $.each(JSON.parse(JSON.stringify(nombres)), function (idx, descripcion) {
+                            desc = descripcion.replace('Identificador', '').trim();
+                            desc = desc[0].toUpperCase() + desc.slice(1);
+                            datos_ = datos_.split('"' + idx + '":').join('"' + desc + '":');
+                            cfg_ = cfg_.split('"' + idx + '":').join('"' + desc + '":');
+                        });
+                        datos = JSON.parse(datos_);
+                        let cfg = JSON.parse(cfg_);
 
-                    $("#output").pivotUI(datos, {
-                        renderers: renderers,
-                        dataClass: dataClass,
-                        aggregatorName: ( cfgAggregatorName == '') ? xaggregatorName : cfgAggregatorName,
-                        vals : ( cfgVals == [] ) ? xvals : cfgVals,
-                        rows: cfgRows,
-                        cols: cfgCols,
-                        rendererName: cfgRendererName,
-                        exclusions: cfgExclusions,
-                        inclusions: cfgInclusions,
-                        rowOrder: cfgRowOrder,
-                        colOrder: cfgColOrder,
-                        menuLimit: 1000,
-                        unusedAttrsVertical: false,
-                        onRefresh: onChangeTable,
-                        rendererOptions: {
-                            arrowCollapsed: "[+] ",
-                            arrowExpanded: "[-] ",
-                            collapseRowsAt: 0,
-                            plotlyConfig : configPlotly,
-                            heatmap: {
-                                colorScaleGenerator : function(values) {
-                                    if ( alertas.length == 0){
-                                        var max, min;
-                                        min = Math.min.apply(Math, values);
-                                        max = Math.max.apply(Math, values);
-                                        return function(x) {
-                                            var nonRed;
-                                            nonRed = 255 - Math.round(255 * (x - min) / (max - min));
-                                            return "rgb(255," + nonRed + "," + nonRed + ")";
-                                        };
-                                    } else {
-                                        return function (x) {
-                                            var rango, i;
-                                            for (i in alertas) {
-                                                rango = alertas[i];
+                        $("#output").pivotUI(datos, {
+                            renderers: renderers,
+                            dataClass: dataClass,
+                            aggregatorName: ( cfg.aggregatorName == '') ? xaggregatorName : cfg.aggregatorName,
+                            vals : ( cfg.vals == [] ) ? xvals : cfg.vals,
+                            rows: cfg.rows,
+                            cols: cfg.rols,
+                            rendererName: cfg.rendererName,
+                            exclusions: cfg.exclusions,
+                            inclusions: cfg.enclusions,
+                            rowOrder: cfg.rowOrder,
+                            colOrder: cfg.colOrder,
+                            menuLimit: 1000,
+                            unusedAttrsVertical: false,
+                            onRefresh: onChangeTable,
+                            rendererOptions: {
+                                arrowCollapsed: "[+] ",
+                                arrowExpanded: "[-] ",
+                                collapseRowsAt: 0,
+                                plotlyConfig : configPlotly,
+                                heatmap: {
+                                    colorScaleGenerator : function(values) {
+                                        if ( alertas.length == 0){
+                                            var max, min;
+                                            min = Math.min.apply(Math, values);
+                                            max = Math.max.apply(Math, values);
+                                            return function(x) {
+                                                var nonRed;
+                                                nonRed = 255 - Math.round(255 * (x - min) / (max - min));
+                                                return "rgb(255," + nonRed + "," + nonRed + ")";
+                                            };
+                                        } else {
+                                            return function (x) {
+                                                var rango, i;
+                                                for (i in alertas) {
+                                                    rango = alertas[i];
 
-                                                if ( Math.round(x * factor) >= rango.li && Math.round(x * factor) <= rango.ls) {
-                                                    return rango.color;
+                                                    if ( Math.round(x * factor) >= rango.li && Math.round(x * factor) <= rango.ls) {
+                                                        return rango.color;
+                                                    }
                                                 }
-                                            }
-                                            return "white";
-                                        };
+                                                return "white";
+                                            };
+                                        }
                                     }
-                                }
-                            },
-                        }
-                    }, true, locale);
+                                },
+                            }
+                        }, true, locale);
+                    });
                 }
 
 
