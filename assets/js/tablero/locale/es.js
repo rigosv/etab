@@ -1,5 +1,6 @@
 const messages = {
   es: {
+        _aplicar_filtro_: 'Aplicar filtro',
         _salas_ : 'Salas',
         _indicadores_: 'Indicadores',
         _seleccione_sala_: 'Seleccione una sala',
@@ -54,6 +55,7 @@ const messages = {
         _alerta_: 'Alerta',
         _se_ha_aplicado_filtro_info_: "Se ha aplicado un filtro. Para quitarlo, de doble clic sobre el gráfico",
         _filtros_: 'Filtros',
+        _filtros_generales_: 'Filtros generales',
         _ancho_grafico_help_: 'De clic para seleccionar la cantidad de posiciones que ocupará el ',
         _restaurar_tamanio_: 'Restaurar tamaño',
         _fecha_ultima_lectura_: 'Fecha de última carga de datos',
@@ -140,6 +142,7 @@ const messages = {
         _lineas_: 'Líneas',
         _acciones_: 'Acciones',
         _dimensiones_: 'Dimensiones',
+        _dimension_: 'Dimensión',
         _elija_dimension_comparar_: 'Elija dimensión a comparar',
         _quitar_comparacion_: 'Quitar comparación',
         _mostrar_tabla_datos_: 'Mostrar tabla de datos',
@@ -162,7 +165,8 @@ const messages = {
         _usuario_sin_cuenta_correos_: 'Escribir el correo del usuario. Puede escribir más de 1 separando por comas',
         _todos_: 'Todos',
         _elija_usuarios_a_compartir_: 'Elija los usuarios con quienes se compartirá la sala',
-        _tiempo_en_dias_: 'Tiempo de disponibilidad del enlace (en días)'
+        _tiempo_en_dias_: 'Tiempo de disponibilidad del enlace (en días)',
+        _valor_filtro_: 'Valor filtro',
 
   }
 };

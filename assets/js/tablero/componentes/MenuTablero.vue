@@ -29,6 +29,9 @@
                             <b-dropdown-item href="#" v-b-modal.modalCompartirSala v-if="$store.state.abrio_sala && !esSalaPublica"  >
                                 <font-awesome-icon icon="share" /> {{ $t("_compartir_sala_" ) }}
                             </b-dropdown-item>
+                            <b-dropdown-item href="#" v-b-modal.modalFiltrosGenerales v-if="$store.state.abrio_sala && !esSalaPublica"  >
+                                <font-awesome-icon icon="filter" /> {{ $t("_filtros_generales_" ) }}
+                            </b-dropdown-item>
                         </b-dropdown>                    
                     </b-navbar-nav>
                 </transition>
@@ -40,6 +43,7 @@
         <modal-exportar @convertir-graficos-sala="convertirGraficosSala" ></modal-exportar>
         <modal-acciones-sala></modal-acciones-sala>
         <modal-compartir-sala></modal-compartir-sala>
+        <modal-filtros-generales></modal-filtros-generales>
     </div>
 </template>
 
@@ -49,9 +53,11 @@
     import ModalExportar from './Modal/ModalExportar';
     import ModalAccionesSala from './Modal/ModalAccionesSala';
     import ModalCompartirSala from './Modal/ModalCompartirSala';
+    import ModalFiltrosGenerales from './Modal/ModalFiltrosGenerales';
 
     export default {
-        components : {ModalIndicadores, ModalSalas, ModalIndicadores, ModalExportar, ModalAccionesSala, ModalCompartirSala },
+        components : {ModalIndicadores, ModalSalas, ModalIndicadores, ModalExportar, 
+                      ModalAccionesSala, ModalCompartirSala, ModalFiltrosGenerales },
         computed : {
             esSalaPublica : function() {
                 return ( token != '' && idSala != '' );

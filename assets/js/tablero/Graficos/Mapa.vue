@@ -102,7 +102,6 @@
 
                         if (response.status == 200 ){
                             vm.datosMapa = response.data;
-                            console.log(vm.datosMapa);
                             vm.mapaDatosCargados = true;
                         }
                     })
@@ -127,7 +126,11 @@
 
             'indicador.dimension': function () {
                 this.cargarDatosMapa();
+            },
+            'indicador.filtros': function () {
+                this.cargarDatosMapa();
             }
+
 
         }
         
