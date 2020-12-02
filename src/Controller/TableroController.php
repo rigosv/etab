@@ -101,7 +101,7 @@ class TableroController extends AbstractController {
                         }
                     }
                 }
-
+                array_multisort($data, SORT_ASC);                
             }
 
             $total = count($data);
@@ -1320,7 +1320,12 @@ class TableroController extends AbstractController {
                     if (property_exists($grafico, 'orden') or property_exists($grafico, 'configuracion')) {
                         $indG->setOrden(json_encode($grafico->configuracion));
                     }
-                    $indG->setTipoGrafico($grafico->configuracion["tipo_grafico"]);
+                    if (property_exists($grafico, 'tipo_grafico') ) {
+                        $indG->setTipoGrafico($grafico->configuracion["tipo_grafico"]);
+                    } else {
+                        $indG->setTipoGrafico("columnas");
+                    }
+                    
                     $indG->setGrupo($grupoIndicadores);
                     $grupoIndicadores->addIndicadore($indG);
                 }
