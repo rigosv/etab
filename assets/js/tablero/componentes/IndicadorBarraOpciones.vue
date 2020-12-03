@@ -7,11 +7,11 @@
             </b-nav-item>
 
             <b-nav-item href="#" :title=" $t('_mostrar_tabla_datos_') " @click="indicador.configuracion.mostrarTablaDatos = true" v-if="!indicador.configuracion.mostrarTablaDatos" >
-                <font-awesome-icon icon="table" :style="{ color: indicador.es_favorito ? 'orange' : '' }" />
+                <font-awesome-icon icon="table"  />
             </b-nav-item>
 
             <b-nav-item href="#" :title=" $t('_mostrar_grafico_') " @click="indicador.configuracion.mostrarTablaDatos = false"  v-if="indicador.configuracion.mostrarTablaDatos">
-                <font-awesome-icon icon="chart-bar" :style="{ color: indicador.es_favorito ? 'orange' : '' }" />
+                <font-awesome-icon icon="chart-bar"  />
             </b-nav-item>
                         
             <b-nav-item href="#" @click="$emit('descargar-grafico')" :title=" $t('_descargar_grafico_') " v-if="!indicador.configuracion.mostrarTablaDatos" >

@@ -57,7 +57,7 @@
                 
                 let ind = this.inicializarIndicador(indicador, index);
                 this.$store.commit('agregarIndicador', ind );
-                this.cargarDatosIndicador(ind, index);
+                this.cargarDatosIndicador(ind, index);                
 
             },
             filtrar : function (listado, filtro) {

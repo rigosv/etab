@@ -66,8 +66,19 @@
         },
         components: { ListadoIndicadoresClasificados, Buscar, ListadoIndicadores },
         mounted : function() {
-            //Cargar la clasificación de uso
             let vm =  this;
+            this.$root.$on('bv::modal::show', (bvEvent, modalId) => {
+                console.log('Modal is about to be shown', bvEvent, modalId)
+                //Cargar indicadores favoritos
+                axios.get( '/api/v1/tablero/listaIndicadores?tipo=favoritos' )
+                    .then(function (response) {
+                        vm.indicadores_favoritos = response.data.data;
+                    }).catch( function( error)  {
+                        vm.$snotify.error(vm.$t("_error_conexion_"), "Error");
+                    })
+                ;
+            })
+            //Cargar la clasificación de uso            
             axios.get( '/api/v1/tablero/clasificacionUso' )
                 .then(function (response) {
                     vm.$store.state.clasificaciones_uso = response.data.data;
@@ -83,16 +94,7 @@
                 }).catch( function( error)  {
                     vm.$snotify.error(vm.$t("_error_conexion_"), "Error");
                 })
-            ;
-
-            //Cargar indicadores favoritos
-            axios.get( '/api/v1/tablero/listaIndicadores?tipo=favoritos' )
-                .then(function (response) {
-                    vm.indicadores_favoritos = response.data.data;
-                }).catch( function( error)  {
-                    vm.$snotify.error(vm.$t("_error_conexion_"), "Error");
-                })
-            ;
+            ;            
         },       
         methods : {        
             buscarIndicadoresLibre : function () {            

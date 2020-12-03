@@ -144,6 +144,7 @@
     import IndicadorMixin from "../Mixins/IndicadorMixin";
 
     import domtoimage from 'dom-to-image';
+    import axios from 'axios';
     
 
 
@@ -243,7 +244,8 @@
                 axios.post("/api/v1/tablero/indicadorFavorito", { id: vm.indicador.id, es_favorito: vm.indicador.es_favorito })
                     .then(function(response) {
                         if (response.data.status == 200) {
-                            vm.indicador.es_favorito = response.data.data;
+                            vm.indicador.es_favorito = response.data.data;                            
+                            vm.indicador.es_favorito ? vm.$snotify.info(vm.$t("_agregado_favorito_")) : vm.$snotify.warning(vm.$t("_eliminado_favorito_"));
                         }
                     })
                     .catch(function(error) {

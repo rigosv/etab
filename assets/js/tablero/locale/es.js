@@ -16,6 +16,8 @@ const messages = {
         _salas_cargadas_: 'Se han cargado las salas situacionales disponibles',
         _error_: 'Error',
         _favoritos_: 'Favoritos',
+        _agregado_favorito_: 'Indicador agregado a favoritos',
+        _eliminado_favorito_: 'Indicador eliminado de favoritos',
         _configuracion_: 'Configuración',
         _dimension_opciones_: 'Opciones de dimensión',
         _exportar_: 'Exportar',
