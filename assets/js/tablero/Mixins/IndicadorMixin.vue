@@ -55,7 +55,8 @@
                     ficha: "",
                     full_screen: false,
                     configuracion: conf,
-                    otros_filtros: otros_filtros
+                    otros_filtros: otros_filtros,
+                    cargaCompletaIniciada: false
                 };
                 return datos_indicador;
             },
@@ -69,7 +70,10 @@
                     this.cargarFromLocal(indicador, dataInd[0].data);
                 } else {
                     this.cargarFromServer(indicador, index);
-                    this.cargarDataCompleta(indicador);
+                    if ( indicador.cargaCompletaIniciada === false ){
+                        indicador.cargaCompletaIniciada = true;
+                        this.cargarDataCompleta(indicador);
+                    }
                 }
                 
             },
@@ -169,12 +173,15 @@
                             let datos = [];
                             let cargadas = 1;
                             let mps = response.data;
-                            
+                            if (mps.total_partes > 2){
+                                // No cargar en local si tiene muchos datos porque traba el navegador
+                                return;
+                            }
                             datos = datos.concat(mps.datos);
                             // Se obtiene en partes de 50,000 por limitación de tamaño en respuesta de peticiones post
                             if ( mps.total_partes != undefined && mps.total_partes > 1) {
                                 for(var i = 2; i <= mps.total_partes ; i++) {
-                                    axios.get( '/rest-service/data/'+indicador.id, {parte: i})
+                                    axios.get( '/rest-service/data/'+indicador.id+'?parte='+i)
                                         .then( function(response) {
                                             let mpsx = response.data;
                                             datos = datos.concat(mpsx.datos);
