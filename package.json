@@ -51,7 +51,7 @@
         "bootstrap": "^4.4.1",
         "bootstrap-vue": "^2.11.0",
         "dom-to-image": "^2.6.0",
-        "highlight.js": "^9.15.9",
+        "highlight.js": "^10.4.1",
         "html2canvas": "^1.0.0-rc.3",
         "html2pdf.js": "^0.9.1",
         "jspdf": "^1.5.3",
