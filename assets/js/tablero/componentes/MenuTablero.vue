@@ -2,7 +2,8 @@
     <div>
         <section class="content-header">       
             <b-navbar type="dark"  variant="secondary">
-                <b-navbar-brand href="/">eTab</b-navbar-brand>
+                <b-navbar-brand href="/" v-if="!esSalaPublica">eTab</b-navbar-brand>
+                <b-navbar-brand href="#" v-if="esSalaPublica">eTab</b-navbar-brand>
                 <b-navbar-nav>
                     <b-nav-item href="#" v-if="!esSalaPublica">
                         <b-button v-b-modal.modalSalas variant="primary" style="padding: 5px;">
