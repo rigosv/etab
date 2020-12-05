@@ -20,6 +20,19 @@
 
     export default  {
         components: { MenuTablero, Sala},
+        props: {
+            idSala: {
+                type: String,
+                default: ''
+            },
+            token: {
+                type: String,
+                default: ''
+            }
+        },
+        mounted : function() {
+            this.$store.commit('addDatosSalaPublica', {idSala:this.idSala, token:this.token});
+        }, 
         methods : {
             convertirGraficosSala :  function () {
                 //Extraer cada gráfico y convertirlo en formato png para que sea más

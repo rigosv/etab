@@ -73,7 +73,8 @@
             vm.$snotify.async( vm.$t('_cargando_salas_'), () => {
                 return new Promise((resolve, reject) => {
                     const url = '/api/v1/tablero/listaSalas';
-                    let params = {'id' : idSala, 'token': token};
+                    let params = {'id' : vm.$store.state.idSala, 'token': vm.$store.state.token};
+                    
                     return axios.get( url , { params: params })
                         .then(function (response) {
                             vm.salas = response.data.data;
@@ -91,7 +92,7 @@
                                     position: 'rightTop'
                                 }
                             });
-                            if (vm.salas.length == 1 && token != '' && idSala != '' ){
+                            if ( vm.$store.state.token != '' && vm.$store.state.idSala != '' ){
                                 //Es una sala pública, cargarla
                                 vm.activarSala( vm.salas[0] );
 

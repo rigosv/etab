@@ -61,7 +61,7 @@
                       ModalAccionesSala, ModalCompartirSala, ModalFiltrosGenerales },
         computed : {
             esSalaPublica : function() {
-                return ( token != '' && idSala != '' );
+                return ( this.$store.state.token != '' && this.$store.state.idSala != '' );
             }
         },        
         methods : {

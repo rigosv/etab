@@ -24,6 +24,8 @@ export const store = new Vuex.Store({
         clasificacion_uso : null,
         clasificaciones_tecnica : [],
         clasificacion_tecnica : null,
+        idSala:'',
+        token:''
 
 
     },
@@ -37,6 +39,12 @@ export const store = new Vuex.Store({
             state.indicadores.push(indicador);
             state.layout.push( indicador.configuracion.layout );
 
+        },
+        addDatosSalaPublica(state, datosSala) {
+            state.idSala = datosSala.idSala;
+            state.token = datosSala.token;
+            console.log(state.token);
+            console.log(state.idSala);
         },
         agregarDatosIndicador(state, datos) {
             let indicador = datos.indicador;

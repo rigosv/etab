@@ -78,7 +78,7 @@
                 }
             },
             esSalaPublica : function() {
-                return ( token != '' && idSala != '' );
+                return ( this.$store.state.token != '' && this.$store.state.idSala != '' );
             }
         },
         methods : {
