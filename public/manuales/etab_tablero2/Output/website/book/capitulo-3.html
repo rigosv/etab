@@ -1,0 +1,336 @@
+<html >
+	<head>
+		<title>eTAB </title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="charset" content="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<!-- Latest compiled and minified CSS -->
+		  
+			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+			<link rel="stylesheet" href="./css/styles.css" />  
+			<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+				
+					<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+			<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+			<!-- Latest compiled and minified JavaScript -->
+			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+			<script charset="utf-8">
+			$(document).ready(function () {
+			  $("body").on("click",".btn-main-menu",function(e) {
+				e.preventDefault();
+				$("#wrapper").toggleClass("toggled");
+			  });
+			  $(".btn-datagrid-row-mostrar-opciones").on('click', function(e){
+				e.preventDefault();
+
+				$(this).toggleClass('btn-primary');
+				$(this).parent().find('.btn-group').eq(0).toggleClass('hidden-xs');
+			  });
+			});
+			</script>
+		
+		<link rel="shortcut icon" href="./images/etab.png" />
+	</head>
+	<body>
+	
+
+	<nav class="navbar navbar-default navbar-fixed-top top-bar">
+    <div class="container-fluid">
+      <div class="navbar-header" style="margin-right:20pt;width: 208px;">
+		<a href="./index.html" class="navbar-brand"><img alt="Home" src="./images/etab.png" style="top:0px; margin-top:-5px; height:34px; float:left; ">eTAB</a>
+      </div>
+      <ul class="nav navbar-nav">
+		<li class="">
+		  <a>Manual de usuario <i class="fa fa-caret-right"></i></a>
+		</li>
+		<li class="active">
+		  <a href="">Salas</a>
+		</li>
+	  </ul>
+      <ul class="nav navbar-nav navbar-right">
+        				<li><a  href="./capitulo-2.html">&larr; Anterior </a></li>
+			
+							<li><a href="./capitulo-4.html">Siguiente &rarr; </a></li>
+			      </ul>
+    </div>
+  </nav>
+
+	<div id="wrapper" class="" >
+	
+		
+<!-- Sidebar -->
+    <aside id="sidebar-wrapper">
+      <ul class="sidebar-nav nav">
+        
+        <li>
+          <a href="index.html"><i class="fa fa-dashboard"></i> Dashboard</a>
+        </li>
+															
+				<li class="">
+					<a href="./capitulo-1.html" ><i class="fa fa-book"></i> Tablero </a>				  
+					<ul id="chunk_toc" class='nav collapse submenu in'  aria-expanded="true">		
+						
+												
+													
+					</ul>
+					
+				</li>
+													
+				<li class="">
+					<a href="./capitulo-2.html" ><i class="fa fa-book"></i> Indicador </a>				  
+					<ul id="chunk_toc" class='nav collapse submenu in'  aria-expanded="true">		
+						
+												
+													
+					</ul>
+					
+				</li>
+													
+				<li class="active">
+					<a href="./capitulo-3.html" ><i class="fa fa-book"></i> Salas </a>				  
+					<ul id="chunk_toc" class='nav collapse submenu in'  aria-expanded="true">		
+						
+																																												<li><a href="./capitulo-3.html#filtros-2"><i class="fa fa-file"></i> Filtros</a></li>
+																															<li><a href="./capitulo-3.html#eliminar-sala"><i class="fa fa-file"></i> Eliminar sala</a></li>
+																															<li><a href="./capitulo-3.html#sala-cargada"><i class="fa fa-file"></i> Sala cargada</a></li>
+																															<li><a href="./capitulo-3.html#guardar-sala"><i class="fa fa-file"></i> Guardar Sala</a></li>
+																															<li><a href="./capitulo-3.html#filtros-generales"><i class="fa fa-file"></i> Filtros generales</a></li>
+																						
+												
+													
+					</ul>
+					
+				</li>
+													
+				<li class="">
+					<a href="./capitulo-4.html" ><i class="fa fa-book"></i> Social </a>				  
+					<ul id="chunk_toc" class='nav collapse submenu in'  aria-expanded="true">		
+						
+												
+													
+					</ul>
+					
+				</li>
+		 
+				  
+        
+      </ul>
+	  
+    </aside>
+<!-- /#sidebar-wrapper -->
+		
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-12">
+            <br>
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h1 class="panel-title"><i class="fa fa-bookmark"></i> <span>Capítulo 3</span>  </h1>
+              </div>
+              <div class="panel-body" >
+                
+				
+    <h1 id="salas"> Salas</h1>
+    <p><br/></p>
+
+<p style="text-align: justify;">
+Las salas son un grupo de indicadores, que se guardan con sus respectivas opciones, filtros y tamaños, se pueden comprartir con otros usuarios para tener un foro de discusión o simplemente para hacer notar un hallazgo.
+</p>
+
+<div class="figure" id="figure-3-1">
+    <img src="images/salas.png" alt="" />
+
+</div>
+
+
+<p><br/></p>
+
+<h2 id="filtros-2">3.1 Filtros</h2>
+
+<p><br/></p>
+
+<p style="text-align: justify;">
+Para acceder a una sala es necesario primero hacer clic al boton salas y abrir los filtros para encontrar la sala a la que tenemos acceso, bien sea que nosotros las creemos o bien que alguien mas nos compartio
+</p>
+
+<div class="figure" id="figure-3-2">
+    <img src="images/salas-0.png" alt="" />
+
+</div>
+
+
+<p><br/>
+<div class="figure" id="figure-3-3">
+    <img src="images/salas-1.png" alt="" />
+
+</div>
+
+
+<p><br/></p>
+
+<blockquote>
+  <p><strong>Filtros</strong></p>
+  
+  <ul>
+  <li>1.- Primero se tienen 3 pestañas con la lista de salas</li>
+  <li>2.- Por cada pestaña un buscador para encontrar un elemento mas rapido</li>
+  <li>3.- Lista de salas disponibles</li>
+  <li>4.- Número de inidcadores que tiene la sala</li>
+  <li>5.- Cerrar ventana</li>
+  </ul>
+</blockquote>
+
+<p><br/></p>
+
+<h2 id="eliminar-sala">3.2 Eliminar sala</h2>
+
+<p><br/></p>
+
+<p style="text-align: justify;">
+Una vez que se crean las salas solo pueden ser borradas por la persona que las creo, para ello accedemos a la segunda pestaña de la venta de filtros del boton salas.
+</p>
+
+<div class="figure" id="figure-3-4">
+    <img src="images/salas-2.png" alt="" />
+
+</div>
+
+
+<p><br/></p>
+
+<blockquote>
+  <p><strong>Eliminar</strong></p>
+  
+  <ul>
+  <li>1.- acceder a la pestaña numero 2</li>
+  <li>2.- Hacer click al boton rojo eliminar</li>
+  <li>3.- Se nos pide una confirmación, si es positiva se borra</li>
+  </ul>
+</blockquote>
+
+<p><br/></p>
+
+<h2 id="sala-cargada">3.3 Sala cargada</h2>
+
+<p><br/></p>
+
+<p style="text-align: justify;">
+Al hacer clic en una sala, se nos mostrara el area de gráfico todos los indicadores que pertenecen a la sala. Solo se puede tener abierto una sala, es decir que si tenemos una sala abierta y hacemos clic en otra sala la sala anterior se cerrara y solo quedaran los indicadores de la sala abierta.
+</p>
+
+<div class="figure" id="figure-3-5">
+    <img src="images/salas-3.png" alt="" />
+
+</div>
+
+
+<p><br/></p>
+
+<blockquote>
+  <p><strong>Elementos</strong></p>
+  
+  <ul>
+  <li>1.- Acciones para el usuario con la sala</li>
+  <li>2.- Nombre de la sala</li>
+  <li>3.- Indicadores con sus respectivos datos, cargados y gráficados segun la configuracion guardada</li>
+  </ul>
+</blockquote>
+
+<p><br/></p>
+
+<p style="text-align: justify;">
+Todos los gráficos que aparecen en el area de gráfico son independientes unos de otros, aun si el indicador es el mismo se puede guardar cada uno con diferentes filtros, y diferente tipo de gráfica, tambien se puede guardar el tamaño de cada grafico y cambiar la posición del inidcador con solo arrastrar y soltar. de esta forma podemos asignarle el aspecto que se dese a nuestra sala, y al compartirlo o abrirlo lo veamos igual cada vez.
+</p>
+
+<div class="figure" id="figure-3-6">
+    <img src="images/salas-4.png" alt="" />
+
+</div>
+
+
+<p><br/></p>
+
+<h2 id="guardar-sala">3.4 Guardar Sala</h2>
+
+<p><br/></p>
+
+<p style="text-align: justify;">
+Para guardar la sala, simplemente de clic al boton "Guardar sala" despues de hacer clic aparecera una ventana como esta.
+</p>
+
+<div class="figure" id="figure-3-7">
+    <img src="images/salas-5.png" alt="" />
+
+</div>
+
+<div class="figure" id="figure-3-8">
+    <img src="images/salas-6.png" alt="" />
+
+</div>
+
+
+<p><br/></p>
+
+<blockquote>
+  <p><strong>Guardar</strong></p>
+  
+  <ul>
+  <li>1.- Nombre de la sala</li>
+  <li>2.- Si la sala ya esta creada y queremos solo actualizar aparece este boton tambien para borrar, con previa confirmación</li>
+  <li>3.- Guardar los cambios</li>
+  <li>4.- Cerrar ventana</li>
+  </ul>
+</blockquote>
+
+<h2 id="filtros-generales">3.5 Filtros generales</h2>
+
+<p>Esta opción se utiliza para aplicar filtros a todos los indicadores cargados en la sala</p>
+
+<ol>
+<li>Dar clic en el botón <strong>Filtros generales</strong></li>
+<li>Elegir la dimensión por la cual vamos a filtrar</li>
+<li>Ingresar el valor a asignar al filtro</li>
+<li>Dar clic en aplicar filtro</li>
+</ol>
+
+<p>Si alguno de los indicadores no tiene la dimensión seleccionada, el filtro no será aplicado a dicho indicador</p>
+
+<div class="figure" id="figure-3-9">
+    <img src="images/filtros_generales.gif" alt="Filtros generales" />
+
+    <p class="caption"><strong>Figura 3.9</strong> Filtros generales</p>
+</div>
+
+
+
+	
+			
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer class="app-footer">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-xs-4"><img src="./images/logo1.png"  height="30px" alt="" /></div>
+            <div class="col-xs-4">
+              <p class="hidden-xs">
+                Tablero de control electronico | ETAB
+              </p>
+            </div>
+            <div class="col-xs-4" align="right"><img src="./images/logo2.png"  height="30px" alt="" /></div>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <!-- /#page-content-wrapper -->
+
+  </div>
+</body>
+</html>

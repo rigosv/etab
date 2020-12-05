@@ -13,7 +13,14 @@ debe ser ejecutado como usuario root y "$" que debe ser ejecutado como un usuari
 en ambos casos desde una consola de comandos.
 
     # apt-get update
-    # apt-get install php php-pgsql php-curl php-sqlite3 sqlite php-cli php-xsl php-intl  postgresql acl git-core curl postgresql-contrib php-mysql php-sybase php-json php-bcmath php-mbstring redis-server php-redis php-zip php-gd php-fpm composer supervisor php-apcu
+    # apt-get install php php-pgsql php-curl php-sqlite3 sqlite php-cli php-xsl php-intl  postgresql acl git-core curl postgresql-contrib php-mysql php-sybase php-json php-bcmath php-mbstring redis-server php-redis php-zip php-gd php-fpm composer supervisor php-apcu nodejs
+
+### Instalación de yarn
+Para instalar los archivos del frontend y poder realizar la compilación de los mismos se utiliza yarn.
+
+    # curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+    # echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+    # apt update && apt install yarn
 
 
 ### Crear usuario y directorio de trabajo
@@ -93,6 +100,18 @@ Si es un servidor de pruebas
 Si es un servidor de producción
 
     $ composer install --no-dev --optimize-autoloader
+
+Las librerías del frontend
+
+    $ yarn install
+
+Compilar el frontend para entorno de producción
+
+    $ yarn encore prod
+
+Compilar el frontend para entorno de desarrollo
+
+    $ yarn encore dev --watch
 
 
 

@@ -3,29 +3,20 @@
 <head>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <meta name="author" content="eTAB" />
-    <meta name="date" content="22/05/2019"/>
-    <meta name="generator" content="easybook 5.0-DEV"/>
+    <meta name="date" content="05/12/2020"/>
+    <meta name="generator" content="easybook5.0-DEV"/>
 
-    <title>Manual Técnico</title>
-
-    <link rel="stylesheet" href="./css/easybook.css" />
-
-</head>
+    <title>Manual Técnico</title>    <link rel="stylesheet" href="./css/easybook.css" /></head>
 
 <body>
 
 <div class="container">
 <div class="row">
-    <div class="span12">
-    <div class="item cover">
+    <div class="span12"><div class="item cover">
     <h1>Manual Técnico</h1>
     <h2>eTAB</h2>
 </div>    </div>
-    <div class="span9">
-        <div class="item ">
-    <h1>Introducción</h1>
-
-    <p>El presente manual técnico describe cada uno de los componentes del sistema eTAB y los pasos 
+    <div class="span9"><div class="item">    <h1>Introducción</h1><p>El presente manual técnico describe cada uno de los componentes del sistema eTAB y los pasos 
 necesarios para instalarlo.</p>
 
 <p>El sistema de información eTAB es parte de la iniciativa Salud Mesoamérica 2015 (SM2015). 
@@ -49,11 +40,8 @@ post natal y acceso a planificación familiar entre otros servicios.</p>
 <p>Salud Mesoamérica 2015 espera generar conocimiento de relevancia global sobre como aumentar asistencia 
 en salud de bajo costo en comunidades pobres.   Para este fin el sistema de información eTAB permite 
 analizar y dar seguimiento a los indicadores en salud con los que trabaja este proyecto.</p>
-
-</div>
-        <div class="item chapter">
-    <h1 id="tecnologias-utilizadas"><span>Capítulo 1</span> Tecnologías utilizadas</h1>
-    <p>El Tablero eTAB es un servicio Web disponible para que dependencias del sistema de salud suban 
+</div><div class="item chapter">
+    <h1 id="tecnologias-utilizadas"><span>Capítulo1</span>Tecnologías utilizadas</h1><p>El Tablero eTAB es un servicio Web disponible para que dependencias del sistema de salud suban 
 sus datos para poder analizarlos, generar gráficas y reportes.</p>
 
 <p>La aplicación cuenta con un módulo para efectuar la extracción,transformación y carga de datos (ETL) 
@@ -79,18 +67,14 @@ Estos incluyen:</p>
 <li>PHP: Lenguaje de desarrollo de la Aplicación eTAB</li>
 <li>D3.js: Librería para la generación de gráficos</li>
 <li>JQuery: Lenguaje para interfaces de usuario</li>
-<li>RabbitMQ: Servidor de Mensajería</li>
-<li>EasyBook: Generador de documentos en formato PDF</li>
 <li>Bootstrap: Framework para interfaces de usuario</li>
 <li>PivotTable.js: Librería para crear tabla pivote</li>
 <li>Redis: Motor de base de datos en memoria.</li>
 <li>AngularJS: Framework javascript</li>
 </ul>
 
-</div>
-        <div class="item chapter">
-    <h1 id="instalacion-del-etab"><span>Capítulo 2</span> Instalación del eTAB</h1>
-    <h2 id="requerimientos">2.1 Requerimientos</h2>
+</div><div class="item chapter">
+    <h1 id="instalacion-del-etab"><span>Capítulo2</span>Instalación del eTAB</h1><h2 id="requerimientos">2.1 Requerimientos</h2>
 
 <ul>
 <li>PostgreSQL 9.6+</li>
@@ -105,28 +89,34 @@ Estos incluyen:</p>
 debe ser ejecutado como usuario root y "$" que debe ser ejecutado como un usuario normal, 
 en ambos casos desde una consola de comandos.</p>
 
-<div class="code code">
-<pre class="code"># apt-get update
-# apt-get install php php-pgsql php-curl php-sqlite3 sqlite php-cli php-xsl php-intl  postgresql acl git-core curl postgresql-contrib php-ldap php-mysql php-sybase php-json php-bcmath php-mbstring redis-server php-redis php-zip php-gd php-fpm composer supervisor php-acpu</pre>
+<div class="codecode"><pre class="code"># apt-get update
+# apt-get install php php-pgsql php-curl php-sqlite3 sqlite php-cli php-xsl php-intl  postgresql acl git-core curl postgresql-contrib php-mysql php-sybase php-json php-bcmath php-mbstring redis-server php-redis php-zip php-gd php-fpm composer supervisor php-apcu nodejs</pre>
 </div>
 
-<h3 id="crear-usuario-y-directorio-de-trabajo">2.2.2 Crear usuario y directorio de trabajo</h3>
+<h3 id="instalacion-de-yarn">2.2.2 Instalación de yarn</h3>
+
+<p>Para instalar los archivos del frontend y poder realizar la compilación de los mismos se utiliza yarn.</p>
+
+<div class="codecode"><pre class="code"># curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+# echo &quot;deb https://dl.yarnpkg.com/debian/ stable main&quot; | sudo tee /etc/apt/sources.list.d/yarn.list
+# apt update &amp;&amp; apt install yarn</pre>
+</div>
+
+<h3 id="crear-usuario-y-directorio-de-trabajo">2.2.3 Crear usuario y directorio de trabajo</h3>
 
 <p>El directorio y usuario a utilizar pueden variar de acuerdo a los que se deseen elegir en cada instalación, 
 como ejemplo se usará un usuario llamado <em>etab</em> y el directorio de instalación <em>/var/www/etab</em></p>
 
-<div class="code code">
-<pre class="code"># adduser etab
+<div class="codecode"><pre class="code"># adduser etab
 # mkdir /var/www/etab
 # chown etab:etab /var/www/etab
 # su etab
 $ cd /var/www</pre>
 </div>
 
-<h3 id="obtener-el-codigo-fuente">2.2.3 Obtener el código fuente</h3>
+<h3 id="obtener-el-codigo-fuente">2.2.4 Obtener el código fuente</h3>
 
-<div class="code code">
-<pre class="code">$ git clone https://github.com/rigosv/etab</pre>
+<div class="codecode"><pre class="code">$ git clone https://github.com/rigosv/etab</pre>
 </div>
 
 <p>A partir de este punto todos los comandos se deben ejecutar dentro de la carpeta en que se ha descargado 
@@ -145,14 +135,12 @@ el código fuente</p>
 <li>Cambiar la siguiente línea, sustituir la última palabra por <em>md5</em> </li>
 </ol>
 
-<div class="code code">
-<pre class="code">local   all             all                       md5</pre>
+<div class="codecode"><pre class="code">local   all             all                       md5</pre>
 </div>
 
 <p>Reiniciar PostgreSQL</p>
 
-<div class="code code">
-<pre class="code"># /etc/init.d/postgresql restart</pre>
+<div class="codecode"><pre class="code"># /etc/init.d/postgresql restart</pre>
 </div>
 
 <h4 id="crear-el-usuario-dueno-de-la-base-de-datos-y-la-estructura-inicial">2.3.1.2 Crear el usuario dueño de la base de datos y la estructura inicial</h4>
@@ -161,8 +149,7 @@ el código fuente</p>
 los criterios que se quieran seguir, se muestra un ejemplo, ejecutar <em>createuser --help</em> 
 para la explicación de las opciones.</p>
 
-<div class="code code">
-<pre class="code"># su postgres
+<div class="codecode"><pre class="code"># su postgres
 $ createuser -d -S  -R -P admin
 $ createdb etab -O admin
 $ exit
@@ -175,8 +162,7 @@ $ psql -d etab -f src/EstructuraDB/etab_initdb.sql -U admin</pre>
 <p>Configurar los valores correspondientes en el archivo <strong>.env.local</strong> 
 (Si no existe copiar el contenido de .env: <code>cp .env .env.local</code> )</p>
 
-<div class="code code">
-<pre class="code">DATABASE_URL=pgsql://[usuario]:[clave]@[IP_SERVIDOR]:[PUERTO]/[NOMBRE_DB]
+<div class="codecode"><pre class="code">DATABASE_URL=pgsql://[usuario]:[clave]@[IP_SERVIDOR]:[PUERTO]/[NOMBRE_DB]
 &nbsp;
 // Si los orígenes se guardarán en la misma base de datos, utilizar el mismo nombre de base de datos 
 DATABASE_ETAB_DATOS_URL=pgsql://[usuario]:[clave]@[IP_SERVIDOR]:[PUERTO]/[NOMBRE_DB_ORIGENES]</pre>
@@ -189,29 +175,40 @@ DATABASE_ETAB_DATOS_URL=pgsql://[usuario]:[clave]@[IP_SERVIDOR]:[PUERTO]/[NOMBRE
 
 <p>Si es un servidor de pruebas</p>
 
-<div class="code code">
-<pre class="code">$ php composer.phar install</pre>
+<div class="codecode"><pre class="code">$ composer install</pre>
 </div>
 
 <p>Si es un servidor de producción</p>
 
-<div class="code code">
-<pre class="code">$ php composer install --no-dev --optimize-autoloader</pre>
+<div class="codecode"><pre class="code">$ composer install --no-dev --optimize-autoloader</pre>
+</div>
+
+<p>Las librerías del frontend</p>
+
+<div class="codecode"><pre class="code">$ yarn install</pre>
+</div>
+
+<p>Compilar el frontend para entorno de producción</p>
+
+<div class="codecode"><pre class="code">$ yarn encore prod</pre>
+</div>
+
+<p>Compilar el frontend para entorno de desarrollo</p>
+
+<div class="codecode"><pre class="code">$ yarn encore dev --watch</pre>
 </div>
 
 <h3 id="configurar-el-supervisor-de-gestion-de-colas">2.3.3 Configurar el supervisor de gestión de colas</h3>
 
 <p>crear el archivo etab_colas.conf</p>
 
-<div class="code code">
-<pre class="code"># nano  /etc/supervisor/conf.d/etab_colas.conf</pre>
+<div class="codecode"><pre class="code"># nano  /etc/supervisor/conf.d/etab_colas.conf</pre>
 </div>
 
 <p>Poner el siguiente contenido en el archivo (verificar la ruta y usuario con que se ha instalado el etab y 
 sustituir en este archivo, en el ejemplo se asume que está instalado en /var/www/etab con el usuario admin )</p>
 
-<div class="code code">
-<pre class="code">[program:pf_message_consumer]
+<div class="codecode"><pre class="code">[program:pf_message_consumer]
 command=/var/www/etab/bin/console messenger:consume-messages --env=prod --no-debug --time-limit=300
 user=admin
 process_name=%(program_name)s_%(process_num)02d
@@ -224,8 +221,7 @@ redirect_stderr=true</pre>
 
 <p>reiniciar el supervisor</p>
 
-<div class="code code">
-<pre class="code"># /etc/init.d/supervisor restart</pre>
+<div class="codecode"><pre class="code"># /etc/init.d/supervisor restart</pre>
 </div>
 
 <h3 id="permisos-sobre-carpetas">2.3.4 Permisos sobre carpetas</h3>
@@ -233,15 +229,13 @@ redirect_stderr=true</pre>
 <p>Es necesario tener <a href="https://help.ubuntu.com/community/FilePermissionsACLs">soporte para ACL</a> en la 
 partición en que está el proyecto y luego ejecutar</p>
 
-<div class="code code">
-<pre class="code">$ setfacl -R -m u:www-data:rwx -m u:`whoami`:rwx var/cache var/log public/uploads
+<div class="codecode"><pre class="code">$ setfacl -R -m u:www-data:rwx -m u:`whoami`:rwx var/cache var/log public/uploads
 $ setfacl -dR -m u:www-data:rwx -m u:`whoami`:rwx var/cache var/log public/uploads</pre>
 </div>
 
 <h3 id="crear-el-usuario-administrador-de-la-aplicacion">2.3.5 Crear el usuario administrador de la aplicación</h3>
 
-<div class="code code">
-<pre class="code">$ bin/console fos:user:create --super-admin</pre>
+<div class="codecode"><pre class="code">$ bin/console fos:user:create --super-admin</pre>
 </div>
 
 <h3 id="ejecutando-el-etab">2.3.6 Ejecutando el etab</h3>
@@ -250,8 +244,7 @@ $ setfacl -dR -m u:www-data:rwx -m u:`whoami`:rwx var/cache var/log public/uploa
 <a href="https://symfony.com/doc/current/setup/web_server_configuration.html">configurar un servidor web</a>
 Para desarrollo o una verificación rápida se puede usar un servidor web local, activándolo de la siguiente forma</p>
 
-<div class="code code">
-<pre class="code">$ bin/console server:start</pre>
+<div class="codecode"><pre class="code">$ bin/console server:start</pre>
 </div>
 
 <p>Abra el navegador web y cargue la ruta <code>http://localhost:8000/</code></p>
@@ -261,10 +254,8 @@ Para desarrollo o una verificación rápida se puede usar un servidor web local,
 <p>Si se leerá orígenes de datos desde MSSQLServer, instalar los controladores de Microsoft, según la siguiente guía
 <a href="https://docs.microsoft.com/en-us/sql/connect/php/installation-tutorial-linux-mac?view=sql-server-2017">MSSQLServer</a></p>
 
-</div>
-        <div class="item chapter">
-    <h1 id="personalizacion"><span>Capítulo 3</span> Personalización</h1>
-    <h2 id="temas">3.1 Temas</h2>
+</div><div class="item chapter">
+    <h1 id="personalizacion"><span>Capítulo3</span>Personalización</h1><h2 id="temas">3.1 Temas</h2>
 
 <p>Se tiene una separación en cuanto a la personalización de la interfaz de usuairo en cada instalación del etab. 
 Para esto se utilizarán temas. El objetivo es que en cada instalación tome un tema base, 
@@ -278,37 +269,17 @@ y así ir creando un conjunto de temas disponibles. Existen 3 temas: <strong>def
 
 <p>En este tema no tiene imágenes relacionadas a una institución, el menú principal es vertical del lado izquierdo.</p>
 
-<div class="figure" id="figure-3-1">
-    <img src="images/default-ingreso.png" alt="Pantalla de ingreso, tema default" />
+<div class="figure" id="figure-3-1"><img src="images/default-ingreso.png" alt="Pantalla de ingreso, tema default" />    <p class="caption"><strong>Figura3.1</strong>Pantalla de ingreso, tema default</p></div>
 
-    <p class="caption"><strong>Figura 3.1</strong> Pantalla de ingreso, tema default</p>
-</div>
-
-
-<div class="figure" id="figure-3-2">
-    <img src="images/default-inicial.png" alt="Pantalla de ingreso, tema default" />
-
-    <p class="caption"><strong>Figura 3.2</strong> Pantalla de ingreso, tema default</p>
-</div>
-
+<div class="figure" id="figure-3-2"><img src="images/default-inicial.png" alt="Pantalla de ingreso, tema default" />    <p class="caption"><strong>Figura3.2</strong>Pantalla de ingreso, tema default</p></div>
 
 <h4 id="tema-minsal-esa">3.1.1.2 Tema MINSAL_ESA</h4>
 
 <p>Es el tema utilizado en El Salvador, contiene imágenes que identifican al Ministerio de Salud, su menú es horizontal.</p>
 
-<div class="figure" id="figure-3-3">
-    <img src="images/minsal-ingreso.png" alt="Pantalla de ingreso, tema MINSAL_ESA" />
+<div class="figure" id="figure-3-3"><img src="images/minsal-ingreso.png" alt="Pantalla de ingreso, tema MINSAL_ESA" />    <p class="caption"><strong>Figura3.3</strong>Pantalla de ingreso, tema MINSAL_ESA</p></div>
 
-    <p class="caption"><strong>Figura 3.3</strong> Pantalla de ingreso, tema MINSAL_ESA</p>
-</div>
-
-
-<div class="figure" id="figure-3-4">
-    <img src="images/minsal-inicial.png" alt="Pantalla de ingreso, tema MINSAL_ESA" />
-
-    <p class="caption"><strong>Figura 3.4</strong> Pantalla de ingreso, tema MINSAL_ESA</p>
-</div>
-
+<div class="figure" id="figure-3-4"><img src="images/minsal-inicial.png" alt="Pantalla de ingreso, tema MINSAL_ESA" />    <p class="caption"><strong>Figura3.4</strong>Pantalla de ingreso, tema MINSAL_ESA</p></div>
 
 <h3 id="crear-un-tema">3.1.2 Crear un tema</h3>
 
@@ -317,31 +288,16 @@ y así ir creando un conjunto de temas disponibles. Existen 3 temas: <strong>def
 (el nombre del directorio será el nombre del tema), este contendrá los archivos de imágenes, css y js.</li>
 <li><p>Debe contener al menos los archivos que tenga el tema default, agregando además los nuevos 
 que se vayan a utilizar.
-<div class="figure" id="figure-3-5">
-    <img src="images/estructura-tema.png" alt="Estructura de un tema" />
-
-    <p class="caption"><strong>Figura 3.5</strong> Estructura de un tema</p>
-</div>
-</li>
+<div class="figure" id="figure-3-5"><img src="images/estructura-tema.png" alt="Estructura de un tema" />    <p class="caption"><strong>Figura3.5</strong>Estructura de un tema</p></div></li>
 <li><p>Crear el directorio del nuevo tema para contener la estructura (debe coincidir con el nombre del 
 directorio creado para los las imágenes, estilos y js ) para modificar la estructura de la interfaz, 
 en la ruta: <code>templates/themes</code></p></li>
 <li><p>Como en el caso anterior el tema default, nos indica los archivos mínimos que será obligatorio 
 tener en nuestro nuevo tema
-<div class="figure" id="figure-3-6">
-    <img src="images/estructura2-tema.png" alt="Estructura de un tema" />
-
-    <p class="caption"><strong>Figura 3.6</strong> Estructura de un tema</p>
-</div>
-</li>
+<div class="figure" id="figure-3-6"><img src="images/estructura2-tema.png" alt="Estructura de un tema" />    <p class="caption"><strong>Figura3.6</strong>Estructura de un tema</p></div></li>
 <li><p>Para activar el nuevo tema, cambiar el parámetro <code>app.theme</code> en el archivo de configuración 
 <code>config/app_config.yaml</code> (el nombre del tema será el nombre del directorio).
-<div class="figure" id="figure-3-7">
-    <img src="images/config-tema.png" alt="Estructura de un tema" />
-
-    <p class="caption"><strong>Figura 3.7</strong> Estructura de un tema</p>
-</div>
-</li>
+<div class="figure" id="figure-3-7"><img src="images/config-tema.png" alt="Estructura de un tema" />    <p class="caption"><strong>Figura3.7</strong>Estructura de un tema</p></div></li>
 </ol>
 
 <h2 id="gestion-de-carga-de-origenes-de-datos">3.2 Gestión de carga de orígenes de datos</h2>
@@ -370,8 +326,7 @@ mejor nos parezca; entre los protocolos posibles tenemos:</p>
 Y la configuración se pone en el archivo <code>.env.local</code> los datos para conectarse a nuestra 
 instalación del servidor de redis, en la línea:</p>
 
-<div class="code code">
-<pre class="code">###&gt; enqueue/redis ###
+<div class="codecode"><pre class="code">###&gt; enqueue/redis ###
 ENQUEUE_DSN=redis://localhost
 ###&lt; enqueue/redis ###</pre>
 </div>
@@ -387,24 +342,21 @@ correspondiente al paquete. Y luego cambiar la variable de entorno en el archivo
 <li>Agregar la extensión de PHP </li>
 </ol>
 
-<div class="code code">
-<pre class="code"># apt-get install php-amqp</pre>
+<div class="codecode"><pre class="code"># apt-get install php-amqp</pre>
 </div>
 
 <ol>
 <li>Instalar el componente de Enqueue para ese protocolo</li>
 </ol>
 
-<div class="code code">
-<pre class="code">$ composer require enqueue/amqp-ext</pre>
+<div class="codecode"><pre class="code">$ composer require enqueue/amqp-ext</pre>
 </div>
 
 <ol>
 <li>Cambiar el archivo de configuración <code>.env.local</code></li>
 </ol>
 
-<div class="code code">
-<pre class="code">###&gt; enqueue/amqp ###
+<div class="codecode"><pre class="code">###&gt; enqueue/amqp ###
 ENQUEUE_DSN=amqp://guest:guest@localhost:5672/%2f/messages
 ###&lt; enqueue/amqp ###</pre>
 </div>
@@ -418,8 +370,7 @@ correspondiente y cambiar una línea en el archivo <code>.env.local</code></p>
 <p>Independientemente de la implementación del protocolo la activación de las colas se hará 
 con el siguiente comando:</p>
 
-<div class="code code">
-<pre class="code">bin/console messenger:consume-messages</pre>
+<div class="codecode"><pre class="code">bin/console messenger:consume-messages</pre>
 </div>
 
 <p>En el proceso de instalación, se configuró <code>supervisor</code> para que verifique cada 5 minutos si está activas las colas
@@ -443,66 +394,32 @@ utilizar un indicador en el tablero.</p>
 
 <ol>
 <li><p>Ingresamos a la consola de administración de redis, comando <code>redis-cli</code>
-<div class="figure" id="figure-3-8">
-    <img src="images/redis-cli.png" alt="Consola Redis" />
-
-    <p class="caption"><strong>Figura 3.8</strong> Consola Redis</p>
-</div>
-</li>
+<div class="figure" id="figure-3-8"><img src="images/redis-cli.png" alt="Consola Redis" />    <p class="caption"><strong>Figura3.8</strong>Consola Redis</p></div></li>
 <li><p>Ver si hay mensajes pendientes de procesar, comando <code>KEYS *</code>
-<div class="figure" id="figure-3-9">
-    <img src="images/redis-keys.png" alt="Redis keys" />
-
-    <p class="caption"><strong>Figura 3.9</strong> Redis keys</p>
-</div>
-</li>
+<div class="figure" id="figure-3-9"><img src="images/redis-keys.png" alt="Redis keys" />    <p class="caption"><strong>Figura3.9</strong>Redis keys</p></div></li>
 <li><p>Si hay mensajes veremos una llave con el nombre <strong>messages</strong>. Para borrar los mensajes usamos el 
 comando <code>DEL</code>
-<div class="figure" id="figure-3-10">
-    <img src="images/redis-del.png" alt="Redis DEL" />
-
-    <p class="caption"><strong>Figura 3.10</strong> Redis DEL</p>
-</div>
-</li>
+<div class="figure" id="figure-3-10"><img src="images/redis-del.png" alt="Redis DEL" />    <p class="caption"><strong>Figura3.10</strong>Redis DEL</p></div></li>
 <li><p>Buscar los procesos del componente messenger que se estén ejecutando: <code>ps aux | grep messenger</code>
-<div class="figure" id="figure-3-11">
-    <img src="images/ps-aux.png" alt="ps aux" />
-
-    <p class="caption"><strong>Figura 3.11</strong> ps aux</p>
-</div>
-</li>
+<div class="figure" id="figure-3-11"><img src="images/ps-aux.png" alt="ps aux" />    <p class="caption"><strong>Figura3.11</strong>ps aux</p></div></li>
 <li><p>Detener los procesos encontrados, utilizar el número de proceso encontrado en el comando anterior : 
 <code>kill -9 3226</code></p></li>
 </ol>
 
-</div>
-        <div class="item chapter">
-    <h1 id="modelo-de-datos"><span>Capítulo 4</span> Modelo de datos</h1>
-    <h2 id="diagrama-de-relaciones">4.1 Diagrama de relaciones</h2>
+</div><div class="item chapter">
+    <h1 id="modelo-de-datos"><span>Capítulo4</span>Modelo de datos</h1><h2 id="diagrama-de-relaciones">4.1 Diagrama de relaciones</h2>
 
-<div class="figure" id="figure-4-1">
-    <img src="images/diagrama_conceptual.png" alt="Relaciones base de datos" />
-
-    <p class="caption"><strong>Figura 4.1</strong> Relaciones base de datos</p>
-</div>
-
+<div class="figure" id="figure-4-1"><img src="images/diagrama_conceptual.png" alt="Relaciones base de datos" />    <p class="caption"><strong>Figura4.1</strong>Relaciones base de datos</p></div>
 
 <h2 id="diagrama-fisico-de-la-base-de-datos">4.2 Diagrama físico de la base de datos</h2>
 
-<div class="figure" id="figure-4-2">
-    <img src="images/diagrama_fisico.png" alt="Diagrama físico" />
-
-    <p class="caption"><strong>Figura 4.2</strong> Diagrama físico</p>
-</div>
-
+<div class="figure" id="figure-4-2"><img src="images/diagrama_fisico.png" alt="Diagrama físico" />    <p class="caption"><strong>Figura4.2</strong>Diagrama físico</p></div>
 
 <h2 id="diccionario-de-datos">4.3 Diccionario de datos</h2>
 
 <h3 id="listado-de-tablas">4.3.1 Listado de tablas</h3>
 
-<div class="table" id="table-4-1">
-
-    <table border="1" style="border-collapse: collapse;" id="tablas">
+<div class="table" id="table-4-1"><table border="1" style="border-collapse: collapse;" id="tablas">
     <thead>
     <tr style="background-color: #1c94c4;">
         <TH>Tabla</TH>
@@ -715,9 +632,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-alerta">4.3.2 Descripción de la tabla: <strong>alerta</strong></h3>
 
-<div class="table" id="table-4-2">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-alerta">
+<div class="table" id="table-4-2"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-alerta">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -763,9 +678,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-bitacora">4.3.3 Descripción de la tabla: <strong>bitacora</strong></h3>
 
-<div class="table" id="table-4-3">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-bitacora">
+<div class="table" id="table-4-3"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-bitacora">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -838,9 +751,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-boletin">4.3.4 Descripción de la tabla: <strong>boletin</strong></h3>
 
-<div class="table" id="table-4-4">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-boletin">
+<div class="table" id="table-4-4"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-boletin">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -922,9 +833,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-campo">4.3.5 Descripción de la tabla: <strong>campo</strong></h3>
 
-<div class="table" id="table-4-5">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-campo">
+<div class="table" id="table-4-5"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-campo">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -997,9 +906,7 @@ comando <code>DEL</code>
 
 <h3 id="descripicon-de-la-tabla-clasificacion-tecnica">4.3.6 Descripicón de la tabla: <strong>clasificacion_tecnica</strong></h3>
 
-<div class="table" id="table-4-6">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-clasificacion_tecnica">
+<div class="table" id="table-4-6"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-clasificacion_tecnica">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -1063,9 +970,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-clasificacion-uso">4.3.7 Descripción de la tabla: <strong>clasificacion_uso</strong></h3>
 
-<div class="table" id="table-4-7">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-clasificacion_uso">
+<div class="table" id="table-4-7"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-clasificacion_uso">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -1120,9 +1025,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-conexion">4.3.8 Descripción de la tabla: <strong>conexion</strong></h3>
 
-<div class="table" id="table-4-8">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-conexion">
+<div class="table" id="table-4-8"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-conexion">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -1231,9 +1134,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-configuracion-pivot-table">4.3.9 Descripción de la tabla: <strong>configuracion_pivot_table</strong></h3>
 
-<div class="table" id="table-4-9">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-configuracion_pivot_table">
+<div class="table" id="table-4-9"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-configuracion_pivot_table">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -1315,9 +1216,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-ficha-tecnica">4.3.10 Descripción de la tabla: <strong>ficha_tecnica</strong></h3>
 
-<div class="table" id="table-4-10">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-ficha_tecnica">
+<div class="table" id="table-4-10"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-ficha_tecnica">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -1489,9 +1388,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-ficha-tecnica-campo">4.3.11 Descripción de la tabla: <strong>ficha_tecnica_campo</strong></h3>
 
-<div class="table" id="table-4-11">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-ficha_tecnica_campo">
+<div class="table" id="table-4-11"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-ficha_tecnica_campo">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -1528,9 +1425,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-fichatecnica-clasificaciontecnica">4.3.12 Descripción de la tabla: <strong>fichatecnica_clasificaciontecnica</strong></h3>
 
-<div class="table" id="table-4-12">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-fichatecnica_clasificaciontecnica">
+<div class="table" id="table-4-12"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-fichatecnica_clasificaciontecnica">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -1567,9 +1462,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-fichatecnica-tiposgraficos">4.3.13 Descripción de la tabla: <strong>fichatecnica_tiposgraficos</strong></h3>
 
-<div class="table" id="table-4-13">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-fichatecnica_tiposgraficos">
+<div class="table" id="table-4-13"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-fichatecnica_tiposgraficos">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -1606,9 +1499,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-ficha-tecnica-variable-dato">4.3.14 Descripción de la tabla: <strong>ficha_tecnica_variable_dato</strong></h3>
 
-<div class="table" id="table-4-14">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-ficha_tecnica_variable_dato">
+<div class="table" id="table-4-14"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-ficha_tecnica_variable_dato">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -1645,9 +1536,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-fila-origen-dato-v2">4.3.15 Descripción de la tabla: <strong>fila_origen_dato_v2</strong></h3>
 
-<div class="table" id="table-4-15">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-fila_origen_dato_v2">
+<div class="table" id="table-4-15"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-fila_origen_dato_v2">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -1702,9 +1591,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-fos-user-group">4.3.16 Descripción de la tabla: <strong>fos_user_group</strong></h3>
 
-<div class="table" id="table-4-16">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-fos_user_group">
+<div class="table" id="table-4-16"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-fos_user_group">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -1750,9 +1637,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-fos-user-user">4.3.17 Descripción de la tabla: <strong>fos_user_user</strong></h3>
 
-<div class="table" id="table-4-17">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-fos_user_user">
+<div class="table" id="table-4-17"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-fos_user_user">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -1897,9 +1782,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-fos-user-user-group">4.3.18 Descripción de la tabla: <strong>fos_user_user_group</strong></h3>
 
-<div class="table" id="table-4-18">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-fos_user_user_group">
+<div class="table" id="table-4-18"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-fos_user_user_group">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -1936,9 +1819,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-fuente-dato">4.3.19 Descripción de la tabla; <strong>fuente_dato</strong></h3>
 
-<div class="table" id="table-4-19">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-fuente_dato">
+<div class="table" id="table-4-19"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-fuente_dato">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -2011,9 +1892,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-fusion-origenes-datos">4.3.20 Descripción de la tabla: <strong>fusion_origenes_datos</strong></h3>
 
-<div class="table" id="table-4-20">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-fusion_origenes_datos">
+<div class="table" id="table-4-20"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-fusion_origenes_datos">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -2068,9 +1947,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-group-fichatecnica">4.3.21 Descripción de la tabla: <strong>group_fichatecnica</strong></h3>
 
-<div class="table" id="table-4-21">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-group_fichatecnica">
+<div class="table" id="table-4-21"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-group_fichatecnica">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -2107,9 +1984,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-group-grupoindicadores">4.3.22 Descripción de la tabla: <strong>group_grupoindicadores</strong></h3>
 
-<div class="table" id="table-4-22">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-group_grupoindicadores">
+<div class="table" id="table-4-22"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-group_grupoindicadores">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -2146,9 +2021,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-grupo-indicadores">4.3.23 Descripción de la tabla: <strong>grupo_indicadores</strong></h3>
 
-<div class="table" id="table-4-23">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-grupo_indicadores">
+<div class="table" id="table-4-23"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-grupo_indicadores">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -2194,9 +2067,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-grupo-indicadores-indicador">4.3.24 Descripción de la tabla: <strong>grupo_indicadores_indicador</strong></h3>
 
-<div class="table" id="table-4-24">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-grupo_indicadores_indicador">
+<div class="table" id="table-4-24"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-grupo_indicadores_indicador">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -2323,9 +2194,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-indicador-alertas">4.3.25 Descripción de la tabla: <strong>indicador_alertas</strong></h3>
 
-<div class="table" id="table-4-25">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-indicador_alertas">
+<div class="table" id="table-4-25"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-indicador_alertas">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -2398,9 +2267,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-indicador-usuario">4.3.26 Descripción de la tabla: <strong>indicador_usuario</strong></h3>
 
-<div class="table" id="table-4-26">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-indicador_usuario">
+<div class="table" id="table-4-26"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-indicador_usuario">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -2437,9 +2304,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-indicador-variablecaptura">4.3.27 Descripción de la tabla: <strong>indicador_variablecaptura</strong></h3>
 
-<div class="table" id="table-4-27">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-indicador_variablecaptura">
+<div class="table" id="table-4-27"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-indicador_variablecaptura">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -2476,9 +2341,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-matriz-indicadores-desempeno">4.3.28 Descripción de la tabla: <strong>matriz_indicadores_desempeno</strong></h3>
 
-<div class="table" id="table-4-28">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-matriz_indicadores_desempeno">
+<div class="table" id="table-4-28"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-matriz_indicadores_desempeno">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -2551,9 +2414,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-matriz-indicadores-desempeno-ficha-tecnica">4.3.29 Descripción de la tabla: <strong>matriz_indicadores_desempeno_ficha_tecnica</strong></h3>
 
-<div class="table" id="table-4-29">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-matriz_indicadores_desempeno_ficha_tecnica">
+<div class="table" id="table-4-29"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-matriz_indicadores_desempeno_ficha_tecnica">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -2590,9 +2451,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-matriz-indicadores-etab">4.3.30 Descripción de la tabla: <strong>matriz_indicadores_etab</strong></h3>
 
-<div class="table" id="table-4-30">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-matriz_indicadores_etab">
+<div class="table" id="table-4-30"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-matriz_indicadores_etab">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -2665,9 +2524,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-matriz-indicadores-etab-alertas">4.3.31 Descripción de la tabla: <strong>matriz_indicadores_etab_alertas</strong></h3>
 
-<div class="table" id="table-4-31">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-matriz_indicadores_etab_alertas">
+<div class="table" id="table-4-31"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-matriz_indicadores_etab_alertas">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -2749,9 +2606,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-matriz-indicadores-relacion">4.3.32 Descripción de la tabla: <strong>matriz_indicadores_relacion</strong></h3>
 
-<div class="table" id="table-4-32">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-matriz_indicadores_relacion">
+<div class="table" id="table-4-32"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-matriz_indicadores_relacion">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -2824,9 +2679,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-matriz-indicadores-relacion-alertas">4.3.33 Descripción de la tabla: <strong>matriz_indicadores_relacion_alertas</strong></h3>
 
-<div class="table" id="table-4-33">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-matriz_indicadores_relacion_alertas">
+<div class="table" id="table-4-33"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-matriz_indicadores_relacion_alertas">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -2908,9 +2761,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-matriz-indicadores-usuario">4.3.34 Descripción de la tabla: <strong>matriz_indicadores_usuario</strong></h3>
 
-<div class="table" id="table-4-34">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-matriz_indicadores_usuario">
+<div class="table" id="table-4-34"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-matriz_indicadores_usuario">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -2974,9 +2825,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-matriz-seguimiento">4.3.35 Descripción de la tabla: <strong>matriz_seguimiento</strong></h3>
 
-<div class="table" id="table-4-35">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-matriz_seguimiento">
+<div class="table" id="table-4-35"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-matriz_seguimiento">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -3067,9 +2916,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-matriz-seguimiento-dato">4.3.36 Descripción de la tabla: <strong>matriz_seguimiento_dato</strong></h3>
 
-<div class="table" id="table-4-36">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-matriz_seguimiento_dato">
+<div class="table" id="table-4-36"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-matriz_seguimiento_dato">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -3151,9 +2998,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-matriz-seguimiento-matriz">4.3.37 Descripción de la tabla: <strong>matriz_seguimiento_matriz</strong></h3>
 
-<div class="table" id="table-4-37">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-matriz_seguimiento_matriz">
+<div class="table" id="table-4-37"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-matriz_seguimiento_matriz">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -3199,9 +3044,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-motor-bd">4.3.38 Descripción de la tabla: <strong>motor_bd</strong></h3>
 
-<div class="table" id="table-4-38">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-motor_bd">
+<div class="table" id="table-4-38"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-motor_bd">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -3247,9 +3090,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-origen-datos">4.3.39 Descripción de la tabla: <strong>origen_datos</strong></h3>
 
-<div class="table" id="table-4-39">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-origen_datos">
+<div class="table" id="table-4-39"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-origen_datos">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -3448,9 +3289,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-origen-datos-fusiones">4.3.40 Descripción de la tabla: <strong>origen_datos_fusiones</strong></h3>
 
-<div class="table" id="table-4-40">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-origen_datos_fusiones">
+<div class="table" id="table-4-40"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-origen_datos_fusiones">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -3487,9 +3326,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-origenes-conexiones">4.3.41 Descripción de la tabla: <strong>origenes_conexiones</strong></h3>
 
-<div class="table" id="table-4-41">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-origenes_conexiones">
+<div class="table" id="table-4-41"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-origenes_conexiones">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -3526,9 +3363,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-periodos">4.3.42 Descripción de la tabla: <strong>periodos</strong></h3>
 
-<div class="table" id="table-4-42">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-periodos">
+<div class="table" id="table-4-42"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-periodos">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -3574,9 +3409,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-responsable-dato">4.3.43 Descripción de la tabla: <strong>responsable_dato</strong></h3>
 
-<div class="table" id="table-4-43">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-responsable_dato">
+<div class="table" id="table-4-43"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-responsable_dato">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -3649,9 +3482,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-responsable-indicador">4.3.44 Descripción de la tabla: <strong>responsable_indicador</strong></h3>
 
-<div class="table" id="table-4-44">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-responsable_indicador">
+<div class="table" id="table-4-44"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-responsable_indicador">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -3724,9 +3555,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-sala-acciones">4.3.45 Descripción de la tabla: <strong>sala_acciones</strong></h3>
 
-<div class="table" id="table-4-45">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-sala_acciones">
+<div class="table" id="table-4-45"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-sala_acciones">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -3808,9 +3637,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-sala-comentarios">4.3.46 Descripción de la tabla: <strong>sala_comentarios</strong></h3>
 
-<div class="table" id="table-4-46">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-sala_comentarios">
+<div class="table" id="table-4-46"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-sala_comentarios">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -3874,9 +3701,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-significado-campo">4.3.47 Descripción de la tabla: <strong>significado_campo</strong></h3>
 
-<div class="table" id="table-4-47">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-significado_campo">
+<div class="table" id="table-4-47"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-significado_campo">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -3949,9 +3774,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-significados-tipos-graficos">4.3.48 Descripción de la tabla: <strong>significados_tipos_graficos</strong></h3>
 
-<div class="table" id="table-4-48">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-significados_tipos_graficos">
+<div class="table" id="table-4-48"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-significados_tipos_graficos">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -3988,9 +3811,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-base-de-datos-tipo-campo">4.3.49 Descripción de la base de datos: <strong>tipo_campo</strong></h3>
 
-<div class="table" id="table-4-49">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-tipo_campo">
+<div class="table" id="table-4-49"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-tipo_campo">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -4036,9 +3857,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-tipo-grafico">4.3.50 Descripción de la tabla: tipo_grafico**</h3>
 
-<div class="table" id="table-4-50">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-tipo_grafico">
+<div class="table" id="table-4-50"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-tipo_grafico">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -4084,9 +3903,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-usuario-grupo-indicadores">4.3.51 Descripción de la tabla: <strong>usuario_grupo_indicadores</strong></h3>
 
-<div class="table" id="table-4-51">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-usuario_grupo_indicadores">
+<div class="table" id="table-4-51"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-usuario_grupo_indicadores">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -4141,9 +3958,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-usuario-indicadores-favoritos">4.3.52 Descripción de la tabla: <strong>usuario_indicadores_favoritos</strong></h3>
 
-<div class="table" id="table-4-52">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-usuario_indicadores_favoritos">
+<div class="table" id="table-4-52"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-usuario_indicadores_favoritos">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -4180,9 +3995,7 @@ comando <code>DEL</code>
 
 <h3 id="descripcion-de-la-tabla-variable-dato">4.3.53 Descripción de la tabla: <strong>variable_dato</strong></h3>
 
-<div class="table" id="table-4-53">
-
-    <table border="1" style="border-collapse: collapse; width: 80%" id="dic-variable_dato">
+<div class="table" id="table-4-53"><table border="1" style="border-collapse: collapse; width: 80%" id="dic-variable_dato">
     <thead>
     <tr style="background-color: #1c94c4; ">
         <TH style="width: 20%" >Campo</TH>
@@ -4262,115 +4075,84 @@ comando <code>DEL</code>
 </div>
 
 
-<div class="code code">
-<pre class="code">&nbsp;</pre>
+<div class="codecode"><pre class="code">&nbsp;</pre>
 </div>
 
-</div>
-        <div class="item lof">
+</div><div class="item lof">
 
 <h1>Lista de figuras</h1>
 
-<ul>
-                        <li>
+<ul>            <li>
                 <span>3.1</span>
                 <a href="#figure-3-1">Pantalla de ingreso, tema default</a>
-            </li>
-                                <li>
+            </li>            <li>
                 <span>3.2</span>
                 <a href="#figure-3-2">Pantalla de ingreso, tema default</a>
-            </li>
-                                <li>
+            </li>            <li>
                 <span>3.3</span>
                 <a href="#figure-3-3">Pantalla de ingreso, tema MINSAL_ESA</a>
-            </li>
-                                <li>
+            </li>            <li>
                 <span>3.4</span>
                 <a href="#figure-3-4">Pantalla de ingreso, tema MINSAL_ESA</a>
-            </li>
-                                <li>
+            </li>            <li>
                 <span>3.5</span>
                 <a href="#figure-3-5">Estructura de un tema</a>
-            </li>
-                                <li>
+            </li>            <li>
                 <span>3.6</span>
                 <a href="#figure-3-6">Estructura de un tema</a>
-            </li>
-                                <li>
+            </li>            <li>
                 <span>3.7</span>
                 <a href="#figure-3-7">Estructura de un tema</a>
-            </li>
-                                <li>
+            </li>            <li>
                 <span>3.8</span>
                 <a href="#figure-3-8">Consola Redis</a>
-            </li>
-                                <li>
+            </li>            <li>
                 <span>3.9</span>
                 <a href="#figure-3-9">Redis keys</a>
-            </li>
-                                <li>
+            </li>            <li>
                 <span>3.10</span>
                 <a href="#figure-3-10">Redis DEL</a>
-            </li>
-                                <li>
+            </li>            <li>
                 <span>3.11</span>
                 <a href="#figure-3-11">ps aux</a>
-            </li>
-                                    <li>
+            </li>            <li>
                 <span>4.1</span>
                 <a href="#figure-4-1">Relaciones base de datos</a>
-            </li>
-                                <li>
+            </li>            <li>
                 <span>4.2</span>
                 <a href="#figure-4-2">Diagrama físico</a>
-            </li>
-            </ul>
+            </li></ul>
 
-</div>
-    </div>
-    <div class="span3">
-    <div class="item toc">
+</div>    </div>
+    <div class="span3"><div class="item toc">
 
 <h1>Índice de contenidos</h1>
 
-<ul class="unstyled">
-            <li class="chapter level-1">
-            <span>Capítulo 1</span> <a href="#tecnologias-utilizadas">Tecnologías utilizadas</a>
-        </li>
-                <li class="chapter level-1">
-            <span>Capítulo 2</span> <a href="#instalacion-del-etab">Instalación del eTAB</a>
-        </li>
-            <li class="chapter level-2">
+<ul class="unstyled">        <li class="chapter level-1">
+            <span>Capítulo1</span> <a href="#tecnologias-utilizadas">Tecnologías utilizadas</a>
+        </li>        <li class="chapter level-1">
+            <span>Capítulo2</span> <a href="#instalacion-del-etab">Instalación del eTAB</a>
+        </li>        <li class="chapter level-2">
             <span>2.1</span> <a href="#requerimientos">Requerimientos</a>
-        </li>
-            <li class="chapter level-2">
+        </li>        <li class="chapter level-2">
             <span>2.2</span> <a href="#instalacion">Instalación</a>
-        </li>
-            <li class="chapter level-2">
+        </li>        <li class="chapter level-2">
             <span>2.3</span> <a href="#configuracion">Configuración</a>
-        </li>
-                <li class="chapter level-1">
-            <span>Capítulo 3</span> <a href="#personalizacion">Personalización</a>
-        </li>
-            <li class="chapter level-2">
+        </li>        <li class="chapter level-1">
+            <span>Capítulo3</span> <a href="#personalizacion">Personalización</a>
+        </li>        <li class="chapter level-2">
             <span>3.1</span> <a href="#temas">Temas</a>
-        </li>
-            <li class="chapter level-2">
+        </li>        <li class="chapter level-2">
             <span>3.2</span> <a href="#gestion-de-carga-de-origenes-de-datos">Gestión de carga de orígenes de datos</a>
-        </li>
-                <li class="chapter level-1">
-            <span>Capítulo 4</span> <a href="#modelo-de-datos">Modelo de datos</a>
-        </li>
-            <li class="chapter level-2">
+        </li>        <li class="chapter level-1">
+            <span>Capítulo4</span> <a href="#modelo-de-datos">Modelo de datos</a>
+        </li>        <li class="chapter level-2">
             <span>4.1</span> <a href="#diagrama-de-relaciones">Diagrama de relaciones</a>
-        </li>
-            <li class="chapter level-2">
+        </li>        <li class="chapter level-2">
             <span>4.2</span> <a href="#diagrama-fisico-de-la-base-de-datos">Diagrama físico de la base de datos</a>
-        </li>
-            <li class="chapter level-2">
+        </li>        <li class="chapter level-2">
             <span>4.3</span> <a href="#diccionario-de-datos">Diccionario de datos</a>
-        </li>
-    </ul>
+        </li></ul>
 
 </div>    </div>
 </div>

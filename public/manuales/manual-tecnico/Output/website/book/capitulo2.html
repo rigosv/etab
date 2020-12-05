@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="author" content="eTAB" />
+    <meta name="date" content="05/12/2020"/>
+    <meta name="generator" content="easybook5.0-DEV"/>
+
+    <title>Instalación del eTAB|Manual Técnico</title>    <link rel="stylesheet" href="./css/easybook.css" /></head>
+
+<body class="itemchapter">
+<div class="container"><div class="menu">
+    <div class="row">
+        <h1 class="span9"><a href="./index.html">Manual Técnico</a></h1>
+        <p class="span3">            <a href="./capitulo1.html"><span>&larr;</span>Anterior</a>            <a href="./capitulo3.html">Siguiente <span>&rarr;</span></a>        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span9">        <h1 id="instalacion-del-etab"><span>Capítulo2</span>Instalación del eTAB</h1><h2 id="requerimientos">2.1 Requerimientos</h2>
+
+<ul>
+<li>PostgreSQL 9.6+</li>
+<li>PHP 7.2+</li>
+</ul>
+
+<h2 id="instalacion">2.2 Instalación</h2>
+
+<h3 id="instalacion-de-los-requerimientos-desde-un-servidor-debian">2.2.1 Instalación de los requerimientos desde un servidor Debian</h3>
+
+<p>Es muy importante poner atención al indicador "#" significa que el comando 
+debe ser ejecutado como usuario root y "$" que debe ser ejecutado como un usuario normal, 
+en ambos casos desde una consola de comandos.</p>
+
+<div class="codecode"><pre class="code"># apt-get update
+# apt-get install php php-pgsql php-curl php-sqlite3 sqlite php-cli php-xsl php-intl  postgresql acl git-core curl postgresql-contrib php-mysql php-sybase php-json php-bcmath php-mbstring redis-server php-redis php-zip php-gd php-fpm composer supervisor php-apcu nodejs</pre>
+</div>
+
+<h3 id="instalacion-de-yarn">2.2.2 Instalación de yarn</h3>
+
+<p>Para instalar los archivos del frontend y poder realizar la compilación de los mismos se utiliza yarn.</p>
+
+<div class="codecode"><pre class="code"># curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+# echo &quot;deb https://dl.yarnpkg.com/debian/ stable main&quot; | sudo tee /etc/apt/sources.list.d/yarn.list
+# apt update &amp;&amp; apt install yarn</pre>
+</div>
+
+<h3 id="crear-usuario-y-directorio-de-trabajo">2.2.3 Crear usuario y directorio de trabajo</h3>
+
+<p>El directorio y usuario a utilizar pueden variar de acuerdo a los que se deseen elegir en cada instalación, 
+como ejemplo se usará un usuario llamado <em>etab</em> y el directorio de instalación <em>/var/www/etab</em></p>
+
+<div class="codecode"><pre class="code"># adduser etab
+# mkdir /var/www/etab
+# chown etab:etab /var/www/etab
+# su etab
+$ cd /var/www</pre>
+</div>
+
+<h3 id="obtener-el-codigo-fuente">2.2.4 Obtener el código fuente</h3>
+
+<div class="codecode"><pre class="code">$ git clone https://github.com/rigosv/etab</pre>
+</div>
+
+<p>A partir de este punto todos los comandos se deben ejecutar dentro de la carpeta en que se ha descargado 
+el código fuente</p>
+
+<h2 id="configuracion">2.3 Configuración</h2>
+
+<h3 id="configuracion-de-postgres">2.3.1 Configuración de Postgres</h3>
+
+<h4 id="editar-archivo-de-configuracion">2.3.1.1 Editar archivo de configuración</h4>
+
+<p>Como usuario root realizar:</p>
+
+<ol>
+<li>Editar el archivo <em>/etc/postgresql/9.6/main/pg_hba.conf</em> (Verificar la ruta con la versión correspondiente) </li>
+<li>Cambiar la siguiente línea, sustituir la última palabra por <em>md5</em> </li>
+</ol>
+
+<div class="codecode"><pre class="code">local   all             all                       md5</pre>
+</div>
+
+<p>Reiniciar PostgreSQL</p>
+
+<div class="codecode"><pre class="code"># /etc/init.d/postgresql restart</pre>
+</div>
+
+<h4 id="crear-el-usuario-dueno-de-la-base-de-datos-y-la-estructura-inicial">2.3.1.2 Crear el usuario dueño de la base de datos y la estructura inicial</h4>
+
+<p>Se creará el usuario dueño de la base de datos, las opciones utilizadas dependerán de 
+los criterios que se quieran seguir, se muestra un ejemplo, ejecutar <em>createuser --help</em> 
+para la explicación de las opciones.</p>
+
+<div class="codecode"><pre class="code"># su postgres
+$ createuser -d -S  -R -P admin
+$ createdb etab -O admin
+$ exit
+# exit
+$ psql -d etab -f src/EstructuraDB/etab_initdb.sql -U admin</pre>
+</div>
+
+<h4 id="configurar-los-parametros-de-conexion">2.3.1.3 Configurar los parámetros de conexión</h4>
+
+<p>Configurar los valores correspondientes en el archivo <strong>.env.local</strong> 
+(Si no existe copiar el contenido de .env: <code>cp .env .env.local</code> )</p>
+
+<div class="codecode"><pre class="code">DATABASE_URL=pgsql://[usuario]:[clave]@[IP_SERVIDOR]:[PUERTO]/[NOMBRE_DB]
+&nbsp;
+// Si los orígenes se guardarán en la misma base de datos, utilizar el mismo nombre de base de datos 
+DATABASE_ETAB_DATOS_URL=pgsql://[usuario]:[clave]@[IP_SERVIDOR]:[PUERTO]/[NOMBRE_DB_ORIGENES]</pre>
+</div>
+
+<p>Configurar el parámetro "server_version" estableciendo la versión de postgres utilizada, en el archivo 
+<strong>config/packages/doctrine.yaml</strong></p>
+
+<h3 id="instalar-todas-las-librerias-necesarias">2.3.2 Instalar todas las librerías necesarias</h3>
+
+<p>Si es un servidor de pruebas</p>
+
+<div class="codecode"><pre class="code">$ composer install</pre>
+</div>
+
+<p>Si es un servidor de producción</p>
+
+<div class="codecode"><pre class="code">$ composer install --no-dev --optimize-autoloader</pre>
+</div>
+
+<p>Las librerías del frontend</p>
+
+<div class="codecode"><pre class="code">$ yarn install</pre>
+</div>
+
+<p>Compilar el frontend para entorno de producción</p>
+
+<div class="codecode"><pre class="code">$ yarn encore prod</pre>
+</div>
+
+<p>Compilar el frontend para entorno de desarrollo</p>
+
+<div class="codecode"><pre class="code">$ yarn encore dev --watch</pre>
+</div>
+
+<h3 id="configurar-el-supervisor-de-gestion-de-colas">2.3.3 Configurar el supervisor de gestión de colas</h3>
+
+<p>crear el archivo etab_colas.conf</p>
+
+<div class="codecode"><pre class="code"># nano  /etc/supervisor/conf.d/etab_colas.conf</pre>
+</div>
+
+<p>Poner el siguiente contenido en el archivo (verificar la ruta y usuario con que se ha instalado el etab y 
+sustituir en este archivo, en el ejemplo se asume que está instalado en /var/www/etab con el usuario admin )</p>
+
+<div class="codecode"><pre class="code">[program:pf_message_consumer]
+command=/var/www/etab/bin/console messenger:consume-messages --env=prod --no-debug --time-limit=300
+user=admin
+process_name=%(program_name)s_%(process_num)02d
+numprocs=1
+autostart=true
+autorestart=true
+startsecs=0
+redirect_stderr=true</pre>
+</div>
+
+<p>reiniciar el supervisor</p>
+
+<div class="codecode"><pre class="code"># /etc/init.d/supervisor restart</pre>
+</div>
+
+<h3 id="permisos-sobre-carpetas">2.3.4 Permisos sobre carpetas</h3>
+
+<p>Es necesario tener <a href="https://help.ubuntu.com/community/FilePermissionsACLs">soporte para ACL</a> en la 
+partición en que está el proyecto y luego ejecutar</p>
+
+<div class="codecode"><pre class="code">$ setfacl -R -m u:www-data:rwx -m u:`whoami`:rwx var/cache var/log public/uploads
+$ setfacl -dR -m u:www-data:rwx -m u:`whoami`:rwx var/cache var/log public/uploads</pre>
+</div>
+
+<h3 id="crear-el-usuario-administrador-de-la-aplicacion">2.3.5 Crear el usuario administrador de la aplicación</h3>
+
+<div class="codecode"><pre class="code">$ bin/console fos:user:create --super-admin</pre>
+</div>
+
+<h3 id="ejecutando-el-etab">2.3.6 Ejecutando el etab</h3>
+
+<p>En producción, se debe usar un servidor web como Nginx o Apache, puede ver el siguiente enlace para 
+<a href="https://symfony.com/doc/current/setup/web_server_configuration.html">configurar un servidor web</a>
+Para desarrollo o una verificación rápida se puede usar un servidor web local, activándolo de la siguiente forma</p>
+
+<div class="codecode"><pre class="code">$ bin/console server:start</pre>
+</div>
+
+<p>Abra el navegador web y cargue la ruta <code>http://localhost:8000/</code></p>
+
+<h3 id="origenes-de-datos-desde-mssqlserver">2.3.7 Orígenes de datos desde MSSQLServer</h3>
+
+<p>Si se leerá orígenes de datos desde MSSQLServer, instalar los controladores de Microsoft, según la siguiente guía
+<a href="https://docs.microsoft.com/en-us/sql/connect/php/installation-tutorial-linux-mac?view=sql-server-2017">MSSQLServer</a></p>
+    </div>
+
+    <div class="span3">        <div class="item local_toc">
+            <h3>Índice de contenidos</h3>
+
+            <ul class="unstyled">                    <li class="level-1">
+                        <span></span>
+                        <a class="internal" href="./capitulo-2.html#instalacion-del-etab">Instalación del eTAB</a>
+                    </li>                    <li class="level-2">
+                        <span>2.1</span>
+                        <a class="internal" href="./capitulo-2.html#requerimientos">Requerimientos</a>
+                    </li>                    <li class="level-2">
+                        <span>2.2</span>
+                        <a class="internal" href="./capitulo-2.html#instalacion">Instalación</a>
+                    </li>                    <li class="level-2">
+                        <span>2.3</span>
+                        <a class="internal" href="./capitulo-2.html#configuracion">Configuración</a>
+                    </li>            </ul>
+        </div>    </div>
+</div></div>
+</body>
+</html>

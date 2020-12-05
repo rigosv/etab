@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="author" content="eTAB" />
+    <meta name="date" content="05/12/2020"/>
+    <meta name="generator" content="easybook5.0-DEV"/>
+
+    <title>Personalización|Manual Técnico</title>    <link rel="stylesheet" href="./css/easybook.css" /></head>
+
+<body class="itemchapter">
+<div class="container"><div class="menu">
+    <div class="row">
+        <h1 class="span9"><a href="./index.html">Manual Técnico</a></h1>
+        <p class="span3">            <a href="./capitulo2.html"><span>&larr;</span>Anterior</a>            <a href="./capitulo4.html">Siguiente <span>&rarr;</span></a>        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span9">        <h1 id="personalizacion"><span>Capítulo3</span>Personalización</h1><h2 id="temas">3.1 Temas</h2>
+
+<p>Se tiene una separación en cuanto a la personalización de la interfaz de usuairo en cada instalación del etab. 
+Para esto se utilizarán temas. El objetivo es que en cada instalación tome un tema base, 
+se hagan los cambios necesarios y se active ese tema, sin cambiar nada de los temas existentes. 
+Además si el tema es muy diferente (más allá de cambiar el logo) se puede agregar al repositorio 
+y así ir creando un conjunto de temas disponibles. Existen 3 temas: <strong>default</strong>, <strong>MINSAL_ESA</strong>, y <strong>simple</strong></p>
+
+<h3 id="temas-de-ejemplo">3.1.1 Temas de ejemplo</h3>
+
+<h4 id="tema-default">3.1.1.1 Tema default</h4>
+
+<p>En este tema no tiene imágenes relacionadas a una institución, el menú principal es vertical del lado izquierdo.</p>
+
+<div class="figure" id="figure-3-1"><img src="images/default-ingreso.png" alt="Pantalla de ingreso, tema default" />    <p class="caption"><strong>Figura3.1</strong>Pantalla de ingreso, tema default</p></div>
+
+<div class="figure" id="figure-3-2"><img src="images/default-inicial.png" alt="Pantalla de ingreso, tema default" />    <p class="caption"><strong>Figura3.2</strong>Pantalla de ingreso, tema default</p></div>
+
+<h4 id="tema-minsal-esa">3.1.1.2 Tema MINSAL_ESA</h4>
+
+<p>Es el tema utilizado en El Salvador, contiene imágenes que identifican al Ministerio de Salud, su menú es horizontal.</p>
+
+<div class="figure" id="figure-3-3"><img src="images/minsal-ingreso.png" alt="Pantalla de ingreso, tema MINSAL_ESA" />    <p class="caption"><strong>Figura3.3</strong>Pantalla de ingreso, tema MINSAL_ESA</p></div>
+
+<div class="figure" id="figure-3-4"><img src="images/minsal-inicial.png" alt="Pantalla de ingreso, tema MINSAL_ESA" />    <p class="caption"><strong>Figura3.4</strong>Pantalla de ingreso, tema MINSAL_ESA</p></div>
+
+<h3 id="crear-un-tema">3.1.2 Crear un tema</h3>
+
+<ol>
+<li>En la ruta <code>public/themes</code> dentro del directorio del proyecto, crear un nuevo directorio 
+(el nombre del directorio será el nombre del tema), este contendrá los archivos de imágenes, css y js.</li>
+<li><p>Debe contener al menos los archivos que tenga el tema default, agregando además los nuevos 
+que se vayan a utilizar.
+<div class="figure" id="figure-3-5"><img src="images/estructura-tema.png" alt="Estructura de un tema" />    <p class="caption"><strong>Figura3.5</strong>Estructura de un tema</p></div></li>
+<li><p>Crear el directorio del nuevo tema para contener la estructura (debe coincidir con el nombre del 
+directorio creado para los las imágenes, estilos y js ) para modificar la estructura de la interfaz, 
+en la ruta: <code>templates/themes</code></p></li>
+<li><p>Como en el caso anterior el tema default, nos indica los archivos mínimos que será obligatorio 
+tener en nuestro nuevo tema
+<div class="figure" id="figure-3-6"><img src="images/estructura2-tema.png" alt="Estructura de un tema" />    <p class="caption"><strong>Figura3.6</strong>Estructura de un tema</p></div></li>
+<li><p>Para activar el nuevo tema, cambiar el parámetro <code>app.theme</code> en el archivo de configuración 
+<code>config/app_config.yaml</code> (el nombre del tema será el nombre del directorio).
+<div class="figure" id="figure-3-7"><img src="images/config-tema.png" alt="Estructura de un tema" />    <p class="caption"><strong>Figura3.7</strong>Estructura de un tema</p></div></li>
+</ol>
+
+<h2 id="gestion-de-carga-de-origenes-de-datos">3.2 Gestión de carga de orígenes de datos</h2>
+
+<p>Se está utilizando <strong>Enqueue bundle</strong> el cual permite integrar el componente <strong>Enqueue</strong>. 
+Este último brindará  el servicio de mensajería pudiendo utilizar el protocolo de transporte que 
+mejor nos parezca; entre los protocolos posibles tenemos:</p>
+
+<ul>
+<li>AMQP(s) based on PHP AMQP extension </li>
+<li>AMQP based on bunny </li>
+<li>AMQP(s) based on php-amqplib </li>
+<li>Beanstalk </li>
+<li>STOMP </li>
+<li>Amazon SQS </li>
+<li>Google PubSub </li>
+<li>Kafka </li>
+<li>Redis </li>
+<li>Gearman </li>
+<li>Doctrine DBAL </li>
+<li>Filesystem </li>
+<li>Mongodb </li>
+</ul>
+
+<p>El eTab utiliza por defecto, el protocolo de transporte basado en Redis por defecto. 
+Y la configuración se pone en el archivo <code>.env.local</code> los datos para conectarse a nuestra 
+instalación del servidor de redis, en la línea:</p>
+
+<div class="codecode"><pre class="code">###&gt; enqueue/redis ###
+ENQUEUE_DSN=redis://localhost
+###&lt; enqueue/redis ###</pre>
+</div>
+
+<h3 id="cambiar-el-protocolo-de-transporte">3.2.1 Cambiar el protocolo de transporte</h3>
+
+<p>Si se desea utilizar/probar otro protocolo, por ejemplo RabbitMQ, se debe instalar el servidor 
+de RabbitMQ, agregar la extensión para que PHP pueda leer el protocolo y el componente de Enqueue 
+correspondiente al paquete. Y luego cambiar la variable de entorno en el archivo <code>.env.local</code></p>
+
+<ol>
+<li>Instalar el servidor RabbitMQ, según la <a href="http://getcomposer.org/">guía oficial</a></li>
+<li>Agregar la extensión de PHP </li>
+</ol>
+
+<div class="codecode"><pre class="code"># apt-get install php-amqp</pre>
+</div>
+
+<ol>
+<li>Instalar el componente de Enqueue para ese protocolo</li>
+</ol>
+
+<div class="codecode"><pre class="code">$ composer require enqueue/amqp-ext</pre>
+</div>
+
+<ol>
+<li>Cambiar el archivo de configuración <code>.env.local</code></li>
+</ol>
+
+<div class="codecode"><pre class="code">###&gt; enqueue/amqp ###
+ENQUEUE_DSN=amqp://guest:guest@localhost:5672/%2f/messages
+###&lt; enqueue/amqp ###</pre>
+</div>
+
+<p>¡Eso sería todo! La dificultad estará en el costo de instalar el servidor del protocolo que 
+deseemos probar, una vez hecho eso, en el eTab solo se debe agregar el paquete de enqueue 
+correspondiente y cambiar una línea en el archivo <code>.env.local</code></p>
+
+<h3 id="activar-las-colas-para-la-carga-de-datos">3.2.2 Activar las colas para la carga de datos</h3>
+
+<p>Independientemente de la implementación del protocolo la activación de las colas se hará 
+con el siguiente comando:</p>
+
+<div class="codecode"><pre class="code">bin/console messenger:consume-messages</pre>
+</div>
+
+<p>En el proceso de instalación, se configuró <code>supervisor</code> para que verifique cada 5 minutos si está activas las colas
+y las carga si no lo están.</p>
+
+<h3 id="gestion-manual-de-mensajes">3.2.3 Gestión manual de mensajes</h3>
+
+<p>Si se desea manipular los mensajes de carga de los orígenes de datos, por ejemplo para borrarlos 
+y que ya no se tomen en cuenta, se deberá realizar de acuerdo al servidor del protocolo utilizado. 
+Por ejemplo actualmente con RabbitMQ se ingresa a la interfaz web de administración de este y desde 
+ahí se pueden borrar las colas o mensajes que estas tengan.</p>
+
+<p>Con redis, podemos utilizar el cliente de redis o cualquier otro cliente gráfico que hayamos instalado 
+(eso ya depende de cada instalación). 
+Si se desea borrar todos los mensajes pendientes, de manera rápida, podemos utilizar el comando 
+<code>bin/console redis:flushall</code> para borrar todos los datos en caché de redis. 
+Esto incluye caché de indicadores mostrados en el tablero los cuales se volverán a generar al volver a 
+utilizar un indicador en el tablero.</p>
+
+<p>Si solo se desea borrar los mensajes correspondiente a la carga de datos, se realizan los siguientes pasos:</p>
+
+<ol>
+<li><p>Ingresamos a la consola de administración de redis, comando <code>redis-cli</code>
+<div class="figure" id="figure-3-8"><img src="images/redis-cli.png" alt="Consola Redis" />    <p class="caption"><strong>Figura3.8</strong>Consola Redis</p></div></li>
+<li><p>Ver si hay mensajes pendientes de procesar, comando <code>KEYS *</code>
+<div class="figure" id="figure-3-9"><img src="images/redis-keys.png" alt="Redis keys" />    <p class="caption"><strong>Figura3.9</strong>Redis keys</p></div></li>
+<li><p>Si hay mensajes veremos una llave con el nombre <strong>messages</strong>. Para borrar los mensajes usamos el 
+comando <code>DEL</code>
+<div class="figure" id="figure-3-10"><img src="images/redis-del.png" alt="Redis DEL" />    <p class="caption"><strong>Figura3.10</strong>Redis DEL</p></div></li>
+<li><p>Buscar los procesos del componente messenger que se estén ejecutando: <code>ps aux | grep messenger</code>
+<div class="figure" id="figure-3-11"><img src="images/ps-aux.png" alt="ps aux" />    <p class="caption"><strong>Figura3.11</strong>ps aux</p></div></li>
+<li><p>Detener los procesos encontrados, utilizar el número de proceso encontrado en el comando anterior : 
+<code>kill -9 3226</code></p></li>
+</ol>
+    </div>
+
+    <div class="span3">        <div class="item local_toc">
+            <h3>Índice de contenidos</h3>
+
+            <ul class="unstyled">                    <li class="level-1">
+                        <span></span>
+                        <a class="internal" href="./capitulo-3.html#personalizacion">Personalización</a>
+                    </li>                    <li class="level-2">
+                        <span>3.1</span>
+                        <a class="internal" href="./capitulo-3.html#temas">Temas</a>
+                    </li>                    <li class="level-2">
+                        <span>3.2</span>
+                        <a class="internal" href="./capitulo-3.html#gestion-de-carga-de-origenes-de-datos">Gestión de carga de orígenes de datos</a>
+                    </li>            </ul>
+        </div>    </div>
+</div></div>
+</body>
+</html>

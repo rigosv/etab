@@ -1,0 +1,361 @@
+<html >
+	<head>
+		<title>eTAB </title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="charset" content="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<!-- Latest compiled and minified CSS -->
+		  
+			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+			<link rel="stylesheet" href="./css/styles.css" />  
+			<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+				
+					<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+			<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+			<!-- Latest compiled and minified JavaScript -->
+			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+			<script charset="utf-8">
+			$(document).ready(function () {
+			  $("body").on("click",".btn-main-menu",function(e) {
+				e.preventDefault();
+				$("#wrapper").toggleClass("toggled");
+			  });
+			  $(".btn-datagrid-row-mostrar-opciones").on('click', function(e){
+				e.preventDefault();
+
+				$(this).toggleClass('btn-primary');
+				$(this).parent().find('.btn-group').eq(0).toggleClass('hidden-xs');
+			  });
+			});
+			</script>
+		
+		<link rel="shortcut icon" href="./images/etab.png" />
+	</head>
+	<body>
+	
+
+	<nav class="navbar navbar-default navbar-fixed-top top-bar">
+    <div class="container-fluid">
+      <div class="navbar-header" style="margin-right:20pt;width: 208px;">
+		<a href="./index.html" class="navbar-brand"><img alt="Home" src="./images/etab.png" style="top:0px; margin-top:-5px; height:34px; float:left; ">eTAB</a>
+      </div>
+      <ul class="nav navbar-nav">
+		<li class="">
+		  <a>Manual de usuario <i class="fa fa-caret-right"></i></a>
+		</li>
+		<li class="active">
+		  <a href="">Social</a>
+		</li>
+	  </ul>
+      <ul class="nav navbar-nav navbar-right">
+        				<li><a  href="./capitulo-3.html">&larr; Anterior </a></li>
+			
+							<li><a class="disabled">Siguiente </a></li>
+			      </ul>
+    </div>
+  </nav>
+
+	<div id="wrapper" class="" >
+	
+		
+<!-- Sidebar -->
+    <aside id="sidebar-wrapper">
+      <ul class="sidebar-nav nav">
+        
+        <li>
+          <a href="index.html"><i class="fa fa-dashboard"></i> Dashboard</a>
+        </li>
+															
+				<li class="">
+					<a href="./capitulo-1.html" ><i class="fa fa-book"></i> Tablero </a>				  
+					<ul id="chunk_toc" class='nav collapse submenu in'  aria-expanded="true">		
+						
+												
+													
+					</ul>
+					
+				</li>
+													
+				<li class="">
+					<a href="./capitulo-2.html" ><i class="fa fa-book"></i> Indicador </a>				  
+					<ul id="chunk_toc" class='nav collapse submenu in'  aria-expanded="true">		
+						
+												
+													
+					</ul>
+					
+				</li>
+													
+				<li class="">
+					<a href="./capitulo-3.html" ><i class="fa fa-book"></i> Salas </a>				  
+					<ul id="chunk_toc" class='nav collapse submenu in'  aria-expanded="true">		
+						
+												
+													
+					</ul>
+					
+				</li>
+													
+				<li class="active">
+					<a href="./capitulo-4.html" ><i class="fa fa-book"></i> Social </a>				  
+					<ul id="chunk_toc" class='nav collapse submenu in'  aria-expanded="true">		
+						
+																																												<li><a href="./capitulo-4.html#acciones-de-sala-situacional"><i class="fa fa-file"></i> Acciones de sala situacional</a></li>
+																															<li><a href="./capitulo-4.html#compartir-sala"><i class="fa fa-file"></i> Compartir sala</a></li>
+																															<li><a href="./capitulo-4.html#exportar-sala"><i class="fa fa-file"></i> Exportar sala</a></li>
+																						
+												
+													
+					</ul>
+					
+				</li>
+		 
+				  
+        
+      </ul>
+	  
+    </aside>
+<!-- /#sidebar-wrapper -->
+		
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-12">
+            <br>
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h1 class="panel-title"><i class="fa fa-bookmark"></i> <span>Capítulo 4</span>  </h1>
+              </div>
+              <div class="panel-body" >
+                
+				
+    <h1 id="social"> Social</h1>
+    <p><br/></p>
+
+<p style="text-align: justify;">
+Dentro de las acciones que se pueden hacer en una sala esta la parte social, que corresponde a como en equipo podemos dar seguimiento a un indicador para lograr las metas programadas. En esta seccion veremos como compartir las salas y como asignarle comentarios y acciones, asi como las opciones de exportacion.
+</p>
+
+<div class="figure" id="figure-4-1">
+    <img src="images/social.png" alt="" />
+
+</div>
+
+
+<p><br/></p>
+
+<h2 id="acciones-de-sala-situacional">4.1 Acciones de sala situacional</h2>
+
+<p><br/></p>
+
+<p style="text-align: justify;">
+Las acciones nos ilustran los retos a los que nos enfrentamos en un indicador para alcanzar su objetivo, aca podemos describir las actividades y retos asi como asigar la o las personas responsables de tales acciones con el unico fin de alcanzar la meta programada. Para ver o iniciar una accion hacer clic en el boton "acciones de sala situacional"
+</p>
+
+<div class="figure" id="figure-4-2">
+    <img src="images/social-1.png" alt="" />
+
+</div>
+
+
+<p><br/>
+<div class="figure" id="figure-4-3">
+    <img src="images/social-2.png" alt="" />
+
+</div>
+
+<br/></p>
+
+<blockquote>
+  <p><strong>Acciones</strong></p>
+  
+  <ul>
+  <li>1.- Despues de abrir la ventana nos aparecen 2 pestañas, la primera es para agregar acciones</li>
+  <li>2.- Describir la acción a implementar</li>
+  <li>3.- Describir las complicaciones u observaciones</li>
+  <li>4.- Asignar a un responsable de la acción</li>
+  <li>5.- Guardar los cambios</li>
+  <li>6.- Cerrar la ventana</li>
+  </ul>
+</blockquote>
+
+<p><br/>
+<div class="figure" id="figure-4-4">
+    <img src="images/social-3.png" alt="" />
+
+</div>
+
+<br/></p>
+
+<blockquote>
+  <p><strong>Historial</strong></p>
+  
+  <ul>
+  <li>1.- Segunda pestaña historial de acciones</li>
+  <li>2.- Cada fila corresponde a una acción</li>
+  </ul>
+</blockquote>
+
+<p><br/></p>
+
+<h2 id="compartir-sala">4.2 Compartir sala</h2>
+
+<p><br/></p>
+
+<p style="text-align: justify;">
+Podemos compartir la sala y generar un acceso temporal en dias o bien permanentemente, mediante la siguinete opción.
+</p>
+
+<div class="figure" id="figure-4-5">
+    <img src="images/social-a.png" alt="" />
+
+</div>
+
+<div class="figure" id="figure-4-6">
+    <img src="images/social-4.png" alt="" />
+
+</div>
+
+
+<p><br/></p>
+
+<blockquote>
+  <p><strong>Compartir</strong></p>
+  
+  <ul>
+  <li>1.- Programar los usuarios</li>
+  <li>2.- Seleccionar los usuarios que tienen cuenta</li>
+  <li>3.- Agregar los correos de las personas que no tienen cuenta, sepuede escribir mas de uno seprandolo por comas (,)</li>
+  <li>4.- Marcar si el acceso va a ser permanente, si se marca esta casilla se hace caso omiso a los dias</li>
+  <li>5.- Número de dias de vigencia para el acceso</li>
+  <li>6.- Guardar los cambios</li>
+  <li>7.- Cerrar la ventana</li>
+  </ul>
+</blockquote>
+
+<p><br/></p>
+
+<h3 id="confirmacion-de-compartir">4.2.1 Confirmación de compartir</h3>
+
+<p><br/></p>
+
+<p style="text-align: justify;">
+Una vez que guardado el sistema nos muestra el siguiente mensaje de que se compartio con exito
+</p>
+
+<div class="figure" id="figure-4-7">
+    <img src="images/social-5.png" alt="" />
+
+</div>
+
+<br/></p>
+
+<p style="text-align: justify;">
+Al correo de las personas que se les compartio llegara el siguiente contenido con los link de acceso
+</p>
+
+<div class="figure" id="figure-4-8">
+    <img src="images/social-6.png" alt="" />
+
+</div>
+
+
+<p><br/></p>
+
+<h2 id="exportar-sala">4.3 Exportar sala</h2>
+
+<p><br/></p>
+
+<p style="text-align: justify;">
+Podemos eportra las salas por su tabla de datos, su diccionario o bien la imagen de las graficas
+</p>
+
+<div class="figure" id="figure-4-9">
+    <img src="images/social-b.png" alt="" />
+
+</div>
+
+
+<p><br/>
+<div class="figure" id="figure-4-10">
+    <img src="images/social-7.png" alt="" />
+
+</div>
+
+<br/></p>
+
+<blockquote>
+  <p><strong>Tabla de datos</strong></p>
+  
+  <ul>
+  <li>1.- Seleccionar el formato a exportar</li>
+  <li>2.- Generar documento</li>
+  <li>3.- Cerrar la ventana</li>
+  </ul>
+</blockquote>
+
+<p><br/>
+<div class="figure" id="figure-4-11">
+    <img src="images/social-8.png" alt="" />
+
+</div>
+
+<br/></p>
+
+<blockquote>
+  <p><strong>Diccionario de datos</strong></p>
+  
+  <ul>
+  <li>1.- Seleccionar el formato a exportar</li>
+  <li>2.- Generar documento</li>
+  <li>3.- Cerrar la ventana</li>
+  </ul>
+</blockquote>
+
+<p><br/>
+<div class="figure" id="figure-4-12">
+    <img src="images/social-9.png" alt="" />
+
+</div>
+
+<br/></p>
+
+<blockquote>
+  <p><strong>Exportar a PDF</strong></p>
+  
+  <ul>
+  <li>1.- Genera un docuemento PDF con las graficas en pantalla</li>
+  </ul>
+</blockquote>
+
+
+	
+			
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer class="app-footer">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-xs-4"><img src="./images/logo1.png"  height="30px" alt="" /></div>
+            <div class="col-xs-4">
+              <p class="hidden-xs">
+                Tablero de control electronico | ETAB
+              </p>
+            </div>
+            <div class="col-xs-4" align="right"><img src="./images/logo2.png"  height="30px" alt="" /></div>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <!-- /#page-content-wrapper -->
+
+  </div>
+</body>
+</html>
