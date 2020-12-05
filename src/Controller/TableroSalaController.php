@@ -186,30 +186,32 @@ class TableroSalaController extends AbstractController
     public function usuariosSala($idSala) {
         $em = $this->getDoctrine()->getManager();
         
-        $usuarios_asignados = $em->getRepository(UsuarioGrupoIndicadores::class)->findBy(array('grupoIndicadores' => $idSala));
-        $usuarios_asignados_por_usuario_actual = $em->getRepository(UsuarioGrupoIndicadores::class)->findBy(array('usuario'=>$this->getUser(), 'grupoIndicadores' => $idSala));
-        $usuarios_sala_por_usuario_actual = array(); 
-        foreach ($usuarios_asignados_por_usuario_actual as $ua){
-            $usuarios_sala_por_usuario_actual[] = $ua->getUsuario()->getId();
-        }
-        
-        $usuarios_sala = array(); 
-        foreach ($usuarios_asignados as $ua){
-            $usuarios_sala[] = $ua->getUsuario()->getId();
-        }
-        
-        $usuarios = $em->getRepository(User::class)->findBy(array(), array('username'=>'ASC'));
-        
         $data = [];
-        foreach ($usuarios as $u){
-            if ($u->getId() != $this->getUser()->getId()){
-                $name = $u->getFirstname().$u->getLastname() == "" ? $u->getUsername() : $u->getFirstname().' '.$u->getLastname();
-                $selected = (in_array($u->getId(), $usuarios_sala)) ? true : false;
-                array_push($data, array(
-                    "id" => $u->getId(),
-                    "nombre" => $name,
-                    "selected" => $selected,
-                ));
+        if ($this->getUser() != null ){
+            $usuarios_asignados = $em->getRepository(UsuarioGrupoIndicadores::class)->findBy(array('grupoIndicadores' => $idSala));
+            $usuarios_asignados_por_usuario_actual = $em->getRepository(UsuarioGrupoIndicadores::class)->findBy(array('usuario'=>$this->getUser(), 'grupoIndicadores' => $idSala));
+            $usuarios_sala_por_usuario_actual = array(); 
+            foreach ($usuarios_asignados_por_usuario_actual as $ua){
+                $usuarios_sala_por_usuario_actual[] = $ua->getUsuario()->getId();
+            }
+
+            $usuarios_sala = array(); 
+            foreach ($usuarios_asignados as $ua){
+                $usuarios_sala[] = $ua->getUsuario()->getId();
+            }
+
+            $usuarios = $em->getRepository(User::class)->findBy(array(), array('username'=>'ASC'));
+    
+            foreach ($usuarios as $u){
+                if ($u->getId() != $this->getUser()->getId()){
+                    $name = $u->getFirstname().$u->getLastname() == "" ? $u->getUsername() : $u->getFirstname().' '.$u->getLastname();
+                    $selected = (in_array($u->getId(), $usuarios_sala)) ? true : false;
+                    array_push($data, array(
+                        "id" => $u->getId(),
+                        "nombre" => $name,
+                        "selected" => $selected,
+                    ));
+                }
             }
         }
         $response = [
