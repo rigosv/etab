@@ -437,8 +437,8 @@ class TableroController extends AbstractController {
             $grupos = [];
             $where = '';
             //Verificar si es una sala pública
-            $token = $request->get('token');
-            $idSala = $request->get('id');
+            $token = $request->get('token') === '' ? null : $request->get('token');
+            $idSala = $request->get('id') === '' ? null : $request->get('id');
             if ( $token === null and $idSala === null){
                 $usuarioId = $usuario->getId();
                 $datos = (object) $request->query->all();                  
