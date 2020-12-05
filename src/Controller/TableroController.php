@@ -436,7 +436,10 @@ class TableroController extends AbstractController {
             $usuario = $this->getUser();
             $grupos = [];
             $where = '';
-            if ( $this->getUser() !== null ){
+            //Verificar si es una sala pública
+            $token = $request->get('token');
+            $idSala = $request->get('id');
+            if ( $token === null and $idSala === null){
                 $usuarioId = $usuario->getId();
                 $datos = (object) $request->query->all();                  
                 $salas_permitidos = [];
@@ -460,9 +463,7 @@ class TableroController extends AbstractController {
                 }
             } else {
                 $usuarioId = -1;
-                //Verificar si es una sala pública
-                $token = $request->get('token');
-                $idSala = $request->get('id');
+                
                 $where = " AND id = -1 ";
                 if ( $token !== null and $idSala !== null ) {
                     $sa = $em->getRepository(Social::class)->getRuta($idSala,$token);                    
