@@ -16,7 +16,7 @@ file that was distributed with this source code.
 
 {% block title %}
     {% if objectId|default(admin.id(object)) is not null %}
-        {{ "title_edit"|trans({'%name%': admin.toString(object)|truncate(100) }, 'SonataAdminBundle') }}
+        {{ "title_edit"|trans({'%name%': admin.toString(object)|u.truncate(100) }, 'SonataAdminBundle') }}
     {% else %}
         {{ "title_create"|trans({}, 'SonataAdminBundle') }}
     {% endif %}
