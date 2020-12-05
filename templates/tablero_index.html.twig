@@ -42,14 +42,14 @@
                 navigator.serviceWorker.register('/service-worker.js');
             });
         }
-        
-        var token = '{{token|default('')}}';
-        var idSala = '{{idSala|default('')}}';
     </script>
 </head>
 <body>
     <div id="app">
-        <Tablero/>
+        <Tablero 
+            token = '{{token|default('')}}'
+            id-sala = '{{idSala|default('')}}'
+        />
     </div>
     {{ encore_entry_script_tags('app/js') }}
 </body>
