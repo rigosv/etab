@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="author" content="eTAB" />
-    <meta name="date" content="05/12/2020"/>
+    <meta name="date" content="06/12/2020"/>
     <meta name="generator" content="easybook5.0-DEV"/>
 
     <title>Instalación del eTAB|Manual Técnico</title>    <link rel="stylesheet" href="./css/easybook.css" /></head>
@@ -33,19 +33,10 @@ debe ser ejecutado como usuario root y "$" que debe ser ejecutado como un usuari
 en ambos casos desde una consola de comandos.</p>
 
 <div class="codecode"><pre class="code"># apt-get update
-# apt-get install php php-pgsql php-curl php-sqlite3 sqlite php-cli php-xsl php-intl  postgresql acl git-core curl postgresql-contrib php-mysql php-sybase php-json php-bcmath php-mbstring redis-server php-redis php-zip php-gd php-fpm composer supervisor php-apcu nodejs</pre>
+# apt-get install php php-pgsql php-curl php-sqlite3 sqlite php-cli php-xsl php-intl  postgresql acl git-core curl postgresql-contrib php-mysql php-sybase php-json php-bcmath php-mbstring redis-server php-redis php-zip php-gd php-fpm composer supervisor php-apcu nodejs npm</pre>
 </div>
 
-<h3 id="instalacion-de-yarn">2.2.2 Instalación de yarn</h3>
-
-<p>Para instalar los archivos del frontend y poder realizar la compilación de los mismos se utiliza yarn.</p>
-
-<div class="codecode"><pre class="code"># curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-# echo &quot;deb https://dl.yarnpkg.com/debian/ stable main&quot; | sudo tee /etc/apt/sources.list.d/yarn.list
-# apt update &amp;&amp; apt install yarn</pre>
-</div>
-
-<h3 id="crear-usuario-y-directorio-de-trabajo">2.2.3 Crear usuario y directorio de trabajo</h3>
+<h3 id="crear-usuario-y-directorio-de-trabajo">2.2.2 Crear usuario y directorio de trabajo</h3>
 
 <p>El directorio y usuario a utilizar pueden variar de acuerdo a los que se deseen elegir en cada instalación, 
 como ejemplo se usará un usuario llamado <em>etab</em> y el directorio de instalación <em>/var/www/etab</em></p>
@@ -57,7 +48,7 @@ como ejemplo se usará un usuario llamado <em>etab</em> y el directorio de insta
 $ cd /var/www</pre>
 </div>
 
-<h3 id="obtener-el-codigo-fuente">2.2.4 Obtener el código fuente</h3>
+<h3 id="obtener-el-codigo-fuente">2.2.3 Obtener el código fuente</h3>
 
 <div class="codecode"><pre class="code">$ git clone https://github.com/rigosv/etab</pre>
 </div>
@@ -128,12 +119,12 @@ DATABASE_ETAB_DATOS_URL=pgsql://[usuario]:[clave]@[IP_SERVIDOR]:[PUERTO]/[NOMBRE
 
 <p>Las librerías del frontend</p>
 
-<div class="codecode"><pre class="code">$ yarn install</pre>
+<div class="codecode"><pre class="code">$ npm install</pre>
 </div>
 
 <p>Compilar el frontend para entorno de producción</p>
 
-<div class="codecode"><pre class="code">$ yarn encore prod</pre>
+<div class="codecode"><pre class="code">$ npm run watch</pre>
 </div>
 
 <p>Compilar el frontend para entorno de desarrollo</p>
