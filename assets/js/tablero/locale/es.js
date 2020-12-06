@@ -55,7 +55,7 @@ const messages = {
         _quitar_filtro_: 'Quitar filtro',
         _ultima_dimension_: 'Ha llegado al limite de dimensiones',
         _alerta_: 'Alerta',
-        _se_ha_aplicado_filtro_info_: "Se ha aplicado un filtro. Para quitarlo, de doble clic sobre el gráfico",
+        _se_ha_aplicado_filtro_info_: "Se ha aplicado un filtro",
         _filtros_: 'Filtros',
         _filtros_generales_: 'Filtros generales',
         _ancho_grafico_help_: 'De clic para seleccionar la cantidad de posiciones que ocupará el ',
