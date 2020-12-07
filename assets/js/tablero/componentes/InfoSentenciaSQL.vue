@@ -1,10 +1,6 @@
 <template>
     <div style="max-height:400px; max-width:100%; overflow:auto;">
-        <pre>
-            <highlight-code >
-                {{ indicador.sql }}
-            </highlight-code>
-        </pre>
+        <pre>{{ indicador.sql }}</pre>
     </div>
 </template>
 

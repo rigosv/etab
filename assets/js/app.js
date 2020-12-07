@@ -3,8 +3,8 @@ import VueI18n from 'vue-i18n';
 import Snotify, { SnotifyPosition } from 'vue-snotify';
 import BootstrapVue from 'bootstrap-vue';
 import fullscreen from 'vue-fullscreen';
-import VueHighlightJS from 'vue-highlight.js';
-import sql from 'highlight.js/lib/languages/sql';
+//import VueHighlightJS from 'vue-highlight.js';
+//import sql from 'highlight.js/lib/languages/sql';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
@@ -33,7 +33,7 @@ Vue.use(VueI18n);
 Vue.use(Snotify, { toast: { position: SnotifyPosition.rightTop } } );
 Vue.use(BootstrapVue);
 Vue.use(fullscreen);
-Vue.use(VueHighlightJS);
+//Vue.use(VueHighlightJS,{ languages: {sql}});
 
 
 const i18n = new VueI18n({
