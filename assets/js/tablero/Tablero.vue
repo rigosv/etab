@@ -15,7 +15,7 @@
 <script>
     
     import MenuTablero from './componentes/MenuTablero';
-    //import {loadLanguageAsync} from './setup/i18n-setup';
+    import {loadLanguageAsync} from './setup/i18n-setup';
     import Sala from './componentes/Sala';
     import alasql from 'alasql';
 
@@ -38,6 +38,7 @@
         mounted : function() {
             this.$store.commit('addDatosSalaPublica', {idSala:this.idSala, token:this.token});
             //loadLanguageAsync(this.lang);
+            this.$i18n.locale = this.lang;
         }, 
         methods : {
             convertirGraficosSala :  function () {

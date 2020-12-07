@@ -23,7 +23,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 //import {i18n} from './tablero/setup/i18n-setup';
 import es from './tablero/locale/es.js';
 import en from './tablero/locale/en.js';
-const messages = lang==='es' ? es : en;
+const messages = {es: es.es, en: en.en};
 import Tablero from './tablero/Tablero';
 import IndicadorMixin from './tablero/Mixins/IndicadorMixin';
 
@@ -37,7 +37,7 @@ Vue.use(fullscreen);
 
 
 const i18n = new VueI18n({
-    locale: lang, // set locale
+    locale: 'es', // set default locale
     messages, // set locale messages
 });
 
