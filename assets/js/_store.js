@@ -42,9 +42,7 @@ export const store = new Vuex.Store({
         },
         addDatosSalaPublica(state, datosSala) {
             state.idSala = datosSala.idSala;
-            state.token = datosSala.token;
-            console.log(state.token);
-            console.log(state.idSala);
+            state.token = datosSala.token;            
         },
         agregarDatosIndicador(state, datos) {
             let indicador = datos.indicador;

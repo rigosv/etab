@@ -1,7 +1,7 @@
 <template>
     <div style="max-height:400px; max-width:100%; overflow:auto;">
         <pre>
-            <highlight-code lang="sql">
+            <highlight-code >
                 {{ indicador.sql }}
             </highlight-code>
         </pre>

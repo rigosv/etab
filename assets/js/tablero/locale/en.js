@@ -1,5 +1,5 @@
 const messages = {
-  es: {
+  en: {
         _aplicar_filtro_: 'Apply filters',
         _salas_ : 'Rooms',
         _indicadores_: 'Indicators',

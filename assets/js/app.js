@@ -20,8 +20,10 @@ library.add(faBan, faBell, faBolt, faBookmark, faChartBar, faCheck, faClipboardL
             faSort, faSortNumericDownAlt, faSortNumericUpAlt, faShare, faSyncAlt, faTable, faTasks, faTh, faTimes, faTimesCircle, faThLarge, faThList
         );
 Vue.component('font-awesome-icon', FontAwesomeIcon);
-
-import messages from './tablero/locale/es.js';
+//import {i18n} from './tablero/setup/i18n-setup';
+import es from './tablero/locale/es.js';
+import en from './tablero/locale/en.js';
+const messages = lang==='es' ? es : en;
 import Tablero from './tablero/Tablero';
 import IndicadorMixin from './tablero/Mixins/IndicadorMixin';
 
@@ -31,11 +33,11 @@ Vue.use(VueI18n);
 Vue.use(Snotify, { toast: { position: SnotifyPosition.rightTop } } );
 Vue.use(BootstrapVue);
 Vue.use(fullscreen);
-Vue.use(VueHighlightJS, {languages: {sql}});
+Vue.use(VueHighlightJS);
 
 
 const i18n = new VueI18n({
-    locale: 'es', // set locale
+    locale: lang, // set locale
     messages, // set locale messages
 });
 
