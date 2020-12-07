@@ -42,9 +42,10 @@
                 navigator.serviceWorker.register('/service-worker.js');
             });
         }
+        var lang='{{ app.request.locale }}';
     </script>
 </head>
-<body>
+<body>    
     <div id="app">
         <Tablero 
             token = '{{token|default('')}}'
