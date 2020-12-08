@@ -165,18 +165,18 @@
         methods : {
             getGrafico : function (tipo) {
                 if ( ['BARRA', 'BARRAS', 'COLUMNAS', 'COLUMNA', 'DISCRETEBARCHART'].includes(tipo.toUpperCase() ) ){
-                    return this.images.columnas;
+                    return this.images.columnas.default;
 
                 } else if ( ['LINECHART', 'LINEA', 'LINEAS'].includes(tipo.toUpperCase() ) ) {
-                    return this.images.lineas;
+                    return this.images.lineas.default;
                 } else if ( ['PIECHART', 'PIE', 'PASTEL', 'TORTA'].includes(tipo.toUpperCase() ) ){
-                    return this.images.pastel;
+                    return this.images.pastel.default;
                 } else if ( ['MAPA', 'GEOLOCATION', 'MAP'].includes(tipo.toUpperCase() ) ){
-                    return this.images.mapa;
+                    return this.images.mapa.default;
                 } else if ( ['BOX', 'CAJA'].includes(tipo.toUpperCase() ) ){
-                    return this.images.caja;
+                    return this.images.caja.default;
                 } else if ( ['BURBUJA', 'BUBBLE'].includes(tipo.toUpperCase() ) ){
-                    return this.images.burbuja;
+                    return this.images.burbuja.default;
                 }
             },
             asignarAncho : function( ancho ) {
