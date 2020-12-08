@@ -42,7 +42,6 @@
                 navigator.serviceWorker.register('/service-worker.js');
             });
         }
-        var lang='{{ app.request.locale }}';
     </script>
 </head>
 <body>    
@@ -50,6 +49,7 @@
         <Tablero 
             token = '{{token|default('')}}'
             id-sala = '{{idSala|default('')}}'
+            lang='{{ app.request.locale }}'
         />
     </div>
     {{ encore_entry_script_tags('app/js') }}
