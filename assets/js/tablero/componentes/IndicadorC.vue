@@ -135,7 +135,6 @@
 <script>
     
     import GraficoBasico from "../Graficos/GraficoBasico";
-    import GraficoTendencia from "../Graficos/GraficoTendencia";
     import Mapa from "../Graficos/Mapa";
     import IndicadorBarraOpciones from "./IndicadorBarraOpciones";
     import IndicadorBreadcum from "./IndicadorBreadcum";
@@ -157,7 +156,6 @@
         },
         components: {
             GraficoBasico,
-            GraficoTendencia,
             IndicadorBarraOpciones,
             IndicadorBreadcum,
             IndicadorMensajes,
