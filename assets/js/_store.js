@@ -14,6 +14,7 @@ export const store = new Vuex.Store({
         layout: [],
         indicadores: [],
         indicadoresAllData: [],
+        indicadoresDataTendencia: [],
         indicadoresFichas: [],
         indexActivo : 0,
         abrio_sala: false,

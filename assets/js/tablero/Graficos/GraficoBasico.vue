@@ -43,34 +43,62 @@
             datos : function () {
 
                 let traces = [];
-                if ( this.indicador.configuracion.dimensionComparacion == '' ) {
-                    let trace0 = this.getDataTrace(this.datosOrdenados, 1);
-                    traces.push(trace0);
-                    if (this.indicador.dataComparar.length == 0 && this.indicador.informacion.meta != null) {
-                        traces.push(this.agregarMeta());
-                    }
+                
+                if (this.indicador.tendencia){
+                    const groups = this.indicador.data_tendencia.reduce((groups, item) => {
+                        const group = (groups[item.category] || []);
+                        group.push(item);
+                        groups[item.category] = group;
+                        return groups;
+                    }, {});
+                    console.log(groups);
+                    const keys = Object.keys(groups);
+                    keys.forEach((categoria, index) => {
+                        let x = groups[categoria].map( f => { return  f.x } );
+                        let y = groups[categoria].map( f => { return  f.y  } );                        
 
-                    if (this.tipoGrafico != 'burbuja' && this.indicador.dataComparar.length > 0) {
-                        this.indicador.dataComparar.forEach((ind, index_) => {
-                            let data_ = ind.data.map(f => {
-                                return {x: f.category, y: f.measure}
-                            });
-
-                            //Incluir solo los elementos que también existan en el indicador principal     
-                            let filtros_ = this.indicador.otros_filtros.elementos;
-                            if (filtros_.length > 0) {
-                                data_ = data_.filter(d => {
-                                    return filtros_.includes(d.x)
-                                });
-                            }
-
-                            traces.push(this.getDataTrace(this.aplicarOrden(data_), parseInt(index_) + 2));
+                        traces.push({
+                            x: x, 
+                            y: y,
+                            type: 'scatter',
+                            text: y.map( v => numeral( v ).format('0,0.'+'0'.repeat(this.dec)) ),
+                            textposition: 'auto',
+                            hoverinfo: 'text',
+                            hovertemplate :'%{x}<br><b>%{y:,}</b>',
+                            showlegend: true ,
+                            name: categoria
                         });
-                    }
+                    });
                 } else {
-                    traces = this.datosComparacionDimension();
-                    if ( this.indicador.informacion.meta != null) {
-                        traces.push(this.agregarMeta());
+                    if ( this.indicador.configuracion.dimensionComparacion == '' ) {
+                        let trace0 = this.getDataTrace(this.datosOrdenados, 1);
+                        traces.push(trace0);
+                        if (this.indicador.dataComparar.length == 0 && this.indicador.informacion.meta != null) {
+                            traces.push(this.agregarMeta());
+                        }
+
+                        if (this.tipoGrafico != 'burbuja' && this.indicador.dataComparar.length > 0) {
+                            this.indicador.dataComparar.forEach((ind, index_) => {
+                                let data_ = ind.data.map(f => {
+                                    return {x: f.category, y: f.measure}
+                                });
+
+                                //Incluir solo los elementos que también existan en el indicador principal     
+                                let filtros_ = this.indicador.otros_filtros.elementos;
+                                if (filtros_.length > 0) {
+                                    data_ = data_.filter(d => {
+                                        return filtros_.includes(d.x)
+                                    });
+                                }
+
+                                traces.push(this.getDataTrace(this.aplicarOrden(data_), parseInt(index_) + 2));
+                            });
+                        }
+                    } else {
+                        traces = this.datosComparacionDimension();
+                        if ( this.indicador.informacion.meta != null) {
+                            traces.push(this.agregarMeta());
+                        }
                     }
                 }
 
@@ -193,7 +221,7 @@
                         showlegend: this.indicador.dataComparar.length > 0 ,
                         name: pos + ' - ' +  ( (pos == 1) ? this.indicador.nombre : this.indicador.dataComparar[pos-2].nombre )
                     };                                               
-                } else {
+                } else {                    
                     return  { x: x, y: y,
                             type: this.tipoGrafico,
                             text: y.map( v => numeral( v ).format('0,0.'+'0'.repeat(this.dec)) ),

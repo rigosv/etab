@@ -35,12 +35,14 @@
                 let datos_indicador = {
                     cargando: true,
                     tendencia: false,
+                    tipo_grafico_ant: '',
                     filtros: filtros,
                     error: "",
                     informacion: {},
                     index: index,
                     mostrar_configuracion: false,
                     data: [],
+                    data_tendencia: [],
                     dataComparar : [],
                     id: indicador.indicador_id,
                     nombre: "",
@@ -66,7 +68,7 @@
                 //Verificar si ya se ha hecho una carga completa de los datos, de ser así, tomar de ahí los datos
                 let dataInd = this.$store.state.indicadoresAllData.filter ( ind => ind.id == indicador.id );
                 let ind = this.$store.state.indicadores.find ( i => i.id == indicador.id);
-                if ( ind && dataInd.length >  0 && ![ 'MAPA', 'GEOLOCATION', 'MAP' ].includes(indicador.configuracion.tipo_grafico.toUpperCase()) ){
+                if ( ind && dataInd.length >  0 && ![ 'MAPA', 'GEOLOCATION', 'MAP' ].includes(indicador.configuracion.tipo_grafico.toUpperCase()) && !indicador.tendencia){
                     this.cargarFromLocal(indicador, dataInd[0].data);
                 } else {
                     this.cargarFromServer(indicador, index);
@@ -141,7 +143,12 @@
 
                             indicadorCompleto.informacion = data.informacion;
                             indicadorCompleto.informacion.nombre = data.informacion.nombre_indicador;
-                            indicadorCompleto.data = data.data;
+                            
+                            if(data.data_tendencia !== undefined ){
+                                indicadorCompleto.data_tendencia = data.data_tendencia[0].values;
+                            } else {
+                                indicadorCompleto.data = data.data;
+                            }
                             indicadorCompleto.cargando = false;
 
                             if (!vm.$store.state.indicadoresFichas.find ( f => f.id == indicador.id ) ){

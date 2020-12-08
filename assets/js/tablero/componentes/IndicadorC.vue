@@ -66,7 +66,7 @@
                         @quitar-filtros="quitarFiltros()"
                         @click-plot="clicGrafico($event)"
                         ref="grafico"
-                    ></GraficoBasico>
+                    ></GraficoBasico>                    
                     <Mapa
                         v-if="[ 'MAPA', 'GEOLOCATION', 'MAP' ].includes(indicador.configuracion.tipo_grafico.toUpperCase() )
                                 && indicador.data.length > 0 "
@@ -135,6 +135,7 @@
 <script>
     
     import GraficoBasico from "../Graficos/GraficoBasico";
+    import GraficoTendencia from "../Graficos/GraficoTendencia";
     import Mapa from "../Graficos/Mapa";
     import IndicadorBarraOpciones from "./IndicadorBarraOpciones";
     import IndicadorBreadcum from "./IndicadorBreadcum";
@@ -156,6 +157,7 @@
         },
         components: {
             GraficoBasico,
+            GraficoTendencia,
             IndicadorBarraOpciones,
             IndicadorBreadcum,
             IndicadorMensajes,

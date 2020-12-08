@@ -33,7 +33,7 @@
             </b-nav-item>
             
             <b-nav-item :title=" indicador.tendencia ? $t('_ver_tendencia_') : $t('_ver_grafica_') " 
-                ng-click="indicador.tendencia = !indicador.tendencia; agregarIndicadorDimension(indicadores[$index].dimension, $index)"> 
+                @click="tendencia"> 
                 <font-awesome-icon icon="chart-line" ng-if="indicador.tendencia" />
             </b-nav-item>                        
           </b-navbar-nav>
@@ -61,6 +61,16 @@
             refrescar : function (){            
                 this.indicador.filtros = [];            
                 this.indicador.dimension = this.indicador.dimensiones[0]; 
+                this.cargarDatosIndicador(this.indicador, this.index);
+            },
+            tendencia : function (){            
+                this.indicador.tendencia = !this.indicador.tendencia; 
+                if ( this.indicador.tendencia ) {
+                    this.indicador.tipo_grafico_ant = this.indicador.configuracion.tipo_grafico;
+                    this.indicador.configuracion.tipo_grafico = "LINEAS"
+                } else {
+                    this.indicador.configuracion.tipo_grafico = this.indicador.tipo_grafico_ant ;
+                }
                 this.cargarDatosIndicador(this.indicador, this.index);
             },
 
