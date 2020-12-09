@@ -32,9 +32,10 @@
               <font-awesome-icon icon="cogs" :style=" (indicador.mostrar_configuracion ) ? 'color: green' : '' " />
             </b-nav-item>
             
-            <b-nav-item :title=" indicador.tendencia ? $t('_ver_tendencia_') : $t('_ver_grafica_') " 
+            <b-nav-item :title=" indicador.tendencia ? $t('_ver_grafica_') : $t('_ver_tendencia_') " 
                 @click="tendencia"> 
-                <font-awesome-icon icon="chart-line" ng-if="indicador.tendencia" />
+                <font-awesome-icon icon="chart-line" v-if="!indicador.tendencia" />
+                <font-awesome-icon icon="chart-bar" v-if="indicador.tendencia" />
             </b-nav-item>                        
           </b-navbar-nav>
       </b-navbar>

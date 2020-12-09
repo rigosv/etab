@@ -145,7 +145,7 @@
                             indicadorCompleto.informacion.nombre = data.informacion.nombre_indicador;
                             
                             if(data.data_tendencia !== undefined ){
-                                indicadorCompleto.data_tendencia = data.data_tendencia[0].values;
+                                indicadorCompleto.data_tendencia = data.data;
                             } else {
                                 indicadorCompleto.data = data.data;
                             }

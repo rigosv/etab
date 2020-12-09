@@ -68,7 +68,6 @@
         mounted : function() {
             let vm =  this;
             this.$root.$on('bv::modal::show', (bvEvent, modalId) => {
-                console.log('Modal is about to be shown', bvEvent, modalId)
                 //Cargar indicadores favoritos
                 axios.get( '/api/v1/tablero/listaIndicadores?tipo=favoritos' )
                     .then(function (response) {

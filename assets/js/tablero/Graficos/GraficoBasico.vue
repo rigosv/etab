@@ -51,11 +51,11 @@
                         groups[item.category] = group;
                         return groups;
                     }, {});
-                    console.log(groups);
+                    
                     const keys = Object.keys(groups);
                     keys.forEach((categoria, index) => {
-                        let x = groups[categoria].map( f => { return  f.x } );
-                        let y = groups[categoria].map( f => { return  f.y  } );                        
+                        let x = groups[categoria].map( f => { return  f.fecha } );
+                        let y = groups[categoria].map( f => { return  f.measure  } );                        
 
                         traces.push({
                             x: x, 

@@ -32,6 +32,7 @@ const messages = {
         _refresh_: 'Refresh',
         _full_screen_: 'Fullscreen',
         _ver_grafica_: 'See graph',
+        _ver_tendencia_: 'See trend',
         _indicador_warning_: 'Indicator loading failed',
         _indicador_error_: 'An error occurred on the server',
         _indicador_dimension_fin_: 'Has reached the limit of dimensions',

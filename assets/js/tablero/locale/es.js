@@ -26,6 +26,7 @@ const messages = {
         _descargar_grafico_: 'Descargar gráfico',
         _opciones_: 'Opciones',
         _ver_ficha_tecnica_: 'Ver ficha técnica',
+        _ver_tendencia_: 'Ver tendencia',
         _indicador_alertas_: 'Alertas del indicador',
         _tabla_datos_: 'Tabla datos',
         _ver_sql_: 'Ver sentencia SQL',
