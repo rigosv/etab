@@ -100,11 +100,11 @@ Las librerías del frontend
 
 Compilar el frontend para entorno de producción
 
+    $ npm run build
+
+Si se desea compilar frontend para entorno de desarrollo
+
     $ npm run watch
-
-Compilar el frontend para entorno de desarrollo
-
-    $ yarn encore dev --watch
 
 
 
