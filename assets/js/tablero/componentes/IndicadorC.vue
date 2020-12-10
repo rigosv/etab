@@ -17,7 +17,7 @@
                     <h4 style="font-size: 18px;">{{ indicador.nombre.toUpperCase() }} 
                         <span class='dimensionTitulo' v-if=" getConteo(indicador.id) > 1 
                                 && indicador.informacion.dimensiones != undefined 
-                                && indicador.informacion.dimensiones[indicador.dimension] != undefined""
+                                && indicador.informacion.dimensiones[indicador.dimension] != undefined "
                         >
                             ({{ indicador.informacion.dimensiones[indicador.dimension].descripcion }})
                         </span>
