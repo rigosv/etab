@@ -29,7 +29,10 @@
         "dev-server": "encore dev-server",
         "dev": "encore dev",
         "watch": "encore dev --watch",
-        "build": "encore production"
+        "build": "encore production",
+        "serve": "vue-cli-service serve",
+        "build-c": "vue-cli-service build",
+        "lint": "vue-cli-service lint assets"
     },
     "dependencies": {
         "@fortawesome/fontawesome-svg-core": "^1.2.21",
