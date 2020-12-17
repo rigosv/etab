@@ -77,12 +77,12 @@ import vSelect from "vue-select";
 import ListadoIndicadores from "./ListadoIndicadores.vue";
 
 @Component({
-  components: { vSelect, ListadoIndicadores },
+  components: { vSelect, ListadoIndicadores }
 })
 export default class ListadoIndicadoresClasificados extends Vue {
-  private filtro: string = "";
-  private cargando_uso: boolean = false;
-  private cargando_tecnica: boolean = false;
+  private filtro = "";
+  private cargando_uso = false;
+  private cargando_tecnica = false;
 
   get state(): boolean {
     return this.$store.state.clasificacion_uso != null;
@@ -105,7 +105,7 @@ export default class ListadoIndicadoresClasificados extends Vue {
   }
 
   public getClasificacionesTecnica(clasificacionUso: any): void {
-    let vm = this;
+    const vm = this;
     this.cargando_tecnica = true;
     axios
       .get("/api/v1/tablero/clasificacionTecnica?id=" + clasificacionUso.id)
@@ -129,7 +129,7 @@ export default class ListadoIndicadoresClasificados extends Vue {
   }
 
   public getIndicadores(clasificacionTecnica: any): void {
-    let vm = this;
+    const vm = this;
     this.cargando_tecnica = true;
     axios
       .get(
@@ -160,18 +160,20 @@ export default class ListadoIndicadoresClasificados extends Vue {
 
   public filtrar(listado: any, filtro: string): any {
     return listado.filter((ind: any) => {
-      let base = this.normalizarDiacriticos(ind.nombre);
-      let filtro_ = this.normalizarDiacriticos(filtro);
+      const base = this.normalizarDiacriticos(ind.nombre);
+      const filtro_ = this.normalizarDiacriticos(filtro);
       return base.includes(filtro_);
     });
   }
 
-  public normalizarDiacriticos( value: string) : string {
-    if (!value || value == undefined) return '';
+  public normalizarDiacriticos(value: string): string {
+    if (!value || value == undefined) return "";
 
-    return value.toLowerCase().normalize('NFD')
-        .replace(/([aeio])\u0301|(u)[\u0301\u0308]/gi, "$1$2")
-        .normalize();
+    return value
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/([aeio])\u0301|(u)[\u0301\u0308]/gi, "$1$2")
+      .normalize();
   }
 }
 </script>

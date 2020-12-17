@@ -42,25 +42,25 @@ export default class IndicadorMensajes extends Vue {
   @Prop({ default: {} }) indicador: any;
   @Prop() readonly index!: number;
 
-  private dismissSecs: number = 10;
-  private dismissCountDown: number = 0;
-  private showDismissibleAlert: boolean = false;
+  private dismissSecs = 10;
+  private dismissCountDown = 0;
+  private showDismissibleAlert = false;
   private mensajes: any[] = [
     {
       variante: "success",
       error: "Success",
-      mensaje: this.$t("_indicador_dimension_fin_") as string,
+      mensaje: this.$t("_indicador_dimension_fin_") as string
     },
     {
       variante: "warning",
       error: "Warning",
-      mensaje: this.$t("_indicador_warning_") as string,
+      mensaje: this.$t("_indicador_warning_") as string
     },
     {
       variante: "danger",
       error: "Error",
-      mensaje: this.$t("_indicador_error_") as string,
-    },
+      mensaje: this.$t("_indicador_error_") as string
+    }
   ];
 
   public countDownChanged(dismissCountDown: number): void {

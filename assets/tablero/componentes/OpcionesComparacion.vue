@@ -115,24 +115,24 @@ import Buscar from "./Buscar.vue";
 import IndicadorMixin from "../Mixins/IndicadorMixin";
 
 @Component({
-  components: { Buscar },
+  components: { Buscar }
 })
 export default class OpcionesComparacion extends Mixins(IndicadorMixin) {
   @Prop({ default: {} }) indicador: any;
   @Prop() readonly index!: number;
 
-  private filtroIndicadores: string = "";
+  private filtroIndicadores = "";
   private indicadoresFiltrados: any[] = [];
 
   get dimensionesComparar() {
-    let vm = this;
+    const vm = this;
 
-    let dimensiones = this.indicador.dimensiones.filter((dimension: any) => {
+    const dimensiones = this.indicador.dimensiones.filter((dimension: any) => {
       //Verificar  que no sea la dimensión actual
       if (dimension != vm.indicador.dimension) {
         //Verificar que no esté en los filtros
         let esFiltro = false;
-        for (let filtro of vm.indicador.filtros) {
+        for (const filtro of vm.indicador.filtros) {
           esFiltro = dimension == filtro.codigo ? true : esFiltro;
         }
         return !esFiltro;
@@ -143,14 +143,14 @@ export default class OpcionesComparacion extends Mixins(IndicadorMixin) {
     return dimensiones.map((d: any) => {
       return {
         text: this.indicador.informacion.dimensiones[d].descripcion,
-        value: d,
+        value: d
       };
     });
   }
 
   public buscarIndicadores(): void {
     if (this.filtroIndicadores.length >= 3) {
-      let vm = this;
+      const vm = this;
       axios
         .get(
           "/api/v1/tablero/listaIndicadores?tipo=busqueda&busqueda=" +
@@ -169,21 +169,21 @@ export default class OpcionesComparacion extends Mixins(IndicadorMixin) {
 
   public agregarIndicador(indicadorC: any): void {
     //Sacar las dimensiones del indicador a agregar
-    let dimensiones: any[] = [];
-    for (var prop in indicadorC.dimensiones) {
+    const dimensiones: any[] = [];
+    for (const prop in indicadorC.dimensiones) {
       dimensiones.push(prop);
     }
 
     //Verificar si el nuevo indicador tiene la dimension actual
-    let existeD = dimensiones.includes(this.indicador.dimension);
+    const existeD = dimensiones.includes(this.indicador.dimension);
 
     //Valores iniciales del indicador
-    let indicadorCompleto = {
+    const indicadorCompleto = {
       id: indicadorC.id,
       dimensiones: dimensiones,
       nombre: indicadorC.nombre,
       data: [],
-      informacion: {},
+      informacion: {}
     };
 
     if (existeD) {
@@ -192,11 +192,11 @@ export default class OpcionesComparacion extends Mixins(IndicadorMixin) {
 
       this.indicador.configuracion.agregados.push(indicadorC.id);
       //leer los datos del indicador
-      let vm = this;
-      let json = {
+      const vm = this;
+      const json = {
         filtros: vm.indicador.filtros,
         ver_sql: false,
-        tendencia: false,
+        tendencia: false
       };
       vm.indicador.cargando = true;
 
@@ -210,7 +210,7 @@ export default class OpcionesComparacion extends Mixins(IndicadorMixin) {
         )
         .then(function(response) {
           if (response.data.status == 200) {
-            let data = response.data;
+            const data = response.data;
             indicadorCompleto.informacion = data.informacion;
             indicadorCompleto.data = data.data;
             vm.indicador.dataComparar.push(indicadorCompleto);
@@ -224,7 +224,7 @@ export default class OpcionesComparacion extends Mixins(IndicadorMixin) {
         });
     } else {
       //Verificar si tienen alguna dimensión en común
-      let dimensionesC = this.indicador.dimensiones.filter((x: any) =>
+      const dimensionesC = this.indicador.dimensiones.filter((x: any) =>
         dimensiones.includes(x)
       );
 
@@ -276,7 +276,7 @@ export default class OpcionesComparacion extends Mixins(IndicadorMixin) {
         "DISCRETEBARCHART",
         "LINECHART",
         "LINEA",
-        "LINEAS",
+        "LINEAS"
       ].includes(this.indicador.configuracion.tipo_grafico.toUpperCase())
     ) {
       this.indicador.configuracion.tipo_grafico = "lineas";

@@ -1,101 +1,100 @@
-import {Component, Vue} from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 import axios from "axios";
 //import alasql from 'alasql';
 
 @Component
 export default class IndicadorMixin extends Vue {
+  public inicializarIndicador(indicador: any, index: number): object {
+    const filtros = indicador.filtro != "" ? JSON.parse(indicador.filtro) : [];
 
-    public inicializarIndicador(indicador:any, index:number):object {
-      let filtros = indicador.filtro != "" ? JSON.parse(indicador.filtro) : [];
+    const conf =
+      indicador.orden != "" && indicador.orden != null
+        ? JSON.parse(indicador.orden)
+        : {
+            width: "col-sm-4",
+            height: "280",
+            orden_x: "asc",
+            orden_y: "",
+            tipo_grafico: indicador.tipo_grafico,
+            maximo: "",
+            maximo_manual: ""
+          };
 
-      let conf =
-        indicador.orden != "" && indicador.orden != null
-          ? JSON.parse(indicador.orden)
-          : {
-              width: "col-sm-4",
-              height: "280",
-              orden_x: "asc",
-              orden_y: "",
-              tipo_grafico: indicador.tipo_grafico,
-              maximo: "",
-              maximo_manual: "",
-            };
+    // si no tiene tipo de gráfico poner columnas por defecto
+    conf.tipo_grafico =
+      !conf.hasOwnProperty("tipo_grafico") ||
+      conf.tipo_grafico == "" ||
+      conf.tipo_grafico == undefined
+        ? "columnas"
+        : conf.tipo_grafico;
+    conf.filtro_inicial = filtros;
+    conf.width =
+      conf.hasOwnProperty("width") && conf.width != ""
+        ? conf.width
+        : "col-sm-4";
+    conf.height = conf.hasOwnProperty("height") ? conf.height : 280;
+    conf.mostrarTablaDatos = conf.hasOwnProperty("mostrarTablaDatos")
+      ? conf.mostrarTablaDatos
+      : false;
+    conf.agregados = conf.hasOwnProperty("agregados") ? conf.agregados : [];
+    conf.dimensionComparacion = conf.hasOwnProperty("dimensionComparacion")
+      ? conf.dimensionComparacion
+      : "";
 
-      // si no tiene tipo de gráfico poner columnas por defecto
-      conf.tipo_grafico =
-        !conf.hasOwnProperty("tipo_grafico") ||
-        conf.tipo_grafico == "" ||
-        conf.tipo_grafico == undefined
-          ? "columnas"
-          : conf.tipo_grafico;
-      conf.filtro_inicial = filtros;
-      conf.width =
-        conf.hasOwnProperty("width") && conf.width != ""
-          ? conf.width
-          : "col-sm-4";
-      conf.height = conf.hasOwnProperty("height") ? conf.height : 280;
-      conf.mostrarTablaDatos = conf.hasOwnProperty("mostrarTablaDatos")
-        ? conf.mostrarTablaDatos
-        : false;
-      conf.agregados = conf.hasOwnProperty("agregados") ? conf.agregados : [];
-      conf.dimensionComparacion = conf.hasOwnProperty("dimensionComparacion")
-        ? conf.dimensionComparacion
-        : "";
+    const col = index % 3;
+    const fila = Math.floor(index / 3);
+    conf.layout = conf.hasOwnProperty("layout")
+      ? conf.layout
+      : { x: col * 4, y: fila * 14, w: 4, h: 14, i: index };
 
-      let col = index % 3;
-      let fila = Math.floor(index / 3);
-      conf.layout = conf.hasOwnProperty("layout")
-        ? conf.layout
-        : { x: col * 4, y: fila * 14, w: 4, h: 14, i: index };
+    const otros_filtros = {
+      desde: indicador.filtro_posicion_desde,
+      hasta: indicador.filtro_posicion_hasta,
+      elementos:
+        indicador.filtro_elementos != "" && indicador.filtro_elementos != null
+          ? indicador.filtro_elementos.split(",")
+          : []
+    };
 
-      let otros_filtros = {
-        desde: indicador.filtro_posicion_desde,
-        hasta: indicador.filtro_posicion_hasta,
-        elementos:
-          indicador.filtro_elementos != "" && indicador.filtro_elementos != null
-            ? indicador.filtro_elementos.split(",")
-            : [],
-      };
+    const datos_indicador = {
+      cargando: true,
+      tendencia: false,
+      tipo_grafico_ant: "",
+      filtros: filtros,
+      error: "",
+      informacion: {},
+      index: index,
+      mostrar_configuracion: false,
+      data: [],
+      data_tendencia: [],
+      dataComparar: [],
+      id: indicador.indicador_id,
+      nombre: "",
+      es_favorito: false,
+      dimensiones: [],
+      dimension: indicador.dimension.trim(),
+      radial: false,
+      termometro: false,
+      mapa: false,
+      posicion: indicador.posicion,
+      sql: "",
+      ficha: "",
+      full_screen: false,
+      configuracion: conf,
+      otros_filtros: otros_filtros,
+      cargaCompletaIniciada: false
+    };
+    return datos_indicador;
+  }
 
-      let datos_indicador = {
-        cargando: true,
-        tendencia: false,
-        tipo_grafico_ant: "",
-        filtros: filtros,
-        error: "",
-        informacion: {},
-        index: index,
-        mostrar_configuracion: false,
-        data: [],
-        data_tendencia: [],
-        dataComparar: [],
-        id: indicador.indicador_id,
-        nombre: "",
-        es_favorito: false,
-        dimensiones: [],
-        dimension: indicador.dimension.trim(),
-        radial: false,
-        termometro: false,
-        mapa: false,
-        posicion: indicador.posicion,
-        sql: "",
-        ficha: "",
-        full_screen: false,
-        configuracion: conf,
-        otros_filtros: otros_filtros,
-        cargaCompletaIniciada: false,
-      };
-      return datos_indicador;
-    }
-
-    public cargarDatosIndicador(indicador:any, index:number): void {
-      //Verificar si ya se ha hecho una carga completa de los datos, de ser así, tomar de ahí los datos
-      let dataInd = this.$store.state.indicadoresAllData.filter(
-        (ind:any) => ind.id == indicador.id
-      );
-      let ind = this.$store.state.indicadores.find((i) => i.id == indicador.id);
-      this.cargarFromServer(indicador, index);
-      /*if ( ind && dataInd.length >  0 && ![ 'MAPA', 'GEOLOCATION', 'MAP' ].includes(indicador.configuracion.tipo_grafico.toUpperCase()) && !indicador.tendencia){
+  public cargarDatosIndicador(indicador: any, index: number): void {
+    //Verificar si ya se ha hecho una carga completa de los datos, de ser así, tomar de ahí los datos
+    const dataInd = this.$store.state.indicadoresAllData.filter(
+      (ind: any) => ind.id == indicador.id
+    );
+    const ind = this.$store.state.indicadores.find(i => i.id == indicador.id);
+    this.cargarFromServer(indicador, index);
+    /*if ( ind && dataInd.length >  0 && ![ 'MAPA', 'GEOLOCATION', 'MAP' ].includes(indicador.configuracion.tipo_grafico.toUpperCase()) && !indicador.tendencia){
                     this.cargarFromLocal(indicador, dataInd[0].data);
                 } else {
                     this.cargarFromServer(indicador, index);
@@ -104,51 +103,51 @@ export default class IndicadorMixin extends Vue {
                         this.cargarDataCompleta(indicador);
                     }
                 }*/
-    }
+  }
 
-    public cargarDatosComparacion():void {
-      //Verificar si hay indicadores de comparación
-      for (let indC of this.indicador.dataComparar) {
-        let vm = this;
-        let json = {
-          filtros: vm.indicador.filtros,
-          ver_sql: false,
-          tendencia: false,
-        };
-        vm.indicador.cargando = true;
-
-        axios
-          .post(
-            "/api/v1/tablero/datosIndicador/" +
-              indC.id +
-              "/" +
-              vm.indicador.dimension,
-            json
-          )
-          .then(function(response) {
-            if (response.data.status == 200) {
-              indC.data = response.data.data;
-            }
-          })
-          .catch(function(error) {
-            console.log(error);
-          })
-          .finally(function() {
-            vm.indicador.cargando = false;
-          });
-      };
-    }
-
-    public cargarFromServer(indicador:any, index:number):void {
-      let indicadorCompleto = indicador;
-      indicador.error = "";
-      let json = {
-        filtros: indicador.filtros,
+  public cargarDatosComparacion(): void {
+    //Verificar si hay indicadores de comparación
+    for (const indC of this.indicador.dataComparar) {
+      const vm = this;
+      const json = {
+        filtros: vm.indicador.filtros,
         ver_sql: false,
-        tendencia: indicador.tendencia,
+        tendencia: false
       };
+      vm.indicador.cargando = true;
 
-      /*if (
+      axios
+        .post(
+          "/api/v1/tablero/datosIndicador/" +
+            indC.id +
+            "/" +
+            vm.indicador.dimension,
+          json
+        )
+        .then(function(response) {
+          if (response.data.status == 200) {
+            indC.data = response.data.data;
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        })
+        .finally(function() {
+          vm.indicador.cargando = false;
+        });
+    }
+  }
+
+  public cargarFromServer(indicador: any, index: number): void {
+    const indicadorCompleto = indicador;
+    indicador.error = "";
+    const json = {
+      filtros: indicador.filtros,
+      ver_sql: false,
+      tendencia: indicador.tendencia
+    };
+
+    /*if (
                     indicador.filtro_posicion_desde != "" ||
                     indicador.filtro_posicion_hasta != "" ||
                     (indicador.filtro_elementos != "" && indicador.filtro_elementos)
@@ -156,83 +155,83 @@ export default class IndicadorMixin extends Vue {
                     json.otros_filtros = indicador.otros_filtros;
                 }*/
 
-      var vm = this;
-      indicador.cargando = true;
-      axios
-        .get(
-          "/api/v1/tablero/datosIndicador/" +
-            indicador.id +
-            "/" +
-            indicador.dimension,
-          { params: json }
-        )
-        .then(function(response) {
-          if (response.data.status == 200) {
-            let data = response.data;
-            let dimension = -1;
-            let dimensiones = [];
-            let pos = 0;
+    const vm = this;
+    indicador.cargando = true;
+    axios
+      .get(
+        "/api/v1/tablero/datosIndicador/" +
+          indicador.id +
+          "/" +
+          indicador.dimension,
+        { params: json }
+      )
+      .then(function(response) {
+        if (response.data.status == 200) {
+          const data = response.data;
+          let dimension = -1;
+          const dimensiones = [];
+          let pos = 0;
 
-            if (data.informacion) {
-              for (var prop in data.informacion.dimensiones) {
-                dimensiones.push(prop);
-                if (prop == indicador.dimension) dimension = pos;
-                pos++;
-              }
+          if (data.informacion) {
+            for (const prop in data.informacion.dimensiones) {
+              dimensiones.push(prop);
+              if (prop == indicador.dimension) dimension = pos;
+              pos++;
             }
+          }
 
-            indicadorCompleto.nombre = data.informacion.nombre_indicador;
-            indicadorCompleto.es_favorito = data.informacion.es_favorito;
-            indicadorCompleto.dimensiones = dimensiones;
-            indicadorCompleto.dimensionIndex = dimension;
-            indicadorCompleto.ficha = data.ficha;
+          indicadorCompleto.nombre = data.informacion.nombre_indicador;
+          indicadorCompleto.es_favorito = data.informacion.es_favorito;
+          indicadorCompleto.dimensiones = dimensiones;
+          indicadorCompleto.dimensionIndex = dimension;
+          indicadorCompleto.ficha = data.ficha;
 
-            indicadorCompleto.informacion = data.informacion;
-            indicadorCompleto.informacion.nombre =
-              data.informacion.nombre_indicador;
+          indicadorCompleto.informacion = data.informacion;
+          indicadorCompleto.informacion.nombre =
+            data.informacion.nombre_indicador;
 
-            if (data.data_tendencia !== undefined) {
-              indicadorCompleto.data_tendencia = data.data;
-            } else {
-              indicadorCompleto.data = data.data;
-            }
-            indicadorCompleto.cargando = false;
+          if (data.data_tendencia !== undefined) {
+            indicadorCompleto.data_tendencia = data.data;
+          } else {
+            indicadorCompleto.data = data.data;
+          }
+          indicadorCompleto.cargando = false;
 
-            if (
-              !vm.$store.state.indicadoresFichas.find(
-                (f) => f.id == indicador.id
-              )
-            ) {
-              vm.$store.state.indicadoresFichas.push({
-                id: indicador.id,
-                ficha: data.ficha,
-                informacion: data.informacion,
-              });
-            }
-
-            vm.$store.commit("agregarDatosIndicador", {
-              indicador: indicadorCompleto,
-              index: index,
+          if (
+            !vm.$store.state.indicadoresFichas.find(f => f.id == indicador.id)
+          ) {
+            vm.$store.state.indicadoresFichas.push({
+              id: indicador.id,
+              ficha: data.ficha,
+              informacion: data.informacion
             });
           }
-        })
-        .catch(function(error) {
-          console.log(error);
-          indicador.error = "Warning";
-        })
-        .finally(function() {
-          indicador.cargando = false;
-        });
-    }
 
-    public normalizarDiacriticos( value: string) : string {
-      if (!value || value == undefined) return '';
+          vm.$store.commit("agregarDatosIndicador", {
+            indicador: indicadorCompleto,
+            index: index
+          });
+        }
+      })
+      .catch(function(error) {
+        console.log(error);
+        indicador.error = "Warning";
+      })
+      .finally(function() {
+        indicador.cargando = false;
+      });
+  }
 
-      return value.toLowerCase().normalize('NFD')
-          .replace(/([aeio])\u0301|(u)[\u0301\u0308]/gi, "$1$2")
-          .normalize();
-    }
-    /*
+  public normalizarDiacriticos(value: string): string {
+    if (!value || value == undefined) return "";
+
+    return value
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/([aeio])\u0301|(u)[\u0301\u0308]/gi, "$1$2")
+      .normalize();
+  }
+  /*
             cargarDataCompleta : function (indicador) {
 
                 //Obtener todos los datos del indicador

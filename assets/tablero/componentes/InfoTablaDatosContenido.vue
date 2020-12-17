@@ -76,7 +76,7 @@ export default class InfoTablaDatosContenido extends Mixins(ColorMixin) {
 
   public getColor(valor: number): string {
     let color = "";
-    for (let rango of this.indicador.informacion.rangos) {
+    for (const rango of this.indicador.informacion.rangos) {
       if (valor >= rango.limite_inf && valor <= rango.limite_sup) {
         color = rango.color;
       }
@@ -85,7 +85,7 @@ export default class InfoTablaDatosContenido extends Mixins(ColorMixin) {
   }
 
   public getColorExceljs_(v: number): string {
-    let codigo = this.getColor(v);
+    const codigo = this.getColor(v);
     return this.getColorExceljs(codigo);
   }
 }

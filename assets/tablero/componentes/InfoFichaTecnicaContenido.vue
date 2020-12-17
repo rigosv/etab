@@ -208,5 +208,5 @@ import ColorMixin from "../Mixins/ColorMixin";
 @Component
 export default class InfoFichaTecnicaContenido extends Mixins(ColorMixin) {
   @Prop({ default: {} }) indicador: any;
-};
+}
 </script>

@@ -13,8 +13,7 @@
           <font-awesome-icon
             icon="filter"
             :style="{
-              color:
-                indicador.otros_filtros.elementos.length > 0 ? 'green' : '',
+              color: indicador.otros_filtros.elementos.length > 0 ? 'green' : ''
             }"
           />
           {{ $t("_filtros_") }}
@@ -56,8 +55,8 @@ import Buscar from "./Buscar.vue";
     OpcionesFiltro,
     OpcionesInformacion,
     OpcionesComparacion,
-    Buscar,
-  },
+    Buscar
+  }
 })
 export default class ConfiguracionIndicador extends Vue {
   @Prop() readonly indicador!: any;
@@ -79,7 +78,7 @@ export default class ConfiguracionIndicador extends Vue {
       "PIECHART",
       "PIE",
       "PASTEL",
-      "TORTA",
+      "TORTA"
     ].includes(this.indicador.configuracion.tipo_grafico.toUpperCase());
 
     return porTipo && this.indicador.configuracion.dimensionComparacion == "";

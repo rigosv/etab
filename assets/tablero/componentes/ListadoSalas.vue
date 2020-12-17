@@ -60,8 +60,8 @@ export default class ListadoSalas extends Vue {
   @Prop({ default: [] }) readonly salas!: any[];
   @Prop({ default: false }) readonly borrar!: boolean;
 
-  private sala_cargando: boolean = false;
-  private sala_activa: number = 0;
+  private sala_cargando = false;
+  private sala_activa = 0;
 
   public activarSala(sala: any): void {
     this.sala_activa = sala.id;
@@ -70,7 +70,7 @@ export default class ListadoSalas extends Vue {
   }
 
   public confirmarBorrarSala(sala: any): void {
-    let vm = this;
+    const vm = this;
 
     vm.$snotify.confirm(
       vm.$t("_esta_seguro_borrar_sala_") as string,
@@ -82,8 +82,8 @@ export default class ListadoSalas extends Vue {
         buttons: [
           {
             text: vm.$t("_si_") as string,
-            action: (toast) => {
-              let json = { id: sala.id };
+            action: toast => {
+              const json = { id: sala.id };
               axios
                 .post("/api/v1/tablero/borrarSala", json)
                 .then(function(response) {
@@ -103,16 +103,16 @@ export default class ListadoSalas extends Vue {
                   }
                 });
             },
-            bold: false,
+            bold: false
           },
           {
             text: vm.$t("_cancelar_") as string,
-            action: (toast) => {
+            action: toast => {
               vm.$snotify.remove(toast.id);
             },
-            bold: false,
-          },
-        ],
+            bold: false
+          }
+        ]
       }
     );
   }

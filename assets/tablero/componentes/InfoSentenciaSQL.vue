@@ -14,10 +14,10 @@ export default class InfoSentenciaSQL extends Vue {
   @Prop({ default: {} }) indicador: any;
 
   mounted() {
-    let json = { filtros: "", ver_sql: true, tendencia: false };
+    const json = { filtros: "", ver_sql: true, tendencia: false };
 
     this.indicador.cargando = true;
-    let self = this;
+    const self = this;
     axios
       .post(
         "/api/v1/tablero/datosIndicador/" +

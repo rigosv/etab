@@ -5,7 +5,7 @@
     :style="{
       height: indicador.full_screen
         ? window_.innerHeight / 1.18 + 'px'
-        : parseFloat(indicador.configuracion.layout.h) * 30 - 100 + 'px',
+        : parseFloat(indicador.configuracion.layout.h) * 30 - 100 + 'px'
     }"
   >
     <l-map
@@ -24,7 +24,12 @@
         </DIV>
       </l-control>
 
-      <l-geo-json :geojson="datosMapa" :options="options" :options-style="styleFunction"> </l-geo-json>
+      <l-geo-json
+        :geojson="datosMapa"
+        :options="options"
+        :options-style="styleFunction"
+      >
+      </l-geo-json>
       <l-tile-layer :url="url"></l-tile-layer>
     </l-map>
   </div>
@@ -40,53 +45,54 @@ import { LMap, LTileLayer, LGeoJson, LControl } from "vue2-leaflet";
 import GraficoMixin from "../Mixins/GraficoMixin";
 
 @Component({
-  components: { Plotly, LMap, LTileLayer, LGeoJson, LControl },
+  components: { Plotly, LMap, LTileLayer, LGeoJson, LControl }
 })
 export default class Mapa extends Mixins(GraficoMixin) {
   @Prop({ default: {} }) indicador: any;
   @Prop() readonly index!: number;
 
-  private mapaDatosCargados: boolean = false;
+  private mapaDatosCargados = false;
   private datosMapa: any = {};
-  private info: string = "";
-  private url: string = "https://{s}.tile.osm.org/{z}/{x}/{y}.png";
-  
-  private window_: any = window;  
+  private info = "";
+  private url = "https://{s}.tile.osm.org/{z}/{x}/{y}.png";
+
+  private window_: any = window;
 
   get zoom() {
-    return this.indicador.informacion.dimensiones[this.indicador.dimension].escala;
+    return this.indicador.informacion.dimensiones[this.indicador.dimension]
+      .escala;
   }
 
-  get center(){
+  get center() {
     return [
       this.indicador.informacion.dimensiones[this.indicador.dimension].origenX,
-      this.indicador.informacion.dimensiones[this.indicador.dimension].origenY,
+      this.indicador.informacion.dimensiones[this.indicador.dimension].origenY
     ];
   }
 
   get styleFunction() {
-      return (feature: any) => {
-        let itemGeoJSONID = feature.properties.ID;
-        const data = this.indicador.data;
+    return (feature: any) => {
+      const itemGeoJSONID = feature.properties.ID;
+      const data = this.indicador.data;
 
-        let item = data.find((x:any) => x.id == itemGeoJSONID);
-        if (!item) {
-          return { weight: 1, opacity: 0.6, color: "black" };
-        }
-
-        return {
-          weight: 1,
-          opacity: 0.6,
-          color: "black",
-          dashArray: "3",
-          fillOpacity: 0.5,
-          fillColor: this.getColor(
-            item.measure,
-            this.indicador.informacion.rangos
-          ),
-        };
+      const item = data.find((x: any) => x.id == itemGeoJSONID);
+      if (!item) {
+        return { weight: 1, opacity: 0.6, color: "black" };
       }
-    }
+
+      return {
+        weight: 1,
+        opacity: 0.6,
+        color: "black",
+        dashArray: "3",
+        fillOpacity: 0.5,
+        fillColor: this.getColor(
+          item.measure,
+          this.indicador.informacion.rangos
+        )
+      };
+    };
+  }
 
   get options() {
     return {
@@ -94,31 +100,35 @@ export default class Mapa extends Mixins(GraficoMixin) {
     };
   }
 
-  get onEachFeatureFunction() {      
-      return (feature: any, layer:any ) => {
-        let itemGeoJSONID = feature.properties.ID;
-        const data = this.indicador.data;
-        let item = data.find((x: any) => x.id == itemGeoJSONID);
+  get onEachFeatureFunction() {
+    return (feature: any, layer: any) => {
+      const itemGeoJSONID = feature.properties.ID;
+      const data = this.indicador.data;
+      const item = data.find((x: any) => x.id == itemGeoJSONID);
 
-        if ( item ) {          
-          layer.on({
-              click: () => { 
-                this.click( {'points' : [{ 'x' : item.category}]} );
-              },
-              mouseover: () => { 
-                this.info = item.category + ': ' + numeral( item.measure ).format('0,0.'+'0'.repeat(this.dec)) + this.indicador.informacion.unidad_medida;
-              },
-              mouseout: () => { 
-                this.info = "";
-              },
-              dblclick: () => { 
-                console.log("doble clic");
-                this.doubleClickTime = Date.now();
-              },
-          })
-        }        
-      };
-    }
+      if (item) {
+        layer.on({
+          click: () => {
+            this.click({ points: [{ x: item.category }] });
+          },
+          mouseover: () => {
+            this.info =
+              item.category +
+              ": " +
+              numeral(item.measure).format("0,0." + "0".repeat(this.dec)) +
+              this.indicador.informacion.unidad_medida;
+          },
+          mouseout: () => {
+            this.info = "";
+          },
+          dblclick: () => {
+            console.log("doble clic");
+            this.doubleClickTime = Date.now();
+          }
+        });
+      }
+    };
+  }
 
   get datos() {
     return this.datosMapa;
@@ -129,15 +139,15 @@ export default class Mapa extends Mixins(GraficoMixin) {
   }
 
   public cargarDatosMapa(): void {
-    let nombre_mapa = this.indicador.informacion.dimensiones[
+    const nombre_mapa = this.indicador.informacion.dimensiones[
       this.indicador.dimension
     ].mapa;
-    let url = "/js/Mapas/" + nombre_mapa;
-    let vm = this;
+    const url = "/js/Mapas/" + nombre_mapa;
+    const vm = this;
 
     axios
       .get(url)
-      .then((response) => {
+      .then(response => {
         if (response.status == 200) {
           vm.datosMapa = response.data;
           vm.mapaDatosCargados = true;
@@ -160,7 +170,7 @@ export default class Mapa extends Mixins(GraficoMixin) {
   @Watch("indicador.full_screen")
   fullScreenChange() {
     //this.$refs["myMap" + this.index].mapObject.invalidateSize();
-    console.log('fulll');
+    console.log("fulll");
   }
 
   @Watch("indicador.dimension")

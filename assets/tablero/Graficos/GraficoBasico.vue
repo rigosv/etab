@@ -24,7 +24,7 @@ import numeral from "numeral";
 import GraficoMixin from "../Mixins/GraficoMixin";
 
 @Component({
-  components: { Plotly },
+  components: { Plotly }
 })
 export default class GraficoBasico extends Mixins(GraficoMixin) {
   @Prop({ default: {} }) indicador: any;
@@ -79,12 +79,12 @@ export default class GraficoBasico extends Mixins(GraficoMixin) {
       );
 
       const keys = Object.keys(groups);
-      
-      for( let categoria of keys ) {
-        let x = groups[categoria].map((f: any) => {
+
+      for (const categoria of keys) {
+        const x = groups[categoria].map((f: any) => {
           return f.fecha;
         });
-        let y = groups[categoria].map((f: any) => {
+        const y = groups[categoria].map((f: any) => {
           return f.measure;
         });
 
@@ -92,17 +92,19 @@ export default class GraficoBasico extends Mixins(GraficoMixin) {
           x: x,
           y: y,
           type: "scatter",
-          text: y.map((v) => numeral(v).format("0,0." + "0".repeat(this.dec))),
+          text: y.map((v: any) =>
+            numeral(v).format("0,0." + "0".repeat(this.dec))
+          ),
           textposition: "auto",
           hoverinfo: "text",
           hovertemplate: "%{x}<br><b>%{y:,}</b>",
           showlegend: true,
-          name: categoria,
+          name: categoria
         });
-      };
+      }
     } else {
       if (this.indicador.configuracion.dimensionComparacion == "") {
-        let trace0 = this.getDataTrace(this.datosOrdenados, 1);
+        const trace0 = this.getDataTrace(this.datosOrdenados, 1);
         traces.push(trace0);
         if (
           this.indicador.dataComparar.length == 0 &&
@@ -115,14 +117,14 @@ export default class GraficoBasico extends Mixins(GraficoMixin) {
           this.tipoGrafico != "burbuja" &&
           this.indicador.dataComparar.length > 0
         ) {
-          let index_:number = 0;
-          for (let ind of this.indicador.dataComparar) {
+          let index_ = 0;
+          for (const ind of this.indicador.dataComparar) {
             let data_ = ind.data.map((f: any) => {
               return { x: f.category, y: f.measure };
             });
 
             //Incluir solo los elementos que también existan en el indicador principal
-            let filtros_ = this.indicador.otros_filtros.elementos;
+            const filtros_ = this.indicador.otros_filtros.elementos;
             if (filtros_.length > 0) {
               data_ = data_.filter((d: any) => {
                 return filtros_.includes(d.x);
@@ -130,9 +132,9 @@ export default class GraficoBasico extends Mixins(GraficoMixin) {
             }
 
             traces.push(
-              this.getDataTrace(this.aplicarOrden(data_), (index_++) + 2)
+              this.getDataTrace(this.aplicarOrden(data_), index_++ + 2)
             );
-          };
+          }
         }
       } else {
         traces = this.datosComparacionDimension();
@@ -146,28 +148,28 @@ export default class GraficoBasico extends Mixins(GraficoMixin) {
   }
 
   get layout(): any {
-    let titulo =
+    const titulo =
       this.indicador.nombre.match(/.{1,40}/g) != null &&
       this.indicador.dataComparar.length == 0
         ? this.indicador.nombre.match(/.{1,40}/g).join("<BR>")
         : "";
-    let height_ = this.indicador.full_screen
+    const height_ = this.indicador.full_screen
       ? window.innerHeight / 1.15
       : parseFloat(this.indicador.configuracion.layout.h) * 30 - 100;
 
-    let layout_: any = {
+    const layout_: any = {
       title: titulo,
       height: height_,
       autosize: true,
       yaxis: {
         title: this.indicador.informacion.unidad_medida,
-        exponentformat: "none",
+        exponentformat: "none"
       },
       xaxis: {
         title: this.nombreDimension,
         exponentformat: "none",
-        type: "category",
-      },
+        type: "category"
+      }
     };
 
     if (this.tipoGrafico == "pie") {
@@ -202,32 +204,32 @@ export default class GraficoBasico extends Mixins(GraficoMixin) {
         hovertemplate: "%{y:,}",
         line: {
           color: "black",
-          dash: "dash",
-        },
+          dash: "dash"
+        }
       };
     }
   }
 
   public getDataTrace(data_: any, pos: number): any {
-    let x = data_.map((f: any) => {
+    const x = data_.map((f: any) => {
       return f.x;
     });
-    let y = data_.map((f: any) => {
+    const y = data_.map((f: any) => {
       return f.y;
     });
     //Asignar un color a cada elemento X y mantenerlo aunque se hayan filtrado, para que al redibujar el gráfico filtrado no le cambie de color al elemento del gráfico
-    let rangos =
+    const rangos =
       pos == 1
         ? this.indicador.informacion.rangos
         : this.indicador.dataComparar[pos - 2].informacion.rangos;
-    let colores = this.getColores(this.indicador.data, rangos)
+    const colores = this.getColores(this.indicador.data, rangos)
       .filter((c: any) => {
         return x.includes(c.x);
       })
       .map((c: any) => {
         return c.color;
       });
-    let trace = {};
+    const trace = {};
     //El tipo burbuja solo se mostrará cuando se estén comparando indicadores
     // El eje y será el valor de un indicador y el diámetro de la burbuja será el valor del otro indicador
     // solo se utilizará al comparar dos indicadores, si hay más no se tomarán en cuenta
@@ -246,20 +248,20 @@ export default class GraficoBasico extends Mixins(GraficoMixin) {
         return v == undefined ? 1 : parseFloat(v.measure);
       });
       //Escalar los datos, 2000 será el mayor tamaño de burbuja
-      let factor = 2000 / Math.max.apply(null, size_);
-      let size = size_.map((v: any) => {
+      const factor = 2000 / Math.max.apply(null, size_);
+      const size = size_.map((v: any) => {
         return v * factor;
       });
 
-      let nombre = this.indicador.dataComparar[0].nombre;
-      let nombreIndC = this.indicador.full_screen
+      const nombre = this.indicador.dataComparar[0].nombre;
+      const nombreIndC = this.indicador.full_screen
         ? nombre
         : nombre.substring(0, 30) + (nombre.length > 0 ? "..." : "");
 
-      let dec = isNaN(this.indicador.ficha.cantidad_decimales)
+      const dec = isNaN(this.indicador.ficha.cantidad_decimales)
         ? 2
         : this.indicador.ficha.cantidad_decimales;
-      let texto = size_.map((v: any) => {
+      const texto = size_.map((v: any) => {
         return (
           "(" +
           numeral(v).format("0,0." + "0".repeat(this.dec)) +
@@ -276,8 +278,8 @@ export default class GraficoBasico extends Mixins(GraficoMixin) {
         marker: {
           color: this.$store.state.colores_,
           size: size,
-          sizemode: "area",
-        },
+          sizemode: "area"
+        }
       };
     } else if (this.tipoGrafico == "pie") {
       return {
@@ -286,7 +288,7 @@ export default class GraficoBasico extends Mixins(GraficoMixin) {
         type: "pie",
         textinfo: "label+value",
         hoverinfo: "label+value",
-        showlegend: false,
+        showlegend: false
       };
     } else if (this.tipoGrafico == "box") {
       return {
@@ -298,10 +300,10 @@ export default class GraficoBasico extends Mixins(GraficoMixin) {
         whiskerwidth: 0.2,
         fillcolor: "cls",
         marker: {
-          size: 4,
+          size: 4
         },
         line: {
-          width: 1,
+          width: 1
         },
         showlegend: this.indicador.dataComparar.length > 0,
         name:
@@ -309,14 +311,14 @@ export default class GraficoBasico extends Mixins(GraficoMixin) {
           " - " +
           (pos == 1
             ? this.indicador.nombre
-            : this.indicador.dataComparar[pos - 2].nombre),
+            : this.indicador.dataComparar[pos - 2].nombre)
       };
     } else {
       return {
         x: x,
         y: y,
         type: this.tipoGrafico,
-        text: y.map((v) => numeral(v).format("0,0." + "0".repeat(this.dec))),
+        text: y.map(v => numeral(v).format("0,0." + "0".repeat(this.dec))),
         textposition: "auto",
         hoverinfo: "label+value",
         hovertemplate: "%{x}<br><b>%{y:,}</b>",
@@ -327,27 +329,33 @@ export default class GraficoBasico extends Mixins(GraficoMixin) {
           ".- " +
           (pos == 1
             ? this.indicador.nombre
-            : this.indicador.dataComparar[pos - 2].nombre),
+            : this.indicador.dataComparar[pos - 2].nombre)
       };
     }
   }
 
   public downloadImage(options: any): void {
-    (this.$refs.grafico as Vue & { downloadImage: (options:any) => any }).downloadImage(options);    
+    (this.$refs.grafico as Vue & {
+      downloadImage: (options: any) => any;
+    }).downloadImage(options);
   }
   public react(): void {
-    (this.$refs.grafico as Vue & { schedule: (options:any) => any }).schedule({ replot: true });
+    (this.$refs.grafico as Vue & { schedule: (options: any) => any }).schedule({
+      replot: true
+    });
   }
 
   public toImage(options: any): any {
-    (this.$refs.grafico as Vue & { toImage: (options:any) => any }).toImage(options);
+    (this.$refs.grafico as Vue & { toImage: (options: any) => any }).toImage(
+      options
+    );
   }
 
   public datosComparacionDimension(): any {
-    let traces: any[] = [];
+    const traces: any[] = [];
 
     const subcategorias = [
-      ...new Set(this.indicador.data.map((d: any) => d.subcategory)),
+      ...new Set(this.indicador.data.map((d: any) => d.subcategory))
     ];
 
     const rangos = this.indicador.informacion.rangos;
@@ -370,17 +378,19 @@ export default class GraficoBasico extends Mixins(GraficoMixin) {
       const x = serie.map((s: any) => s.category);
       const y = serie.map((s: any) => s.measure);
 
-      let dataSerie: any = {
+      const dataSerie: any = {
         x: x,
         y: y,
         type: this.tipoGrafico,
-        text: y.map((v: any) => numeral(v).format("0,0." + "0".repeat(this.dec))),
+        text: y.map((v: any) =>
+          numeral(v).format("0,0." + "0".repeat(this.dec))
+        ),
         textposition: "auto",
         hoverinfo: "text",
         hovertemplate: "%{x}<br><b>%{y:,}</b>",
         marker: { opacity: 0.6, size: 14 },
         showlegend: true,
-        name: "<B>" + (index + 1) + ".- </B> " + sc,
+        name: "<B>" + (index + 1) + ".- </B> " + sc
       };
 
       if (rangos.length > 0) {

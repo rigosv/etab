@@ -23,10 +23,10 @@ import { Component, Vue, Prop } from "vue-property-decorator";
 import ConfiguracionIndicador from "../ConfiguracionIndicador.vue";
 
 @Component({
-    components: { ConfiguracionIndicador }
+  components: { ConfiguracionIndicador }
 })
-export default class ModalConfiguracion extends Vue {  
-  @Prop() indicador!: Object;
-  @Prop() index!: Number;
-};
+export default class ModalConfiguracion extends Vue {
+  @Prop() indicador!: Record<string, any>;
+  @Prop() index!: number;
+}
 </script>

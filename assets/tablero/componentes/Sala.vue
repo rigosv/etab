@@ -79,7 +79,7 @@
         <IndicadorC
           :ref="'indicador' + item.i"
           :indicador="
-            $store.state.indicadores.filter((ind) => {
+            $store.state.indicadores.filter(ind => {
               return ind.index == item.i;
             })[0]
           "
@@ -102,8 +102,8 @@ import IndicadorC from "./IndicadorC.vue";
   components: {
     IndicadorC,
     GridLayout: VueGridLayout.GridLayout,
-    GridItem: VueGridLayout.GridItem,
-  },
+    GridItem: VueGridLayout.GridItem
+  }
 })
 export default class Sala extends Vue {
   get nameState(): boolean {
@@ -141,7 +141,9 @@ export default class Sala extends Vue {
     newHPx: number,
     newWPx: number
   ): void {
-    console.log(`RESIZED i= ${i}, H= ${newH}, W= ${newW}, H(px)=${newHPx}, W(px)= ${newWPx}`);
+    console.log(
+      `RESIZED i= ${i}, H= ${newH}, W= ${newW}, H(px)=${newHPx}, W(px)= ${newWPx}`
+    );
     this.$store.state.indicadores.map((ind: any) => {
       if (ind.index == i) {
         ind.configuracion.layout.w = newW;
@@ -153,13 +155,16 @@ export default class Sala extends Vue {
   }
 
   public guardarSala(tipo: string): void {
-    let salaDatos =
+    const salaDatos =
       tipo == "guardar"
         ? this.$store.state.sala
         : { id: "", nombre: this.$store.state.sala.nombre };
-    let json = { sala: salaDatos, indicadores: this.$store.state.indicadores };
+    const json = {
+      sala: salaDatos,
+      indicadores: this.$store.state.indicadores
+    };
     this.$store.state.sala_cargando = true;
-    let vm = this;
+    const vm = this;
 
     if (
       tipo == "guardar_como" &&
@@ -189,7 +194,7 @@ export default class Sala extends Vue {
         })
         .catch(function(error) {
           vm.$snotify.error(vm.$t("_guardar_sala_error_") as string, "Error", {
-            timeout: 10000,
+            timeout: 10000
           });
           console.log(error);
         })

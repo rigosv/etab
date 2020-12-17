@@ -43,7 +43,7 @@ import IndicadorMixin from "../Mixins/IndicadorMixin";
 export default class ListadoIndicadores extends Mixins(IndicadorMixin) {
   @Prop({ default: {} }) indicadores: any;
 
-  private filtro: string = "";
+  private filtro = "";
 
   get indicadoresFiltrados(): any {
     return this.filtrar(this.indicadores, this.filtro);
@@ -51,7 +51,7 @@ export default class ListadoIndicadores extends Mixins(IndicadorMixin) {
 
   public agregarIndicador(indicador: any): void {
     //Buscar el maximo indice utilizado
-    let index =
+    const index =
       this.$store.state.indicadores.length == 0
         ? 0
         : Math.max.apply(
@@ -66,15 +66,15 @@ export default class ListadoIndicadores extends Mixins(IndicadorMixin) {
     indicador.posicion = 0;
     indicador.dimension = Object.keys(indicador.dimensiones)[0];
 
-    let ind = this.inicializarIndicador(indicador, index);
+    const ind = this.inicializarIndicador(indicador, index);
     this.$store.commit("agregarIndicador", ind);
     this.cargarDatosIndicador(ind, index);
   }
 
   public filtrar(listado: any, filtro: string): any {
     return listado.filter((ind: any) => {
-      let base = this.normalizarDiacriticos(ind.nombre);
-      let filtro_ = this.normalizarDiacriticos(filtro);
+      const base = this.normalizarDiacriticos(ind.nombre);
+      const filtro_ = this.normalizarDiacriticos(filtro);
       return base.includes(filtro_);
     });
   }

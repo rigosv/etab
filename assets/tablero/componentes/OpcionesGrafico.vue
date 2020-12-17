@@ -111,9 +111,9 @@ export default class OpcionesGrafico extends Mixins(IndicadorMixin) {
     pastel: require("../../images/pastel.png"),
     mapa: require("../../images/mapa.png"),
     caja: require("../../images/cajas.png"),
-    burbuja: require("../../images/burbuja.png"),
+    burbuja: require("../../images/burbuja.png")
   };
-  private dimension: string = "";
+  private dimension = "";
 
   get comparaDimensiones(): boolean {
     return this.indicador.configuracion.dimensionComparacion != "";
@@ -130,16 +130,16 @@ export default class OpcionesGrafico extends Mixins(IndicadorMixin) {
   }
 
   get dimensionesFiltradas(): any {
-    let vm = this;
+    const vm = this;
 
     let dimensiones = this.indicador.dimensiones.filter((dimension: string) => {
       //Verificar  que no sea la dimensión actual
       if (dimension != vm.indicador.dimension) {
         //Verificar que no esté en los filtros
         let esFiltro = false;
-        for (let filtro of vm.indicador.filtros) {
+        for (const filtro of vm.indicador.filtros) {
           esFiltro = dimension == filtro.codigo ? true : esFiltro;
-        };
+        }
         return !esFiltro;
       }
       return false;
@@ -168,7 +168,7 @@ export default class OpcionesGrafico extends Mixins(IndicadorMixin) {
           "TORTA",
           "MAPA",
           "GEOLOCATION",
-          "MAP",
+          "MAP"
         ].includes(tipo.codigo.toUpperCase());
       });
 
@@ -205,7 +205,7 @@ export default class OpcionesGrafico extends Mixins(IndicadorMixin) {
       "DISCRETEBARCHART",
       "LINECHART",
       "LINEA",
-      "LINEAS",
+      "LINEAS"
     ].includes(this.indicador.configuracion.tipo_grafico.toUpperCase());
   }
 

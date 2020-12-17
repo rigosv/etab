@@ -21,8 +21,8 @@ import Sala from "./componentes/Sala.vue";
 @Component({
   components: {
     MenuTablero,
-    Sala,
-  },
+    Sala
+  }
 })
 export default class Tablero extends Vue {
   @Prop({ default: "" }) readonly idSala!: string;
@@ -32,7 +32,7 @@ export default class Tablero extends Vue {
   mounted() {
     this.$store.commit("addDatosSalaPublica", {
       idSala: this.idSala,
-      token: this.token,
+      token: this.token
     });
     //loadLanguageAsync(this.lang);
     this.$i18n.locale = this.lang;
@@ -42,7 +42,7 @@ export default class Tablero extends Vue {
     //Extraer cada gráfico y convertirlo en formato png para que sea más
     // fácil de convertir a pdf
     this.$store.state.indicadores.map((indicador: any) => {
-      let img = document.querySelector("#graph-export-" + indicador.index);
+      const img = document.querySelector("#graph-export-" + indicador.index);
       this.$refs.sala.$refs["indicador" + indicador.index][0]
         .graficoImagen({ format: "png", height: 500, width: 685 })
         .then((dataUrl: string) => {

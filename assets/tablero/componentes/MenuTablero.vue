@@ -91,8 +91,8 @@ import ModalFiltrosGenerales from "./Modal/ModalFiltrosGenerales.vue";
     ModalExportar,
     ModalAccionesSala,
     ModalCompartirSala,
-    ModalFiltrosGenerales,
-  },
+    ModalFiltrosGenerales
+  }
 })
 export default class MenuTablero extends Vue {
   get esSalaPublica(): boolean {

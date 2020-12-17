@@ -52,8 +52,8 @@ import InfoRangosAlerta from "./InfoRangosAlerta.vue";
     InfoFichaTecnica,
     InfoTablaDatos,
     InfoSentenciaSQL,
-    InfoRangosAlerta,
-  },
+    InfoRangosAlerta
+  }
 })
 export default class OpcionesInformacion extends Vue {
   @Prop({ default: {} }) indicador: any;

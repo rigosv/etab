@@ -107,7 +107,7 @@
                 'PIECHART',
                 'PIE',
                 'PASTEL',
-                'TORTA',
+                'TORTA'
               ].includes(indicador.configuracion.tipo_grafico.toUpperCase()) &&
                 indicador.data.length > 0
             "
@@ -221,8 +221,8 @@ import IndicadorMixin from "../Mixins/IndicadorMixin";
     IndicadorMensajes,
     ConfiguracionIndicador,
     Mapa,
-    InfoTablaDatosContenido,
-  },
+    InfoTablaDatosContenido
+  }
 })
 export default class IndicadorC extends Mixins(IndicadorMixin) {
   @Prop({ default: {} }) indicador: any;
@@ -245,7 +245,7 @@ export default class IndicadorC extends Mixins(IndicadorMixin) {
   }
 
   public clicGrafico(valor: number): void {
-    let vm = this;
+    const vm = this;
     if (
       parseInt(this.indicador.dimensionIndex) + 1 ==
       this.indicador.dimensiones.length
@@ -254,13 +254,13 @@ export default class IndicadorC extends Mixins(IndicadorMixin) {
     } else {
       this.indicador.otros_filtros.elementos = [];
       //Agregar la dimensión actual como un filtro
-      let datos_dimension = this.indicador.informacion.dimensiones[
+      const datos_dimension = this.indicador.informacion.dimensiones[
         this.indicador.dimension
       ];
       this.indicador.filtros.push({
         codigo: this.indicador.dimension,
         etiqueta: datos_dimension.descripcion,
-        valor: valor,
+        valor: valor
       });
 
       //Moverse a la siguiente dimension
@@ -284,7 +284,7 @@ export default class IndicadorC extends Mixins(IndicadorMixin) {
       });
 
       this.$snotify.info(this.$t("_se_ha_aplicado_filtro_info_") as string, {
-        timeout: 5000,
+        timeout: 5000
       });
     } else {
       this.indicador.otros_filtros.elementos = [];
@@ -313,11 +313,11 @@ export default class IndicadorC extends Mixins(IndicadorMixin) {
   }
 
   public agregarFavorito(): void {
-    let vm = this;
+    const vm = this;
     axios
       .post("/api/v1/tablero/indicadorFavorito", {
         id: vm.indicador.id,
-        es_favorito: vm.indicador.es_favorito,
+        es_favorito: vm.indicador.es_favorito
       })
       .then(function(response) {
         if (response.data.status == 200) {
@@ -330,7 +330,7 @@ export default class IndicadorC extends Mixins(IndicadorMixin) {
       .catch(function(error) {
         console.log(error);
         vm.$snotify.error(vm.$t("_error_conexion_") as string, "Error", {
-          timeout: 10000,
+          timeout: 10000
         });
       });
   }
@@ -364,15 +364,15 @@ export default class IndicadorC extends Mixins(IndicadorMixin) {
         this.indicador.configuracion.tipo_grafico.toUpperCase()
       )
     ) {
-      let vm = this;
+      const vm = this;
       domtoimage
         .toPng(document.querySelector("#grafico-" + this.index), {
           width: 800,
-          height: 600,
+          height: 600
         })
         .then((dataUrl: string) => {
-          let filename = vm.indicador.nombre;
-          let link = document.createElement("a");
+          const filename = vm.indicador.nombre;
+          const link = document.createElement("a");
 
           if (typeof link.download === "string") {
             link.href = dataUrl;
@@ -392,7 +392,7 @@ export default class IndicadorC extends Mixins(IndicadorMixin) {
         format: "png",
         width: 800,
         height: 600,
-        filename: this.indicador.nombre,
+        filename: this.indicador.nombre
       });
     }
   }

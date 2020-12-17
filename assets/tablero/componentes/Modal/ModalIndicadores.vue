@@ -73,16 +73,16 @@ import ListadoIndicadores from "../ListadoIndicadores.vue";
 import Buscar from "../Buscar.vue";
 
 @Component({
-  components: { ListadoIndicadoresClasificados, Buscar, ListadoIndicadores },
+  components: { ListadoIndicadoresClasificados, Buscar, ListadoIndicadores }
 })
 export default class ModalIndicadores extends Vue {
   private indicadores_no_clasificados: any[] = [];
   private indicadores_favoritos: any[] = [];
   indicadores_libres: any[] = [];
-  filtroLibre: string = "";
+  filtroLibre = "";
 
   mounted() {
-    let vm = this;
+    const vm = this;
     this.$root.$on("bv::modal::show", (bvEvent: any, modalId: any) => {
       //Cargar indicadores favoritos
       axios
@@ -116,7 +116,7 @@ export default class ModalIndicadores extends Vue {
   }
 
   public buscarIndicadoresLibre(): void {
-    let vm = this;
+    const vm = this;
     axios
       .get(
         "/api/v1/tablero/listaIndicadores?tipo=busqueda&busqueda=" +
