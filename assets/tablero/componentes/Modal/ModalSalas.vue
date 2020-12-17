@@ -120,7 +120,10 @@ export default class ModalSalas extends Mixins(IndicadorMixin) {
                 //position: 'rightTop'
               }
             });
-            if (this.$store.state.token != "" && this.$store.state.idSala != "") {
+            if (
+              this.$store.state.token != "" &&
+              this.$store.state.idSala != ""
+            ) {
               //Es una sala pública, cargarla
               this.activarSala(this.salas[0]);
             }
