@@ -41,7 +41,7 @@ import IndicadorMixin from "../Mixins/IndicadorMixin";
 
 @Component
 export default class ListadoIndicadores extends Mixins(IndicadorMixin) {
-  @Prop({ default: {} }) indicador: any;
+  @Prop({ default: {} }) indicadores: any;
 
   private filtro: string = "";
 
@@ -73,7 +73,6 @@ export default class ListadoIndicadores extends Mixins(IndicadorMixin) {
 
   public filtrar(listado: any, filtro: string): any {
     return listado.filter((ind: any) => {
-      console.log('prueba');
       let base = this.normalizarDiacriticos(ind.nombre);
       let filtro_ = this.normalizarDiacriticos(filtro);
       return base.includes(filtro_);
