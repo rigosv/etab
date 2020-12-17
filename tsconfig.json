@@ -1,14 +1,40 @@
 {
-    "compilerOptions": {
-      // esto se alinea con el soporte del navegador de Vue
-      "target": "es5",
-      // esto permite una inferencia más estricta para las propiedades de datos en `this`
-      "strict": true,
-      // si usa webpack 2+ o rollup, para aprovechar la agitación del árbol:
-      "module": "es2015",
-      "moduleResolution": "node",
-      "allowJs": true,
-      "checkJs": true,
-      "experimentalDecorators": true
-    }
-  }
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "strict": true,
+    "jsx": "preserve",
+    "importHelpers": true,
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "types": [
+      "webpack-env"
+    ],
+    "paths": {
+      "@/*": [
+        "assets/*"
+      ]
+    },
+    "lib": [
+      "esnext",
+      "dom",
+      "dom.iterable",
+      "scripthost"
+    ]
+  },
+  "include": [
+    "assets/**/*.ts",
+    "assets/**/*.tsx",
+    "assets/**/*.vue",
+    "tests/**/*.ts",
+    "tests/**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
