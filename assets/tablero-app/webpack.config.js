@@ -15,12 +15,11 @@ Encore
     .enableVersioning(Encore.isProduction())
 
     // uncomment to define the assets of the project
-    //.addEntry('app/js', './assets/js/app.js')
-    .addEntry('tablero-app/js', './assets/main.ts')
-    .addStyleEntry('tablero-app/css', './assets/css/app.scss')
+    .addEntry('app/js', './assets/js/app.js')
+    .addStyleEntry('app/css', './assets/css/app.scss')
 
     // uncomment if you use TypeScript
-    .enableTypeScriptLoader()
+    //.enableTypeScriptLoader()
 
     // uncomment if you use Sass/SCSS files
     .enableSassLoader()
@@ -30,7 +29,7 @@ Encore
     // uncomment for legacy applications that require $/jQuery as a global variable
     //.autoProvidejQuery()
 
-    .enableVueLoader(() => {}, { runtimeCompilerBuild: true })
+    .enableVueLoader()
     ;
 
 
