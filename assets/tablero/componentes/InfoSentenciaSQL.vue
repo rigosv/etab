@@ -1,0 +1,41 @@
+<template>
+  <div style="max-height:400px; max-width:100%; overflow:auto;">
+    <pre>{{ indicador.sql }}</pre>
+  </div>
+</template>
+
+<script lang="ts">
+import { Component, Vue, Prop } from "vue-property-decorator";
+import axios from "axios";
+import sqlFormatter from "sql-formatter";
+
+@Component
+export default class InfoSentenciaSQL extends Vue {
+  @Prop({ default: {} }) indicador: any;
+
+  mounted() {
+    let json = { filtros: "", ver_sql: true, tendencia: false };
+
+    this.indicador.cargando = true;
+    let self = this;
+    axios
+      .post(
+        "/api/v1/tablero/datosIndicador/" +
+          this.indicador.id +
+          "/" +
+          this.indicador.dimension,
+        json
+      )
+      .then(function(response) {
+        if (response.status == 200) {
+          self.indicador.sql = sqlFormatter.format(response.data.data);
+        }
+        self.indicador.cargando = false;
+      })
+      .catch(function(error) {
+        console.log(error);
+        self.indicador.cargando = false;
+      });
+  }
+}
+</script>
