@@ -40,28 +40,33 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
+import { defineComponent } from "@vue/composition-api";
 
-@Component
-export default class OpcionesFiltro extends Vue {
-  @Prop({ default: {} }) indicador: any;
-  @Prop() readonly index!: number;
+export default defineComponent ({
+  props: {
+    indicador: {default: {}, type: Object},
+    index: Number
+  },
 
-  get categorias(): any {
-    return this.indicador.data.sort((a: any, b: any) =>
-      a.category.localeCompare(b.category)
-    );
-  }
-
-  public agregarOtrosFiltros(valor: string): void {
-    if (this.indicador.otros_filtros.elementos.indexOf(valor) > -1) {
-      this.indicador.otros_filtros.elementos.splice(
-        this.indicador.otros_filtros.elementos.indexOf(valor),
-        1
+  computed : {
+    categorias(): any {
+      return this.indicador.data.sort((a: any, b: any) =>
+        a.category.localeCompare(b.category)
       );
-    } else {
-      this.indicador.otros_filtros.elementos.push(valor);
+    }
+  },
+
+  methods : {
+    agregarOtrosFiltros(valor: string): void {
+      if (this.indicador.otros_filtros.elementos.indexOf(valor) > -1) {
+        this.indicador.otros_filtros.elementos.splice(
+          this.indicador.otros_filtros.elementos.indexOf(valor),
+          1
+        );
+      } else {
+        this.indicador.otros_filtros.elementos.push(valor);
+      }
     }
   }
-}
+})
 </script>

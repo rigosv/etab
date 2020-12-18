@@ -97,164 +97,173 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Mixins } from "vue-property-decorator";
+import { defineComponent } from "@vue/composition-api";
 import IndicadorMixin from "../Mixins/IndicadorMixin";
 
-@Component
-export default class OpcionesGrafico extends Mixins(IndicadorMixin) {
-  @Prop({ default: {} }) indicador: any;
-  @Prop() readonly index!: number;
+export default defineComponent ({
+  props: {
+    indicador: {default: {}, type: Object},
+    index: Number
+  },
 
-  private images: any = {
-    columnas: require("../../images/bar.png"),
-    lineas: require("../../images/lineas.png"),
-    pastel: require("../../images/pastel.png"),
-    mapa: require("../../images/mapa.png"),
-    caja: require("../../images/cajas.png"),
-    burbuja: require("../../images/burbuja.png")
-  };
-  private dimension = "";
+  mixins:[ IndicadorMixin ],
 
-  get comparaDimensiones(): boolean {
-    return this.indicador.configuracion.dimensionComparacion != "";
-  }
+  data : () => ({
+    images: {
+      columnas: require("../../images/bar.png"),
+      lineas: require("../../images/lineas.png"),
+      pastel: require("../../images/pastel.png"),
+      mapa: require("../../images/mapa.png"),
+      caja: require("../../images/cajas.png"),
+      burbuja: require("../../images/burbuja.png")
+    },
+    dimension : ""
+  }),
 
-  get comparaIndicadores(): boolean {
-    return this.indicador.dataComparar.length > 0;
-  }
+  computed : {
+    comparaDimensiones(): boolean {
+      return this.indicador.configuracion.dimensionComparacion != "";
+    },
 
-  get seriesOrden(): any {
-    return this.comparaIndicadores || this.comparaDimensiones
-      ? { x: "orden_x" }
-      : { x: "orden_x", y: "orden_y" };
-  }
+    comparaIndicadores(): boolean {
+      return this.indicador.dataComparar.length > 0;
+    },
 
-  get dimensionesFiltradas(): any {
-    const vm = this;
+    seriesOrden(): any {
+      return this.comparaIndicadores || this.comparaDimensiones
+        ? { x: "orden_x" }
+        : { x: "orden_x", y: "orden_y" };
+    },
 
-    let dimensiones = this.indicador.dimensiones.filter((dimension: string) => {
-      //Verificar  que no sea la dimensión actual
-      if (dimension != vm.indicador.dimension) {
-        //Verificar que no esté en los filtros
-        let esFiltro = false;
-        for (const filtro of vm.indicador.filtros) {
-          esFiltro = dimension == filtro.codigo ? true : esFiltro;
+    dimensionesFiltradas(): any {
+      const vm = this;
+
+      let dimensiones = this.indicador.dimensiones.filter((dimension: string) => {
+        //Verificar  que no sea la dimensión actual
+        if (dimension != vm.indicador.dimension) {
+          //Verificar que no esté en los filtros
+          let esFiltro = false;
+          for (const filtro of vm.indicador.filtros) {
+            esFiltro = dimension == filtro.codigo ? true : esFiltro;
+          }
+          return !esFiltro;
         }
-        return !esFiltro;
-      }
-      return false;
-    });
-
-    //Si hay indicadores cargados para comparación, mostrar solo las dimensiones comunes
-    this.indicador.dataComparar.map((ind: any) => {
-      dimensiones = dimensiones.filter((x: string) =>
-        ind.dimensiones.includes(x)
-      );
-    });
-
-    return dimensiones;
-  }
-
-  get tiposGraficos(): any {
-    let tipos = this.indicador.informacion.dimensiones[this.indicador.dimension]
-      .graficos;
-
-    if (this.comparaDimensiones || this.comparaIndicadores) {
-      tipos = tipos.filter((tipo: any) => {
-        return ![
-          "PIECHART",
-          "PIE",
-          "PASTEL",
-          "TORTA",
-          "MAPA",
-          "GEOLOCATION",
-          "MAP"
-        ].includes(tipo.codigo.toUpperCase());
+        return false;
       });
 
-      if (this.comparaIndicadores) {
-        //Agregar los tipos caja, burbuja y línea cuando se estén comparando indicadores
-        tipos.push({ codigo: "box", descripcion: this.$t("_box_") });
-        tipos.push({ codigo: "burbuja", descripcion: this.$t("_burbuja_") });
+      //Si hay indicadores cargados para comparación, mostrar solo las dimensiones comunes
+      this.indicador.dataComparar.map((ind: any) => {
+        dimensiones = dimensiones.filter((x: string) =>
+          ind.dimensiones.includes(x)
+        );
+      });
+
+      return dimensiones;
+    },
+
+    tiposGraficos(): any {
+      let tipos = this.indicador.informacion.dimensiones[this.indicador.dimension]
+        .graficos;
+
+      if (this.comparaDimensiones || this.comparaIndicadores) {
+        tipos = tipos.filter((tipo: any) => {
+          return ![
+            "PIECHART",
+            "PIE",
+            "PASTEL",
+            "TORTA",
+            "MAPA",
+            "GEOLOCATION",
+            "MAP"
+          ].includes(tipo.codigo.toUpperCase());
+        });
+
+        if (this.comparaIndicadores) {
+          //Agregar los tipos caja, burbuja y línea cuando se estén comparando indicadores
+          tipos.push({ codigo: "box", descripcion: this.$t("_box_") });
+          tipos.push({ codigo: "burbuja", descripcion: this.$t("_burbuja_") });
+        }
+
+        if (
+          !tipos.find((tipo: any) => {
+            return ["LINECHART", "LINEA", "LINEAS"].includes(
+              tipo.codigo.toUpperCase()
+            );
+          })
+        ) {
+          tipos.push({ codigo: "lineas", descripcion: this.$t("_lineas_") });
+        }
       }
 
-      if (
-        !tipos.find((tipo: any) => {
-          return ["LINECHART", "LINEA", "LINEAS"].includes(
-            tipo.codigo.toUpperCase()
-          );
-        })
-      ) {
-        tipos.push({ codigo: "lineas", descripcion: this.$t("_lineas_") });
-      }
+      return tipos.sort((a: any, b: any) =>
+        a.descripcion.localeCompare(b.descripcion)
+      );
+    },
+
+    puedeOrdenar(): boolean {
+      return [
+        "BARRA",
+        "BURBUJA",
+        "BUBBLE",
+        "BARRAS",
+        "COLUMNAS",
+        "COLUMNA",
+        "DISCRETEBARCHART",
+        "LINECHART",
+        "LINEA",
+        "LINEAS"
+      ].includes(this.indicador.configuracion.tipo_grafico.toUpperCase());
     }
-
-    return tipos.sort((a: any, b: any) =>
-      a.descripcion.localeCompare(b.descripcion)
-    );
-  }
-
-  get puedeOrdenar(): boolean {
-    return [
-      "BARRA",
-      "BURBUJA",
-      "BUBBLE",
-      "BARRAS",
-      "COLUMNAS",
-      "COLUMNA",
-      "DISCRETEBARCHART",
-      "LINECHART",
-      "LINEA",
-      "LINEAS"
-    ].includes(this.indicador.configuracion.tipo_grafico.toUpperCase());
-  }
+  },
 
   mounted() {
     this.dimension = this.indicador.dimension;
-  }
+  },
 
-  public getGrafico(tipo: string): any {
-    if (
-      ["BARRA", "BARRAS", "COLUMNAS", "COLUMNA", "DISCRETEBARCHART"].includes(
-        tipo.toUpperCase()
-      )
-    ) {
-      return this.images.columnas.default;
-    } else if (["LINECHART", "LINEA", "LINEAS"].includes(tipo.toUpperCase())) {
-      return this.images.lineas.default;
-    } else if (
-      ["PIECHART", "PIE", "PASTEL", "TORTA"].includes(tipo.toUpperCase())
-    ) {
-      return this.images.pastel.default;
-    } else if (["MAPA", "GEOLOCATION", "MAP"].includes(tipo.toUpperCase())) {
-      return this.images.mapa.default;
-    } else if (["BOX", "CAJA"].includes(tipo.toUpperCase())) {
-      return this.images.caja.default;
-    } else if (["BURBUJA", "BUBBLE"].includes(tipo.toUpperCase())) {
-      return this.images.burbuja.default;
+  methods : {
+    getGrafico(tipo: string): any {
+      if (
+        ["BARRA", "BARRAS", "COLUMNAS", "COLUMNA", "DISCRETEBARCHART"].includes(
+          tipo.toUpperCase()
+        )
+      ) {
+        return this.images.columnas.default;
+      } else if (["LINECHART", "LINEA", "LINEAS"].includes(tipo.toUpperCase())) {
+        return this.images.lineas.default;
+      } else if (
+        ["PIECHART", "PIE", "PASTEL", "TORTA"].includes(tipo.toUpperCase())
+      ) {
+        return this.images.pastel.default;
+      } else if (["MAPA", "GEOLOCATION", "MAP"].includes(tipo.toUpperCase())) {
+        return this.images.mapa.default;
+      } else if (["BOX", "CAJA"].includes(tipo.toUpperCase())) {
+        return this.images.caja.default;
+      } else if (["BURBUJA", "BUBBLE"].includes(tipo.toUpperCase())) {
+        return this.images.burbuja.default;
+      }
+    },
+
+    asignarAncho(ancho: string): void {
+      this.indicador.configuracion.width = "col-sm-" + ancho;
+    },
+
+    cambiarOrden(tipo: string, modo: string): void {
+      if (tipo == "x") {
+        this.indicador.configuracion.orden_y = "";
+        this.indicador.configuracion.orden_x = modo;
+      } else {
+        this.indicador.configuracion.orden_x = "";
+        this.indicador.configuracion.orden_y = modo;
+      }
+    },
+
+    cambiarDimension(): void {
+      this.indicador.dimension = this.dimension;
+      this.indicador.otros_filtros.elementos = [];
+      this.cargarDatosIndicador(this.indicador, this.index);
+
+      this.cargarDatosComparacion();
     }
   }
-
-  public asignarAncho(ancho: string): void {
-    this.indicador.configuracion.width = "col-sm-" + ancho;
-  }
-
-  public cambiarOrden(tipo: string, modo: string): void {
-    if (tipo == "x") {
-      this.indicador.configuracion.orden_y = "";
-      this.indicador.configuracion.orden_x = modo;
-    } else {
-      this.indicador.configuracion.orden_x = "";
-      this.indicador.configuracion.orden_y = modo;
-    }
-  }
-
-  public cambiarDimension(): void {
-    this.indicador.dimension = this.dimension;
-    this.indicador.otros_filtros.elementos = [];
-    this.cargarDatosIndicador(this.indicador, this.index);
-
-    this.cargarDatosComparacion();
-  }
-}
+})
 </script>

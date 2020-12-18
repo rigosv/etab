@@ -41,22 +41,23 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
+import { defineComponent } from "@vue/composition-api";
 import InfoFichaTecnica from "./InfoFichaTecnica.vue";
 import InfoTablaDatos from "./InfoTablaDatos.vue";
 import InfoSentenciaSQL from "./InfoSentenciaSQL.vue";
 import InfoRangosAlerta from "./InfoRangosAlerta.vue";
 
-@Component({
+export default defineComponent ({
   components: {
     InfoFichaTecnica,
     InfoTablaDatos,
     InfoSentenciaSQL,
     InfoRangosAlerta
+  },
+
+  props: {
+    indicador: {default: {}, type: Object},
+    index: Number
   }
 })
-export default class OpcionesInformacion extends Vue {
-  @Prop({ default: {} }) indicador: any;
-  @Prop() readonly index!: number;
-}
 </script>

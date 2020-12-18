@@ -35,43 +35,58 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Watch } from "vue-property-decorator";
+import { defineComponent } from "@vue/composition-api";
 
-@Component
-export default class IndicadorMensajes extends Vue {
-  @Prop({ default: {} }) indicador: any;
-  @Prop() readonly index!: number;
+export default defineComponent ({
+  props: {
+    indicador: {default: {}, type: Object},
+    index: Number
+  },
 
-  private dismissSecs = 10;
-  private dismissCountDown = 0;
-  private showDismissibleAlert = false;
-  private mensajes: any[] = [
-    {
-      variante: "success",
-      error: "Success",
-      mensaje: this.$t("_indicador_dimension_fin_") as string
+  data : () => ({
+    dismissSecs : 10,
+    dismissCountDown : 0,
+    showDismissibleAlert : false,    
+  }),
+
+  computed : {
+    error(): any {
+      return this.indicador.error;
     },
-    {
-      variante: "warning",
-      error: "Warning",
-      mensaje: this.$t("_indicador_warning_") as string
-    },
-    {
-      variante: "danger",
-      error: "Error",
-      mensaje: this.$t("_indicador_error_") as string
+    
+    mensajes(): object[] {
+      return [
+        {
+          variante: "success",
+          error: "Success",
+          mensaje: this.$t("_indicador_dimension_fin_") as string
+        },
+        {
+          variante: "warning",
+          error: "Warning",
+          mensaje: this.$t("_indicador_warning_") as string
+        },
+        {
+          variante: "danger",
+          error: "Error",
+          mensaje: this.$t("_indicador_error_") as string
+        }
+      ]
     }
-  ];
+  },
 
-  public countDownChanged(dismissCountDown: number): void {
-    this.dismissCountDown = dismissCountDown;
-  }
+  methods : {
+    countDownChanged(dismissCountDown: number): void {
+      this.dismissCountDown = dismissCountDown;
+    }
+  },
 
-  @Watch("indicador.error")
-  public errorChange(newVal: any): void {
-    if (this.indicador.mensaje != "") {
-      this.dismissCountDown = this.dismissSecs;
+  watch: {
+    error() {
+      if (this.indicador.mensaje != "") {
+        this.dismissCountDown = this.dismissSecs;
+      }
     }
   }
-}
+})
 </script>

@@ -19,14 +19,14 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
+import { defineComponent } from "@vue/composition-api";
 import ConfiguracionIndicador from "../ConfiguracionIndicador.vue";
 
-@Component({
-  components: { ConfiguracionIndicador }
+export default defineComponent ({
+  components: { ConfiguracionIndicador },
+  props: {
+    indicador: Object,
+    index: Number
+  }  
 })
-export default class ModalConfiguracion extends Vue {
-  @Prop() indicador!: Record<string, any>;
-  @Prop() index!: number;
-}
 </script>

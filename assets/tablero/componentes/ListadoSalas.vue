@@ -52,69 +52,73 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
+import { defineComponent } from "@vue/composition-api";
 import axios from "axios";
 
-@Component
-export default class ListadoSalas extends Vue {
-  @Prop({ default: [] }) readonly salas!: any[];
-  @Prop({ default: false }) readonly borrar!: boolean;
+export default defineComponent ({  
+  props: {
+    salas: {default: [], type: Array},
+    borrar: {default: false, type: Boolean}
+  },
 
-  private sala_cargando = false;
-  private sala_activa = 0;
+  data : () => ({
+    sala_cargando : false,
+    sala_activa : 0
+  }),
 
-  public activarSala(sala: any): void {
-    this.sala_activa = sala.id;
-    this.$bvModal.hide("modalSalas");
-    this.$emit("activarSala", sala);
-  }
+  methods : {
 
-  public confirmarBorrarSala(sala: any): void {
-    const vm = this;
+    activarSala(sala: any): void {
+      this.sala_activa = sala.id;
+      this.$bvModal.hide("modalSalas");
+      this.$emit("activarSala", sala);
+    },
 
-    vm.$snotify.confirm(
-      vm.$t("_esta_seguro_borrar_sala_") as string,
-      vm.$t("_confirmar_") as string,
-      {
-        closeOnClick: false,
-        //position: "centerCenter",
-        backdrop: 0.7,
-        buttons: [
-          {
-            text: vm.$t("_si_") as string,
-            action: toast => {
-              const json = { id: sala.id };
-              axios
-                .post("/api/v1/tablero/borrarSala", json)
-                .then(function(response) {
-                  if (response.data.status == 200) {
-                    vm.$snotify.remove(toast.id);
-                    vm.$emit("borrarSala", sala);
-                    vm.$snotify.success(
-                      vm.$t("_mensaje_ok_eliminar_sala_") as string
-                    );
-                  } else {
-                    vm.$snotify.remove(toast.id);
-                    vm.$snotify.error(
-                      vm.$t("_mensaje_error_eliminar_sala_") as string,
-                      vm.$t("_error_") as string,
-                      { timeout: 10000 }
-                    );
-                  }
-                });
+    confirmarBorrarSala(sala: any): void {
+      this.$snotify.confirm(
+        this.$t("_esta_seguro_borrar_sala_") as string,
+        this.$t("_confirmar_") as string,
+        {
+          closeOnClick: false,
+          //position: "centerCenter",
+          backdrop: 0.7,
+          buttons: [
+            {
+              text: this.$t("_si_") as string,
+              action: (toast: any) => {
+                const json = { id: sala.id };
+                axios
+                  .post("/api/v1/tablero/borrarSala", json)
+                  .then(response => {
+                    if (response.data.status == 200) {
+                      this.$snotify.remove(toast.id);
+                      this.$emit("borrarSala", sala);
+                      this.$snotify.success(
+                        this.$t("_mensaje_ok_eliminar_sala_") as string
+                      );
+                    } else {
+                      this.$snotify.remove(toast.id);
+                      this.$snotify.error(
+                        this.$t("_mensaje_error_eliminar_sala_") as string,
+                        this.$t("_error_") as string,
+                        { timeout: 10000 }
+                      );
+                    }
+                  });
+              },
+              bold: false
             },
-            bold: false
-          },
-          {
-            text: vm.$t("_cancelar_") as string,
-            action: toast => {
-              vm.$snotify.remove(toast.id);
-            },
-            bold: false
-          }
-        ]
-      }
-    );
+            {
+              text: this.$t("_cancelar_") as string,
+              action: (toast: any) => {
+                this.$snotify.remove(toast.id);
+              },
+              bold: false
+            }
+          ]
+        }
+      );
+    }
   }
-}
+})
 </script>

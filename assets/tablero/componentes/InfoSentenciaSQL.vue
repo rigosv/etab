@@ -5,13 +5,14 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
+import { defineComponent } from "@vue/composition-api";
 import axios from "axios";
 import sqlFormatter from "sql-formatter";
 
-@Component
-export default class InfoSentenciaSQL extends Vue {
-  @Prop({ default: {} }) indicador: any;
+export default defineComponent ({
+  props: {
+    indicador: {default: {}, type: Object}
+  },
 
   mounted() {
     const json = { filtros: "", ver_sql: true, tendencia: false };
@@ -37,5 +38,5 @@ export default class InfoSentenciaSQL extends Vue {
         self.indicador.cargando = false;
       });
   }
-}
+})
 </script>

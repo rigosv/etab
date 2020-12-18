@@ -35,54 +35,64 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Mixins, Prop } from "vue-property-decorator";
+import { defineComponent } from "@vue/composition-api";
 
 import IndicadorMixin from "../Mixins/IndicadorMixin";
 
-@Component
-export default class ListadoIndicadores extends Mixins(IndicadorMixin) {
-  @Prop({ default: {} }) indicadores: any;
+export default defineComponent ({
+  props: {
+    indicador: {default: {}, type: Object}
+  },
 
-  private filtro = "";
+  mixins:[ IndicadorMixin ],
 
-  get indicadoresFiltrados(): any {
-    return this.filtrar(this.indicadores, this.filtro);
+  data : () => ({
+    filtro: ""
+  }),
+  
+  computed : {
+    indicadoresFiltrados(): any {
+      return this.filtrar(this.indicadores, this.filtro);
+    }
+  },
+
+  methods : {
+
+    agregarIndicador(indicador: any): void {
+      //Buscar el maximo indice utilizado
+      const index =
+        this.$store.state.indicadores.length == 0
+          ? 0
+          : Math.max.apply(
+              Math,
+              this.$store.state.indicadores.map(function(o: any) {
+                return o.index;
+              })
+            ) + 1;
+      indicador.filtro = "";
+      indicador.orden = "";
+      indicador.indicador_id = indicador.id;
+      indicador.posicion = 0;
+      indicador.dimension = Object.keys(indicador.dimensiones)[0];
+
+      const ind = this.inicializarIndicador(indicador, index);
+      this.$store.commit("agregarIndicador", ind);
+      this.cargarDatosIndicador(ind, index);
+    },
+
+    filtrar(listado: any, filtro: string): any {
+      return listado.filter((ind: any) => {
+        const base = this.normalizarDiacriticos(ind.nombre);
+        const filtro_ = this.normalizarDiacriticos(filtro);
+        return base.includes(filtro_);
+      });
+    },
+
+    getConteo(id: string): any {
+      return this.$store.state.indicadores.filter((x: any) => {
+        return x.id == id;
+      }).length;
+    }
   }
-
-  public agregarIndicador(indicador: any): void {
-    //Buscar el maximo indice utilizado
-    const index =
-      this.$store.state.indicadores.length == 0
-        ? 0
-        : Math.max.apply(
-            Math,
-            this.$store.state.indicadores.map(function(o: any) {
-              return o.index;
-            })
-          ) + 1;
-    indicador.filtro = "";
-    indicador.orden = "";
-    indicador.indicador_id = indicador.id;
-    indicador.posicion = 0;
-    indicador.dimension = Object.keys(indicador.dimensiones)[0];
-
-    const ind = this.inicializarIndicador(indicador, index);
-    this.$store.commit("agregarIndicador", ind);
-    this.cargarDatosIndicador(ind, index);
-  }
-
-  public filtrar(listado: any, filtro: string): any {
-    return listado.filter((ind: any) => {
-      const base = this.normalizarDiacriticos(ind.nombre);
-      const filtro_ = this.normalizarDiacriticos(filtro);
-      return base.includes(filtro_);
-    });
-  }
-
-  public getConteo(id: string): any {
-    return this.$store.state.indicadores.filter((x: any) => {
-      return x.id == id;
-    }).length;
-  }
-}
+})
 </script>

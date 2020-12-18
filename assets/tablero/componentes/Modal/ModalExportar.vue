@@ -185,7 +185,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { defineComponent } from "@vue/composition-api";
 import VueHtml2pdf from "vue-html2pdf";
 import TableToExcel from "@linways/table-to-excel";
 
@@ -193,64 +193,69 @@ import InfoTablaDatosContenido from "../InfoTablaDatosContenido.vue";
 import InfoFichaTecnicaContenido from "../InfoFichaTecnicaContenido.vue";
 import IndicadorBreadcum from "../IndicadorBreadcum.vue";
 
-@Component({
+@Options({
+  
+})
+export default defineComponent ({
   components: {
     InfoTablaDatosContenido,
     InfoFichaTecnicaContenido,
     IndicadorBreadcum,
     VueHtml2pdf
-  }
-})
-export default class ModalExportar extends Vue {
+  },
+
   mounted() {
     this.$root.$on("bv::modal::shown", (bvEvent: any, modalId: string) => {
       if (modalId == "modalExportar") {
         this.$emit("convertir-graficos-sala");
       }
     });
+  }, 
+
+  computed: {
+    pdfOptions() {
+      return {
+        filename: this.$store.state.sala.nombre,
+        margin: 0.5,
+        image: { type: "jpeg", quality: 0.6 },
+        html2canvas: { scale: 1 },
+        jsPDF: { unit: "in", format: "letter", orientation: "portrait" }
+      };
+    }
+  },
+
+  methods : {
+    exportarExcel(id: string, nombreArchivo: string): void {
+
+      TableToExcel.convert(document.getElementById(id), {
+        name: this.$t(nombreArchivo) + ".xlsx"
+      });
+    },
+
+    exportarpdf(id: string, nombreArchivo: string): void {
+      this.$refs[id].generatePdf();
+    },
+
+    exportarcsv(): void {
+      let csvContent = "data:text/csv;charset=utf-8,";
+
+      this.$store.state.indicadores.map((indicador: any) => {
+        const arrData = indicador.data;
+        csvContent += [
+          Object.keys(arrData[0]).join(","),
+          ...arrData.map((item: any) => Object.values(item).join(","))
+        ]
+          .join("\n")
+          .replace(/(^\[)|(\]$)/gm, "");
+        csvContent += "\n\n";
+      });
+
+      const data = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", data);
+      link.setAttribute("download", this.$t("_tabla_datos_") + ".csv");
+      link.click();
+    }
   }
-
-  get pdfOptions() {
-    return {
-      filename: this.$store.state.sala.nombre,
-      margin: 0.5,
-      image: { type: "jpeg", quality: 0.6 },
-      html2canvas: { scale: 1 },
-      jsPDF: { unit: "in", format: "letter", orientation: "portrait" }
-    };
-  }
-
-  public exportarExcel(id: string, nombreArchivo: string): void {
-    const vm = this;
-
-    TableToExcel.convert(document.getElementById(id), {
-      name: vm.$t(nombreArchivo) + ".xlsx"
-    });
-  }
-
-  public exportarpdf(id: string, nombreArchivo: string): void {
-    this.$refs[id].generatePdf();
-  }
-
-  public exportarcsv(): void {
-    let csvContent = "data:text/csv;charset=utf-8,";
-
-    this.$store.state.indicadores.map((indicador: any) => {
-      const arrData = indicador.data;
-      csvContent += [
-        Object.keys(arrData[0]).join(","),
-        ...arrData.map((item: any) => Object.values(item).join(","))
-      ]
-        .join("\n")
-        .replace(/(^\[)|(\]$)/gm, "");
-      csvContent += "\n\n";
-    });
-
-    const data = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", data);
-    link.setAttribute("download", this.$t("_tabla_datos_") + ".csv");
-    link.click();
-  }
-}
+})
 </script>

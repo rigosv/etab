@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Mixins, Prop, Watch } from "vue-property-decorator";
+import { defineComponent } from "@vue/composition-api";
 import { Plotly } from "vue-plotly";
 import numeral from "numeral";
 import axios from "axios";
@@ -44,143 +44,162 @@ import { LMap, LTileLayer, LGeoJson, LControl } from "vue2-leaflet";
 
 import GraficoMixin from "../Mixins/GraficoMixin";
 
-@Component({
-  components: { Plotly, LMap, LTileLayer, LGeoJson, LControl }
-})
-export default class Mapa extends Mixins(GraficoMixin) {
-  @Prop({ default: {} }) indicador: any;
-  @Prop() readonly index!: number;
+export default defineComponent ({
+  components: { Plotly, LMap, LTileLayer, LGeoJson, LControl },
 
-  private mapaDatosCargados = false;
-  private datosMapa: any = {};
-  private info = "";
-  private url = "https://{s}.tile.osm.org/{z}/{x}/{y}.png";
+  props: {
+    indicador: {default: {}, type: Object},
+    index: Number
+  },
 
-  private window_: any = window;
+  mixins:[ GraficoMixin ],
 
-  get zoom() {
-    return this.indicador.informacion.dimensiones[this.indicador.dimension]
-      .escala;
-  }
+  data : () => ({
+    mapaDatosCargados : false,
+    datosMapa : {},
+    info : "",
+    url : "https://{s}.tile.osm.org/{z}/{x}/{y}.png",
+    window_: window
+  }),
 
-  get center() {
-    return [
-      this.indicador.informacion.dimensiones[this.indicador.dimension].origenX,
-      this.indicador.informacion.dimensiones[this.indicador.dimension].origenY
-    ];
-  }
+  computed : {
+    zoom(): any {
+      return this.indicador.informacion.dimensiones[this.indicador.dimension]
+        .escala;
+    },
 
-  get styleFunction() {
-    return (feature: any) => {
-      const itemGeoJSONID = feature.properties.ID;
-      const data = this.indicador.data;
+    center(): any {
+      return [
+        this.indicador.informacion.dimensiones[this.indicador.dimension].origenX,
+        this.indicador.informacion.dimensiones[this.indicador.dimension].origenY
+      ];
+    },
 
-      const item = data.find((x: any) => x.id == itemGeoJSONID);
-      if (!item) {
-        return { weight: 1, opacity: 0.6, color: "black" };
-      }
+    styleFunction(): any {
+      return (feature: any) => {
+        const itemGeoJSONID = feature.properties.ID;
+        const data = this.indicador.data;
 
-      return {
-        weight: 1,
-        opacity: 0.6,
-        color: "black",
-        dashArray: "3",
-        fillOpacity: 0.5,
-        fillColor: this.getColor(
-          item.measure,
-          this.indicador.informacion.rangos
-        )
+        const item = data.find((x: any) => x.id == itemGeoJSONID);
+        if (!item) {
+          return { weight: 1, opacity: 0.6, color: "black" };
+        }
+
+        return {
+          weight: 1,
+          opacity: 0.6,
+          color: "black",
+          dashArray: "3",
+          fillOpacity: 0.5,
+          fillColor: this.getColor(
+            item.measure,
+            this.indicador.informacion.rangos
+          )
+        };
       };
-    };
-  }
+    },
 
-  get options() {
-    return {
-      onEachFeature: this.onEachFeatureFunction
-    };
-  }
+    options() {
+      return {
+        onEachFeature: this.onEachFeatureFunction
+      };
+    },
 
-  get onEachFeatureFunction() {
-    return (feature: any, layer: any) => {
-      const itemGeoJSONID = feature.properties.ID;
-      const data = this.indicador.data;
-      const item = data.find((x: any) => x.id == itemGeoJSONID);
+    onEachFeatureFunction() {
+      return (feature: any, layer: any) => {
+        const itemGeoJSONID = feature.properties.ID;
+        const data = this.indicador.data;
+        const item = data.find((x: any) => x.id == itemGeoJSONID);
 
-      if (item) {
-        layer.on({
-          click: () => {
-            this.click({ points: [{ x: item.category }] });
-          },
-          mouseover: () => {
-            this.info =
-              item.category +
-              ": " +
-              numeral(item.measure).format("0,0." + "0".repeat(this.dec)) +
-              this.indicador.informacion.unidad_medida;
-          },
-          mouseout: () => {
-            this.info = "";
-          },
-          dblclick: () => {
-            console.log("doble clic");
-            this.doubleClickTime = Date.now();
-          }
-        });
-      }
-    };
-  }
+        if (item) {
+          layer.on({
+            click: () => {
+              this.click({ points: [{ x: item.category }] });
+            },
+            mouseover: () => {
+              this.info =
+                item.category +
+                ": " +
+                numeral(item.measure).format("0,0." + "0".repeat(this.dec)) +
+                this.indicador.informacion.unidad_medida;
+            },
+            mouseout: () => {
+              this.info = "";
+            },
+            dblclick: () => {
+              console.log("doble clic");
+              this.doubleClickTime = Date.now();
+            }
+          });
+        }
+      };
+    },
 
-  get datos() {
-    return this.datosMapa;
-  }
+    datos(): any {
+      return this.datosMapa;
+    },
+
+    fullsreen (): any {
+      return this.indicador.full_screen;
+    },
+
+    dimension() : any {
+      return this.dimension;
+    },
+
+    filtros() : any {
+      return this.filtros;
+    }
+  },
 
   mounted() {
     this.cargarDatosMapa();
-  }
+  },
 
-  public cargarDatosMapa(): void {
-    const nombre_mapa = this.indicador.informacion.dimensiones[
-      this.indicador.dimension
-    ].mapa;
-    const url = "/js/Mapas/" + nombre_mapa;
-    const vm = this;
+  methods : {
+    cargarDatosMapa(): void {
+      const nombre_mapa = this.indicador.informacion.dimensiones[
+        this.indicador.dimension
+      ].mapa;
+      const url = "/js/Mapas/" + nombre_mapa;
+      const vm = this;
 
-    axios
-      .get(url)
-      .then(response => {
-        if (response.status == 200) {
-          vm.datosMapa = response.data;
-          vm.mapaDatosCargados = true;
-        }
-      })
-      .catch(function(error) {
-        console.log(error);
-        vm.indicador.error = "Error";
-      });
-  }
+      axios
+        .get(url)
+        .then(response => {
+          if (response.status == 200) {
+            vm.datosMapa = response.data;
+            vm.mapaDatosCargados = true;
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+          vm.indicador.error = "Error";
+        });
+    },
 
-  public zoomUpdated(zoom: number): void {
-    console.log("Zoom: " + zoom);
-  }
+    zoomUpdated(zoom: number): void {
+      console.log("Zoom: " + zoom);
+    },
 
-  public centerUpdated(center: number): void {
-    console.log("Center: " + center);
-  }
+    centerUpdated(center: number): void {
+      console.log("Center: " + center);
+    }
+  },
 
-  @Watch("indicador.full_screen")
-  fullScreenChange() {
-    //this.$refs["myMap" + this.index].mapObject.invalidateSize();
-    console.log("fulll");
-  }
+  watch : {
+    fullsreen(){
+      //this.$refs["myMap" + this.index].mapObject.invalidateSize();
+      console.log("fulll");
+    },
 
-  @Watch("indicador.dimension")
-  dimensionChange() {
-    this.cargarDatosMapa();
-  }
+    dimension() {
+      this.cargarDatosMapa();
+    },
 
-  @Watch("indicador.filtros")
-  filtrosChange() {
-    this.cargarDatosMapa();
+    filtros() {
+      this.cargarDatosMapa();  
+    }
   }
-}
+})
 </script>

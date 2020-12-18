@@ -200,7 +200,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Mixins, Prop } from "vue-property-decorator";
+import { defineComponent } from "@vue/composition-api";
 import domtoimage from "dom-to-image";
 import axios from "axios";
 
@@ -213,7 +213,7 @@ import ConfiguracionIndicador from "./ConfiguracionIndicador.vue";
 import InfoTablaDatosContenido from "./InfoTablaDatosContenido.vue";
 import IndicadorMixin from "../Mixins/IndicadorMixin";
 
-@Component({
+export default defineComponent ({
   components: {
     GraficoBasico,
     IndicadorBarraOpciones,
@@ -222,185 +222,192 @@ import IndicadorMixin from "../Mixins/IndicadorMixin";
     ConfiguracionIndicador,
     Mapa,
     InfoTablaDatosContenido
-  }
-})
-export default class IndicadorC extends Mixins(IndicadorMixin) {
-  @Prop({ default: {} }) indicador: any;
-  @Prop() readonly index!: number;
+  },
 
-  get ancho(): number {
-    return this.indicador.configuracion.width.split("-")[2];
-  }
+  props: {
+    indicador: {default: {}, type: Object},
+    index: Number
+  },
 
-  get anchopx(): number {
-    return (parseFloat(this.ancho()) * window.width) / 12;
-  }
+  mixins:[ IndicadorMixin ],
 
-  get alto(): number {
-    return this.$store.state.layout[this.index].h * 30;
-  }
+  computed : {
+    ancho(): number {
+      return this.indicador.configuracion.width.split("-")[2];
+    },
 
-  public quitarIndicador(): void {
-    this.$store.commit("quitarIndicador", this.index);
-  }
+    anchopx(): number {
+      return (parseFloat(this.ancho()) * window.width) / 12;
+    },
 
-  public clicGrafico(valor: number): void {
-    const vm = this;
-    if (
-      parseInt(this.indicador.dimensionIndex) + 1 ==
-      this.indicador.dimensiones.length
-    ) {
-      this.indicador.error = "Success";
-    } else {
-      this.indicador.otros_filtros.elementos = [];
-      //Agregar la dimensión actual como un filtro
-      const datos_dimension = this.indicador.informacion.dimensiones[
-        this.indicador.dimension
-      ];
-      this.indicador.filtros.push({
-        codigo: this.indicador.dimension,
-        etiqueta: datos_dimension.descripcion,
-        valor: valor
-      });
-
-      //Moverse a la siguiente dimension
-      this.indicador.dimensionIndex++;
-      this.indicador.dimension = this.indicador.dimensiones[
-        this.indicador.dimensionIndex
-      ];
-
-      //Recargar datos del gráfico
-      this.cargarDatosIndicador(this.indicador, this.index);
-
-      this.cargarDatosComparacion();
+    alto(): number {
+      return this.$store.state.layout[this.index].h * 30;
     }
-  }
+  },
 
-  public filtrarPosicion(elementos: any): void {
-    if (elementos.length > 0) {
-      this.indicador.otros_filtros.elementos = [];
-      elementos.map((e: any) => {
-        this.indicador.otros_filtros.elementos.push(e.x);
-      });
+  methods : {
+    quitarIndicador(): void {
+      this.$store.commit("quitarIndicador", this.index);
+    },
 
-      this.$snotify.info(this.$t("_se_ha_aplicado_filtro_info_") as string, {
-        timeout: 5000
-      });
-    } else {
-      this.indicador.otros_filtros.elementos = [];
-    }
-  }
-
-  public quitarFiltros(): void {
-    this.indicador.otros_filtros.elementos = [];
-  }
-
-  public cerrarConfiguracion(index: number): void {
-    this.indicador.mostrar_configuracion = false;
-    //this.indicador.full_screen = false;
-  }
-
-  public fullscreen(): void {
-    this.$refs["fullscreen"].toggle();
-  }
-
-  public fullscreenChange(fullscreen: boolean): void {
-    //this.fullscreen = fullscreen
-    this.indicador.full_screen = fullscreen;
-    this.indicador.mostrar_configuracion = this.indicador.full_screen
-      ? this.indicador.mostrar_configuracion
-      : false;
-  }
-
-  public agregarFavorito(): void {
-    const vm = this;
-    axios
-      .post("/api/v1/tablero/indicadorFavorito", {
-        id: vm.indicador.id,
-        es_favorito: vm.indicador.es_favorito
-      })
-      .then(function(response) {
-        if (response.data.status == 200) {
-          vm.indicador.es_favorito = response.data.data;
-          vm.indicador.es_favorito
-            ? vm.$snotify.info(vm.$t("_agregado_favorito_") as string)
-            : vm.$snotify.warning(vm.$t("_eliminado_favorito_") as string);
-        }
-      })
-      .catch(function(error) {
-        console.log(error);
-        vm.$snotify.error(vm.$t("_error_conexion_") as string, "Error", {
-          timeout: 10000
-        });
-      });
-  }
-
-  public move(data: any): void {
-    this.height = data.height;
-  }
-
-  public end(): void {
-    this.indicador.configuracion.height = this.height;
-  }
-
-  public graficoImagen(options: any): void {
-    if (
-      !["MAPA", "GEOLOCATION", "MAP"].includes(
-        this.indicador.configuracion.tipo_grafico.toUpperCase()
-      )
-    ) {
-      return this.$refs.grafico.toImage(options);
-    } else {
-      return domtoimage.toPng(
-        document.querySelector("#grafico-" + this.index),
-        options
-      );
-    }
-  }
-
-  public descargarGrafico(): void {
-    if (
-      ["MAPA", "GEOLOCATION", "MAP"].includes(
-        this.indicador.configuracion.tipo_grafico.toUpperCase()
-      )
-    ) {
+    clicGrafico(valor: number): void {
       const vm = this;
-      domtoimage
-        .toPng(document.querySelector("#grafico-" + this.index), {
-          width: 800,
-          height: 600
-        })
-        .then((dataUrl: string) => {
-          const filename = vm.indicador.nombre;
-          const link = document.createElement("a");
+      if (
+        parseInt(this.indicador.dimensionIndex) + 1 ==
+        this.indicador.dimensiones.length
+      ) {
+        this.indicador.error = "Success";
+      } else {
+        this.indicador.otros_filtros.elementos = [];
+        //Agregar la dimensión actual como un filtro
+        const datos_dimension = this.indicador.informacion.dimensiones[
+          this.indicador.dimension
+        ];
+        this.indicador.filtros.push({
+          codigo: this.indicador.dimension,
+          etiqueta: datos_dimension.descripcion,
+          valor: valor
+        });
 
-          if (typeof link.download === "string") {
-            link.href = dataUrl;
-            link.download = filename;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-          } else {
-            window.open(uri);
+        //Moverse a la siguiente dimension
+        this.indicador.dimensionIndex++;
+        this.indicador.dimension = this.indicador.dimensiones[
+          this.indicador.dimensionIndex
+        ];
+
+        //Recargar datos del gráfico
+        this.cargarDatosIndicador(this.indicador, this.index);
+
+        this.cargarDatosComparacion();
+      }
+    },
+
+    filtrarPosicion(elementos: any): void {
+      if (elementos.length > 0) {
+        this.indicador.otros_filtros.elementos = [];
+        elementos.map((e: any) => {
+          this.indicador.otros_filtros.elementos.push(e.x);
+        });
+
+        this.$snotify.info(this.$t("_se_ha_aplicado_filtro_info_") as string, {
+          timeout: 5000
+        });
+      } else {
+        this.indicador.otros_filtros.elementos = [];
+      }
+    },
+
+    quitarFiltros(): void {
+      this.indicador.otros_filtros.elementos = [];
+    },
+
+    cerrarConfiguracion(index: number): void {
+      this.indicador.mostrar_configuracion = false;
+      //this.indicador.full_screen = false;
+    },
+
+    fullscreen(): void {
+      this.$refs["fullscreen"].toggle();
+    },
+
+    fullscreenChange(fullscreen: boolean): void {
+      //this.fullscreen = fullscreen
+      this.indicador.full_screen = fullscreen;
+      this.indicador.mostrar_configuracion = this.indicador.full_screen
+        ? this.indicador.mostrar_configuracion
+        : false;
+    },
+
+    agregarFavorito(): void {
+      const vm = this;
+      axios
+        .post("/api/v1/tablero/indicadorFavorito", {
+          id: vm.indicador.id,
+          es_favorito: vm.indicador.es_favorito
+        })
+        .then(function(response) {
+          if (response.data.status == 200) {
+            vm.indicador.es_favorito = response.data.data;
+            vm.indicador.es_favorito
+              ? vm.$snotify.info(vm.$t("_agregado_favorito_") as string)
+              : vm.$snotify.warning(vm.$t("_eliminado_favorito_") as string);
           }
         })
-        .catch(function(error: any) {
-          console.error("oops, something went wrong!", error);
+        .catch(function(error) {
+          console.log(error);
+          vm.$snotify.error(vm.$t("_error_conexion_") as string, "Error", {
+            timeout: 10000
+          });
         });
-    } else {
-      this.$refs.grafico.downloadImage({
-        format: "png",
-        width: 800,
-        height: 600,
-        filename: this.indicador.nombre
-      });
+    },
+
+    move(data: any): void {
+      this.height = data.height;
+    },
+
+    end(): void {
+      this.indicador.configuracion.height = this.height;
+    },
+
+    graficoImagen(options: any): void {
+      if (
+        !["MAPA", "GEOLOCATION", "MAP"].includes(
+          this.indicador.configuracion.tipo_grafico.toUpperCase()
+        )
+      ) {
+        return this.$refs.grafico.toImage(options);
+      } else {
+        return domtoimage.toPng(
+          document.querySelector("#grafico-" + this.index),
+          options
+        );
+      }
+    },
+
+    descargarGrafico(): void {
+      if (
+        ["MAPA", "GEOLOCATION", "MAP"].includes(
+          this.indicador.configuracion.tipo_grafico.toUpperCase()
+        )
+      ) {
+        const vm = this;
+        domtoimage
+          .toPng(document.querySelector("#grafico-" + this.index), {
+            width: 800,
+            height: 600
+          })
+          .then((dataUrl: string) => {
+            const filename = vm.indicador.nombre;
+            const link = document.createElement("a");
+
+            if (typeof link.download === "string") {
+              link.href = dataUrl;
+              link.download = filename;
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+            } else {
+              window.open(uri);
+            }
+          })
+          .catch(function(error: any) {
+            console.error("oops, something went wrong!", error);
+          });
+      } else {
+        this.$refs.grafico.downloadImage({
+          format: "png",
+          width: 800,
+          height: 600,
+          filename: this.indicador.nombre
+        });
+      }
+    },
+
+    getConteo(id: string): void {
+      return this.$store.state.indicadores.filter((x: any) => {
+        return x.id == id;
+      }).length;
     }
   }
-
-  public getConteo(id: string): void {
-    return this.$store.state.indicadores.filter((x: any) => {
-      return x.id == id;
-    }).length;
-  }
-}
+})
 </script>

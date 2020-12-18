@@ -202,11 +202,14 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Mixins, Prop } from "vue-property-decorator";
+import { defineComponent } from "@vue/composition-api";
 import ColorMixin from "../Mixins/ColorMixin";
 
-@Component
-export default class InfoFichaTecnicaContenido extends Mixins(ColorMixin) {
-  @Prop({ default: {} }) indicador: any;
-}
+export default defineComponent ({
+  props: {
+    indicador: {default: {}, type: Object}
+  },
+
+  mixins:[ ColorMixin ]
+})
 </script>

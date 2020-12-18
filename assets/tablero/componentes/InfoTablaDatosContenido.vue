@@ -67,26 +67,31 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Mixins } from "vue-property-decorator";
+import { defineComponent } from "@vue/composition-api";
 import ColorMixin from "../Mixins/ColorMixin";
 
-@Component
-export default class InfoTablaDatosContenido extends Mixins(ColorMixin) {
-  @Prop({ default: {} }) indicador: any;
+export default defineComponent ({
+  props: {
+    indicador: {default: {}, type: Object}
+  },
 
-  public getColor(valor: number): string {
-    let color = "";
-    for (const rango of this.indicador.informacion.rangos) {
-      if (valor >= rango.limite_inf && valor <= rango.limite_sup) {
-        color = rango.color;
+  mixins:[ ColorMixin ],
+
+  methods : {
+    getColor(valor: number): string {
+      let color = "";
+      for (const rango of this.indicador.informacion.rangos) {
+        if (valor >= rango.limite_inf && valor <= rango.limite_sup) {
+          color = rango.color;
+        }
       }
-    }
-    return color;
-  }
+      return color;
+    },
 
-  public getColorExceljs_(v: number): string {
-    const codigo = this.getColor(v);
-    return this.getColorExceljs(codigo);
+    getColorExceljs_(v: number): string {
+      const codigo = this.getColor(v);
+      return this.getColorExceljs(codigo);
+    }
   }
-}
+})
 </script>

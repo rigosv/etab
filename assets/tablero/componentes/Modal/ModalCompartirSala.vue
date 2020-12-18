@@ -117,48 +117,49 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { defineComponent } from "@vue/composition-api";
 import axios from "axios";
 import vSelect from "vue-select";
 
-@Component({
-  components: { vSelect }
-})
-export default class ModalCompartirSala extends Vue {
-  private datos = {
-    usuarios_con_cuenta: [],
-    usuarios_sin_cuenta: "",
-    comentarios: "",
-    correo: 0,
-    tiempo_dias: 1,
-    es_permanente: false
-  };
+export default defineComponent({
+  components: { vSelect },
+  data: () => ({
+    datos : {
+      usuarios_con_cuenta: [],
+      usuarios_sin_cuenta: "",
+      comentarios: "",
+      correo: 0,
+      tiempo_dias: 1,
+      es_permanente: false
+    }
+  }),
+
   mounted() {
     this.datos.usuarios_con_cuenta = this.$store.state.sala_usuarios.filter(
       (s: any) => {
         return s.selected == true;
       }
     );
+  },
+
+  methods: {
+    guardarCompartirSala() { 
+      const json = JSON.parse(JSON.stringify(this.datos));
+
+      axios
+        .post("/api/v1/tablero/comentarioSala/" + this.$store.state.sala.id, json)
+        .then(response => {
+          if (response.data.status == 200) {
+            this.$bvModal.hide("modalCompartirSala");
+            this.$snotify.success(this.$t("_guardar_ok_") as string);
+          } else {
+            this.$snotify.error(
+              this.$t("_guardar_error_") as string,
+              this.$t("_error_") as string
+            );
+          }
+        });
+    }
   }
-
-  public guardarCompartirSala(): void {
-    const vm = this;
-
-    const json = JSON.parse(JSON.stringify(this.datos));
-
-    axios
-      .post("/api/v1/tablero/comentarioSala/" + vm.$store.state.sala.id, json)
-      .then(function(response) {
-        if (response.data.status == 200) {
-          vm.$bvModal.hide("modalCompartirSala");
-          vm.$snotify.success(vm.$t("_guardar_ok_") as string);
-        } else {
-          vm.$snotify.error(
-            vm.$t("_guardar_error_") as string,
-            vm.$t("_error_") as string
-          );
-        }
-      });
-  }
-}
+});
 </script>

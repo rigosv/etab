@@ -27,10 +27,11 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
+import { defineComponent } from "@vue/composition-api";
 
-@Component
-export default class InfoRangosAlerta extends Vue {
-  @Prop({ default: {} }) indicador: any;
-}
+export default defineComponent ({
+  props: {
+    indicador: {default: {}, type: Object}
+  },
+})
 </script>

@@ -22,21 +22,27 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Mixins } from "vue-property-decorator";
+import { defineComponent } from "@vue/composition-api";
 
 import IndicadorMixin from "../Mixins/IndicadorMixin";
 
-@Component
-export default class IndicadorBreadcum extends Mixins(IndicadorMixin) {
-  @Prop({ default: {} }) indicador: any;
-  @Prop() readonly index!: number;
+export default defineComponent ({
+  props: {
+    indicador: {default: {}, type: Object},
+    index: Number
+  },
 
-  public breadcum(indexF: any): void {
-    //poner la nueva dimension
-    this.indicador.dimension = this.indicador.filtros[indexF].codigo;
-    this.indicador.filtros = this.indicador.filtros.slice(0, indexF);
-    this.indicador.dimensionIndex = indexF;
-    this.cargarDatosIndicador(this.indicador, this.index);
+  mixins:[ IndicadorMixin ],
+  
+  methods : {
+    breadcum(indexF: any): void {
+      //poner la nueva dimension
+      this.indicador.dimension = this.indicador.filtros[indexF].codigo;
+      this.indicador.filtros = this.indicador.filtros.slice(0, indexF);
+      this.indicador.dimensionIndex = indexF;
+      this.cargarDatosIndicador(this.indicador, this.index);
+    }
   }
-}
+  
+})
 </script>

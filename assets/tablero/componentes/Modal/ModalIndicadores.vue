@@ -65,75 +65,77 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { defineComponent } from "@vue/composition-api";
 import axios from "axios";
 
 import ListadoIndicadoresClasificados from "../ListadoIndicadoresClasificados.vue";
 import ListadoIndicadores from "../ListadoIndicadores.vue";
 import Buscar from "../Buscar.vue";
 
-@Component({
-  components: { ListadoIndicadoresClasificados, Buscar, ListadoIndicadores }
-})
-export default class ModalIndicadores extends Vue {
-  private indicadores_no_clasificados: any[] = [];
-  private indicadores_favoritos: any[] = [];
-  indicadores_libres: any[] = [];
-  filtroLibre = "";
+export default defineComponent ({
+  components: { ListadoIndicadoresClasificados, Buscar, ListadoIndicadores },
+  data : () => ({
+    indicadores_no_clasificados: [],
+    indicadores_favoritos: [],
+    indicadores_libres: [],
+    filtroLibre: ""
+  }),
 
   mounted() {
-    const vm = this;
     this.$root.$on("bv::modal::show", (bvEvent: any, modalId: any) => {
       //Cargar indicadores favoritos
       axios
         .get("/api/v1/tablero/listaIndicadores?tipo=favoritos")
-        .then(function(response) {
-          vm.indicadores_favoritos = response.data.data;
+        .then(response => {
+          this.indicadores_favoritos = response.data.data;
         })
-        .catch(function(error) {
-          vm.$snotify.error(vm.$t("_error_conexion_") as string, "Error");
+        .catch( () => {
+          this.$snotify.error( this.$t("_error_conexion_") as string, "Error" );
         });
     });
     //Cargar la clasificación de uso
     axios
       .get("/api/v1/tablero/clasificacionUso")
-      .then(function(response) {
-        vm.$store.state.clasificaciones_uso = response.data.data;
+      .then(response => {
+        this.$store.state.clasificaciones_uso = response.data.data;
       })
-      .catch(function(error) {
-        vm.$snotify.error(vm.$t("_error_conexion_") as string, "Error");
+      .catch(() => {
+        this.$snotify.error(this.$t("_error_conexion_") as string, "Error");
       });
 
     //Cargar indicadores no clasificados
     axios
       .get("/api/v1/tablero/listaIndicadores?tipo=no_clasificados")
-      .then(function(response) {
-        vm.indicadores_no_clasificados = response.data.data;
+      .then(response => {
+        this.indicadores_no_clasificados = response.data.data;
       })
-      .catch(function(error) {
-        vm.$snotify.error(vm.$t("_error_conexion_") as string, "Error");
+      .catch(() => {
+        this.$snotify.error(this.$t("_error_conexion_") as string, "Error");
       });
+  },
+
+  methods: {
+    buscarIndicadoresLibre(): void {
+      axios
+        .get(
+          "/api/v1/tablero/listaIndicadores?tipo=busqueda&busqueda=" +
+            this.filtroLibre
+        )
+        .then(response => {
+          if (response.data.status == 200) {
+            this.indicadores_libres = response.data.data;
+          } else {
+            this.indicadores_libres = [];
+            this.$snotify.info(this.$t("_datos_no_encontrados_") as string);
+          }
+        })
+        .catch(error => {
+          console.log(error);
+          this.$snotify.error(this.$t("_error_conexion_") as string, "Error");
+        });
+    }
   }
 
-  public buscarIndicadoresLibre(): void {
-    const vm = this;
-    axios
-      .get(
-        "/api/v1/tablero/listaIndicadores?tipo=busqueda&busqueda=" +
-          this.filtroLibre
-      )
-      .then(function(response) {
-        if (response.data.status == 200) {
-          vm.indicadores_libres = response.data.data;
-        } else {
-          vm.indicadores_libres = [];
-          vm.$snotify.info(vm.$t("_datos_no_encontrados_") as string);
-        }
-      })
-      .catch(function(error) {
-        console.log(error);
-        vm.$snotify.error(vm.$t("_error_conexion_") as string, "Error");
-      });
-  }
-}
+  
+})
 </script>

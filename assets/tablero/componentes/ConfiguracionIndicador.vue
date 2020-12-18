@@ -40,7 +40,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
+import { defineComponent } from "@vue/composition-api";
 import axios from "axios";
 
 import OpcionesFiltro from "./OpcionesFiltro.vue";
@@ -49,39 +49,43 @@ import OpcionesInformacion from "./OpcionesInformacion.vue";
 import OpcionesComparacion from "./OpcionesComparacion.vue";
 import Buscar from "./Buscar.vue";
 
-@Component({
+export default defineComponent ({
   components: {
     OpcionesGrafico,
     OpcionesFiltro,
     OpcionesInformacion,
     OpcionesComparacion,
     Buscar
+  },
+
+  props: {
+    indicador: { default: {}, type: Object},
+    index: Number
+  },
+
+  computed: {
+    puedeFiltrar(): boolean {
+      const porTipo = [
+        "BOX",
+        "BURBUJA",
+        "BUBBLE",
+        "BARRA",
+        "BARRAS",
+        "COLUMNAS",
+        "COLUMNA",
+        "DISCRETEBARCHART",
+        "LINECHART",
+        "LINEA",
+        "LINEAS",
+        "PIECHART",
+        "PIE",
+        "PASTEL",
+        "TORTA"
+      ].includes(this.indicador.configuracion.tipo_grafico.toUpperCase());
+
+      return porTipo && this.indicador.configuracion.dimensionComparacion == "";
+    }
   }
+  
 })
-export default class ConfiguracionIndicador extends Vue {
-  @Prop() readonly indicador!: any;
-  @Prop() readonly index!: number;
-
-  get puedeFiltrar(): boolean {
-    const porTipo = [
-      "BOX",
-      "BURBUJA",
-      "BUBBLE",
-      "BARRA",
-      "BARRAS",
-      "COLUMNAS",
-      "COLUMNA",
-      "DISCRETEBARCHART",
-      "LINECHART",
-      "LINEA",
-      "LINEAS",
-      "PIECHART",
-      "PIE",
-      "PASTEL",
-      "TORTA"
-    ].includes(this.indicador.configuracion.tipo_grafico.toUpperCase());
-
-    return porTipo && this.indicador.configuracion.dimensionComparacion == "";
-  }
-}
 </script>

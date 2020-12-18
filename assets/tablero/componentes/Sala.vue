@@ -92,124 +92,128 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { defineComponent } from "@vue/composition-api";
 import axios from "axios";
 import VueGridLayout from "vue-grid-layout";
 
 import IndicadorC from "./IndicadorC.vue";
 
-@Component({
+export default defineComponent ({
   components: {
     IndicadorC,
     GridLayout: VueGridLayout.GridLayout,
     GridItem: VueGridLayout.GridItem
-  }
-})
-export default class Sala extends Vue {
-  get nameState(): boolean {
-    return this.$store.state.sala.nombre.length > 0 ? true : false;
-  }
-  get esSalaPublica(): boolean {
-    return this.$store.state.token != "" && this.$store.state.idSala != "";
-  }
+  },
 
-  public movedEvent(i: string, newX: number, newY: number): void {
-    console.log("MOVED i=" + i + ", X=" + newX + ", Y=" + newY);
-    this.$store.state.indicadores.map((ind: any) => {
-      if (ind.index == i) {
-        ind.configuracion.layout.x = newX;
-        ind.configuracion.layout.y = newY;
-      }
-    });
+  computed : {
+    nameState(): boolean {
+      return this.$store.state.sala.nombre.length > 0 ? true : false;
+    },
 
-    console.log(this.$store.state.indicadores);
-  }
+    esSalaPublica(): boolean {
+      return this.$store.state.token != "" && this.$store.state.idSala != "";
+    }
+  },
 
-  /**
-   *
-   * @param i the item id/index
-   * @param newH new height in grid rows
-   * @param newW new width in grid columns
-   * @param newHPx new height in pixels
-   * @param newWPx new width in pixels
-   *
-   */
-  public resizedEvent(
-    i: string,
-    newH: number,
-    newW: number,
-    newHPx: number,
-    newWPx: number
-  ): void {
-    console.log(
-      `RESIZED i= ${i}, H= ${newH}, W= ${newW}, H(px)=${newHPx}, W(px)= ${newWPx}`
-    );
-    this.$store.state.indicadores.map((ind: any) => {
-      if (ind.index == i) {
-        ind.configuracion.layout.w = newW;
-        ind.configuracion.layout.h = newH;
-      }
-    });
+  methods : {
+    movedEvent(i: string, newX: number, newY: number): void {
+      console.log("MOVED i=" + i + ", X=" + newX + ", Y=" + newY);
+      this.$store.state.indicadores.map((ind: any) => {
+        if (ind.index == i) {
+          ind.configuracion.layout.x = newX;
+          ind.configuracion.layout.y = newY;
+        }
+      });
 
-    console.log(this.$store.state.indicadores);
-  }
+      console.log(this.$store.state.indicadores);
+    },
 
-  public guardarSala(tipo: string): void {
-    const salaDatos =
-      tipo == "guardar"
-        ? this.$store.state.sala
-        : { id: "", nombre: this.$store.state.sala.nombre };
-    const json = {
-      sala: salaDatos,
-      indicadores: this.$store.state.indicadores
-    };
-    this.$store.state.sala_cargando = true;
-    const vm = this;
-
-    if (
-      tipo == "guardar_como" &&
-      this.$store.state.sala.nombre == this.$store.state.sala_nombre_ini
-    ) {
-      vm.$snotify.warning(
-        vm.$t("_guardar_sala_error_nombre_diferente_") as string,
-        "Error"
+    /**
+     *
+     * @param i the item id/index
+     * @param newH new height in grid rows
+     * @param newW new width in grid columns
+     * @param newHPx new height in pixels
+     * @param newWPx new width in pixels
+     *
+     */
+    resizedEvent(
+      i: string,
+      newH: number,
+      newW: number,
+      newHPx: number,
+      newWPx: number
+    ): void {
+      console.log(
+        `RESIZED i= ${i}, H= ${newH}, W= ${newW}, H(px)=${newHPx}, W(px)= ${newWPx}`
       );
-    } else {
-      axios
-        .post("/api/v1/tablero/guardarSala", json)
-        .then(function(response) {
-          if (response.data.status == 200) {
-            vm.$store.state.abrio_sala = true;
-            vm.$store.state.sala.id = response.data.data;
-            vm.$store.state.sala_nombre_ini = vm.$store.state.sala.nombre;
-            vm.$store.state.salas_propias.push(response.data.data);
-            vm.$snotify.success(vm.$t("_sala_guardada_") as string);
-          } else {
-            vm.$snotify.error(
-              vm.$t("_guardar_sala_error_") as string,
-              "Error",
-              { timeout: 10000 }
-            );
-          }
-        })
-        .catch(function(error) {
-          vm.$snotify.error(vm.$t("_guardar_sala_error_") as string, "Error", {
-            timeout: 10000
+      this.$store.state.indicadores.map((ind: any) => {
+        if (ind.index == i) {
+          ind.configuracion.layout.w = newW;
+          ind.configuracion.layout.h = newH;
+        }
+      });
+
+      console.log(this.$store.state.indicadores);
+    },
+
+    guardarSala(tipo: string): void {
+      const salaDatos =
+        tipo == "guardar"
+          ? this.$store.state.sala
+          : { id: "", nombre: this.$store.state.sala.nombre };
+      const json = {
+        sala: salaDatos,
+        indicadores: this.$store.state.indicadores
+      };
+      this.$store.state.sala_cargando = true;
+      const vm = this;
+
+      if (
+        tipo == "guardar_como" &&
+        this.$store.state.sala.nombre == this.$store.state.sala_nombre_ini
+      ) {
+        vm.$snotify.warning(
+          vm.$t("_guardar_sala_error_nombre_diferente_") as string,
+          "Error"
+        );
+      } else {
+        axios
+          .post("/api/v1/tablero/guardarSala", json)
+          .then(function(response) {
+            if (response.data.status == 200) {
+              vm.$store.state.abrio_sala = true;
+              vm.$store.state.sala.id = response.data.data;
+              vm.$store.state.sala_nombre_ini = vm.$store.state.sala.nombre;
+              vm.$store.state.salas_propias.push(response.data.data);
+              vm.$snotify.success(vm.$t("_sala_guardada_") as string);
+            } else {
+              vm.$snotify.error(
+                vm.$t("_guardar_sala_error_") as string,
+                "Error",
+                { timeout: 10000 }
+              );
+            }
+          })
+          .catch(function(error) {
+            vm.$snotify.error(vm.$t("_guardar_sala_error_") as string, "Error", {
+              timeout: 10000
+            });
+            console.log(error);
+          })
+          .finally(function() {
+            vm.$store.state.sala_cargando = false;
           });
-          console.log(error);
-        })
-        .finally(function() {
-          vm.$store.state.sala_cargando = false;
-        });
+      }
+    },
+
+    cerrarSala(): void {
+      this.$store.commit("setIndicadores", []);
+      this.$store.state.indicadoresAllData = [];
+      this.$store.state.sala = { nombre: "" };
+      this.$store.state.abrio_sala = false;
+      this.$store.state.abrio_indicador = false;
     }
   }
-
-  public cerrarSala(): void {
-    this.$store.commit("setIndicadores", []);
-    this.$store.state.indicadoresAllData = [];
-    this.$store.state.sala = { nombre: "" };
-    this.$store.state.abrio_sala = false;
-    this.$store.state.abrio_indicador = false;
-  }
-}
+})
 </script>

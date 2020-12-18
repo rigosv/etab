@@ -13,42 +13,47 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
+import { defineComponent, onMounted } from "@vue/composition-api";
 
 import MenuTablero from "./componentes/MenuTablero.vue";
 import Sala from "./componentes/Sala.vue";
 
-@Component({
+export default defineComponent({
   components: {
     MenuTablero,
     Sala
+  },
+  props: {
+    idSala: String,
+    token: String,
+    lang: String
+  },
+  setup(props){
+    onMounted(() => {
+      this.$store.commit("addDatosSalaPublica", {
+        idSala: props.idSala,
+        token: props.token
+      });
+      //loadLanguageAsync(this.lang);
+      this.$i18n.locale = props.lang;
+    });
+    
+    const convertirGraficosSala = () => {
+      //Extraer cada gráfico y convertirlo en formato png para que sea más
+      // fácil de convertir a pdf
+      this.$store.state.indicadores.map((indicador: any) => {
+        const img = document.querySelector("#graph-export-" + indicador.index);
+        this.$refs.sala.$refs["indicador" + indicador.index][0]
+          .graficoImagen({ format: "png", height: 500, width: 685 })
+          .then((dataUrl: string) => {
+            img?.setAttribute("src", dataUrl);
+          });
+      });
+    };
+
+    return {
+      convertirGraficosSala
+    };
   }
 })
-export default class Tablero extends Vue {
-  @Prop({ default: "" }) readonly idSala!: string;
-  @Prop({ default: "" }) readonly token!: string;
-  @Prop({ default: "es" }) readonly lang!: string;
-
-  mounted() {
-    this.$store.commit("addDatosSalaPublica", {
-      idSala: this.idSala,
-      token: this.token
-    });
-    //loadLanguageAsync(this.lang);
-    this.$i18n.locale = this.lang;
-  }
-
-  public convertirGraficosSala(): void {
-    //Extraer cada gráfico y convertirlo en formato png para que sea más
-    // fácil de convertir a pdf
-    this.$store.state.indicadores.map((indicador: any) => {
-      const img = document.querySelector("#graph-export-" + indicador.index);
-      this.$refs.sala.$refs["indicador" + indicador.index][0]
-        .graficoImagen({ format: "png", height: 500, width: 685 })
-        .then((dataUrl: string) => {
-          img?.setAttribute("src", dataUrl);
-        });
-    });
-  }
-}
 </script>

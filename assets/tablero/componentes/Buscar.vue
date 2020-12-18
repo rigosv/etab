@@ -27,17 +27,22 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
+import { defineComponent } from "@vue/composition-api";
 
-@Component
-export default class Buscar extends Vue {
-  @Prop({ default: "" }) readonly value!: string;
-  @Prop({ default: false }) readonly enter!: boolean;
+export default defineComponent ({
+  props:{
+    value: String,
+    enter: Boolean
+  },
 
-  private cc_salas = false;
-
-  public focus(): void {
-    (this.$refs.input as Vue & { focus: () => any }).focus();
+  data: () => ({
+    cc_salas: false  
+  }),
+  
+  methods: {
+    focus(): void {
+      (this.$refs.input as Vue & { focus: () => any }).focus();
+    }
   }
-}
+})
 </script>

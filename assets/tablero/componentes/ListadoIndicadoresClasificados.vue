@@ -70,110 +70,116 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { defineComponent } from "@vue/composition-api";
 import axios from "axios";
 import vSelect from "vue-select";
 
 import ListadoIndicadores from "./ListadoIndicadores.vue";
 
-@Component({
-  components: { vSelect, ListadoIndicadores }
+export default defineComponent ({
+  components: { vSelect, ListadoIndicadores },
+  
+  data : () => ({
+    filtro : "",
+    cargando_uso : false,
+    cargando_tecnica : false
+  }),
+
+  computed : {
+    state(): boolean {
+      return this.$store.state.clasificacion_uso != null;
+    },
+
+    stateT(): boolean {
+      return this.$store.state.clasificacion_tecnica != null;
+    },
+
+    invalidCU(): boolean {
+      return this.$store.state.clasificacion_uso != null;
+    },
+
+    invalidCT(): boolean {
+      return this.$store.state.clasificacion_tecnica != null;
+    },
+
+    indicadoresFiltrados(): any {
+      return this.filtrar(this.$store.state.indicadoresClasificados, this.filtro);
+    }
+  },
+
+  methods : {
+
+    getClasificacionesTecnica(clasificacionUso: any): void {
+      const vm = this;
+      this.cargando_tecnica = true;
+      axios
+        .get("/api/v1/tablero/clasificacionTecnica?id=" + clasificacionUso.id)
+        .then(function(response) {
+          if (response.data.data.length == 0) {
+            vm.$snotify.warning(vm.$t("_datos_no_encontrados_") as string);
+            vm.$store.state.clasificaciones_tecnica = [];
+          } else {
+            vm.$store.state.clasificaciones_tecnica = response.data.data;
+          }
+        })
+        .catch(function(error) {
+          vm.$snotify.error(
+            vm.$t("_error_conexion_") as string,
+            vm.$t("_error_") as string
+          );
+        })
+        .finally(function() {
+          vm.cargando_tecnica = false;
+        });
+    },
+
+    getIndicadores(clasificacionTecnica: any): void {
+      const vm = this;
+      this.cargando_tecnica = true;
+      axios
+        .get(
+          "/api/v1/tablero/listaIndicadores?tipo=clasificados&uso=" +
+            this.$store.state.clasificacion_uso.id +
+            "&tecnica=" +
+            clasificacionTecnica.id
+        )
+        .then(function(response) {
+          if (response.data.data.length == 0) {
+            vm.$snotify.warning(vm.$t("_datos_no_encontrados_") as string);
+          } else {
+            vm.$store.state.indicadoresClasificados = response.data.data;
+          }
+          //vm.$emit("cant-clasificados");
+        })
+        .catch(function(error) {
+          vm.$snotify.error(vm.$t("_error_conexion_") as string, "Error");
+        })
+        .finally(function() {
+          vm.cargando_tecnica = false;
+        });
+    },
+
+    agregarIndicador(indicador: any): void {
+      //vm.$emit("cant-clasificados", indicador);
+    },
+
+    filtrar(listado: any, filtro: string): any {
+      return listado.filter((ind: any) => {
+        const base = this.normalizarDiacriticos(ind.nombre);
+        const filtro_ = this.normalizarDiacriticos(filtro);
+        return base.includes(filtro_);
+      });
+    },
+
+    normalizarDiacriticos(value: string): string {
+      if (!value || value == undefined) return "";
+
+      return value
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/([aeio])\u0301|(u)[\u0301\u0308]/gi, "$1$2")
+        .normalize();
+    }
+  }
 })
-export default class ListadoIndicadoresClasificados extends Vue {
-  private filtro = "";
-  private cargando_uso = false;
-  private cargando_tecnica = false;
-
-  get state(): boolean {
-    return this.$store.state.clasificacion_uso != null;
-  }
-
-  get stateT(): boolean {
-    return this.$store.state.clasificacion_tecnica != null;
-  }
-
-  get invalidCU(): boolean {
-    return this.$store.state.clasificacion_uso != null;
-  }
-
-  get invalidCT(): boolean {
-    return this.$store.state.clasificacion_tecnica != null;
-  }
-
-  get indicadoresFiltrados(): any {
-    return this.filtrar(this.$store.state.indicadoresClasificados, this.filtro);
-  }
-
-  public getClasificacionesTecnica(clasificacionUso: any): void {
-    const vm = this;
-    this.cargando_tecnica = true;
-    axios
-      .get("/api/v1/tablero/clasificacionTecnica?id=" + clasificacionUso.id)
-      .then(function(response) {
-        if (response.data.data.length == 0) {
-          vm.$snotify.warning(vm.$t("_datos_no_encontrados_") as string);
-          vm.$store.state.clasificaciones_tecnica = [];
-        } else {
-          vm.$store.state.clasificaciones_tecnica = response.data.data;
-        }
-      })
-      .catch(function(error) {
-        vm.$snotify.error(
-          vm.$t("_error_conexion_") as string,
-          vm.$t("_error_") as string
-        );
-      })
-      .finally(function() {
-        vm.cargando_tecnica = false;
-      });
-  }
-
-  public getIndicadores(clasificacionTecnica: any): void {
-    const vm = this;
-    this.cargando_tecnica = true;
-    axios
-      .get(
-        "/api/v1/tablero/listaIndicadores?tipo=clasificados&uso=" +
-          this.$store.state.clasificacion_uso.id +
-          "&tecnica=" +
-          clasificacionTecnica.id
-      )
-      .then(function(response) {
-        if (response.data.data.length == 0) {
-          vm.$snotify.warning(vm.$t("_datos_no_encontrados_") as string);
-        } else {
-          vm.$store.state.indicadoresClasificados = response.data.data;
-        }
-        //vm.$emit("cant-clasificados");
-      })
-      .catch(function(error) {
-        vm.$snotify.error(vm.$t("_error_conexion_") as string, "Error");
-      })
-      .finally(function() {
-        vm.cargando_tecnica = false;
-      });
-  }
-
-  public agregarIndicador(indicador: any): void {
-    //vm.$emit("cant-clasificados", indicador);
-  }
-
-  public filtrar(listado: any, filtro: string): any {
-    return listado.filter((ind: any) => {
-      const base = this.normalizarDiacriticos(ind.nombre);
-      const filtro_ = this.normalizarDiacriticos(filtro);
-      return base.includes(filtro_);
-    });
-  }
-
-  public normalizarDiacriticos(value: string): string {
-    if (!value || value == undefined) return "";
-
-    return value
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/([aeio])\u0301|(u)[\u0301\u0308]/gi, "$1$2")
-      .normalize();
-  }
-}
 </script>

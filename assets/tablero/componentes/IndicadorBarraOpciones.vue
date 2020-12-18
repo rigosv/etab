@@ -88,43 +88,51 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Mixins } from "vue-property-decorator";
+import { defineComponent } from "@vue/composition-api";
 import IndicadorMixin from "../Mixins/IndicadorMixin";
 import ModalConfiguracion from "./Modal/ModalConfiguracion.vue";
 
-@Component({
-  components: { ModalConfiguracion }
+export default defineComponent ({
+  
+  components: { ModalConfiguracion },
+  
+  props: {
+    indicador: {default: {}, type: Object},
+    index: Number
+  },
+
+  mixins:[ IndicadorMixin ],
+
+  data : () => ({
+    grafico: {}
+  }),
+  
+  methods: {
+    refrescar(): void {
+      this.indicador.filtros = [];
+      this.indicador.dimension = this.indicador.dimensiones[0];
+      this.cargarDatosIndicador(this.indicador, this.index);
+    },
+
+    tendencia(): void {
+      this.indicador.tendencia = !this.indicador.tendencia;
+      if (this.indicador.tendencia) {
+        this.indicador.tipo_grafico_ant = this.indicador.configuracion.tipo_grafico;
+        this.indicador.configuracion.tipo_grafico = "LINEAS";
+      } else {
+        this.indicador.configuracion.tipo_grafico = this.indicador.tipo_grafico_ant;
+      }
+      this.cargarDatosIndicador(this.indicador, this.index);
+    },
+
+    configurar(): void {
+      if (this.indicador.full_screen) {
+        this.indicador.mostrar_configuracion = !this.indicador
+          .mostrar_configuracion;
+      } else {
+        this.$bvModal.show("modalConfiguracion__" + this.index);
+      }
+    }
+  }
 })
-export default class IndicadorBarraOpciones extends Mixins(IndicadorMixin) {
-  @Prop({ default: {} }) indicador: any;
-  @Prop() readonly index!: number;
-
-  private grafico: any = {};
-
-  public refrescar(): void {
-    this.indicador.filtros = [];
-    this.indicador.dimension = this.indicador.dimensiones[0];
-    this.cargarDatosIndicador(this.indicador, this.index);
-  }
-
-  public tendencia(): void {
-    this.indicador.tendencia = !this.indicador.tendencia;
-    if (this.indicador.tendencia) {
-      this.indicador.tipo_grafico_ant = this.indicador.configuracion.tipo_grafico;
-      this.indicador.configuracion.tipo_grafico = "LINEAS";
-    } else {
-      this.indicador.configuracion.tipo_grafico = this.indicador.tipo_grafico_ant;
-    }
-    this.cargarDatosIndicador(this.indicador, this.index);
-  }
-
-  public configurar(): void {
-    if (this.indicador.full_screen) {
-      this.indicador.mostrar_configuracion = !this.indicador
-        .mostrar_configuracion;
-    } else {
-      this.$bvModal.show("modalConfiguracion__" + this.index);
-    }
-  }
-}
 </script>

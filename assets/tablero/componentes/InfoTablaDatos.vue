@@ -32,70 +32,78 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Mixins } from "vue-property-decorator";
+import { defineComponent } from "@vue/composition-api";
 import TableToExcel from "@linways/table-to-excel";
 import VueHtml2pdf from "vue-html2pdf";
 
 import InfoTablaDatosContenido from "./InfoTablaDatosContenido.vue";
 import ColorMixin from "../Mixins/ColorMixin";
 
-@Component({
-  components: { InfoTablaDatosContenido, VueHtml2pdf }
-})
-export default class InfoTablaDatos extends Mixins(ColorMixin) {
-  @Prop({ default: {} }) indicador: any;
+export default defineComponent ({
+  components: { InfoTablaDatosContenido, VueHtml2pdf },
 
-  get pdfOptions() {
-    return {
-      filename: `${this.indicador.nombre}-tabla_datos.pdf`,
-      margin: 0.5,
-      image: { type: "jpeg", quality: 0.6 },
-      html2canvas: { scale: 1 },
-      jsPDF: { unit: "in", format: "letter", orientation: "portrait" }
-    };
-  }
+  props: {
+    indicador: {default: {}, type: Object},
+    index: Number
+  },
 
-  public getColor(valor: number): string {
-    let color = "";
-    for (const rango of this.indicador.informacion.rangos) {
-      if (valor >= rango.limite_inf && valor <= rango.limite_sup) {
-        color = rango.color;
-      }
+  mixins:[ ColorMixin ],
+
+  computed : {
+    pdfOptions(): object {
+      return {
+        filename: `${this.indicador.nombre}-tabla_datos.pdf`,
+        margin: 0.5,
+        image: { type: "jpeg", quality: 0.6 },
+        html2canvas: { scale: 1 },
+        jsPDF: { unit: "in", format: "letter", orientation: "portrait" }
+      };
     }
-    return color;
-  }
+  },
 
-  public exportarExcel(): void {
-    const vm = this;
-    TableToExcel.convert(document.getElementById("exportar_tabla_datos"), {
-      name: vm.indicador.nombre + "- tabla datos.xlsx"
-    });
-  }
+  methods : {
+    getColor(valor: number): string {
+      let color = "";
+      for (const rango of this.indicador.informacion.rangos) {
+        if (valor >= rango.limite_inf && valor <= rango.limite_sup) {
+          color = rango.color;
+        }
+      }
+      return color;
+    },
 
-  public exportarcsv(): void {
-    const arrData = this.indicador.data;
-    let csvContent = "data:text/csv;charset=utf-8,";
-    csvContent += [
-      Object.keys(arrData[0]).join(","),
-      ...arrData.map((item: any) => Object.values(item).join(","))
-    ]
-      .join("\n")
-      .replace(/(^\[)|(\]$)/gm, "");
+    exportarExcel(): void {
+      const vm = this;
+      TableToExcel.convert(document.getElementById("exportar_tabla_datos"), {
+        name: vm.indicador.nombre + "- tabla datos.xlsx"
+      });
+    },
 
-    const data = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", data);
-    link.setAttribute("download", "export.csv");
-    link.click();
-  }
+    exportarcsv(): void {
+      const arrData = this.indicador.data;
+      let csvContent = "data:text/csv;charset=utf-8,";
+      csvContent += [
+        Object.keys(arrData[0]).join(","),
+        ...arrData.map((item: any) => Object.values(item).join(","))
+      ]
+        .join("\n")
+        .replace(/(^\[)|(\]$)/gm, "");
 
-  public exportarpdf(): void {
-    (this.$refs.html2Pdf as Vue & { generatePdf: () => any }).generatePdf();
-  }
+      const data = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", data);
+      link.setAttribute("download", "export.csv");
+      link.click();
+    },
 
-  public getColorExceljs_(v: number): string {
-    const codigo = this.getColor(v);
-    return this.getColorExceljs(codigo);
+    exportarpdf(): void {
+      (this.$refs.html2Pdf as Vue & { generatePdf: () => any }).generatePdf();
+    },
+
+    getColorExceljs_(v: number): string {
+      const codigo = this.getColor(v);
+      return this.getColorExceljs(codigo);
+    }
   }
-}
+})
 </script>

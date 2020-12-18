@@ -73,107 +73,113 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Mixins } from "vue-property-decorator";
+import { defineComponent } from "@vue/composition-api";
 import axios from "axios";
 import vSelect from "vue-select";
 import IndicadorMixin from "../../Mixins/IndicadorMixin";
 
-@Component({
-  components: { vSelect }
-})
-export default class ModalFiltrosGenerales extends Mixins(IndicadorMixin) {
-  private dimensionGeneral: any = "";
-  private filtroGeneralEsCatalogo = false;
-  private dimensionesGenerales: string[] = [];
-  private datosCatalogo: any[] = [];
-  private valorFiltroGeneral = "";
-  private valorFiltroGeneralCatalogo: any = {};
 
-  public iniciarModal(): void {
-    const dimensionesExistentes: string[] = [];
-    const dimensionesAux: any[] = [];
+export default defineComponent ({
+  components: { vSelect },
+  mixins: [ IndicadorMixin ],
+  data : () => ({
+    dimensionGeneral:  {},
+    filtroGeneralEsCatalogo: false,
+    dimensionesGenerales: [],
+    datosCatalogo: [],
+    valorFiltroGeneral: "",
+    valorFiltroGeneralCatalogo: {},
+  }),
 
-    const sala = this.$store.state.sala;
+  
+  
+  methods: {
+    iniciarModal(): void {
+      const dimensionesExistentes:any[] = [];
+      const dimensionesAux = [];
 
-    // Cargar los datos de los indicadores de la sala
-    for (const indicador of this.$store.state.indicadores) {
-      const dims = indicador.informacion.dimensiones;
-      for (const codigo of Object.keys(dims)) {
-        if (!dimensionesExistentes.includes(codigo)) {
-          dimensionesExistentes.push(codigo);
-          dimensionesAux.push({
-            descripcion: dims[codigo].descripcion,
-            codigo: codigo
-          });
-        }
-      }
-    }
-    this.dimensionesGenerales = dimensionesAux.sort((a: any, b: any) => {
-      return a.descripcion.localeCompare(b.descripcion);
-    });
-  }
+      const sala = this.$store.state.sala;
 
-  public recuperarValoresDimensionGeneral(): void {
-    this.filtroGeneralEsCatalogo = false;
-
-    if (this.dimensionGeneral.codigo.split("id_").length > 1) {
-      this.filtroGeneralEsCatalogo = true;
-      const vm = this;
-      axios
-        .get("/api/v1/tablero/datosCatalogo/" + this.dimensionGeneral.codigo)
-        .then(function(response) {
-          if (response.data.status == 200) {
-            vm.datosCatalogo = response.data.data;
-          }
-        });
-    }
-  }
-
-  public aplicarFiltroGeneral(): void {
-    let nuevosFiltros = [];
-    const vm = this;
-    let existe = false;
-    let etiqueta = "";
-    const dimension = this.dimensionGeneral;
-    const valor = this.filtroGeneralEsCatalogo
-      ? this.valorFiltroGeneralCatalogo.descripcion
-      : this.valorFiltroGeneral.trim();
-
-    let index = 0;
-    if (dimension != "" && valor != "") {
-      for (const ind of this.$store.state.indicadores) {
-        nuevosFiltros = [];
-        for (const filtro of ind.filtros) {
-          //Ya tenía el filtro, modificar su valor
-          if (filtro.codigo == dimension.codigo) {
-            filtro.valor = valor;
-            existe = true;
-            etiqueta = filtro.etiqueta;
-          }
-          nuevosFiltros.push(filtro);
-          console.log(filtro);
-        }
-
-        //Si no existe agregarlo al principio
-        if (!existe) {
-          //Verificar primero si existe en el listado de dimensiones del indicador
-          if (ind.dimensiones.includes(dimension.codigo)) {
-            nuevosFiltros.unshift({
-              codigo: dimension.codigo,
-              etiqueta: dimension.descripcion,
-              valor: valor
+      // Cargar los datos de los indicadores de la sala
+      for (const indicador of this.$store.state.indicadores) {
+        const dims = indicador.informacion.dimensiones;
+        for (const codigo of Object.keys(dims)) {
+          if (!dimensionesExistentes.includes(codigo)) {
+            dimensionesExistentes.push(codigo);
+            dimensionesAux.push({
+              descripcion: dims[codigo].descripcion,
+              codigo: codigo
             });
           }
         }
+      }
+      this.dimensionesGenerales = dimensionesAux.sort((a: any, b: any) => {
+        return a.descripcion.localeCompare(b.descripcion);
+      });
+    },
 
-        ind.filtros = nuevosFiltros;
-        //$scope.agregarIndicadorDimension(ind.dimension, ind.posicion - 1);
-        ind.otros_filtros.elementos = [];
-        vm.cargarDatosIndicador(ind, index++);
+    recuperarValoresDimensionGeneral(): void {
+      this.filtroGeneralEsCatalogo = false;
 
-        //vm.cargarDatosComparacion();
+      if (this.dimensionGeneral.codigo.split("id_").length > 1) {
+        this.filtroGeneralEsCatalogo = true;
+        const vm = this;
+        axios
+          .get("/api/v1/tablero/datosCatalogo/" + this.dimensionGeneral.codigo)
+          .then(function(response) {
+            if (response.data.status == 200) {
+              vm.datosCatalogo = response.data.data;
+            }
+          });
+      }
+    },
+
+    aplicarFiltroGeneral(): void {
+      let nuevosFiltros = [];
+      const vm = this;
+      let existe = false;
+      let etiqueta = "";
+      const dimension = this.dimensionGeneral;
+      const valor = this.filtroGeneralEsCatalogo
+        ? this.valorFiltroGeneralCatalogo.descripcion
+        : this.valorFiltroGeneral.trim();
+
+      let index = 0;
+      if (dimension != "" && valor != "") {
+        for (const ind of this.$store.state.indicadores) {
+          nuevosFiltros = [];
+          for (const filtro of ind.filtros) {
+            //Ya tenía el filtro, modificar su valor
+            if (filtro.codigo == dimension.codigo) {
+              filtro.valor = valor;
+              existe = true;
+              etiqueta = filtro.etiqueta;
+            }
+            nuevosFiltros.push(filtro);
+            console.log(filtro);
+          }
+
+          //Si no existe agregarlo al principio
+          if (!existe) {
+            //Verificar primero si existe en el listado de dimensiones del indicador
+            if (ind.dimensiones.includes(dimension.codigo)) {
+              nuevosFiltros.unshift({
+                codigo: dimension.codigo,
+                etiqueta: dimension.descripcion,
+                valor: valor
+              });
+            }
+          }
+
+          ind.filtros = nuevosFiltros;
+          //$scope.agregarIndicadorDimension(ind.dimension, ind.posicion - 1);
+          ind.otros_filtros.elementos = [];
+          vm.cargarDatosIndicador(ind, index++);
+
+          //vm.cargarDatosComparacion();
+        }
       }
     }
   }
-}
+})
 </script>

@@ -76,7 +76,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { defineComponent } from "@vue/composition-api";
 import ModalSalas from "./Modal/ModalSalas.vue";
 import ModalIndicadores from "./Modal/ModalIndicadores.vue";
 import ModalExportar from "./Modal/ModalExportar.vue";
@@ -84,7 +84,7 @@ import ModalAccionesSala from "./Modal/ModalAccionesSala.vue";
 import ModalCompartirSala from "./Modal/ModalCompartirSala.vue";
 import ModalFiltrosGenerales from "./Modal/ModalFiltrosGenerales.vue";
 
-@Component({
+export default defineComponent ({
   components: {
     ModalIndicadores,
     ModalSalas,
@@ -92,15 +92,18 @@ import ModalFiltrosGenerales from "./Modal/ModalFiltrosGenerales.vue";
     ModalAccionesSala,
     ModalCompartirSala,
     ModalFiltrosGenerales
+  },
+
+  computed : {
+    esSalaPublica(): boolean {
+      return this.$store.state.token != "" && this.$store.state.idSala != "";
+    }
+  },
+
+  methods : {
+    convertirGraficosSala(): void {
+      this.$emit("convertir-graficos-sala");
+    }
   }
 })
-export default class MenuTablero extends Vue {
-  get esSalaPublica(): boolean {
-    return this.$store.state.token != "" && this.$store.state.idSala != "";
-  }
-
-  public convertirGraficosSala(): void {
-    this.$emit("convertir-graficos-sala");
-  }
-}
 </script>

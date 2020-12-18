@@ -108,179 +108,193 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Mixins, Watch } from "vue-property-decorator";
+import { defineComponent } from "@vue/composition-api";
 import axios from "axios";
 
 import Buscar from "./Buscar.vue";
 import IndicadorMixin from "../Mixins/IndicadorMixin";
 
-@Component({
-  components: { Buscar }
-})
-export default class OpcionesComparacion extends Mixins(IndicadorMixin) {
-  @Prop({ default: {} }) indicador: any;
-  @Prop() readonly index!: number;
+export default defineComponent ({
+  components: { Buscar },
 
-  private filtroIndicadores = "";
-  private indicadoresFiltrados: any[] = [];
+  props: {
+    indicador: {default: {}, type: Object},
+    index: Number
+  },
 
-  get dimensionesComparar() {
-    const vm = this;
+  mixins:[ IndicadorMixin ],
+  
+  data : () => ({
+    filtroIndicadores : "",
+    indicadoresFiltrados: []
+  }),
 
-    const dimensiones = this.indicador.dimensiones.filter((dimension: any) => {
-      //Verificar  que no sea la dimensión actual
-      if (dimension != vm.indicador.dimension) {
-        //Verificar que no esté en los filtros
-        let esFiltro = false;
-        for (const filtro of vm.indicador.filtros) {
-          esFiltro = dimension == filtro.codigo ? true : esFiltro;
+  computed : {
+
+    dimensionesComparar() : object {
+      const vm = this;
+
+      const dimensiones = this.indicador.dimensiones.filter((dimension: any) => {
+        //Verificar  que no sea la dimensión actual
+        if (dimension != vm.indicador.dimension) {
+          //Verificar que no esté en los filtros
+          let esFiltro = false;
+          for (const filtro of vm.indicador.filtros) {
+            esFiltro = dimension == filtro.codigo ? true : esFiltro;
+          }
+          return !esFiltro;
         }
-        return !esFiltro;
+        return false;
+      });
+
+      return dimensiones.map((d: any) => {
+        return {
+          text: this.indicador.informacion.dimensiones[d].descripcion,
+          value: d
+        };
+      });
+    },
+
+    dimensionComparacion (): any {
+      return this.indicador.configuracion.dimensionComparacion;
+    }
+  },
+
+  methods : {
+    buscarIndicadores(): void {
+      if (this.filtroIndicadores.length >= 3) {
+        const vm = this;
+        axios
+          .get(
+            "/api/v1/tablero/listaIndicadores?tipo=busqueda&busqueda=" +
+              this.filtroIndicadores
+          )
+          .then(function(response) {
+            if (response.data.status == 200) {
+              vm.indicadoresFiltrados = response.data.data;
+            }
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
       }
-      return false;
-    });
+    },
 
-    return dimensiones.map((d: any) => {
-      return {
-        text: this.indicador.informacion.dimensiones[d].descripcion,
-        value: d
+    agregarIndicador(indicadorC: any): void {
+      //Sacar las dimensiones del indicador a agregar
+      const dimensiones: any[] = [];
+      for (const prop in indicadorC.dimensiones) {
+        dimensiones.push(prop);
+      }
+
+      //Verificar si el nuevo indicador tiene la dimension actual
+      const existeD = dimensiones.includes(this.indicador.dimension);
+
+      //Valores iniciales del indicador
+      const indicadorCompleto = {
+        id: indicadorC.id,
+        dimensiones: dimensiones,
+        nombre: indicadorC.nombre,
+        data: [],
+        informacion: {}
       };
-    });
-  }
 
-  public buscarIndicadores(): void {
-    if (this.filtroIndicadores.length >= 3) {
-      const vm = this;
-      axios
-        .get(
-          "/api/v1/tablero/listaIndicadores?tipo=busqueda&busqueda=" +
-            this.filtroIndicadores
-        )
-        .then(function(response) {
-          if (response.data.status == 200) {
-            vm.indicadoresFiltrados = response.data.data;
-          }
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-    }
-  }
-
-  public agregarIndicador(indicadorC: any): void {
-    //Sacar las dimensiones del indicador a agregar
-    const dimensiones: any[] = [];
-    for (const prop in indicadorC.dimensiones) {
-      dimensiones.push(prop);
-    }
-
-    //Verificar si el nuevo indicador tiene la dimension actual
-    const existeD = dimensiones.includes(this.indicador.dimension);
-
-    //Valores iniciales del indicador
-    const indicadorCompleto = {
-      id: indicadorC.id,
-      dimensiones: dimensiones,
-      nombre: indicadorC.nombre,
-      data: [],
-      informacion: {}
-    };
-
-    if (existeD) {
-      //Quitar la comparación por dimensión por si existe
-      this.indicador.configuracion.dimensionComparacion = "";
-
-      this.indicador.configuracion.agregados.push(indicadorC.id);
-      //leer los datos del indicador
-      const vm = this;
-      const json = {
-        filtros: vm.indicador.filtros,
-        ver_sql: false,
-        tendencia: false
-      };
-      vm.indicador.cargando = true;
-
-      axios
-        .post(
-          "/api/v1/tablero/datosIndicador/" +
-            indicadorC.id +
-            "/" +
-            vm.indicador.dimension,
-          json
-        )
-        .then(function(response) {
-          if (response.data.status == 200) {
-            const data = response.data;
-            indicadorCompleto.informacion = data.informacion;
-            indicadorCompleto.data = data.data;
-            vm.indicador.dataComparar.push(indicadorCompleto);
-          }
-        })
-        .catch(function(error) {
-          console.log(error);
-        })
-        .finally(function() {
-          vm.indicador.cargando = false;
-        });
-    } else {
-      //Verificar si tienen alguna dimensión en común
-      const dimensionesC = this.indicador.dimensiones.filter((x: any) =>
-        dimensiones.includes(x)
-      );
-
-      if (dimensionesC.length == 0) {
-        this.$snotify.warning(
-          this.$t("_indicadores_no_tienen_dimensiones_en_comun_") as string
-        );
-      } else {
+      if (existeD) {
         //Quitar la comparación por dimensión por si existe
         this.indicador.configuracion.dimensionComparacion = "";
-        this.$snotify.warning(
-          this.$t("_indicador_no_tiene_dimension_actual_") as string
-        );
+
         this.indicador.configuracion.agregados.push(indicadorC.id);
-        indicadorCompleto.informacion = { rangos: [] };
-        this.indicador.dataComparar.push(indicadorCompleto);
+        //leer los datos del indicador
+        const json = {
+          filtros: this.indicador.filtros,
+          ver_sql: false,
+          tendencia: false
+        };
+        this.indicador.cargando = true;
+
+        axios
+          .post(
+            "/api/v1/tablero/datosIndicador/" +
+              indicadorC.id +
+              "/" +
+              this.indicador.dimension,
+            json
+          )
+          .then(response => {
+            if (response.data.status == 200) {
+              const data = response.data;
+              indicadorCompleto.informacion = data.informacion;
+              indicadorCompleto.data = data.data;
+              this.indicador.dataComparar.push(indicadorCompleto);
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          })
+          .finally(() => {
+            this.indicador.cargando = false;
+          });
+      } else {
+        //Verificar si tienen alguna dimensión en común
+        const dimensionesC = this.indicador.dimensiones.filter((x: any) =>
+          dimensiones.includes(x)
+        );
+
+        if (dimensionesC.length == 0) {
+          this.$snotify.warning(
+            this.$t("_indicadores_no_tienen_dimensiones_en_comun_") as string
+          );
+        } else {
+          //Quitar la comparación por dimensión por si existe
+          this.indicador.configuracion.dimensionComparacion = "";
+          this.$snotify.warning(
+            this.$t("_indicador_no_tiene_dimension_actual_") as string
+          );
+          this.indicador.configuracion.agregados.push(indicadorC.id);
+          indicadorCompleto.informacion = { rangos: [] };
+          this.indicador.dataComparar.push(indicadorCompleto);
+        }
+      }
+    },
+
+    quitarComparacion(indicadorC: any): void {
+      this.indicador.dataComparar = this.indicador.dataComparar.filter(
+        (ind: any) => {
+          return ind.id != indicadorC.id;
+        }
+      );
+      this.indicador.configuracion.agregados = this.indicador.configuracion.agregados.filter(
+        (id: string) => {
+          return id != indicadorC.id;
+        }
+      );
+    }
+  },
+
+  watch : {
+    dimensionComparacion() {
+      // Quitar la comparación de indicadores por si existiera
+      this.indicador.configuracion.agregados = [];
+      this.indicador.dataComparar = [];
+
+      this.cargarDatosIndicador(this.indicador, this.index);
+
+      // Si no tiene un tipo adecuado poner lineas por defecto
+      if (
+        ![
+          "BARRA",
+          "BARRAS",
+          "COLUMNAS",
+          "COLUMNA",
+          "DISCRETEBARCHART",
+          "LINECHART",
+          "LINEA",
+          "LINEAS"
+        ].includes(this.indicador.configuracion.tipo_grafico.toUpperCase())
+      ) {
+        this.indicador.configuracion.tipo_grafico = "lineas";
       }
     }
-  }
-
-  public quitarComparacion(indicadorC: any): void {
-    this.indicador.dataComparar = this.indicador.dataComparar.filter(
-      (ind: any) => {
-        return ind.id != indicadorC.id;
-      }
-    );
-    this.indicador.configuracion.agregados = this.indicador.configuracion.agregados.filter(
-      (id: string) => {
-        return id != indicadorC.id;
-      }
-    );
-  }
-
-  @Watch("indicador.configuracion.dimensionComparacion")
-  dimensionCoparacionChange() {
-    // Quitar la comparación de indicadores por si existiera
-    this.indicador.configuracion.agregados = [];
-    this.indicador.dataComparar = [];
-
-    this.cargarDatosIndicador(this.indicador, this.index);
-
-    // Si no tiene un tipo adecuado poner lineas por defecto
-    if (
-      ![
-        "BARRA",
-        "BARRAS",
-        "COLUMNAS",
-        "COLUMNA",
-        "DISCRETEBARCHART",
-        "LINECHART",
-        "LINEA",
-        "LINEAS"
-      ].includes(this.indicador.configuracion.tipo_grafico.toUpperCase())
-    ) {
-      this.indicador.configuracion.tipo_grafico = "lineas";
-    }
-  }
-}
+  }  
+})
 </script>

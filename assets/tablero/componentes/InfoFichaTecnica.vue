@@ -33,40 +33,47 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Mixins } from "vue-property-decorator";
+import { defineComponent } from "@vue/composition-api";
 import VueHtml2pdf from "vue-html2pdf";
 import TableToExcel from "@linways/table-to-excel";
 
 import InfoFichaTecnicaContenido from "./InfoFichaTecnicaContenido.vue";
 import ColorMixin from "../Mixins/ColorMixin";
 
-@Component({
-  components: { InfoFichaTecnicaContenido, VueHtml2pdf }
+export default defineComponent ({
+  
+  components: { InfoFichaTecnicaContenido, VueHtml2pdf },
+  
+  props: {
+    indicador: {default: {}, type: Object}
+  },
+
+  computed : {
+    pdfOptions() : object {
+      return {
+        filename: `${this.indicador.nombre}-${this.$t(
+          "_ficha_tecnica_" as string
+        )}.pdf`,
+        margin: 0.5,
+        image: { type: "jpeg", quality: 0.6 },
+        html2canvas: { scale: 1 },
+        jsPDF: { unit: "in", format: "letter", orientation: "portrait" }
+      };
+    }
+  },
+
+  methods : {
+    exportarExcel(): void {
+      const nombreArchivo =
+        this.indicador.nombre + " - " + this.$t("_ficha_tecnica_");
+      TableToExcel.convert(document.getElementById("exportar_ficha_container"), {
+        name: nombreArchivo + ".xlsx"
+      });
+    },
+
+    exportarpdf(): void {
+      (this.$refs.html2Pdf as Vue & { generatePdf: () => any }).generatePdf();
+    }
+  }
 })
-export default class InfoFichaTecnica extends Mixins(ColorMixin) {
-  @Prop({ default: {} }) indicador: any;
-
-  get pdfOptions() {
-    return {
-      filename: `${this.indicador.nombre}-${this.$t(
-        "_ficha_tecnica_" as string
-      )}.pdf`,
-      margin: 0.5,
-      image: { type: "jpeg", quality: 0.6 },
-      html2canvas: { scale: 1 },
-      jsPDF: { unit: "in", format: "letter", orientation: "portrait" }
-    };
-  }
-
-  public exportarExcel(): void {
-    const nombreArchivo =
-      this.indicador.nombre + " - " + this.$t("_ficha_tecnica_");
-    TableToExcel.convert(document.getElementById("exportar_ficha_container"), {
-      name: nombreArchivo + ".xlsx"
-    });
-  }
-  public exportarpdf(): void {
-    (this.$refs.html2Pdf as Vue & { generatePdf: () => any }).generatePdf();
-  }
-}
 </script>

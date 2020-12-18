@@ -91,35 +91,38 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { defineComponent } from "@vue/composition-api";
 import axios from "axios";
+import { setup } from "vue-class-component";
 
-@Component
-export default class ModalAccionesSala extends Vue {
-  private accion = { acciones: "", responsables: "", observaciones: "" };
+export default defineComponent ({
+  data: () => ({
+    accion : { acciones: "", responsables: "", observaciones: "" }
+  }),
 
-  public guardarAccionSala(): void {
-    //const vm = this;
-    if (this.accion.acciones.trim() === "") {
-      this.$snotify.warning(this.$t("_debe_agregar_acciones_") as string);
-    } else {
-      const json = JSON.parse(JSON.stringify(this.accion));
+  methods : {
+    guardarAccionSala() {
+      if ( this.accion.acciones.trim() === "" ) {
+        this.$snotify.warning(this.$t("_debe_agregar_acciones_") as string);
+      } else {
+        const json = JSON.parse(JSON.stringify(this.accion));
 
-      axios
-        .post("/api/v1/tablero/salaAccion/" + vm.$store.state.sala.id, json)
-        .then(response => {
-          if (response.data.status == 200) {
-            this.$store.state.sala_acciones = response.data.data;
-            this.accion = { acciones: "", responsables: "", observaciones: "" };
-            this.$snotify.success(vm.$t("_guardar_ok_") as string);
-          } else {
-            this.$snotify.error(
-              this.$t("_guardar_error_") as string,
-              this.$t("_error_") as string
-            );
-          }
-        });
+        axios
+          .post("/api/v1/tablero/salaAccion/" + this.$store.state.sala.id, json)
+          .then(response => {
+            if (response.data.status == 200) {
+              this.$store.state.sala_acciones = response.data.data;
+              this.accion = { acciones: "", responsables: "", observaciones: "" };
+              this.$snotify.success(this.$t("_guardar_ok_") as string);
+            } else {
+              this.$snotify.error(
+                this.$t("_guardar_error_") as string,
+                this.$t("_error_") as string
+              );
+            }
+          });
+      }
     }
   }
-}
+})
 </script>
