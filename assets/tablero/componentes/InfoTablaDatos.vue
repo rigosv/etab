@@ -39,17 +39,17 @@ import VueHtml2pdf from "vue-html2pdf";
 import InfoTablaDatosContenido from "./InfoTablaDatosContenido.vue";
 import ColorMixin from "../Mixins/ColorMixin";
 
-export default defineComponent ({
+export default defineComponent({
   components: { InfoTablaDatosContenido, VueHtml2pdf },
 
   props: {
-    indicador: {default: {}, type: Object},
+    indicador: { default: {}, type: Object },
     index: Number
   },
 
-  mixins:[ ColorMixin ],
+  mixins: [ColorMixin],
 
-  computed : {
+  computed: {
     pdfOptions(): object {
       return {
         filename: `${this.indicador.nombre}-tabla_datos.pdf`,
@@ -61,7 +61,7 @@ export default defineComponent ({
     }
   },
 
-  methods : {
+  methods: {
     getColor(valor: number): string {
       let color = "";
       for (const rango of this.indicador.informacion.rangos) {
@@ -105,5 +105,5 @@ export default defineComponent ({
       return this.getColorExceljs(codigo);
     }
   }
-})
+});
 </script>

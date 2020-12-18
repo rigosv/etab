@@ -114,38 +114,39 @@ import axios from "axios";
 import Buscar from "./Buscar.vue";
 import IndicadorMixin from "../Mixins/IndicadorMixin";
 
-export default defineComponent ({
+export default defineComponent({
   components: { Buscar },
 
   props: {
-    indicador: {default: {}, type: Object},
+    indicador: { default: {}, type: Object },
     index: Number
   },
 
-  mixins:[ IndicadorMixin ],
-  
-  data : () => ({
-    filtroIndicadores : "",
+  mixins: [IndicadorMixin],
+
+  data: () => ({
+    filtroIndicadores: "",
     indicadoresFiltrados: []
   }),
 
-  computed : {
-
-    dimensionesComparar() : object {
+  computed: {
+    dimensionesComparar(): object {
       const vm = this;
 
-      const dimensiones = this.indicador.dimensiones.filter((dimension: any) => {
-        //Verificar  que no sea la dimensión actual
-        if (dimension != vm.indicador.dimension) {
-          //Verificar que no esté en los filtros
-          let esFiltro = false;
-          for (const filtro of vm.indicador.filtros) {
-            esFiltro = dimension == filtro.codigo ? true : esFiltro;
+      const dimensiones = this.indicador.dimensiones.filter(
+        (dimension: any) => {
+          //Verificar  que no sea la dimensión actual
+          if (dimension != vm.indicador.dimension) {
+            //Verificar que no esté en los filtros
+            let esFiltro = false;
+            for (const filtro of vm.indicador.filtros) {
+              esFiltro = dimension == filtro.codigo ? true : esFiltro;
+            }
+            return !esFiltro;
           }
-          return !esFiltro;
+          return false;
         }
-        return false;
-      });
+      );
 
       return dimensiones.map((d: any) => {
         return {
@@ -155,12 +156,12 @@ export default defineComponent ({
       });
     },
 
-    dimensionComparacion (): any {
+    dimensionComparacion(): any {
       return this.indicador.configuracion.dimensionComparacion;
     }
   },
 
-  methods : {
+  methods: {
     buscarIndicadores(): void {
       if (this.filtroIndicadores.length >= 3) {
         const vm = this;
@@ -271,7 +272,7 @@ export default defineComponent ({
     }
   },
 
-  watch : {
+  watch: {
     dimensionComparacion() {
       // Quitar la comparación de indicadores por si existiera
       this.indicador.configuracion.agregados = [];
@@ -295,6 +296,6 @@ export default defineComponent ({
         this.indicador.configuracion.tipo_grafico = "lineas";
       }
     }
-  }  
-})
+  }
+});
 </script>

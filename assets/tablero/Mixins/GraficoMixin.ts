@@ -1,13 +1,13 @@
 import { defineComponent } from "@vue/composition-api";
 
-export default defineComponent ({
-  data : () => ({
-    doubleClickTime : 0,
-    doubleClickThreshold : 500,
-    seleccionActiva : false
+export default defineComponent({
+  data: () => ({
+    doubleClickTime: 0,
+    doubleClickThreshold: 500,
+    seleccionActiva: false
   }),
-  
-  computed : {
+
+  computed: {
     dec(): any {
       return isNaN(this.indicador.ficha.cantidad_decimales) ||
         this.indicador.ficha.cantidad_decimales == null
@@ -33,7 +33,7 @@ export default defineComponent ({
     }
   },
 
-  methods : {
+  methods: {
     getColores(datos_: any, rangos: any): any {
       let indice = 0;
       const colores_ = this.$store.state.colores_;
@@ -113,7 +113,7 @@ export default defineComponent ({
       //Aplicar otros filtros
       if (this.indicador.otros_filtros.elementos.length > 0) {
         const filtros_ = this.indicador.otros_filtros.elementos;
-        datos_ = datos_.filter((d:any) => {
+        datos_ = datos_.filter((d: any) => {
           return filtros_.includes(d.x);
         });
       }
@@ -123,20 +123,20 @@ export default defineComponent ({
       if (this.indicador.configuracion.orden_x != "") {
         datos_ =
           this.indicador.configuracion.orden_x == "asc"
-            ? datos_.sort((a:any, b: any) =>
+            ? datos_.sort((a: any, b: any) =>
                 isNaN(a.x) || isNaN(b.x) ? a.x.localeCompare(b.x) : a.x - b.x
               )
-            : datos_.sort((a: any, b:any ) =>
+            : datos_.sort((a: any, b: any) =>
                 isNaN(a.x) || isNaN(b.x) ? b.x.localeCompare(a.x) : b.x - a.x
               );
       } else if (this.indicador.configuracion.orden_y != "") {
         datos_ =
           this.indicador.configuracion.orden_y == "asc"
             ? datos_.sort((a: any, b: any) => a.y - b.y)
-            : datos_.sort((a:any , b:any) => b.y - a.y);
+            : datos_.sort((a: any, b: any) => b.y - a.y);
       }
 
       return datos_;
     }
   }
-})
+});

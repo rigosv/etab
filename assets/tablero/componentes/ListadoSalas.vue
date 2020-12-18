@@ -55,19 +55,18 @@
 import { defineComponent } from "@vue/composition-api";
 import axios from "axios";
 
-export default defineComponent ({  
+export default defineComponent({
   props: {
-    salas: {default: [], type: Array},
-    borrar: {default: false, type: Boolean}
+    salas: { default: [], type: Array },
+    borrar: { default: false, type: Boolean }
   },
 
-  data : () => ({
-    sala_cargando : false,
-    sala_activa : 0
+  data: () => ({
+    sala_cargando: false,
+    sala_activa: 0
   }),
 
-  methods : {
-
+  methods: {
     activarSala(sala: any): void {
       this.sala_activa = sala.id;
       this.$bvModal.hide("modalSalas");
@@ -120,5 +119,5 @@ export default defineComponent ({
       );
     }
   }
-})
+});
 </script>

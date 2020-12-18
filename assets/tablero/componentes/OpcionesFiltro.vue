@@ -42,13 +42,13 @@
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
 
-export default defineComponent ({
+export default defineComponent({
   props: {
-    indicador: {default: {}, type: Object},
+    indicador: { default: {}, type: Object },
     index: Number
   },
 
-  computed : {
+  computed: {
     categorias(): any {
       return this.indicador.data.sort((a: any, b: any) =>
         a.category.localeCompare(b.category)
@@ -56,7 +56,7 @@ export default defineComponent ({
     }
   },
 
-  methods : {
+  methods: {
     agregarOtrosFiltros(valor: string): void {
       if (this.indicador.otros_filtros.elementos.indexOf(valor) > -1) {
         this.indicador.otros_filtros.elementos.splice(
@@ -68,5 +68,5 @@ export default defineComponent ({
       }
     }
   }
-})
+});
 </script>

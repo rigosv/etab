@@ -40,16 +40,15 @@ import TableToExcel from "@linways/table-to-excel";
 import InfoFichaTecnicaContenido from "./InfoFichaTecnicaContenido.vue";
 import ColorMixin from "../Mixins/ColorMixin";
 
-export default defineComponent ({
-  
+export default defineComponent({
   components: { InfoFichaTecnicaContenido, VueHtml2pdf },
-  
+
   props: {
-    indicador: {default: {}, type: Object}
+    indicador: { default: {}, type: Object }
   },
 
-  computed : {
-    pdfOptions() : object {
+  computed: {
+    pdfOptions(): object {
       return {
         filename: `${this.indicador.nombre}-${this.$t(
           "_ficha_tecnica_" as string
@@ -62,18 +61,21 @@ export default defineComponent ({
     }
   },
 
-  methods : {
+  methods: {
     exportarExcel(): void {
       const nombreArchivo =
         this.indicador.nombre + " - " + this.$t("_ficha_tecnica_");
-      TableToExcel.convert(document.getElementById("exportar_ficha_container"), {
-        name: nombreArchivo + ".xlsx"
-      });
+      TableToExcel.convert(
+        document.getElementById("exportar_ficha_container"),
+        {
+          name: nombreArchivo + ".xlsx"
+        }
+      );
     },
 
     exportarpdf(): void {
       (this.$refs.html2Pdf as Vue & { generatePdf: () => any }).generatePdf();
     }
   }
-})
+});
 </script>

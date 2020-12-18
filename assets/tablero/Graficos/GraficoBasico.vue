@@ -23,17 +23,16 @@ import numeral from "numeral";
 
 import GraficoMixin from "../Mixins/GraficoMixin";
 
-export default defineComponent ({
+export default defineComponent({
   components: { Plotly },
   props: {
-    indicador: {default: {}, type: Object},
+    indicador: { default: {}, type: Object },
     index: Number
   },
 
-  mixins:[ GraficoMixin ],
+  mixins: [GraficoMixin],
 
-  computed : {
-
+  computed: {
     tipoGrafico(): string {
       let resp = "";
       if (
@@ -55,7 +54,9 @@ export default defineComponent ({
       ) {
         resp = "pie";
       } else if (
-        ["BOX"].includes(this.indicador.configuracion.tipo_grafico.toUpperCase())
+        ["BOX"].includes(
+          this.indicador.configuracion.tipo_grafico.toUpperCase()
+        )
       ) {
         resp = "box";
       } else if (
@@ -191,8 +192,7 @@ export default defineComponent ({
     }
   },
 
-  methods : {
-
+  methods: {
     agregarMeta(): any {
       const meta = this.indicador.informacion.meta;
       if (meta != null) {
@@ -348,7 +348,9 @@ export default defineComponent ({
     },
 
     react(): void {
-      (this.$refs.grafico as Vue & { schedule: (options: any) => any }).schedule({
+      (this.$refs.grafico as Vue & {
+        schedule: (options: any) => any;
+      }).schedule({
         replot: true
       });
     },
@@ -411,5 +413,5 @@ export default defineComponent ({
       return traces;
     }
   }
-})
+});
 </script>

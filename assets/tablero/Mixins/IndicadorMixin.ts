@@ -2,10 +2,11 @@ import { defineComponent } from "@vue/composition-api";
 import axios from "axios";
 //import alasql from 'alasql';
 
-export default defineComponent ({
-  methods : {
+export default defineComponent({
+  methods: {
     inicializarIndicador(indicador: any, index: number): object {
-      const filtros = indicador.filtro != "" ? JSON.parse(indicador.filtro) : [];
+      const filtros =
+        indicador.filtro != "" ? JSON.parse(indicador.filtro) : [];
 
       const conf =
         indicador.orden != "" && indicador.orden != null
@@ -342,4 +343,4 @@ export default defineComponent ({
 
     }*/
   }
-})
+});

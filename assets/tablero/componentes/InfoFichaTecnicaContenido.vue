@@ -205,11 +205,11 @@
 import { defineComponent } from "@vue/composition-api";
 import ColorMixin from "../Mixins/ColorMixin";
 
-export default defineComponent ({
+export default defineComponent({
   props: {
-    indicador: {default: {}, type: Object}
+    indicador: { default: {}, type: Object }
   },
 
-  mixins:[ ColorMixin ]
-})
+  mixins: [ColorMixin]
+});
 </script>

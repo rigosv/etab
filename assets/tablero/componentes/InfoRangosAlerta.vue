@@ -29,9 +29,9 @@
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
 
-export default defineComponent ({
+export default defineComponent({
   props: {
-    indicador: {default: {}, type: Object}
-  },
-})
+    indicador: { default: {}, type: Object }
+  }
+});
 </script>

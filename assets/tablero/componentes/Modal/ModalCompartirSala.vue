@@ -124,7 +124,7 @@ import vSelect from "vue-select";
 export default defineComponent({
   components: { vSelect },
   data: () => ({
-    datos : {
+    datos: {
       usuarios_con_cuenta: [],
       usuarios_sin_cuenta: "",
       comentarios: "",
@@ -143,11 +143,14 @@ export default defineComponent({
   },
 
   methods: {
-    guardarCompartirSala() { 
+    guardarCompartirSala() {
       const json = JSON.parse(JSON.stringify(this.datos));
 
       axios
-        .post("/api/v1/tablero/comentarioSala/" + this.$store.state.sala.id, json)
+        .post(
+          "/api/v1/tablero/comentarioSala/" + this.$store.state.sala.id,
+          json
+        )
         .then(response => {
           if (response.data.status == 200) {
             this.$bvModal.hide("modalCompartirSala");

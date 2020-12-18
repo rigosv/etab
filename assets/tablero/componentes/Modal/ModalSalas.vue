@@ -65,14 +65,14 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from "@vue/composition-api";
+import { defineComponent } from "@vue/composition-api";
 import axios from "axios";
 
 import Buscar from "../Buscar.vue";
 import ListadoSalas from "../ListadoSalas.vue";
 import IndicadorMixin from "../../Mixins/IndicadorMixin";
 
-export default defineComponent ({
+export default defineComponent({
   components: { Buscar, ListadoSalas },
   data: () => ({
     salas: [],
@@ -80,10 +80,10 @@ export default defineComponent ({
     salas_grupos: [],
     filtroSalas: "",
     filtroSalasPropias: "",
-    filtroSalasGrupos : "",
-    searchFilter : "",
-    searchFilterG : "",
-    searchFilterP : ""
+    filtroSalasGrupos: "",
+    searchFilter: "",
+    searchFilterG: "",
+    searchFilterP: ""
   }),
 
   mixins: [IndicadorMixin],
@@ -157,7 +157,7 @@ export default defineComponent ({
       return this.filtrar(this.salas_grupos, this.filtroSalasGrupos);
     }
   },
-  
+
   methods: {
     activarSala(sala: any): void {
       this.$store.state.sala = sala;
@@ -237,7 +237,5 @@ export default defineComponent ({
       });
     }
   }
-
-  
-})
+});
 </script>

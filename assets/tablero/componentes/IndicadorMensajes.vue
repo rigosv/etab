@@ -37,23 +37,23 @@
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
 
-export default defineComponent ({
+export default defineComponent({
   props: {
-    indicador: {default: {}, type: Object},
+    indicador: { default: {}, type: Object },
     index: Number
   },
 
-  data : () => ({
-    dismissSecs : 10,
-    dismissCountDown : 0,
-    showDismissibleAlert : false,    
+  data: () => ({
+    dismissSecs: 10,
+    dismissCountDown: 0,
+    showDismissibleAlert: false
   }),
 
-  computed : {
+  computed: {
     error(): any {
       return this.indicador.error;
     },
-    
+
     mensajes(): object[] {
       return [
         {
@@ -71,11 +71,11 @@ export default defineComponent ({
           error: "Error",
           mensaje: this.$t("_indicador_error_") as string
         }
-      ]
+      ];
     }
   },
 
-  methods : {
+  methods: {
     countDownChanged(dismissCountDown: number): void {
       this.dismissCountDown = dismissCountDown;
     }
@@ -88,5 +88,5 @@ export default defineComponent ({
       }
     }
   }
-})
+});
 </script>

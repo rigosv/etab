@@ -72,9 +72,9 @@ import ListadoIndicadoresClasificados from "../ListadoIndicadoresClasificados.vu
 import ListadoIndicadores from "../ListadoIndicadores.vue";
 import Buscar from "../Buscar.vue";
 
-export default defineComponent ({
+export default defineComponent({
   components: { ListadoIndicadoresClasificados, Buscar, ListadoIndicadores },
-  data : () => ({
+  data: () => ({
     indicadores_no_clasificados: [],
     indicadores_favoritos: [],
     indicadores_libres: [],
@@ -89,8 +89,8 @@ export default defineComponent ({
         .then(response => {
           this.indicadores_favoritos = response.data.data;
         })
-        .catch( () => {
-          this.$snotify.error( this.$t("_error_conexion_") as string, "Error" );
+        .catch(() => {
+          this.$snotify.error(this.$t("_error_conexion_") as string, "Error");
         });
     });
     //Cargar la clasificación de uso
@@ -135,7 +135,5 @@ export default defineComponent ({
         });
     }
   }
-
-  
-})
+});
 </script>

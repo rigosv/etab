@@ -1,7 +1,7 @@
 import { defineComponent } from "@vue/composition-api";
 
-export default defineComponent ({
-  methods : {
+export default defineComponent({
+  methods: {
     getColorExceljs(codigo: string): string {
       let resp = "";
 
@@ -18,4 +18,4 @@ export default defineComponent ({
       return resp;
     }
   }
-})
+});

@@ -76,16 +76,16 @@ import vSelect from "vue-select";
 
 import ListadoIndicadores from "./ListadoIndicadores.vue";
 
-export default defineComponent ({
+export default defineComponent({
   components: { vSelect, ListadoIndicadores },
-  
-  data : () => ({
-    filtro : "",
-    cargando_uso : false,
-    cargando_tecnica : false
+
+  data: () => ({
+    filtro: "",
+    cargando_uso: false,
+    cargando_tecnica: false
   }),
 
-  computed : {
+  computed: {
     state(): boolean {
       return this.$store.state.clasificacion_uso != null;
     },
@@ -103,12 +103,14 @@ export default defineComponent ({
     },
 
     indicadoresFiltrados(): any {
-      return this.filtrar(this.$store.state.indicadoresClasificados, this.filtro);
+      return this.filtrar(
+        this.$store.state.indicadoresClasificados,
+        this.filtro
+      );
     }
   },
 
-  methods : {
-
+  methods: {
     getClasificacionesTecnica(clasificacionUso: any): void {
       const vm = this;
       this.cargando_tecnica = true;
@@ -181,5 +183,5 @@ export default defineComponent ({
         .normalize();
     }
   }
-})
+});
 </script>

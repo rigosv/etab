@@ -49,7 +49,7 @@ import OpcionesInformacion from "./OpcionesInformacion.vue";
 import OpcionesComparacion from "./OpcionesComparacion.vue";
 import Buscar from "./Buscar.vue";
 
-export default defineComponent ({
+export default defineComponent({
   components: {
     OpcionesGrafico,
     OpcionesFiltro,
@@ -59,7 +59,7 @@ export default defineComponent ({
   },
 
   props: {
-    indicador: { default: {}, type: Object},
+    indicador: { default: {}, type: Object },
     index: Number
   },
 
@@ -86,6 +86,5 @@ export default defineComponent ({
       return porTipo && this.indicador.configuracion.dimensionComparacion == "";
     }
   }
-  
-})
+});
 </script>

@@ -98,14 +98,14 @@ import VueGridLayout from "vue-grid-layout";
 
 import IndicadorC from "./IndicadorC.vue";
 
-export default defineComponent ({
+export default defineComponent({
   components: {
     IndicadorC,
     GridLayout: VueGridLayout.GridLayout,
     GridItem: VueGridLayout.GridItem
   },
 
-  computed : {
+  computed: {
     nameState(): boolean {
       return this.$store.state.sala.nombre.length > 0 ? true : false;
     },
@@ -115,7 +115,7 @@ export default defineComponent ({
     }
   },
 
-  methods : {
+  methods: {
     movedEvent(i: string, newX: number, newY: number): void {
       console.log("MOVED i=" + i + ", X=" + newX + ", Y=" + newY);
       this.$store.state.indicadores.map((ind: any) => {
@@ -196,9 +196,13 @@ export default defineComponent ({
             }
           })
           .catch(function(error) {
-            vm.$snotify.error(vm.$t("_guardar_sala_error_") as string, "Error", {
-              timeout: 10000
-            });
+            vm.$snotify.error(
+              vm.$t("_guardar_sala_error_") as string,
+              "Error",
+              {
+                timeout: 10000
+              }
+            );
             console.log(error);
           })
           .finally(function() {
@@ -215,5 +219,5 @@ export default defineComponent ({
       this.$store.state.abrio_indicador = false;
     }
   }
-})
+});
 </script>

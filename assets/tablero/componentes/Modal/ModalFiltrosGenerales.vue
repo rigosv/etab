@@ -78,24 +78,21 @@ import axios from "axios";
 import vSelect from "vue-select";
 import IndicadorMixin from "../../Mixins/IndicadorMixin";
 
-
-export default defineComponent ({
+export default defineComponent({
   components: { vSelect },
-  mixins: [ IndicadorMixin ],
-  data : () => ({
-    dimensionGeneral:  {},
+  mixins: [IndicadorMixin],
+  data: () => ({
+    dimensionGeneral: {},
     filtroGeneralEsCatalogo: false,
     dimensionesGenerales: [],
     datosCatalogo: [],
     valorFiltroGeneral: "",
-    valorFiltroGeneralCatalogo: {},
+    valorFiltroGeneralCatalogo: {}
   }),
 
-  
-  
   methods: {
     iniciarModal(): void {
-      const dimensionesExistentes:any[] = [];
+      const dimensionesExistentes: any[] = [];
       const dimensionesAux = [];
 
       const sala = this.$store.state.sala;
@@ -181,5 +178,5 @@ export default defineComponent ({
       }
     }
   }
-})
+});
 </script>

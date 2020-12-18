@@ -47,7 +47,7 @@ import InfoTablaDatos from "./InfoTablaDatos.vue";
 import InfoSentenciaSQL from "./InfoSentenciaSQL.vue";
 import InfoRangosAlerta from "./InfoRangosAlerta.vue";
 
-export default defineComponent ({
+export default defineComponent({
   components: {
     InfoFichaTecnica,
     InfoTablaDatos,
@@ -56,8 +56,8 @@ export default defineComponent ({
   },
 
   props: {
-    indicador: {default: {}, type: Object},
+    indicador: { default: {}, type: Object },
     index: Number
   }
-})
+});
 </script>

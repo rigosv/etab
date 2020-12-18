@@ -29,20 +29,20 @@
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
 
-export default defineComponent ({
-  props:{
+export default defineComponent({
+  props: {
     value: String,
     enter: Boolean
   },
 
   data: () => ({
-    cc_salas: false  
+    cc_salas: false
   }),
-  
+
   methods: {
     focus(): void {
       (this.$refs.input as Vue & { focus: () => any }).focus();
     }
   }
-})
+});
 </script>

@@ -39,25 +39,24 @@ import { defineComponent } from "@vue/composition-api";
 
 import IndicadorMixin from "../Mixins/IndicadorMixin";
 
-export default defineComponent ({
+export default defineComponent({
   props: {
-    indicador: {default: {}, type: Object}
+    indicador: { default: {}, type: Object }
   },
 
-  mixins:[ IndicadorMixin ],
+  mixins: [IndicadorMixin],
 
-  data : () => ({
+  data: () => ({
     filtro: ""
   }),
-  
-  computed : {
+
+  computed: {
     indicadoresFiltrados(): any {
       return this.filtrar(this.indicadores, this.filtro);
     }
   },
 
-  methods : {
-
+  methods: {
     agregarIndicador(indicador: any): void {
       //Buscar el maximo indice utilizado
       const index =
@@ -94,5 +93,5 @@ export default defineComponent ({
       }).length;
     }
   }
-})
+});
 </script>

@@ -92,21 +92,20 @@ import { defineComponent } from "@vue/composition-api";
 import IndicadorMixin from "../Mixins/IndicadorMixin";
 import ModalConfiguracion from "./Modal/ModalConfiguracion.vue";
 
-export default defineComponent ({
-  
+export default defineComponent({
   components: { ModalConfiguracion },
-  
+
   props: {
-    indicador: {default: {}, type: Object},
+    indicador: { default: {}, type: Object },
     index: Number
   },
 
-  mixins:[ IndicadorMixin ],
+  mixins: [IndicadorMixin],
 
-  data : () => ({
+  data: () => ({
     grafico: {}
   }),
-  
+
   methods: {
     refrescar(): void {
       this.indicador.filtros = [];
@@ -134,5 +133,5 @@ export default defineComponent ({
       }
     }
   }
-})
+});
 </script>

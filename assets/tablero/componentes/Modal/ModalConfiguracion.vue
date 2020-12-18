@@ -22,11 +22,11 @@
 import { defineComponent } from "@vue/composition-api";
 import ConfiguracionIndicador from "../ConfiguracionIndicador.vue";
 
-export default defineComponent ({
+export default defineComponent({
   components: { ConfiguracionIndicador },
   props: {
     indicador: Object,
     index: Number
-  }  
-})
+  }
+});
 </script>

@@ -193,10 +193,7 @@ import InfoTablaDatosContenido from "../InfoTablaDatosContenido.vue";
 import InfoFichaTecnicaContenido from "../InfoFichaTecnicaContenido.vue";
 import IndicadorBreadcum from "../IndicadorBreadcum.vue";
 
-@Options({
-  
-})
-export default defineComponent ({
+export default defineComponent({
   components: {
     InfoTablaDatosContenido,
     InfoFichaTecnicaContenido,
@@ -210,7 +207,7 @@ export default defineComponent ({
         this.$emit("convertir-graficos-sala");
       }
     });
-  }, 
+  },
 
   computed: {
     pdfOptions() {
@@ -224,9 +221,8 @@ export default defineComponent ({
     }
   },
 
-  methods : {
+  methods: {
     exportarExcel(id: string, nombreArchivo: string): void {
-
       TableToExcel.convert(document.getElementById(id), {
         name: this.$t(nombreArchivo) + ".xlsx"
       });
@@ -257,5 +253,5 @@ export default defineComponent ({
       link.click();
     }
   }
-})
+});
 </script>

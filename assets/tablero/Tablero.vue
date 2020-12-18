@@ -28,7 +28,7 @@ export default defineComponent({
     token: String,
     lang: String
   },
-  setup(props){
+  setup(props) {
     onMounted(() => {
       this.$store.commit("addDatosSalaPublica", {
         idSala: props.idSala,
@@ -37,7 +37,7 @@ export default defineComponent({
       //loadLanguageAsync(this.lang);
       this.$i18n.locale = props.lang;
     });
-    
+
     const convertirGraficosSala = () => {
       //Extraer cada gráfico y convertirlo en formato png para que sea más
       // fácil de convertir a pdf
@@ -55,5 +55,5 @@ export default defineComponent({
       convertirGraficosSala
     };
   }
-})
+});
 </script>

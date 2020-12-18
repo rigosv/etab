@@ -44,25 +44,25 @@ import { LMap, LTileLayer, LGeoJson, LControl } from "vue2-leaflet";
 
 import GraficoMixin from "../Mixins/GraficoMixin";
 
-export default defineComponent ({
+export default defineComponent({
   components: { Plotly, LMap, LTileLayer, LGeoJson, LControl },
 
   props: {
-    indicador: {default: {}, type: Object},
+    indicador: { default: {}, type: Object },
     index: Number
   },
 
-  mixins:[ GraficoMixin ],
+  mixins: [GraficoMixin],
 
-  data : () => ({
-    mapaDatosCargados : false,
-    datosMapa : {},
-    info : "",
-    url : "https://{s}.tile.osm.org/{z}/{x}/{y}.png",
+  data: () => ({
+    mapaDatosCargados: false,
+    datosMapa: {},
+    info: "",
+    url: "https://{s}.tile.osm.org/{z}/{x}/{y}.png",
     window_: window
   }),
 
-  computed : {
+  computed: {
     zoom(): any {
       return this.indicador.informacion.dimensiones[this.indicador.dimension]
         .escala;
@@ -70,7 +70,8 @@ export default defineComponent ({
 
     center(): any {
       return [
-        this.indicador.informacion.dimensiones[this.indicador.dimension].origenX,
+        this.indicador.informacion.dimensiones[this.indicador.dimension]
+          .origenX,
         this.indicador.informacion.dimensiones[this.indicador.dimension].origenY
       ];
     },
@@ -139,15 +140,15 @@ export default defineComponent ({
       return this.datosMapa;
     },
 
-    fullsreen (): any {
+    fullsreen(): any {
       return this.indicador.full_screen;
     },
 
-    dimension() : any {
+    dimension(): any {
       return this.dimension;
     },
 
-    filtros() : any {
+    filtros(): any {
       return this.filtros;
     }
   },
@@ -156,7 +157,7 @@ export default defineComponent ({
     this.cargarDatosMapa();
   },
 
-  methods : {
+  methods: {
     cargarDatosMapa(): void {
       const nombre_mapa = this.indicador.informacion.dimensiones[
         this.indicador.dimension
@@ -187,8 +188,8 @@ export default defineComponent ({
     }
   },
 
-  watch : {
-    fullsreen(){
+  watch: {
+    fullsreen() {
       //this.$refs["myMap" + this.index].mapObject.invalidateSize();
       console.log("fulll");
     },
@@ -198,8 +199,8 @@ export default defineComponent ({
     },
 
     filtros() {
-      this.cargarDatosMapa();  
+      this.cargarDatosMapa();
     }
   }
-})
+});
 </script>

@@ -26,15 +26,15 @@ import { defineComponent } from "@vue/composition-api";
 
 import IndicadorMixin from "../Mixins/IndicadorMixin";
 
-export default defineComponent ({
+export default defineComponent({
   props: {
-    indicador: {default: {}, type: Object},
+    indicador: { default: {}, type: Object },
     index: Number
   },
 
-  mixins:[ IndicadorMixin ],
-  
-  methods : {
+  mixins: [IndicadorMixin],
+
+  methods: {
     breadcum(indexF: any): void {
       //poner la nueva dimension
       this.indicador.dimension = this.indicador.filtros[indexF].codigo;
@@ -43,6 +43,5 @@ export default defineComponent ({
       this.cargarDatosIndicador(this.indicador, this.index);
     }
   }
-  
-})
+});
 </script>

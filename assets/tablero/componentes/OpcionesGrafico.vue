@@ -100,15 +100,15 @@
 import { defineComponent } from "@vue/composition-api";
 import IndicadorMixin from "../Mixins/IndicadorMixin";
 
-export default defineComponent ({
+export default defineComponent({
   props: {
-    indicador: {default: {}, type: Object},
+    indicador: { default: {}, type: Object },
     index: Number
   },
 
-  mixins:[ IndicadorMixin ],
+  mixins: [IndicadorMixin],
 
-  data : () => ({
+  data: () => ({
     images: {
       columnas: require("../../images/bar.png"),
       lineas: require("../../images/lineas.png"),
@@ -117,10 +117,10 @@ export default defineComponent ({
       caja: require("../../images/cajas.png"),
       burbuja: require("../../images/burbuja.png")
     },
-    dimension : ""
+    dimension: ""
   }),
 
-  computed : {
+  computed: {
     comparaDimensiones(): boolean {
       return this.indicador.configuracion.dimensionComparacion != "";
     },
@@ -138,18 +138,20 @@ export default defineComponent ({
     dimensionesFiltradas(): any {
       const vm = this;
 
-      let dimensiones = this.indicador.dimensiones.filter((dimension: string) => {
-        //Verificar  que no sea la dimensión actual
-        if (dimension != vm.indicador.dimension) {
-          //Verificar que no esté en los filtros
-          let esFiltro = false;
-          for (const filtro of vm.indicador.filtros) {
-            esFiltro = dimension == filtro.codigo ? true : esFiltro;
+      let dimensiones = this.indicador.dimensiones.filter(
+        (dimension: string) => {
+          //Verificar  que no sea la dimensión actual
+          if (dimension != vm.indicador.dimension) {
+            //Verificar que no esté en los filtros
+            let esFiltro = false;
+            for (const filtro of vm.indicador.filtros) {
+              esFiltro = dimension == filtro.codigo ? true : esFiltro;
+            }
+            return !esFiltro;
           }
-          return !esFiltro;
+          return false;
         }
-        return false;
-      });
+      );
 
       //Si hay indicadores cargados para comparación, mostrar solo las dimensiones comunes
       this.indicador.dataComparar.map((ind: any) => {
@@ -162,8 +164,9 @@ export default defineComponent ({
     },
 
     tiposGraficos(): any {
-      let tipos = this.indicador.informacion.dimensiones[this.indicador.dimension]
-        .graficos;
+      let tipos = this.indicador.informacion.dimensiones[
+        this.indicador.dimension
+      ].graficos;
 
       if (this.comparaDimensiones || this.comparaIndicadores) {
         tipos = tipos.filter((tipo: any) => {
@@ -220,7 +223,7 @@ export default defineComponent ({
     this.dimension = this.indicador.dimension;
   },
 
-  methods : {
+  methods: {
     getGrafico(tipo: string): any {
       if (
         ["BARRA", "BARRAS", "COLUMNAS", "COLUMNA", "DISCRETEBARCHART"].includes(
@@ -228,7 +231,9 @@ export default defineComponent ({
         )
       ) {
         return this.images.columnas.default;
-      } else if (["LINECHART", "LINEA", "LINEAS"].includes(tipo.toUpperCase())) {
+      } else if (
+        ["LINECHART", "LINEA", "LINEAS"].includes(tipo.toUpperCase())
+      ) {
         return this.images.lineas.default;
       } else if (
         ["PIECHART", "PIE", "PASTEL", "TORTA"].includes(tipo.toUpperCase())
@@ -265,5 +270,5 @@ export default defineComponent ({
       this.cargarDatosComparacion();
     }
   }
-})
+});
 </script>

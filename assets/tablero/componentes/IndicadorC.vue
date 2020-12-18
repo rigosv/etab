@@ -213,7 +213,7 @@ import ConfiguracionIndicador from "./ConfiguracionIndicador.vue";
 import InfoTablaDatosContenido from "./InfoTablaDatosContenido.vue";
 import IndicadorMixin from "../Mixins/IndicadorMixin";
 
-export default defineComponent ({
+export default defineComponent({
   components: {
     GraficoBasico,
     IndicadorBarraOpciones,
@@ -225,13 +225,13 @@ export default defineComponent ({
   },
 
   props: {
-    indicador: {default: {}, type: Object},
+    indicador: { default: {}, type: Object },
     index: Number
   },
 
-  mixins:[ IndicadorMixin ],
+  mixins: [IndicadorMixin],
 
-  computed : {
+  computed: {
     ancho(): number {
       return this.indicador.configuracion.width.split("-")[2];
     },
@@ -245,7 +245,7 @@ export default defineComponent ({
     }
   },
 
-  methods : {
+  methods: {
     quitarIndicador(): void {
       this.$store.commit("quitarIndicador", this.index);
     },
@@ -409,5 +409,5 @@ export default defineComponent ({
       }).length;
     }
   }
-})
+});
 </script>

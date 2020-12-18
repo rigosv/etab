@@ -93,16 +93,15 @@
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
 import axios from "axios";
-import { setup } from "vue-class-component";
 
-export default defineComponent ({
+export default defineComponent({
   data: () => ({
-    accion : { acciones: "", responsables: "", observaciones: "" }
+    accion: { acciones: "", responsables: "", observaciones: "" }
   }),
 
-  methods : {
+  methods: {
     guardarAccionSala() {
-      if ( this.accion.acciones.trim() === "" ) {
+      if (this.accion.acciones.trim() === "") {
         this.$snotify.warning(this.$t("_debe_agregar_acciones_") as string);
       } else {
         const json = JSON.parse(JSON.stringify(this.accion));
@@ -112,7 +111,11 @@ export default defineComponent ({
           .then(response => {
             if (response.data.status == 200) {
               this.$store.state.sala_acciones = response.data.data;
-              this.accion = { acciones: "", responsables: "", observaciones: "" };
+              this.accion = {
+                acciones: "",
+                responsables: "",
+                observaciones: ""
+              };
               this.$snotify.success(this.$t("_guardar_ok_") as string);
             } else {
               this.$snotify.error(
@@ -124,5 +127,5 @@ export default defineComponent ({
       }
     }
   }
-})
+});
 </script>

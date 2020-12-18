@@ -9,9 +9,9 @@ import { defineComponent } from "@vue/composition-api";
 import axios from "axios";
 import sqlFormatter from "sql-formatter";
 
-export default defineComponent ({
+export default defineComponent({
   props: {
-    indicador: {default: {}, type: Object}
+    indicador: { default: {}, type: Object }
   },
 
   mounted() {
@@ -38,5 +38,5 @@ export default defineComponent ({
         self.indicador.cargando = false;
       });
   }
-})
+});
 </script>

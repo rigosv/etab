@@ -84,7 +84,7 @@ import ModalAccionesSala from "./Modal/ModalAccionesSala.vue";
 import ModalCompartirSala from "./Modal/ModalCompartirSala.vue";
 import ModalFiltrosGenerales from "./Modal/ModalFiltrosGenerales.vue";
 
-export default defineComponent ({
+export default defineComponent({
   components: {
     ModalIndicadores,
     ModalSalas,
@@ -94,16 +94,16 @@ export default defineComponent ({
     ModalFiltrosGenerales
   },
 
-  computed : {
+  computed: {
     esSalaPublica(): boolean {
       return this.$store.state.token != "" && this.$store.state.idSala != "";
     }
   },
 
-  methods : {
+  methods: {
     convertirGraficosSala(): void {
       this.$emit("convertir-graficos-sala");
     }
   }
-})
+});
 </script>

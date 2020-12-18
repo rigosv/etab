@@ -70,14 +70,14 @@
 import { defineComponent } from "@vue/composition-api";
 import ColorMixin from "../Mixins/ColorMixin";
 
-export default defineComponent ({
+export default defineComponent({
   props: {
-    indicador: {default: {}, type: Object}
+    indicador: { default: {}, type: Object }
   },
 
-  mixins:[ ColorMixin ],
+  mixins: [ColorMixin],
 
-  methods : {
+  methods: {
     getColor(valor: number): string {
       let color = "";
       for (const rango of this.indicador.informacion.rangos) {
@@ -93,5 +93,5 @@ export default defineComponent ({
       return this.getColorExceljs(codigo);
     }
   }
-})
+});
 </script>
