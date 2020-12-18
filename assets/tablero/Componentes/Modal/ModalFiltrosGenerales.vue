@@ -76,12 +76,13 @@
 import { defineComponent } from "@vue/composition-api";
 import axios from "axios";
 import vSelect from "vue-select";
-import useIndicador from "../../Compositions/useIndicador";
+import useCargadorDatos from "../../Compositions/useCargadorDatos";
 
 export default defineComponent({
   components: { vSelect },
   setup(props, ctx) {
-    return { ...useIndicador(props, ctx) };
+    const { cargarDatosIndicador } = useCargadorDatos(ctx);
+    return { cargarDatosIndicador };
   },
   data: () => ({
     dimensionGeneral: {},

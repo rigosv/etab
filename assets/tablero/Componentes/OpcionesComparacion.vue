@@ -112,7 +112,7 @@ import { defineComponent } from "@vue/composition-api";
 import axios from "axios";
 
 import Buscar from "./Buscar.vue";
-import useIndicador from "../Compositions/useIndicador";
+import useCargadorDatos from "../Compositions/useCargadorDatos";
 
 export default defineComponent({
   components: { Buscar },
@@ -123,7 +123,8 @@ export default defineComponent({
   },
 
   setup(props, ctx) {
-    return { ...useIndicador(ctx) };
+    const { cargarDatosIndicador } = useCargadorDatos(ctx);
+    return { cargarDatosIndicador };
   },
 
   data: () => ({
@@ -133,15 +134,14 @@ export default defineComponent({
 
   computed: {
     dimensionesComparar(): object {
-      const vm = this;
 
       const dimensiones = this.indicador.dimensiones.filter(
         (dimension: any) => {
           //Verificar  que no sea la dimensión actual
-          if (dimension != vm.indicador.dimension) {
+          if (dimension != this.indicador.dimension) {
             //Verificar que no esté en los filtros
             let esFiltro = false;
-            for (const filtro of vm.indicador.filtros) {
+            for (const filtro of this.indicador.filtros) {
               esFiltro = dimension == filtro.codigo ? true : esFiltro;
             }
             return !esFiltro;

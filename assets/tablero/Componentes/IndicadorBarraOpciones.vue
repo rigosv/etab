@@ -90,7 +90,7 @@
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
 import ModalConfiguracion from "./Modal/ModalConfiguracion.vue";
-import useIndicador from "../Compositions/useIndicador";
+import useCargadorDatos from "../Compositions/useCargadorDatos";
 
 export default defineComponent({
   components: { ModalConfiguracion },
@@ -101,7 +101,11 @@ export default defineComponent({
   },
 
   setup(props, ctx) {
-    return { ...useIndicador(props.indicador, ctx) };
+    const { cargarDatosIndicador } = useCargadorDatos(ctx);
+
+    return {
+      cargarDatosIndicador
+    };
   },
 
   data: () => ({

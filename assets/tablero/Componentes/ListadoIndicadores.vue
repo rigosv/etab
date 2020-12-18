@@ -38,14 +38,24 @@
 import { defineComponent } from "@vue/composition-api";
 
 import useIndicador from "../Compositions/useIndicador";
+import useCargadorDatos from "../Compositions/useCargadorDatos";
+import useCadena from "../Compositions/useCadena";
 
 export default defineComponent({
   props: {
-    indicador: { default: {}, type: Object }
+    indicadores: { default: [], type: Array }
   },
 
   setup(props, ctx) {
-    return { ...useIndicador(ctx) };
+    const { normalizarDiacriticos } = useCadena();
+    const { inicializarIndicador } = useIndicador();
+    const { cargarDatosIndicador } = useCargadorDatos(ctx);
+
+    return {
+      inicializarIndicador,
+      cargarDatosIndicador,
+      normalizarDiacriticos
+    };
   },
 
   data: () => ({

@@ -24,7 +24,7 @@
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
 
-import useIndicador from "../Compositions/useIndicador";
+import useCargadorDatos from "../Compositions/useCargadorDatos";
 
 export default defineComponent({
   props: {
@@ -33,7 +33,11 @@ export default defineComponent({
   },
 
   setup(props, ctx) {
-    return { ...useIndicador(props.indicador, ctx) };
+    const { cargarDatosIndicador } = useCargadorDatos(ctx);
+
+    return {
+      cargarDatosIndicador
+    };
   },
 
   methods: {

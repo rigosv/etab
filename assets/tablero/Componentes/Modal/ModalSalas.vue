@@ -71,6 +71,8 @@ import axios from "axios";
 import Buscar from "../Buscar.vue";
 import ListadoSalas from "../ListadoSalas.vue";
 import useIndicador from "../../Compositions/useIndicador";
+import useCargadorDatos from "../../Compositions/useCargadorDatos";
+import useCadena from "../../Compositions/useCadena";
 
 export default defineComponent({
   components: { Buscar, ListadoSalas },
@@ -87,7 +89,15 @@ export default defineComponent({
   }),
 
   setup(props, ctx) {
-    return { ...useIndicador(ctx) };
+    const { normalizarDiacriticos } = useCadena();
+    const { inicializarIndicador } = useIndicador();
+    const { cargarDatosIndicador } = useCargadorDatos(ctx);
+
+    return {
+      inicializarIndicador,
+      cargarDatosIndicador,
+      normalizarDiacriticos
+    };
   },
 
   mounted() {

@@ -75,6 +75,7 @@ import axios from "axios";
 import vSelect from "vue-select";
 
 import ListadoIndicadores from "./ListadoIndicadores.vue";
+import useCadena from "../Compositions/useCadena";
 
 export default defineComponent({
   components: { vSelect, ListadoIndicadores },
@@ -84,6 +85,14 @@ export default defineComponent({
     cargando_uso: false,
     cargando_tecnica: false
   }),
+
+  setup() {
+    const { normalizarDiacriticos } = useCadena();
+
+    return {
+      normalizarDiacriticos
+    };
+  },
 
   computed: {
     state(): boolean {
@@ -171,16 +180,6 @@ export default defineComponent({
         const filtro_ = this.normalizarDiacriticos(filtro);
         return base.includes(filtro_);
       });
-    },
-
-    normalizarDiacriticos(value: string): string {
-      if (!value || value == undefined) return "";
-
-      return value
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/([aeio])\u0301|(u)[\u0301\u0308]/gi, "$1$2")
-        .normalize();
     }
   }
 });
