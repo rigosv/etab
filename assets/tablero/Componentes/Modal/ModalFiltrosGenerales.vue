@@ -76,11 +76,13 @@
 import { defineComponent } from "@vue/composition-api";
 import axios from "axios";
 import vSelect from "vue-select";
-import IndicadorMixin from "../../Mixins/IndicadorMixin";
+import useIndicador from "../../Compositions/useIndicador";
 
 export default defineComponent({
   components: { vSelect },
-  mixins: [IndicadorMixin],
+  setup(props, ctx) {
+    return { ...useIndicador(props, ctx) };
+  },
   data: () => ({
     dimensionGeneral: {},
     filtroGeneralEsCatalogo: false,
@@ -120,12 +122,11 @@ export default defineComponent({
 
       if (this.dimensionGeneral.codigo.split("id_").length > 1) {
         this.filtroGeneralEsCatalogo = true;
-        const vm = this;
         axios
           .get("/api/v1/tablero/datosCatalogo/" + this.dimensionGeneral.codigo)
-          .then(function(response) {
+          .then(response => {
             if (response.data.status == 200) {
-              vm.datosCatalogo = response.data.data;
+              this.datosCatalogo = response.data.data;
             }
           });
       }
@@ -133,7 +134,6 @@ export default defineComponent({
 
     aplicarFiltroGeneral(): void {
       let nuevosFiltros = [];
-      const vm = this;
       let existe = false;
       let etiqueta = "";
       const dimension = this.dimensionGeneral;
@@ -171,9 +171,9 @@ export default defineComponent({
           ind.filtros = nuevosFiltros;
           //$scope.agregarIndicadorDimension(ind.dimension, ind.posicion - 1);
           ind.otros_filtros.elementos = [];
-          vm.cargarDatosIndicador(ind, index++);
+          this.cargarDatosIndicador(ind, index++);
 
-          //vm.cargarDatosComparacion();
+          //vm.cargarDatosComparacion(ind);
         }
       }
     }

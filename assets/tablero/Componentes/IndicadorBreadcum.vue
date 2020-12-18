@@ -24,7 +24,7 @@
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
 
-import IndicadorMixin from "../Mixins/IndicadorMixin";
+import useIndicador from "../Compositions/useIndicador";
 
 export default defineComponent({
   props: {
@@ -32,7 +32,9 @@ export default defineComponent({
     index: Number
   },
 
-  mixins: [IndicadorMixin],
+  setup(props, ctx) {
+    return { ...useIndicador(props.indicador, ctx) };
+  },
 
   methods: {
     breadcum(indexF: any): void {

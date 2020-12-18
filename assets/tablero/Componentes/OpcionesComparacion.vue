@@ -112,7 +112,7 @@ import { defineComponent } from "@vue/composition-api";
 import axios from "axios";
 
 import Buscar from "./Buscar.vue";
-import IndicadorMixin from "../Mixins/IndicadorMixin";
+import useIndicador from "../Compositions/useIndicador";
 
 export default defineComponent({
   components: { Buscar },
@@ -122,7 +122,9 @@ export default defineComponent({
     index: Number
   },
 
-  mixins: [IndicadorMixin],
+  setup(props, ctx) {
+    return { ...useIndicador(ctx) };
+  },
 
   data: () => ({
     filtroIndicadores: "",

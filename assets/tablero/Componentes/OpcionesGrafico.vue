@@ -98,7 +98,7 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
-import IndicadorMixin from "../Mixins/IndicadorMixin";
+import useIndicador from "../Compositions/useIndicador";
 
 export default defineComponent({
   props: {
@@ -106,7 +106,9 @@ export default defineComponent({
     index: Number
   },
 
-  mixins: [IndicadorMixin],
+  setup(props, ctx) {
+    return { ...useIndicador(ctx) };
+  },
 
   data: () => ({
     images: {
@@ -267,7 +269,7 @@ export default defineComponent({
       this.indicador.otros_filtros.elementos = [];
       this.cargarDatosIndicador(this.indicador, this.index);
 
-      this.cargarDatosComparacion();
+      this.cargarDatosComparacion( this.indicador );
     }
   }
 });

@@ -70,7 +70,7 @@ import axios from "axios";
 
 import Buscar from "../Buscar.vue";
 import ListadoSalas from "../ListadoSalas.vue";
-import IndicadorMixin from "../../Mixins/IndicadorMixin";
+import useIndicador from "../../Compositions/useIndicador";
 
 export default defineComponent({
   components: { Buscar, ListadoSalas },
@@ -86,7 +86,9 @@ export default defineComponent({
     searchFilterP: ""
   }),
 
-  mixins: [IndicadorMixin],
+  setup(props, ctx) {
+    return { ...useIndicador(ctx) };
+  },
 
   mounted() {
     //const vm = this;
@@ -129,7 +131,7 @@ export default defineComponent({
               this.activarSala(this.salas[0]);
             }
           })
-          .catch((error) => {
+          .catch(error => {
             console.log(error);
             reject({
               title: this.$t("_error_"),

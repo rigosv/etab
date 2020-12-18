@@ -1,4 +1,4 @@
-import { ref, computed } from "@vue/composition-api";
+import { ref } from "@vue/composition-api";
 
 export default function(indicador: any, ctx: any) {
   const doubleClickTime = ref(0);

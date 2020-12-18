@@ -211,7 +211,7 @@ import IndicadorBreadcum from "./IndicadorBreadcum.vue";
 import IndicadorMensajes from "./IndicadorMensajes.vue";
 import ConfiguracionIndicador from "./ConfiguracionIndicador.vue";
 import InfoTablaDatosContenido from "./InfoTablaDatosContenido.vue";
-import IndicadorMixin from "../Mixins/IndicadorMixin";
+import useIndicador from "../Compositions/useIndicador";
 
 export default defineComponent({
   components: {
@@ -229,7 +229,9 @@ export default defineComponent({
     index: Number
   },
 
-  mixins: [IndicadorMixin],
+  setup(props, ctx) {
+    return { ...useIndicador(ctx) };
+  },
 
   computed: {
     ancho(): number {
@@ -278,7 +280,7 @@ export default defineComponent({
         //Recargar datos del gráfico
         this.cargarDatosIndicador(this.indicador, this.index);
 
-        this.cargarDatosComparacion();
+        this.cargarDatosComparacion(this.indicador);
       }
     },
 

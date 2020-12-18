@@ -37,14 +37,16 @@
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
 
-import IndicadorMixin from "../Mixins/IndicadorMixin";
+import useIndicador from "../Compositions/useIndicador";
 
 export default defineComponent({
   props: {
     indicador: { default: {}, type: Object }
   },
 
-  mixins: [IndicadorMixin],
+  setup(props, ctx) {
+    return { ...useIndicador(ctx) };
+  },
 
   data: () => ({
     filtro: ""

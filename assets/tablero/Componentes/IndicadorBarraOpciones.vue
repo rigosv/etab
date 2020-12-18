@@ -89,8 +89,8 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
-import IndicadorMixin from "../Mixins/IndicadorMixin";
 import ModalConfiguracion from "./Modal/ModalConfiguracion.vue";
+import useIndicador from "../Compositions/useIndicador";
 
 export default defineComponent({
   components: { ModalConfiguracion },
@@ -100,7 +100,9 @@ export default defineComponent({
     index: Number
   },
 
-  mixins: [IndicadorMixin],
+  setup(props, ctx) {
+    return { ...useIndicador(props.indicador, ctx) };
+  },
 
   data: () => ({
     grafico: {}
