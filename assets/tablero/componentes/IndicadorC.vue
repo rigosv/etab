@@ -64,7 +64,7 @@
             v-else
             class="close restaurar-tamanio-indicador"
             aria-label="Close"
-            :title="$t('_restaurar_tamanio_')"
+            :title="$t('_restaurarTamanio_')"
           >
             <font-awesome-icon icon="compress-arrows-alt" />
           </span>
@@ -133,7 +133,7 @@
         </div>
         <div slot="footer">
           <div>
-            <div class="float-left" :title="$t('_fecha_ultima_lectura_')">
+            <div class="float-left" :title="$t('_fechaUltimaLectura_')">
               [{{ indicador.informacion.ultima_lectura }}]
             </div>
             <div class="float-right">
@@ -157,7 +157,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
           <div align="center">
-            <h4>{{ $t("_cargando_indicador_") }}</h4>
+            <h4>{{ $t("_cargandoIndicador_") }}</h4>
             <font-awesome-icon icon="sync" spin size="2x" />
           </div>
         </div>
@@ -182,7 +182,7 @@
         <DIV slot="header">
           <i class="fas fa-cogs fa-2x"></i>
           <span style="font-size: 20pt;">
-            <B>{{ $t("_configuracion_grafico_") }}</B>
+            <B>{{ $t("_configuracionGrafico_") }}</B>
           </span>
           <button
             type="button"
@@ -289,7 +289,7 @@ export default defineComponent({
           this.indicador.otros_filtros.elementos.push(e.x);
         });
 
-        this.$snotify.info(this.$t("_se_ha_aplicado_filtro_info_") as string, {
+        this.$snotify.info(this.$t("_seHaAplicadoFiltroInfo_") as string, {
           timeout: 5000
         });
       } else {
@@ -329,13 +329,13 @@ export default defineComponent({
           if (response.data.status == 200) {
             vm.indicador.es_favorito = response.data.data;
             vm.indicador.es_favorito
-              ? vm.$snotify.info(vm.$t("_agregado_favorito_") as string)
-              : vm.$snotify.warning(vm.$t("_eliminado_favorito_") as string);
+              ? vm.$snotify.info(vm.$t("_agregadoFavorito_") as string)
+              : vm.$snotify.warning(vm.$t("_eliminadoFavorito_") as string);
           }
         })
         .catch(function(error) {
           console.log(error);
-          vm.$snotify.error(vm.$t("_error_conexion_") as string, "Error", {
+          vm.$snotify.error(vm.$t("_errorConexion_") as string, "Error", {
             timeout: 10000
           });
         });

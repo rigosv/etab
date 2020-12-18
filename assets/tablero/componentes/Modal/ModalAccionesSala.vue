@@ -1,14 +1,14 @@
 <template>
   <b-modal
     id="modalAccionesSala"
-    :title="$t('_acciones_sala_situacional_')"
+    :title="$t('_accionesSalaSituacional_')"
     ok-only
     :ok-title="$t('_cancelar_')"
     ok-variant="secondary"
     size="lg"
   >
     <b-tabs content-class="mt-2">
-      <b-tab :title="$t('_agregar_accion_')" active>
+      <b-tab :title="$t('_agregarAccion_')" active>
         <form id="acciones_frm" class="form-horizontal" role="form">
           <div class="form-group" id="acciones_div">
             <label for="acciones" class="col-sm-2 control-label col-lg-3">{{
@@ -62,17 +62,17 @@
         </form>
       </b-tab>
       <b-tab
-        :title="$t('_historial_sala_')"
+        :title="$t('_historialSala_')"
         v-if="
-          $store.state.sala_acciones != undefined &&
-            $store.state.sala_acciones.length > 0
+          $store.state.salaAcciones != undefined &&
+            $store.state.salaAcciones.length > 0
         "
       >
         <table class="table table-bordered table-striped">
           <thead>
             <tr class="sonata-ba-view-title" bgcolor="#E1EFFB">
               <th
-                v-for="(value, key) in $store.state.sala_acciones[0]"
+                v-for="(value, key) in $store.state.salaAcciones[0]"
                 :key="key"
               >
                 {{ key }}
@@ -80,7 +80,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(value, key) in $store.state.sala_acciones" :key="key">
+            <tr v-for="(value, key) in $store.state.salaAcciones" :key="key">
               <td v-for="(v, k) in value" :key="k">{{ v }}</td>
             </tr>
           </tbody>
@@ -102,7 +102,7 @@ export default defineComponent({
   methods: {
     guardarAccionSala() {
       if (this.accion.acciones.trim() === "") {
-        this.$snotify.warning(this.$t("_debe_agregar_acciones_") as string);
+        this.$snotify.warning(this.$t("_debeAgregarAcciones_") as string);
       } else {
         const json = JSON.parse(JSON.stringify(this.accion));
 
@@ -110,16 +110,16 @@ export default defineComponent({
           .post("/api/v1/tablero/salaAccion/" + this.$store.state.sala.id, json)
           .then(response => {
             if (response.data.status == 200) {
-              this.$store.state.sala_acciones = response.data.data;
+              this.$store.state.salaAcciones = response.data.data;
               this.accion = {
                 acciones: "",
                 responsables: "",
                 observaciones: ""
               };
-              this.$snotify.success(this.$t("_guardar_ok_") as string);
+              this.$snotify.success(this.$t("_guardarOk_") as string);
             } else {
               this.$snotify.error(
-                this.$t("_guardar_error_") as string,
+                this.$t("_guardarError_") as string,
                 this.$t("_error_") as string
               );
             }

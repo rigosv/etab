@@ -3,7 +3,7 @@
     <b-input-group
       size="md"
       class="mt-3"
-      v-if="$store.state.abrio_sala || $store.state.abrio_indicador"
+      v-if="$store.state.abrioSala || $store.state.abrioIndicador"
     >
       <b-input-group-text slot="prepend"
         ><font-awesome-icon icon="th" /> {{ $t("_sala_") }}</b-input-group-text
@@ -11,7 +11,7 @@
       <b-form-input
         v-model="$store.state.sala.nombre"
         :state="nameState"
-        :placeholder="$t('_debe_proporcionar_nombre_sala_')"
+        :placeholder="$t('_debeProporcionarNombreSala_')"
         trim
         :readonly="esSalaPublica"
       >
@@ -20,38 +20,38 @@
         <b-button
           variant="outline-primary"
           @click="guardarSala('guardar')"
-          :title="$t('_guardar_sala_')"
+          :title="$t('_guardarSala_')"
           v-if="
             nameState &&
               !esSalaPublica &&
-              $store.state.salas_propias.includes($store.state.sala.id)
+              $store.state.salasPropias.includes($store.state.sala.id)
           "
         >
           <font-awesome-icon icon="save" /><span
             class="d-none d-md-block float-right"
-            >{{ $t("_guardar_sala_") }}</span
+            >{{ $t("_guardarSala_") }}</span
           >
         </b-button>
         <b-button
           variant="outline-info"
           @click="guardarSala('guardar_como')"
-          :title="$t('_guardar_sala_como_')"
+          :title="$t('_guardarSalaComo_')"
           v-if="nameState && !esSalaPublica"
         >
           <font-awesome-icon icon="share-alt" /><span
             class="d-none d-md-block float-right"
-            >{{ $t("_guardar_sala_como_") }}</span
+            >{{ $t("_guardarSalaComo_") }}</span
           >
         </b-button>
         <b-button
           variant="outline-danger"
           v-if="!esSalaPublica"
           @click="cerrarSala()"
-          :title="$t('_cerrar_sala_')"
+          :title="$t('_cerrarSala_')"
         >
           <font-awesome-icon icon="times" /><span
             class="d-none d-md-block float-right"
-            >{{ $t("_cerrar_sala_") }}</span
+            >{{ $t("_cerrarSala_") }}</span
           >
         </b-button>
       </b-input-group-append>
@@ -171,10 +171,10 @@ export default defineComponent({
 
       if (
         tipo == "guardar_como" &&
-        this.$store.state.sala.nombre == this.$store.state.sala_nombre_ini
+        this.$store.state.sala.nombre == this.$store.state.salaNombreIni
       ) {
         vm.$snotify.warning(
-          vm.$t("_guardar_sala_error_nombre_diferente_") as string,
+          vm.$t("_guardarSalaErrorNombreDiferente_") as string,
           "Error"
         );
       } else {
@@ -182,14 +182,14 @@ export default defineComponent({
           .post("/api/v1/tablero/guardarSala", json)
           .then(function(response) {
             if (response.data.status == 200) {
-              vm.$store.state.abrio_sala = true;
+              vm.$store.state.abrioSala = true;
               vm.$store.state.sala.id = response.data.data;
-              vm.$store.state.sala_nombre_ini = vm.$store.state.sala.nombre;
-              vm.$store.state.salas_propias.push(response.data.data);
-              vm.$snotify.success(vm.$t("_sala_guardada_") as string);
+              vm.$store.state.salaNombreIni = vm.$store.state.sala.nombre;
+              vm.$store.state.salasPropias.push(response.data.data);
+              vm.$snotify.success(vm.$t("_salaGuardada_") as string);
             } else {
               vm.$snotify.error(
-                vm.$t("_guardar_sala_error_") as string,
+                vm.$t("_guardarSalaError_") as string,
                 "Error",
                 { timeout: 10000 }
               );
@@ -197,7 +197,7 @@ export default defineComponent({
           })
           .catch(function(error) {
             vm.$snotify.error(
-              vm.$t("_guardar_sala_error_") as string,
+              vm.$t("_guardarSalaError_") as string,
               "Error",
               {
                 timeout: 10000
@@ -215,8 +215,8 @@ export default defineComponent({
       this.$store.commit("setIndicadores", []);
       this.$store.state.indicadoresAllData = [];
       this.$store.state.sala = { nombre: "" };
-      this.$store.state.abrio_sala = false;
-      this.$store.state.abrio_indicador = false;
+      this.$store.state.abrioSala = false;
+      this.$store.state.abrioIndicador = false;
     }
   }
 });

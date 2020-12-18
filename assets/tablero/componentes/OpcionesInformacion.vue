@@ -5,7 +5,7 @@
         <b-tab active>
           <template slot="title">
             <font-awesome-icon icon="clipboard-list" />
-            {{ $t("_ficha_tecnica_") }}
+            {{ $t("_fichaTecnica_") }}
           </template>
           <b-card-text>
             <InfoFichaTecnica :indicador="indicador" />
@@ -13,7 +13,7 @@
         </b-tab>
         <b-tab>
           <template slot="title">
-            <font-awesome-icon icon="table" /> {{ $t("_tabla_datos_") }}
+            <font-awesome-icon icon="table" /> {{ $t("_tablaDatos_") }}
           </template>
           <b-card-text>
             <InfoTablaDatos :indicador="indicador" />
@@ -21,7 +21,7 @@
         </b-tab>
         <b-tab v-if="indicador.informacion.rangos.length > 0">
           <template slot="title">
-            <font-awesome-icon icon="bell" /> {{ $t("_rangos_alerta_") }}
+            <font-awesome-icon icon="bell" /> {{ $t("_rangosAlerta_") }}
           </template>
           <b-card-text>
             <InfoRangosAlerta :indicador="indicador" />
@@ -29,7 +29,7 @@
         </b-tab>
         <b-tab>
           <template slot="title">
-            <font-awesome-icon icon="bolt" /> {{ $t("_sentencia_sql_") }}
+            <font-awesome-icon icon="bolt" /> {{ $t("_sentenciaSQL_") }}
           </template>
           <b-card-text>
             <InfoSentenciaSQL :indicador="indicador" />

@@ -1,7 +1,7 @@
 <template>
   <b-modal
     id="modalFiltrosGenerales"
-    :title="$t('_filtros_generales_')"
+    :title="$t('_filtrosGenerales_')"
     ok-only
     :ok-title="$t('_cancelar_')"
     @show="iniciarModal"
@@ -38,7 +38,7 @@
         "
       >
         <label for="valorFiltro1" class="col-sm-2 control-label">{{
-          $t("_valor_filtro_")
+          $t("_valorFiltro_")
         }}</label>
         <div class="col-sm-10">
           <input type="text" id="valorFiltro1" v-model="valorFiltroGeneral" />
@@ -47,7 +47,7 @@
 
       <div class="form-group" v-show="filtroGeneralEsCatalogo">
         <label for="valorFiltro2" class="col-sm-2 control-label">{{
-          $t("_valor_filtro_")
+          $t("_valorFiltro_")
         }}</label>
         <div class="col-sm-10">
           <b-form-select v-model="valorFiltroGeneralCatalogo" id="valorFiltro2">
@@ -66,7 +66,7 @@
         type="button"
         @click="aplicarFiltroGeneral"
       >
-        {{ $t("_aplicar_filtro_") }}
+        {{ $t("_aplicarFiltro_") }}
       </button>
     </form>
   </b-modal>

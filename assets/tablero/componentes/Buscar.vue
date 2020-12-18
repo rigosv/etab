@@ -16,7 +16,7 @@
         type="text"
         class="form-control"
         :placeholder="
-          enter ? $t('_presione_enter_iniciar_busqueda_') : $t('_buscar_')
+          enter ? $t('_presionEnterIniciarBusqueda_') : $t('_buscar_')
         "
         :value="value"
         @input="$emit('input', $event.target.value)"

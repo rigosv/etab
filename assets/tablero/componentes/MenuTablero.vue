@@ -29,7 +29,7 @@
         <transition name="bounce">
           <b-navbar-nav
             class="ml-auto"
-            v-if="$store.state.abrio_sala || $store.state.abrio_indicador"
+            v-if="$store.state.abrioSala || $store.state.abrioIndicador"
           >
             <b-dropdown variant="info" :text="$t('_acciones_')" right>
               <b-dropdown-item href="#" v-b-modal.modalExportar>
@@ -38,25 +38,25 @@
               <b-dropdown-item
                 href="#"
                 v-b-modal.modalAccionesSala
-                v-if="$store.state.abrio_sala && !esSalaPublica"
+                v-if="$store.state.abrioSala && !esSalaPublica"
               >
                 <font-awesome-icon icon="bookmark" />
-                {{ $t("_acciones_sala_situacional_") }}
+                {{ $t("_accionesSalaSituacional_") }}
               </b-dropdown-item>
               <b-dropdown-item
                 href="#"
                 v-b-modal.modalCompartirSala
-                v-if="$store.state.abrio_sala && !esSalaPublica"
+                v-if="$store.state.abrioSala && !esSalaPublica"
               >
-                <font-awesome-icon icon="share" /> {{ $t("_compartir_sala_") }}
+                <font-awesome-icon icon="share" /> {{ $t("_compartirSala_") }}
               </b-dropdown-item>
               <b-dropdown-item
                 href="#"
                 v-b-modal.modalFiltrosGenerales
-                v-if="$store.state.abrio_sala && !esSalaPublica"
+                v-if="$store.state.abrioSala && !esSalaPublica"
               >
                 <font-awesome-icon icon="filter" />
-                {{ $t("_filtros_generales_") }}
+                {{ $t("_filtrosGenerales_") }}
               </b-dropdown-item>
             </b-dropdown>
           </b-navbar-nav>

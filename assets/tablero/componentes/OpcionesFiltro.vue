@@ -1,8 +1,8 @@
 <template>
   <div class="container-fluid row">
     <div class="col-12">
-      <b-card :title="$t('_filtrar_por_elemento_')" footer-tag="footer">
-        <h5>{{ $t("_elija_elementos_mostrar_grafico_") }}</h5>
+      <b-card :title="$t('_filtrarPorElemento_')" footer-tag="footer">
+        <h5>{{ $t("_elijaElementosMostrarGrafico_") }}</h5>
         <b-list-group
           style="max-height: 40vh; min-height: 70px; overflow: auto;"
         >
@@ -32,7 +32,7 @@
           variant="danger"
           @click="indicador.otros_filtros.elementos = []"
           v-if="indicador.otros_filtros.elementos.length > 0"
-          >{{ $t("_quitar_filtro_") }}</b-button
+          >{{ $t("_quitarFiltro_") }}</b-button
         >
       </b-card>
     </div>

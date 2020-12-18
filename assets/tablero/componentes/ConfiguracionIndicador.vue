@@ -4,7 +4,7 @@
       <b-tab active>
         <template slot="title">
           <font-awesome-icon icon="cog" />
-          {{ $t("_opciones_grafico_") }}
+          {{ $t("_opcionesGrafico_") }}
         </template>
         <OpcionesGrafico :indicador="indicador" :index="index" />
       </b-tab>

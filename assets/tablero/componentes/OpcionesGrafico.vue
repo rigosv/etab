@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid row">
-    <b-form-group :label="$t('_cambiar_dimension_')" class="col-12">
-      {{ $t("_dimension_actual_") }} : {{ dimension }}
+    <b-form-group :label="$t('_cambiarDimension_')" class="col-12">
+      {{ $t("_dimensionActual_") }} : {{ dimension }}
       <b-form-select v-model="dimension" @change="cambiarDimension">
         <option
           v-for="(item, key) in dimensionesFiltradas"
@@ -15,7 +15,7 @@
 
     <transition name="slide-fade">
       <b-form-group
-        :label="$t('_cambiar_orden_')"
+        :label="$t('_cambiarOrden_')"
         class="col-12"
         v-if="puedeOrdenar"
       >
@@ -31,7 +31,7 @@
                 <b-button
                   pill
                   v-if="indicador.configuracion[i] == ''"
-                  :title="$t('_sin_orden_')"
+                  :title="$t('_sinOrden_')"
                   @click="cambiarOrden(k, 'asc')"
                 >
                   <font-awesome-icon icon="sort" size="2x" />
@@ -39,7 +39,7 @@
                 <b-button
                   pill
                   variant="primary"
-                  :title="$t('_ordenado_descendentemente_')"
+                  :title="$t('_ordenadoDescendentemente_')"
                   @click="cambiarOrden(k, 'asc')"
                   v-if="indicador.configuracion[i] == 'desc'"
                 >
@@ -49,7 +49,7 @@
                 <b-button
                   pill
                   variant="success"
-                  :title="$t('_ordenado_ascendentemente_')"
+                  :title="$t('_ordenadoAscendentemente_')"
                   @click="cambiarOrden(k, 'desc')"
                   v-if="indicador.configuracion[i] == 'asc'"
                 >
@@ -64,7 +64,7 @@
         </b-row>
       </b-form-group>
     </transition>
-    <b-form-group :label="$t('_seleccione_tipo_grafico_')">
+    <b-form-group :label="$t('_seleccioneTipoGrafico_')">
       <b-container fluid class="p-4 tipos_graficos bg-light">
         <b-form-radio-group
           id="radio-group-2"

@@ -75,7 +75,7 @@ export default defineComponent({
 
     confirmarBorrarSala(sala: any): void {
       this.$snotify.confirm(
-        this.$t("_esta_seguro_borrar_sala_") as string,
+        this.$t("_estaSeguroBorrarSala_") as string,
         this.$t("_confirmar_") as string,
         {
           closeOnClick: false,
@@ -93,12 +93,12 @@ export default defineComponent({
                       this.$snotify.remove(toast.id);
                       this.$emit("borrarSala", sala);
                       this.$snotify.success(
-                        this.$t("_mensaje_ok_eliminar_sala_") as string
+                        this.$t("_mensajeOkEliminarSala_") as string
                       );
                     } else {
                       this.$snotify.remove(toast.id);
                       this.$snotify.error(
-                        this.$t("_mensaje_error_eliminar_sala_") as string,
+                        this.$t("_mensajeErrorEliminarSala_") as string,
                         this.$t("_error_") as string,
                         { timeout: 10000 }
                       );

@@ -29,7 +29,7 @@
           !indicador.informacion.meta
       "
     >
-      {{ $t("_grafico_aprecia_mejor_meta_") }}
+      {{ $t("_graficoApreciaMejorMeta_") }}
     </b-alert>
   </div>
 </template>
@@ -59,17 +59,17 @@ export default defineComponent({
         {
           variante: "success",
           error: "Success",
-          mensaje: this.$t("_indicador_dimension_fin_") as string
+          mensaje: this.$t("_indicadorDimensionFin_") as string
         },
         {
           variante: "warning",
           error: "Warning",
-          mensaje: this.$t("_indicador_warning_") as string
+          mensaje: this.$t("_indicadorWarning_") as string
         },
         {
           variante: "danger",
           error: "Error",
-          mensaje: this.$t("_indicador_error_") as string
+          mensaje: this.$t("_indicadorError_") as string
         }
       ];
     }

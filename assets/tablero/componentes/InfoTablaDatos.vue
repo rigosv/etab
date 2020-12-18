@@ -19,13 +19,13 @@
     </div>
     <div style="padding-top: 10px;">
       <b-button size="sm" variant="outline-primary" @click="exportarExcel()">
-        <font-awesome-icon icon="file-excel" /> {{ $t("_exportar_excel_") }}
+        <font-awesome-icon icon="file-excel" /> {{ $t("_exportarExcel_") }}
       </b-button>
       <b-button size="sm" variant="outline-primary" @click="exportarcsv()">
-        <font-awesome-icon icon="file-csv" />{{ $t("_exportar_csv_") }}
+        <font-awesome-icon icon="file-csv" />{{ $t("_exportarCSV_") }}
       </b-button>
       <b-button size="sm" variant="outline-primary" @click="exportarpdf()">
-        <font-awesome-icon icon="file-pdf" />{{ $t("_exportar_pdf_") }}
+        <font-awesome-icon icon="file-pdf" />{{ $t("_exportarPDF_") }}
       </b-button>
     </div>
   </div>

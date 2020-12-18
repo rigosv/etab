@@ -18,7 +18,7 @@
 
         <b-nav-item
           href="#"
-          :title="$t('_mostrar_tabla_datos_')"
+          :title="$t('_mostrarTablaDatos_')"
           @click="indicador.configuracion.mostrarTablaDatos = true"
           v-if="!indicador.configuracion.mostrarTablaDatos"
         >
@@ -27,7 +27,7 @@
 
         <b-nav-item
           href="#"
-          :title="$t('_mostrar_grafico_')"
+          :title="$t('_mostrarGrafico_')"
           @click="indicador.configuracion.mostrarTablaDatos = false"
           v-if="indicador.configuracion.mostrarTablaDatos"
         >
@@ -37,7 +37,7 @@
         <b-nav-item
           href="#"
           @click="$emit('descargar-grafico')"
-          :title="$t('_descargar_grafico_')"
+          :title="$t('_descargarGrafico_')"
           v-if="!indicador.configuracion.mostrarTablaDatos"
         >
           <font-awesome-icon icon="download" />
@@ -50,8 +50,8 @@
         <b-nav-item
           :title="
             indicador.full_screen
-              ? $t('_restaurar_tamanio_')
-              : $t('_full_screen_')
+              ? $t('_restaurarTamanio_')
+              : $t('_fullscreen_')
           "
           @click="$emit('full-screen')"
         >
@@ -74,7 +74,7 @@
 
         <b-nav-item
           :title="
-            indicador.tendencia ? $t('_ver_grafica_') : $t('_ver_tendencia_')
+            indicador.tendencia ? $t('_verGrafica_') : $t('_verTendencia_')
           "
           @click="tendencia"
         >

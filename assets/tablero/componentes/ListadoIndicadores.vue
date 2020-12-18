@@ -1,6 +1,6 @@
 <template>
   <b-form-group
-    :label="$t('_clic_indicador_para_agregarlo_tablero_')"
+    :label="$t('_clicIndicadorParaAgregarloTablero_')"
     v-if="indicadores.length > 0"
   >
     <div style="max-height: 40vh; min-height: 70px; overflow: auto;">

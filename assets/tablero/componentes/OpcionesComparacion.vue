@@ -9,7 +9,7 @@
           <b-card-text>
             <b-form-group>
               <template slot="label">
-                {{ $t("_elija_dimension_comparar_") }}
+                {{ $t("_elijaDimensionComparar_") }}
                 <transition name="slide-fade">
                   <b-button
                     size="sm"
@@ -17,7 +17,7 @@
                     v-if="indicador.configuracion.dimensionComparacion != ''"
                     @click="indicador.configuracion.dimensionComparacion = ''"
                   >
-                    {{ $t("_quitar_comparacion_") }}
+                    {{ $t("_quitarComparacion_") }}
                   </b-button>
                 </transition>
               </template>
@@ -43,7 +43,7 @@
               style="padding: 20px;"
             >
               <span class="text-primary">{{
-                $t("_indicadores_agregados_")
+                $t("_indicadoresAgregados_")
               }}</span>
 
               <b-list-group style="max-height: 40vh; overflow: auto;">
@@ -71,7 +71,7 @@
               </b-list-group>
             </div>
 
-            <span>{{ $t("_agregar_indicadores_para_comparacion_") }}</span>
+            <span>{{ $t("_agregarIndicadoresParaComparacion_") }}</span>
             <buscar
               v-model="filtroIndicadores"
               @buscar="buscarIndicadores"
@@ -243,7 +243,7 @@ export default defineComponent({
 
         if (dimensionesC.length == 0) {
           this.$snotify.warning(
-            this.$t("_indicadores_no_tienen_dimensiones_en_comun_") as string
+            this.$t("_indicadoresNoTienenDimensionesEnComun_") as string
           );
         } else {
           //Quitar la comparación por dimensión por si existe

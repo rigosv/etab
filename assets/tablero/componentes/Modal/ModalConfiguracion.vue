@@ -9,7 +9,7 @@
       size="lg"
     >
       <template slot="modal-title">
-        <h3>{{ $t("_configurar_indicador_") }}</h3>
+        <h3>{{ $t("_configurarIndicador_") }}</h3>
         <h4>{{ indicador.nombre }}</h4>
       </template>
 

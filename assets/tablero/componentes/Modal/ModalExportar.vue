@@ -2,11 +2,11 @@
   <div>
     <b-modal id="modalExportar" :title="$t('_exportar_')" ok-only size="lg">
       <b-card no-body class="overflow-hidden">
-        <b-card-body :title="$t('_tablas_datos_')">
+        <b-card-body :title="$t('_tablasDatos_')">
           <b-button
             variant="outline-secondary"
             @click="
-              exportarExcel('tabla-datos-exportar-todas', '_tabla_datos_')
+              exportarExcel('tabla-datos-exportar-todas', '_tablaDatos_')
             "
           >
             <font-awesome-icon icon="file-excel" size="2x" />
@@ -18,7 +18,7 @@
             @click="
               exportarpdf(
                 'tabla-datos-exportar-todas',
-                $store.state.sala.nombre + '-' + $t('_tabla_datos_')
+                $store.state.sala.nombre + '-' + $t('_tablaDatos_')
               )
             "
           >
@@ -57,11 +57,11 @@
         </b-card-body>
       </b-card>
       <b-card no-body class="overflow-hidden">
-        <b-card-body :title="$t('_fichas_tecnicas_')">
+        <b-card-body :title="$t('_fichasTecnicas_')">
           <b-button
             variant="outline-secondary"
             @click="
-              exportarExcel('ficha-tecnica-exportar-todas', '_ficha_tecnica_')
+              exportarExcel('ficha-tecnica-exportar-todas', '_fichaTecnica_')
             "
           >
             <font-awesome-icon icon="file-excel" size="2x" />
@@ -73,7 +73,7 @@
             @click="
               exportarpdf(
                 'ficha-tecnica-exportar-todas',
-                $store.state.sala.nombre + '-' + $t('_ficha_tecnica_')
+                $store.state.sala.nombre + '-' + $t('_fichaTecnica_')
               )
             "
           >
@@ -165,7 +165,7 @@
                     <div slot="footer">
                       <div
                         class="float-left"
-                        :title="$t('_fecha_ultima_lectura_')"
+                        :title="$t('_fechaUltimaLectura_')"
                       >
                         [{{ indicador.informacion.ultima_lectura }}]
                       </div>
@@ -249,7 +249,7 @@ export default defineComponent({
       const data = encodeURI(csvContent);
       const link = document.createElement("a");
       link.setAttribute("href", data);
-      link.setAttribute("download", this.$t("_tabla_datos_") + ".csv");
+      link.setAttribute("download", this.$t("_tablaDatos_") + ".csv");
       link.click();
     }
   }

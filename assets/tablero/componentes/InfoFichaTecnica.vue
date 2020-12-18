@@ -23,10 +23,10 @@
     </div>
     <div style="padding-top: 10px;">
       <b-button size="sm" variant="outline-primary" @click="exportarExcel()">
-        <font-awesome-icon icon="file-excel" />{{ $t("_exportar_excel_") }}
+        <font-awesome-icon icon="file-excel" />{{ $t("_exportarExcel_") }}
       </b-button>
       <b-button size="sm" variant="outline-primary" @click="exportarpdf()">
-        <font-awesome-icon icon="file-pdf" />{{ $t("_exportar_pdf_") }}
+        <font-awesome-icon icon="file-pdf" />{{ $t("_exportarPDF_") }}
       </b-button>
     </div>
   </div>
@@ -51,7 +51,7 @@ export default defineComponent({
     pdfOptions(): object {
       return {
         filename: `${this.indicador.nombre}-${this.$t(
-          "_ficha_tecnica_" as string
+          "_fichaTecnica_" as string
         )}.pdf`,
         margin: 0.5,
         image: { type: "jpeg", quality: 0.6 },
@@ -64,7 +64,7 @@ export default defineComponent({
   methods: {
     exportarExcel(): void {
       const nombreArchivo =
-        this.indicador.nombre + " - " + this.$t("_ficha_tecnica_");
+        this.indicador.nombre + " - " + this.$t("_fichaTecnica_");
       TableToExcel.convert(
         document.getElementById("exportar_ficha_container"),
         {

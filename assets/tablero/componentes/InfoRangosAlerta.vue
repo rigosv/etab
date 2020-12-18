@@ -3,14 +3,14 @@
     <table class="table table-bordered table-striped">
       <caption>
         {{
-          $t("_indicador_alertas_")
+          $t("_indicadorAlertas_")
         }}
       </caption>
       <thead>
         <tr bgcolor="#E1EFFB">
           <th>{{ $t("_color_") }}</th>
-          <th>{{ $t("_alerta_limite_inferior_") }}</th>
-          <th>{{ $t("_alerta_limite_superior_") }}</th>
+          <th>{{ $t("_alertaLimiteInferior_") }}</th>
+          <th>{{ $t("_alertaLimiteSuperior_") }}</th>
           <th>{{ $t("_comentarios_") }}</th>
         </tr>
       </thead>

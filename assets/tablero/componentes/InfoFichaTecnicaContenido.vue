@@ -12,7 +12,7 @@
       </tr>
       <tr class="sonata-ba-view-title" bgcolor="#E1EFFB">
         <th data-f-bold="true" data-fill-color="FFE1EFFB">
-          {{ $t("_nombre_campo_") }}
+          {{ $t("_nombreCampo_") }}
         </th>
         <th data-f-bold="true" data-fill-color="FFE1EFFB">
           {{ $t("_descripcion_") }}
@@ -33,7 +33,7 @@
         <td>{{ indicador.ficha.concepto }}</td>
       </tr>
       <tr>
-        <th data-f-bold="true">{{ $t("_unidad_medida_") }}</th>
+        <th data-f-bold="true">{{ $t("_unidadMedida_") }}</th>
         <td>{{ indicador.ficha.unidad_medida }}</td>
       </tr>
       <tr>
@@ -45,12 +45,12 @@
         <td>{{ indicador.ficha.observacion }}</td>
       </tr>
       <tr>
-        <th data-f-bold="true">{{ $t("_clasificacion_tecnica_") }}</th>
+        <th data-f-bold="true">{{ $t("_clasificacionTecnica_") }}</th>
         <td>
           <ul class="list-group">
             <li
               class="list-group-item"
-              v-for="(v, k) in indicador.ficha.clasificacion_tecnica"
+              v-for="(v, k) in indicador.ficha.clasificacionTecnica"
               :key="k"
             >
               {{ v.descripcion }}
@@ -77,12 +77,12 @@
         <td>{{ indicador.ficha.confiabilidad }}</td>
       </tr>
       <tr>
-        <th data-f-bold="true">{{ $t("_ultima_lectura_") }}</th>
+        <th data-f-bold="true">{{ $t("_ultimaLectura_") }}</th>
         <td>{{ indicador.ficha.ultima_lectura }}</td>
       </tr>
 
       <tr>
-        <th data-f-bold="true">{{ $t("_campos_indicador_") }}</th>
+        <th data-f-bold="true">{{ $t("_camposIndicador_") }}</th>
         <td>{{ indicador.ficha.dimensiones }}</td>
       </tr>
       <tr>
@@ -133,11 +133,11 @@
                 </td>
               </tr>
               <tr>
-                <th data-f-bold="true">{{ $t("_origen_datos_") }}</th>
+                <th data-f-bold="true">{{ $t("_origenDatos_") }}</th>
                 <td>{{ v.origen_dato ? v.origen_dato.nombre : "" }}</td>
               </tr>
               <tr>
-                <th data-f-bold="true">{{ $t("_nombre_conexion_") }}</th>
+                <th data-f-bold="true">{{ $t("_nombreConexion_") }}</th>
                 <td>
                   <ul class="list-group">
                     <li
@@ -151,7 +151,7 @@
                 </td>
               </tr>
               <tr>
-                <th data-f-bold="true">{{ $t("_responsable_datos_") }}</th>
+                <th data-f-bold="true">{{ $t("_responsableDatos_") }}</th>
                 <td>
                   {{
                     v.responsable_dato

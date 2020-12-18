@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-modal id="modalSalas" :title="$t('_seleccione_sala_')" ok-only size="lg">
+    <b-modal id="modalSalas" :title="$t('_seleccioneSala_')" ok-only size="lg">
       <b-card no-body>
         <b-tabs card>
           <b-tab active>
@@ -22,7 +22,7 @@
           <b-tab>
             <template slot="title">
               <font-awesome-icon icon="th-list" />
-              {{ $t("_salas_propias_") }}
+              {{ $t("_salasPropias_") }}
               <b-badge variant="primary">{{
                 salasPropiasFiltradas.length
               }}</b-badge>
@@ -43,7 +43,7 @@
           <b-tab>
             <template slot="title">
               <font-awesome-icon icon="th" />
-              {{ $t("_salas_grupos_") }}
+              {{ $t("_salasGrupos_") }}
               <b-badge variant="primary">{{
                 salasGruposFiltradas.length
               }}</b-badge>
@@ -76,7 +76,7 @@ export default defineComponent({
   components: { Buscar, ListadoSalas },
   data: () => ({
     salas: [],
-    salas_propias: [],
+    salasPropias: [],
     salas_grupos: [],
     filtroSalas: "",
     filtroSalasPropias: "",
@@ -90,7 +90,7 @@ export default defineComponent({
 
   mounted() {
     //const vm = this;
-    this.$snotify.async(this.$t("_cargando_salas_") as string, () => {
+    this.$snotify.async(this.$t("_cargandoSalas_") as string, () => {
       return new Promise((resolve, reject) => {
         const url = "/api/v1/tablero/listaSalas";
         const params = {
@@ -102,18 +102,18 @@ export default defineComponent({
           .get(url, { params: params })
           .then(response => {
             this.salas = response.data.data;
-            this.salas_propias = response.data.salas_propias;
+            this.salasPropias = response.data.salasPropias;
 
-            this.$store.state.salas_propias =
+            this.$store.state.salasPropias =
               this.salas.length > 0
-                ? this.salas_propias.map(sala => {
+                ? this.salasPropias.map(sala => {
                     return sala.id;
                   })
                 : [];
             this.salas_grupos = response.data.salas_grupos;
             resolve({
               title: this.$t("_salas_") as string,
-              body: this.$t("_salas_cargadas_") as string,
+              body: this.$t("_salasCargadas_") as string,
               config: {
                 closeOnClick: true,
                 timeout: 3000,
@@ -132,7 +132,7 @@ export default defineComponent({
           .catch(() => {
             reject({
               title: this.$t("_error_"),
-              body: this.$t("_error_conexion_"),
+              body: this.$t("_errorConexion_"),
               config: {
                 closeOnClick: true,
                 showProgressBar: true,
@@ -150,7 +150,7 @@ export default defineComponent({
     },
 
     salasPropiasFiltradas() {
-      return this.filtrar(this.salas_propias, this.filtroSalasPropias);
+      return this.filtrar(this.salasPropias, this.filtroSalasPropias);
     },
 
     salasGruposFiltradas() {
@@ -161,9 +161,9 @@ export default defineComponent({
   methods: {
     activarSala(sala: any): void {
       this.$store.state.sala = sala;
-      this.$store.state.sala_nombre_ini = sala.nombre;
-      this.$store.state.sala_acciones = [];
-      this.$store.state.abrio_sala = true;
+      this.$store.state.salaNombreIni = sala.nombre;
+      this.$store.state.salaAcciones = [];
+      this.$store.state.abrioSala = true;
 
       this.$store.commit("setIndicadores", []);
 
@@ -185,7 +185,7 @@ export default defineComponent({
       //const vm = this;
       axios.get("/api/v1/tablero/salaAccion/" + sala.id).then(response => {
         if (response.data.status == 200) {
-          this.$store.state.sala_acciones = response.data.data;
+          this.$store.state.salaAcciones = response.data.data;
         }
       });
 
@@ -193,20 +193,20 @@ export default defineComponent({
       axios
         .get("/api/v1/tablero/usuariosSala/" + this.$store.state.sala.id)
         .then(response => {
-          this.$store.state.sala_usuarios = response.data.data;
+          this.$store.state.salaUsuarios = response.data.data;
         })
         .catch(() => {
-          this.$snotify.error(this.$t("_error_conexion_") as string, "Error");
+          this.$snotify.error(this.$t("_errorConexion_") as string, "Error");
         });
       //Cargar los comentarios de la sala
       axios
         .get("/api/v1/tablero/comentarioSala/" + this.$store.state.sala.id)
         .then(response => {
-          this.$store.state.sala_comentarios = response.data.data;
+          this.$store.state.salaComentarios = response.data.data;
         })
         .catch(() => {
           this.$snotify.error(
-            this.$t("_error_conexion_comentarios_sala_") as string,
+            this.$t("_errorConexionComentariosSala_") as string,
             "Error"
           );
         });
@@ -229,7 +229,7 @@ export default defineComponent({
       this.salas = this.salas.filter(s => {
         return s.id != sala.id;
       });
-      this.salas_propias = this.salas_propias.filter(s => {
+      this.salasPropias = this.salasPropias.filter(s => {
         return s.id != sala.id;
       });
       this.salas_grupos = this.salas_grupos.filter(s => {

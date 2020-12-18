@@ -1,7 +1,7 @@
 <template>
   <b-modal
     id="modalIndicadores"
-    :title="$t('_seleccione_indicador_')"
+    :title="$t('_seleccioneIndicador_')"
     ok-only
     size="lg"
   >
@@ -19,7 +19,7 @@
 
         <b-tab>
           <template slot="title">
-            <font-awesome-icon icon="ban" />{{ $t("_sin_clasificacion_") }}
+            <font-awesome-icon icon="ban" />{{ $t("_sinClasificacion_") }}
             <b-badge variant="primary">{{
               indicadores_no_clasificados.length
             }}</b-badge>
@@ -30,7 +30,7 @@
 
         <b-tab>
           <template slot="title">
-            <font-awesome-icon icon="search" /> {{ $t("_busqueda_libre_") }}
+            <font-awesome-icon icon="search" /> {{ $t("_busquedaLibre_") }}
             <b-badge variant="primary">{{ indicadores_libres.length }}</b-badge>
           </template>
 
@@ -90,17 +90,17 @@ export default defineComponent({
           this.indicadores_favoritos = response.data.data;
         })
         .catch(() => {
-          this.$snotify.error(this.$t("_error_conexion_") as string, "Error");
+          this.$snotify.error(this.$t("_errorConexion_") as string, "Error");
         });
     });
     //Cargar la clasificación de uso
     axios
       .get("/api/v1/tablero/clasificacionUso")
       .then(response => {
-        this.$store.state.clasificaciones_uso = response.data.data;
+        this.$store.state.clasificacionesUso = response.data.data;
       })
       .catch(() => {
-        this.$snotify.error(this.$t("_error_conexion_") as string, "Error");
+        this.$snotify.error(this.$t("_errorConexion_") as string, "Error");
       });
 
     //Cargar indicadores no clasificados
@@ -110,7 +110,7 @@ export default defineComponent({
         this.indicadores_no_clasificados = response.data.data;
       })
       .catch(() => {
-        this.$snotify.error(this.$t("_error_conexion_") as string, "Error");
+        this.$snotify.error(this.$t("_errorConexion_") as string, "Error");
       });
   },
 
@@ -126,12 +126,12 @@ export default defineComponent({
             this.indicadores_libres = response.data.data;
           } else {
             this.indicadores_libres = [];
-            this.$snotify.info(this.$t("_datos_no_encontrados_") as string);
+            this.$snotify.info(this.$t("_datosNoEncontrados_") as string);
           }
         })
         .catch(error => {
           console.log(error);
-          this.$snotify.error(this.$t("_error_conexion_") as string, "Error");
+          this.$snotify.error(this.$t("_errorConexion_") as string, "Error");
         });
     }
   }
