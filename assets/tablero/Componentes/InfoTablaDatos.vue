@@ -37,7 +37,6 @@ import TableToExcel from "@linways/table-to-excel";
 import VueHtml2pdf from "vue-html2pdf";
 
 import InfoTablaDatosContenido from "./InfoTablaDatosContenido.vue";
-import ColorMixin from "../Mixins/ColorMixin";
 
 export default defineComponent({
   components: { InfoTablaDatosContenido, VueHtml2pdf },
@@ -46,8 +45,6 @@ export default defineComponent({
     indicador: { default: {}, type: Object },
     index: Number
   },
-
-  mixins: [ColorMixin],
 
   computed: {
     pdfOptions(): object {
@@ -73,9 +70,8 @@ export default defineComponent({
     },
 
     exportarExcel(): void {
-      const vm = this;
       TableToExcel.convert(document.getElementById("exportar_tabla_datos"), {
-        name: vm.indicador.nombre + "- tabla datos.xlsx"
+        name: this.indicador.nombre + "- tabla datos.xlsx"
       });
     },
 
@@ -98,11 +94,6 @@ export default defineComponent({
 
     exportarpdf(): void {
       (this.$refs.html2Pdf as Vue & { generatePdf: () => any }).generatePdf();
-    },
-
-    getColorExceljs_(v: number): string {
-      const codigo = this.getColor(v);
-      return this.getColorExceljs(codigo);
     }
   }
 });

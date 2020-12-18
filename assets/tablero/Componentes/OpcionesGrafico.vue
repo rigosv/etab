@@ -57,7 +57,7 @@
                 </b-button>
               </b-col>
               <b-col cols="8" class="text-middle" style="padding: 10px;">
-                {{ $t("_ordenar_" + k + "_") }}
+                {{ $t("_ordenar" + k.toUpperCase() + "_") }}
               </b-col>
             </b-row>
           </b-col>

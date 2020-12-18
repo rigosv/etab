@@ -38,7 +38,6 @@ import VueHtml2pdf from "vue-html2pdf";
 import TableToExcel from "@linways/table-to-excel";
 
 import InfoFichaTecnicaContenido from "./InfoFichaTecnicaContenido.vue";
-import ColorMixin from "../Mixins/ColorMixin";
 
 export default defineComponent({
   components: { InfoFichaTecnicaContenido, VueHtml2pdf },

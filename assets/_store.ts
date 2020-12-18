@@ -17,7 +17,6 @@ export interface ModuleState {
   indexActivo: number;
   abrioSala: boolean;
   abrioIndicador: boolean;
-  colores_: string[];
   indicadoresClasificados: object[];
   clasificacionesUso: object[];
   clasificacionUso: null | object;
@@ -43,22 +42,6 @@ export const store = new Vuex.Store({
     indexActivo: 0,
     abrioSala: false,
     abrioIndicador: false,
-    colores_: [
-      "rgb(31, 119, 180)",
-      "rgb(174, 199, 232)",
-      "rgb(255, 127, 14)",
-      "rgb(163, 214, 163)",
-      "rgb(214, 39, 40)",
-      "rgb(255, 171, 169)",
-      "rgb(148, 103, 189)",
-      "rgb(197, 176, 213)",
-      "rgb(140, 86, 75)",
-      "rgb(196, 156, 148)",
-      "rgb(227, 119, 194)",
-      "rgb(247, 182, 210)",
-      "rgb(255, 233, 211)",
-      "rgb(152, 223, 138)"
-    ],
     indicadoresClasificados: [],
     clasificacionesUso: [],
     clasificacionUso: null,

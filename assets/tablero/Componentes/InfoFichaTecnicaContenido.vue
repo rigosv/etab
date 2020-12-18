@@ -203,13 +203,15 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
-import ColorMixin from "../Mixins/ColorMixin";
+import useColor from "../Compositions/useColor";
 
 export default defineComponent({
   props: {
     indicador: { default: {}, type: Object }
   },
 
-  mixins: [ColorMixin]
+  setup() {
+    return { ...useColor() };
+  }
 });
 </script>

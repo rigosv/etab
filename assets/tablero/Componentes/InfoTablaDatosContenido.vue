@@ -68,30 +68,32 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
-import ColorMixin from "../Mixins/ColorMixin";
+import useColor from "../Compositions/useColor";
 
 export default defineComponent({
   props: {
     indicador: { default: {}, type: Object }
   },
 
-  mixins: [ColorMixin],
+  setup(props) {
+    const { getColorExceljs } = useColor();
 
-  methods: {
-    getColor(valor: number): string {
+    const getColor = (valor: number): string => {
       let color = "";
-      for (const rango of this.indicador.informacion.rangos) {
+      for (const rango of props.indicador.informacion.rangos) {
         if (valor >= rango.limite_inf && valor <= rango.limite_sup) {
           color = rango.color;
         }
       }
       return color;
-    },
+    };
 
-    getColorExceljs_(v: number): string {
-      const codigo = this.getColor(v);
-      return this.getColorExceljs(codigo);
-    }
+    const getColorExceljs_ = (v: number): string => {
+      const codigo = getColor(v);
+      return getColorExceljs(codigo);
+    };
+
+    return { getColor, getColorExceljs_ };
   }
 });
 </script>

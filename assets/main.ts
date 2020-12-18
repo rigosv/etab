@@ -8,6 +8,7 @@ import fullscreen from "vue-fullscreen";
 //import sql from 'highlight.js/lib/languages/sql';
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import VueCompositionAPI from "@vue/composition-api";
 
 // Listado de íconos a utilizar
 import {
@@ -110,6 +111,7 @@ Vue.use(VueI18n);
 Vue.use(Snotify, { toast: { position: SnotifyPosition.rightTop } });
 Vue.use(BootstrapVue);
 Vue.use(fullscreen);
+Vue.use(VueCompositionAPI);
 //Vue.use(VueHighlightJS,{ languages: {sql}});
 
 const i18n = new VueI18n({

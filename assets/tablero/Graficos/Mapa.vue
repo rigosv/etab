@@ -42,7 +42,9 @@ import numeral from "numeral";
 import axios from "axios";
 import { LMap, LTileLayer, LGeoJson, LControl } from "vue2-leaflet";
 
-import GraficoMixin from "../Mixins/GraficoMixin";
+import useGrafico from "../Compositions/useGrafico";
+import useColor from "../Compositions/useColor";
+import useClicEvents from "../Compositions/useClicEvents";
 
 export default defineComponent({
   components: { Plotly, LMap, LTileLayer, LGeoJson, LControl },
@@ -52,7 +54,13 @@ export default defineComponent({
     index: Number
   },
 
-  mixins: [GraficoMixin],
+  setup(props, ctx) {
+    return {
+      ...useGrafico(props.indicador),
+      ...useColor(),
+      ...useClicEvents(props.indicador, ctx)
+    };
+  },
 
   data: () => ({
     mapaDatosCargados: false,
@@ -159,23 +167,22 @@ export default defineComponent({
 
   methods: {
     cargarDatosMapa(): void {
-      const nombre_mapa = this.indicador.informacion.dimensiones[
+      const nombreMapa = this.indicador.informacion.dimensiones[
         this.indicador.dimension
       ].mapa;
-      const url = "/js/Mapas/" + nombre_mapa;
-      const vm = this;
+      const url = "/js/Mapas/" + nombreMapa;
 
       axios
         .get(url)
         .then(response => {
           if (response.status == 200) {
-            vm.datosMapa = response.data;
-            vm.mapaDatosCargados = true;
+            this.datosMapa = response.data;
+            this.mapaDatosCargados = true;
           }
         })
         .catch(function(error) {
           console.log(error);
-          vm.indicador.error = "Error";
+          this.indicador.error = "Error";
         });
     },
 
@@ -188,7 +195,7 @@ export default defineComponent({
     }
   },
 
-  watch: {
+  /*watch: {
     fullsreen() {
       //this.$refs["myMap" + this.index].mapObject.invalidateSize();
       console.log("fulll");
@@ -201,6 +208,6 @@ export default defineComponent({
     filtros() {
       this.cargarDatosMapa();
     }
-  }
+  }*/
 });
 </script>

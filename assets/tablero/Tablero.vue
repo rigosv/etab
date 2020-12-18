@@ -13,10 +13,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted } from "@vue/composition-api";
+import { defineComponent } from "@vue/composition-api";
 
-import MenuTablero from "./componentes/MenuTablero.vue";
-import Sala from "./componentes/Sala.vue";
+import MenuTablero from "./Componentes/MenuTablero.vue";
+import Sala from "./Componentes/Sala.vue";
 
 export default defineComponent({
   components: {
@@ -26,19 +26,20 @@ export default defineComponent({
   props: {
     idSala: String,
     token: String,
-    lang: String
+    lang: { default: "es", type: String }
   },
-  setup(props) {
-    onMounted(() => {
-      this.$store.commit("addDatosSalaPublica", {
-        idSala: props.idSala,
-        token: props.token
-      });
-      //loadLanguageAsync(this.lang);
-      this.$i18n.locale = props.lang;
-    });
 
-    const convertirGraficosSala = () => {
+  mounted() {
+    this.$store.commit("addDatosSalaPublica", {
+      idSala: this.idSala,
+      token: this.token
+    });
+    //loadLanguageAsync(this.lang);
+    this.$i18n.locale = this.lang;
+  },
+
+  methods: {
+    convertirGraficosSala() {
       //Extraer cada gráfico y convertirlo en formato png para que sea más
       // fácil de convertir a pdf
       this.$store.state.indicadores.map((indicador: any) => {
@@ -49,11 +50,7 @@ export default defineComponent({
             img?.setAttribute("src", dataUrl);
           });
       });
-    };
-
-    return {
-      convertirGraficosSala
-    };
+    }
   }
 });
 </script>

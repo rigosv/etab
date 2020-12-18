@@ -21,7 +21,9 @@ import { defineComponent } from "@vue/composition-api";
 import { Plotly } from "vue-plotly";
 import numeral from "numeral";
 
-import GraficoMixin from "../Mixins/GraficoMixin";
+import useGrafico from "../Compositions/useGrafico";
+import useColor from "../Compositions/useColor";
+import useClicEvents from "../Compositions/useClicEvents";
 
 export default defineComponent({
   components: { Plotly },
@@ -30,7 +32,13 @@ export default defineComponent({
     index: Number
   },
 
-  mixins: [GraficoMixin],
+  setup(props, ctx) {
+    return {
+      ...useGrafico(props.indicador),
+      ...useColor(),
+      ...useClicEvents(props.indicador, ctx)
+    };
+  },
 
   computed: {
     tipoGrafico(): string {
@@ -283,7 +291,7 @@ export default defineComponent({
           text: texto,
           mode: "markers",
           marker: {
-            color: this.$store.state.colores_,
+            color: colores,
             size: size,
             sizemode: "area"
           }

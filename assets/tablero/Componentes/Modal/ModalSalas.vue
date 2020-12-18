@@ -77,7 +77,7 @@ export default defineComponent({
   data: () => ({
     salas: [],
     salasPropias: [],
-    salas_grupos: [],
+    salasGrupos: [],
     filtroSalas: "",
     filtroSalasPropias: "",
     filtroSalasGrupos: "",
@@ -102,7 +102,7 @@ export default defineComponent({
           .get(url, { params: params })
           .then(response => {
             this.salas = response.data.data;
-            this.salasPropias = response.data.salasPropias;
+            this.salasPropias = response.data.salas_propias;
 
             this.$store.state.salasPropias =
               this.salas.length > 0
@@ -110,7 +110,7 @@ export default defineComponent({
                     return sala.id;
                   })
                 : [];
-            this.salas_grupos = response.data.salas_grupos;
+            this.salasGrupos = response.data.salas_grupos;
             resolve({
               title: this.$t("_salas_") as string,
               body: this.$t("_salasCargadas_") as string,
@@ -129,7 +129,8 @@ export default defineComponent({
               this.activarSala(this.salas[0]);
             }
           })
-          .catch(() => {
+          .catch((error) => {
+            console.log(error);
             reject({
               title: this.$t("_error_"),
               body: this.$t("_errorConexion_"),
@@ -229,10 +230,10 @@ export default defineComponent({
       this.salas = this.salas.filter(s => {
         return s.id != sala.id;
       });
-      this.salasPropias = this.salasPropias.filter(s => {
+      this.salasPropias = this.salasPropias.filter((s:any) => {
         return s.id != sala.id;
       });
-      this.salas_grupos = this.salas_grupos.filter(s => {
+      this.salasGrupos = this.salasGrupos.filter((s:any) => {
         return s.id != sala.id;
       });
     }
