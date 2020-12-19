@@ -4,9 +4,9 @@ import axios from "axios";
 export default function(ctx: any) {
   const cargarDatosComparacion = (indicador: any): void => {
     //Verificar si hay indicadores de comparación
-    for (const indC of indicador_.dataComparar) {
+    for (const indC of indicador.dataComparar) {
       const json = {
-        filtros: indicador_.filtros,
+        filtros: indicador.filtros,
         ver_sql: false,
         tendencia: false
       };

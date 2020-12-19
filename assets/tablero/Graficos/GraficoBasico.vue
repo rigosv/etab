@@ -24,6 +24,7 @@ import numeral from "numeral";
 import useGrafico from "../Compositions/useGrafico";
 import useColor from "../Compositions/useColor";
 import useClicEvents from "../Compositions/useClicEvents";
+import useCargadorDatos from "../Compositions/useCargadorDatos";
 
 export default defineComponent({
   components: { Plotly },
@@ -34,6 +35,7 @@ export default defineComponent({
 
   setup(props, ctx) {
     return {
+      ...useCargadorDatos(ctx),
       ...useGrafico(props.indicador),
       ...useColor(),
       ...useClicEvents(props.indicador, ctx)

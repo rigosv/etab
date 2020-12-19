@@ -24,6 +24,7 @@ export default function(indicador: any, ctx: any) {
     // Click fires once on single and twice on double clicks
     // We only care about single clicks.
     //This checks to give the doubleclick event 500 ms to fire, and does nothing if so
+    console.log("clic");
     const t0 = Date.now();
     if (t0 - doubleClickTime.value > doubleClickThreshold.value) {
       setTimeout(function() {
@@ -41,6 +42,7 @@ export default function(indicador: any, ctx: any) {
   };
 
   const selected = (eventData: any): void => {
+    console.log("selected");
     if (eventData != undefined) {
       ctx.$emit("filtar-posicion", eventData.points);
     }

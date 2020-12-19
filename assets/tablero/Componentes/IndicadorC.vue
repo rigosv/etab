@@ -212,6 +212,7 @@ import IndicadorMensajes from "./IndicadorMensajes.vue";
 import ConfiguracionIndicador from "./ConfiguracionIndicador.vue";
 import InfoTablaDatosContenido from "./InfoTablaDatosContenido.vue";
 import useIndicador from "../Compositions/useIndicador";
+import useCargadorDatos from "../Compositions/useCargadorDatos";
 
 export default defineComponent({
   components: {
@@ -230,7 +231,7 @@ export default defineComponent({
   },
 
   setup(props, ctx) {
-    return { ...useIndicador(ctx) };
+    return { ...useIndicador(), ...useCargadorDatos(ctx)};
   },
 
   computed: {
@@ -253,7 +254,6 @@ export default defineComponent({
     },
 
     clicGrafico(valor: number): void {
-      const vm = this;
       if (
         parseInt(this.indicador.dimensionIndex) + 1 ==
         this.indicador.dimensiones.length
@@ -321,23 +321,22 @@ export default defineComponent({
     },
 
     agregarFavorito(): void {
-      const vm = this;
       axios
         .post("/api/v1/tablero/indicadorFavorito", {
-          id: vm.indicador.id,
-          es_favorito: vm.indicador.es_favorito
+          id: this.indicador.id,
+          es_favorito: this.indicador.es_favorito
         })
-        .then(function(response) {
+        .then(response => {
           if (response.data.status == 200) {
-            vm.indicador.es_favorito = response.data.data;
-            vm.indicador.es_favorito
-              ? vm.$snotify.info(vm.$t("_agregadoFavorito_") as string)
-              : vm.$snotify.warning(vm.$t("_eliminadoFavorito_") as string);
+            this.indicador.es_favorito = response.data.data;
+            this.indicador.es_favorito
+              ? this.$snotify.info(this.$t("_agregadoFavorito_") as string)
+              : this.$snotify.warning(this.$t("_eliminadoFavorito_") as string);
           }
         })
-        .catch(function(error) {
+        .catch(error => {
           console.log(error);
-          vm.$snotify.error(vm.$t("_errorConexion_") as string, "Error", {
+          this.$snotify.error(this.$t("_errorConexion_") as string, "Error", {
             timeout: 10000
           });
         });
