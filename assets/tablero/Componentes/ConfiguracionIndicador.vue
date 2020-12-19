@@ -41,7 +41,6 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
-import axios from "axios";
 
 import OpcionesFiltro from "./OpcionesFiltro.vue";
 import OpcionesGrafico from "./OpcionesGrafico.vue";

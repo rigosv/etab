@@ -21,7 +21,7 @@
       >
         <b-row>
           <b-col
-            v-for="(i, k) in seriesOrden"
+            v-for="(tipoOrden, k) in seriesOrden"
             :key="k"
             class="row border rounded shadow flex border-primary "
             style=" margin: 20px 5px 20px 20px; padding: 15px; "
@@ -30,7 +30,7 @@
               <b-col cols="4" style="vertical-align: center">
                 <b-button
                   pill
-                  v-if="indicador.configuracion[i] == ''"
+                  v-if="!indicador.configuracion.hasOwnProperty(tipoOrden)"
                   :title="$t('_sinOrden_')"
                   @click="cambiarOrden(k, 'asc')"
                 >
@@ -41,7 +41,7 @@
                   variant="primary"
                   :title="$t('_ordenadoDescendentemente_')"
                   @click="cambiarOrden(k, 'asc')"
-                  v-if="indicador.configuracion[i] == 'desc'"
+                  v-if="indicador.configuracion[tipoOrden] == 'desc'"
                 >
                   <font-awesome-icon icon="sort-numeric-down-alt" size="2x" />
                 </b-button>
@@ -51,7 +51,7 @@
                   variant="success"
                   :title="$t('_ordenadoAscendentemente_')"
                   @click="cambiarOrden(k, 'desc')"
-                  v-if="indicador.configuracion[i] == 'asc'"
+                  v-if="indicador.configuracion[tipoOrden] == 'asc'"
                 >
                   <font-awesome-icon icon="sort-numeric-up-alt" size="2x" />
                 </b-button>
@@ -98,7 +98,7 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
-import useIndicador from "../Compositions/useIndicador";
+import useCargadorDatos from "../Compositions/useCargadorDatos";
 
 export default defineComponent({
   props: {
@@ -107,7 +107,12 @@ export default defineComponent({
   },
 
   setup(props, ctx) {
-    return { ...useIndicador(ctx) };
+    const { cargarDatosIndicador, cargarDatosComparacion } = useCargadorDatos(ctx);
+
+    return {
+      cargarDatosIndicador,
+      cargarDatosComparacion
+    };
   },
 
   data: () => ({
@@ -138,15 +143,14 @@ export default defineComponent({
     },
 
     dimensionesFiltradas(): any {
-      const vm = this;
 
       let dimensiones = this.indicador.dimensiones.filter(
         (dimension: string) => {
           //Verificar  que no sea la dimensión actual
-          if (dimension != vm.indicador.dimension) {
+          if (dimension != this.indicador.dimension) {
             //Verificar que no esté en los filtros
             let esFiltro = false;
-            for (const filtro of vm.indicador.filtros) {
+            for (const filtro of this.indicador.filtros) {
               esFiltro = dimension == filtro.codigo ? true : esFiltro;
             }
             return !esFiltro;
@@ -223,6 +227,7 @@ export default defineComponent({
 
   mounted() {
     this.dimension = this.indicador.dimension;
+    console.log(this.indicador);
   },
 
   methods: {
@@ -269,7 +274,7 @@ export default defineComponent({
       this.indicador.otros_filtros.elementos = [];
       this.cargarDatosIndicador(this.indicador, this.index);
 
-      this.cargarDatosComparacion( this.indicador );
+      this.cargarDatosComparacion(this.indicador);
     }
   }
 });
