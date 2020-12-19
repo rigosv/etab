@@ -85,7 +85,7 @@ class AlmacenamientoProxy implements DashboardInterface, OrigenDatosInterface
     }
 
 
-    public function calcularIndicador($fichaTec, $dimension, $filtros, $verSql, $filtro_adicional = '', $tendencia = false){
+    public function calcularIndicador($fichaTec, $dimension, $filtros, $verSql, $filtro_adicional = '', $tendencia = false, $dimensionComparacion = null){
 
         //Verificar si en los filtros vienen datos que son catálogos
         if ($filtros != null) {
@@ -106,45 +106,47 @@ class AlmacenamientoProxy implements DashboardInterface, OrigenDatosInterface
             $filtros = $newFiltros;
         }
 
-        $datos = $this->dashboardWrapped->calcularIndicador($fichaTec, $dimension, $filtros, $verSql, $filtro_adicional, $tendencia);
-
-        //Verificar si la dimensión es un catálogo
-        $significado = $this->em->getRepository(SignificadoCampo::class)
-            ->findOneBy(['codigo' => $dimension]);
-        $catalogo = $significado->getCatalogo();
+        $datos = $this->dashboardWrapped->calcularIndicador($fichaTec, $dimension, $filtros, $verSql, $filtro_adicional, $tendencia, $dimensionComparacion);        
         
-        if ($catalogo != '' ) {
+        foreach (['category' => $dimension, 'subcategory' => $dimensionComparacion] as $tipo=>$dim) {
             
-            if ( $verSql ) {
-                $datos = preg_replace('/\b' . $dimension . '\b/', 'B.descripcion', $datos);
-                $datos = preg_replace('/\bA\b/', 'A INNER JOIN '. $catalogo . ' B ON (A. '.$dimension.' = B.id) ', $datos);
-            } else {
-                //Las coincidencias a buscar
-                $buscar = [];            
-                foreach ($datos as $d ){ $buscar[] = $d['category']; }
-                
-                $sql_ctl = "SELECT id, descripcion FROM $catalogo WHERE id IN (".implode(',', $buscar).")";
-                try {
-                    $datCatalogo = $this->em->getConnection()->executeQuery($sql_ctl)->fetchAll();
-                    $datosSust = [];                
-                    foreach ($datCatalogo as $dc ){ $datosSust[$dc['id']] = $dc['descripcion'] ;}
-                    
-                    //Hacer la sustitución, en lugar de mandar los ids de los catálogos, mandar la descripción
-                    $newDatos = [];
-                    foreach ($datos as $d ){
-                        if ( array_key_exists($d['category'], $datosSust) ) {
-                            $d['id'] = $d['category'];
-                            $d['category'] = $datosSust[$d['category']];
+            //Verificar si la dimensión es un catálogo
+            $significado = $this->em->getRepository(SignificadoCampo::class)
+                ->findOneBy(['codigo' => $dim]);
+            $catalogo = ($significado === null) ? '' : $significado->getCatalogo();
+            
+            if ($catalogo != '' ) {            
+                if ( $verSql ) {
+                    $datos = preg_replace('/\b' . $dim . '\b/', 'B.descripcion', $datos);
+                    $datos = preg_replace('/\bA\b/', 'A INNER JOIN '. $catalogo . ' B ON (A. '.$dim.' = B.id) ', $datos);
+                } else {
+                    //Las coincidencias a buscar
+                    $buscar = [];            
+                    foreach ($datos as $d ){ $buscar[] = $d[$tipo]; }
 
+                    $sql_ctl = "SELECT id, descripcion FROM $catalogo WHERE id IN (".implode(',', $buscar).")";
+                    try {
+                        $datCatalogo = $this->em->getConnection()->executeQuery($sql_ctl)->fetchAll();
+                        $datosSust = [];                
+                        foreach ($datCatalogo as $dc ){ $datosSust[$dc['id']] = $dc['descripcion'] ;}
+
+                        //Hacer la sustitución, en lugar de mandar los ids de los catálogos, mandar la descripción
+                        $newDatos = [];
+                        foreach ($datos as $d ){
+                            if ( array_key_exists($d[$tipo], $datosSust) ) {
+                                $d['id'] = $d[$tipo];
+                                $d[$tipo] = $datosSust[$d[$tipo]];
+
+                            }
+                            $newDatos[] = $d;
                         }
-                        $newDatos[] = $d;
-                    }
-                    $datos = $newDatos;
-                } catch ( \Exception $e ) {
+                        $datos = $newDatos;
+                    } catch ( \Exception $e ) {
 
+                    }
                 }
             }
-        }
+        }        
 
         return $datos;
     }

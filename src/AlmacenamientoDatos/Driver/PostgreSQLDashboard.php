@@ -25,9 +25,9 @@ class PostgreSQLDashboard implements DashboardInterface
         $this->fichaRepository->crearIndicador($fichaTec, $dimension, $filtros);
     }
 
-    public function calcularIndicador($fichaTec, $dimension, $filtros, $verSql, $filtro_adicional = '', $tendencia = false){
+    public function calcularIndicador($fichaTec, $dimension, $filtros, $verSql, $filtro_adicional = '', $tendencia = false, $dimensionComparacion = null){
 
-        return $this->fichaRepository->calcularIndicador($fichaTec, $dimension, $filtros, $verSql, $filtro_adicional, $tendencia);
+        return $this->fichaRepository->calcularIndicador($fichaTec, $dimension, $filtros, $verSql, $filtro_adicional, $tendencia, $dimensionComparacion);
     }
 
     public function getAnalisisDescriptivo($sql){

@@ -4,7 +4,7 @@ namespace App\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
-
+//use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\User;
 use App\Entity\FichaTecnica;
 use App\Entity\SignificadoCampo;
@@ -14,7 +14,7 @@ use App\Entity\ClasificacionTecnica;
 class FichaTecnicaRepository extends ServiceEntityRepository {
 
     private $cnxDatos;
-
+    //public function __construct(ManagerRegistry $registry)
     public function __construct(RegistryInterface $registry)
     {
         $this->cnxDatos = $registry->getManager('etab_datos')->getConnection();
@@ -320,7 +320,7 @@ class FichaTecnicaRepository extends ServiceEntityRepository {
         }
     }
 
-    public function calcularIndicador(FichaTecnica $fichaTecnica, $dimension, $filtro_registros = null, $ver_sql = false, $filtro_adicional = '', $tendencia = false) {
+    public function calcularIndicador(FichaTecnica $fichaTecnica, $dimension, $filtro_registros = null, $ver_sql = false, $filtro_adicional = '', $tendencia = false, $dimensionComparacion=null) {
         
         $acumulado = $fichaTecnica->getEsAcumulado();
         $formula = str_replace(' ', '',strtolower($fichaTecnica->getFormula()));
@@ -441,18 +441,27 @@ class FichaTecnicaRepository extends ServiceEntityRepository {
             $grupo_tendencia = ", A.$anio, A.$mes";
             $orden_tendencia = ", fecha";
         }
+        //Dimensión para comparación
+        $dimensionCmpGrp = "";
+        $dimensionCmp = "";
+        if ( $dimensionComparacion !== null ) {
+            $dimensionCmp = " $dimensionComparacion AS subcategory, ";
+            $dimensionCmpGrp = ', '.$dimensionComparacion;
+        }
+        
         $decimales = ( $fichaTecnica->getCantidadDecimales() == null ) ? 2 : $fichaTecnica->getCantidadDecimales();
-            $sql = "SELECT $dimension AS category, $variables_query, round(($formula)::numeric,$decimales) AS measure $fecha_tendencia        
+        $sql = "SELECT $dimension AS category, $dimensionCmp $variables_query, round(($formula)::numeric,$decimales) AS measure $fecha_tendencia        
                 FROM $tabla_indicador A" ;
-            $sql .= ' WHERE 1=1 ' . $evitar_div_0 . ' ' . $filtros .' '. $otros_filtros;
+        $sql .= ' WHERE 1=1 ' . $evitar_div_0 . ' ' . $filtros .' '. $otros_filtros;
 
         $orderid = "";
-        if (stripos(strtoupper($sql), "CTL_MES") || stripos(strtoupper($sql), "CTL_MESES") || stripos(strtoupper($sql), "CTL_MONTH"))
+        if (stripos(strtoupper($sql), "CTL_MES") || stripos(strtoupper($sql), "CTL_MESES") || stripos(strtoupper($sql), "CTL_MONTH")){
             $orderid = "id, ";
+        }
                     
-            $sql .= " GROUP BY " . $dimension . $grupo_tendencia;
-            //$sql .=  " HAVING (($formula)::numeric) >= 0 ";
-            $sql .= " ORDER BY $orderid $dimension $orden_tendencia";
+        $sql .= " GROUP BY " . $dimension . $dimensionCmpGrp .$grupo_tendencia;
+        //$sql .=  " HAVING (($formula)::numeric) >= 0 ";
+        $sql .= " ORDER BY $orderid $dimension $dimensionCmpGrp $orden_tendencia";
         
         try {
             if ($ver_sql == true)

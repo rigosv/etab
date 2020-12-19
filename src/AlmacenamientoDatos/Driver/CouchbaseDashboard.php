@@ -97,7 +97,7 @@ class CouchbaseDashboard implements DashboardInterface
         return $stmFin;
     }
 
-    public function calcularIndicador($fichaTecnica, $dimension, $filtros, $verSql, $filtro_adicional = '', $tendencia = false){
+    public function calcularIndicador($fichaTecnica, $dimension, $filtros, $verSql, $filtro_adicional = '', $tendencia = false, $dimensionComparacion = null){
 
         $formula = str_replace(' ', '',strtolower($fichaTecnica->getFormula()));
 

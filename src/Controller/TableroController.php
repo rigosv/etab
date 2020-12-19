@@ -611,12 +611,13 @@ class TableroController extends AbstractController {
         // iniciar el manager de doctrine
         $em = $this->getDoctrine()->getManager();
         $dimension = ( $dimension == 'null') ? null : trim($dimension);
+        $dimensionComparacion = $request->get('dimensionComparacion');
         try{
             $datos = (object) $request->request->all(); 
             
             //Verificar si la petición a sido realizada con GET
             if ( $request->isMethod('get') ){
-                $filtros_ = ( $request->get('filtros') == null ) ? [] : $request->get('filtros');
+                $filtros_ = ( $request->get('filtros') == null ) ? [] : $request->get('filtros');                
                 $datos->filtros = [];
                 foreach ($filtros_ as $f ){
                     $datos->filtros[] = json_decode($f);
@@ -652,7 +653,7 @@ class TableroController extends AbstractController {
                 $datos->tendencia = false;
             }
             $almacenamiento->crearIndicador($fichaTec, $dimension, $filtros);
-            $data = $almacenamiento->calcularIndicador($fichaTec, $dimension, $filtros, $datos->ver_sql, $otros_filtros, $datos->tendencia);                        
+            $data = $almacenamiento->calcularIndicador($fichaTec, $dimension, $filtros, $datos->ver_sql, $otros_filtros, $datos->tendencia, $dimensionComparacion);                        
             if($data){
                 if($datos->tendencia ){
                     $info = []; $valores = []; 
