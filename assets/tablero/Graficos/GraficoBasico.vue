@@ -379,7 +379,6 @@ export default defineComponent({
       ];
 
       const rangos = this.indicador.informacion.rangos;
-
       subcategorias.map((sc, index) => {
         let serie = this.indicador.data.filter((d: any) => d.subcategory == sc);
         serie =

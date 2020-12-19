@@ -278,7 +278,37 @@ export default defineComponent({
       this.indicador.configuracion.agregados = [];
       this.indicador.dataComparar = [];
 
-      this.cargarDatosIndicador(this.indicador, this.index);
+      if (this.indicador.configuracion.dimensionComparacion === "") {
+        this.cargarDatosIndicador(this.indicador, this.index);
+      } else {
+        const json = {
+          filtros: this.indicador.filtros,
+          ver_sql: false,
+          tendencia: false,
+          dimensionComparacion: this.indicador.configuracion.dimensionComparacion
+        };
+        this.indicador.cargando = true;
+
+        axios
+          .get(
+            "/api/v1/tablero/datosIndicador/" +
+              this.indicador.id +
+              "/" +
+              this.indicador.dimension,
+            { params: json }
+          )
+          .then(response => {
+            if (response.data.status == 200) {
+              this.indicador.data = response.data.data;
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          })
+          .finally(() => {
+            this.indicador.cargando = false;
+          });
+      }
 
       // Si no tiene un tipo adecuado poner lineas por defecto
       if (

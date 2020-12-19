@@ -43,14 +43,6 @@ export default function(ctx: any) {
       tendencia: indicador.tendencia
     };
 
-    /*if (
-                    indicador.filtro_posicion_desde != "" ||
-                    indicador.filtro_posicion_hasta != "" ||
-                    (indicador.filtro_elementos != "" && indicador.filtro_elementos)
-                ) {
-                    json.otros_filtros = indicador.otros_filtros;
-                }*/
-
     indicador.cargando = true;
     axios
       .get(
