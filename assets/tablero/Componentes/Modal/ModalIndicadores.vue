@@ -83,15 +83,17 @@ export default defineComponent({
 
   mounted() {
     this.$root.$on("bv::modal::show", (bvEvent: any, modalId: any) => {
-      //Cargar indicadores favoritos
-      axios
-        .get("/api/v1/tablero/listaIndicadores?tipo=favoritos")
-        .then(response => {
-          this.indicadores_favoritos = response.data.data;
-        })
-        .catch(() => {
-          this.$snotify.error(this.$t("_errorConexion_") as string, "Error");
-        });
+      if (modalId === "modalIndicadores") {
+        //Cargar indicadores favoritos
+        axios
+          .get("/api/v1/tablero/listaIndicadores?tipo=favoritos")
+          .then(response => {
+            this.indicadores_favoritos = response.data.data;
+          })
+          .catch(() => {
+            this.$snotify.error(this.$t("_errorConexion_") as string, "Error");
+          });
+      }
     });
     //Cargar la clasificación de uso
     axios
