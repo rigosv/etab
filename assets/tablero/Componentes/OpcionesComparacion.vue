@@ -134,7 +134,6 @@ export default defineComponent({
 
   computed: {
     dimensionesComparar(): object {
-
       const dimensiones = this.indicador.dimensiones.filter(
         (dimension: any) => {
           //Verificar  que no sea la dimensión actual
@@ -166,15 +165,14 @@ export default defineComponent({
   methods: {
     buscarIndicadores(): void {
       if (this.filtroIndicadores.length >= 3) {
-        const vm = this;
         axios
           .get(
             "/api/v1/tablero/listaIndicadores?tipo=busqueda&busqueda=" +
               this.filtroIndicadores
           )
-          .then(function(response) {
+          .then(response => {
             if (response.data.status == 200) {
-              vm.indicadoresFiltrados = response.data.data;
+              this.indicadoresFiltrados = response.data.data;
             }
           })
           .catch(function(error) {
@@ -216,12 +214,12 @@ export default defineComponent({
         this.indicador.cargando = true;
 
         axios
-          .post(
+          .get(
             "/api/v1/tablero/datosIndicador/" +
               indicadorC.id +
               "/" +
               this.indicador.dimension,
-            json
+            { params: json }
           )
           .then(response => {
             if (response.data.status == 200) {

@@ -2,7 +2,7 @@ import axios from "axios";
 //import alasql from 'alasql';
 
 export default function(ctx: any) {
-  const cargarDatosComparacion = (indicador: any): void => {
+  /*const cargarDatosComparacion = (indicador: any): void => {
     //Verificar si hay indicadores de comparación
     for (const indC of indicador.dataComparar) {
       const json = {
@@ -32,7 +32,7 @@ export default function(ctx: any) {
           indicador.cargando = false;
         });
     }
-  };
+  };*/
 
   const cargarFromServer = (indicador: any, index: number): void => {
     const indicadorCompleto = indicador;
@@ -251,7 +251,7 @@ export default function(ctx: any) {
 
   return {
     cargarDatosIndicador,
-    cargarDatosComparacion,
+    //cargarDatosComparacion,
     cargarFromServer
   };
 }

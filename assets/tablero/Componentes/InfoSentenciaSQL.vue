@@ -15,9 +15,11 @@ export default defineComponent({
   },
 
   mounted() {
-    const json = { filtros: this.indicador.filtros, ver_sql: true, tendencia: false };
-
-    console.log(this.indicador.sql);
+    const json = {
+      filtros: this.indicador.filtros,
+      ver_sql: true,
+      tendencia: false
+    };
     if (this.indicador.sql === "") {
       axios
         .get(
