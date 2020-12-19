@@ -15,28 +15,29 @@ export default defineComponent({
   },
 
   mounted() {
-    const json = { filtros: "", ver_sql: true, tendencia: false };
+    const json = { filtros: this.indicador.filtros, ver_sql: true, tendencia: false };
 
-    this.indicador.cargando = true;
-    const self = this;
-    axios
-      .post(
-        "/api/v1/tablero/datosIndicador/" +
-          this.indicador.id +
-          "/" +
-          this.indicador.dimension,
-        json
-      )
-      .then(function(response) {
-        if (response.status == 200) {
-          self.indicador.sql = sqlFormatter.format(response.data.data);
-        }
-        self.indicador.cargando = false;
-      })
-      .catch(function(error) {
-        console.log(error);
-        self.indicador.cargando = false;
-      });
+    console.log(this.indicador.sql);
+    if (this.indicador.sql === "") {
+      axios
+        .get(
+          "/api/v1/tablero/datosIndicador/" +
+            this.indicador.id +
+            "/" +
+            this.indicador.dimension,
+          { params: json }
+        )
+        .then(response => {
+          if (response.status == 200) {
+            this.indicador.sql = sqlFormatter.format(response.data.data);
+          }
+          this.indicador.cargando = false;
+        })
+        .catch(error => {
+          console.log(error);
+          this.indicador.cargando = false;
+        });
+    }
   }
 });
 </script>
