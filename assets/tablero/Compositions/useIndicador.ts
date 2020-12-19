@@ -5,7 +5,7 @@ export default function() {
   const inicializarIndicador = (indicador: any, index: number): object => {
     const filtros = indicador.filtro != "" ? JSON.parse(indicador.filtro) : [];
 
-    const conf =
+    let conf =
       indicador.orden != "" && indicador.orden != null
         ? JSON.parse(indicador.orden)
         : {
@@ -17,7 +17,10 @@ export default function() {
             maximo: "",
             maximo_manual: ""
           };
-
+    //Corregir formato antiguo
+    if (Array.isArray(conf)) {
+      conf = conf[0];
+    }
     // si no tiene tipo de gráfico poner columnas por defecto
     conf.tipo_grafico =
       !conf.hasOwnProperty("tipo_grafico") ||
@@ -30,6 +33,8 @@ export default function() {
       conf.hasOwnProperty("width") && conf.width != ""
         ? conf.width
         : "col-sm-4";
+    conf.orden_x = conf.hasOwnProperty("orden_x") ? conf.orden_x : "";
+    conf.orden_y = conf.hasOwnProperty("orden_y") ? conf.orden_y : "";
     conf.height = conf.hasOwnProperty("height") ? conf.height : 280;
     conf.mostrarTablaDatos = conf.hasOwnProperty("mostrarTablaDatos")
       ? conf.mostrarTablaDatos

@@ -30,7 +30,10 @@
               <b-col cols="4" style="vertical-align: center">
                 <b-button
                   pill
-                  v-if="!indicador.configuracion.hasOwnProperty(tipoOrden)"
+                  v-if="
+                    !indicador.configuracion.hasOwnProperty(tipoOrden) ||
+                      indicador.configuracion[tipoOrden] == ''
+                  "
                   :title="$t('_sinOrden_')"
                   @click="cambiarOrden(k, 'asc')"
                 >
@@ -227,7 +230,6 @@ export default defineComponent({
 
   mounted() {
     this.dimension = this.indicador.dimension;
-    console.log(this.indicador);
   },
 
   methods: {
