@@ -24,7 +24,6 @@ export default function(indicador: any, ctx: any) {
     // Click fires once on single and twice on double clicks
     // We only care about single clicks.
     //This checks to give the doubleclick event 500 ms to fire, and does nothing if so
-    console.log("clic");
     const t0 = Date.now();
     if (t0 - doubleClickTime.value > doubleClickThreshold.value) {
       setTimeout(function() {
@@ -38,20 +37,19 @@ export default function(indicador: any, ctx: any) {
   const doubleclick = (): void => {
     console.log("doble clic");
     doubleClickTime.value = Date.now();
-    ctx.$emit("doubleclick");
+    ctx.emit("doubleclick");
   };
 
   const selected = (eventData: any): void => {
-    console.log("selected");
     if (eventData != undefined) {
-      ctx.$emit("filtar-posicion", eventData.points);
+      ctx.emit("filtar-posicion", eventData.points);
     }
   };
 
   // Triggered when you double-click to turn off the lasso or box selection
   const deselect = (eventData: any): void => {
     doubleClickTime.value = Date.now();
-    ctx.$emit("quitar-filtros", eventData);
+    ctx.emit("quitar-filtros", eventData);
   };
 
   return {
