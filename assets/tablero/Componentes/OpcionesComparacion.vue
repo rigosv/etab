@@ -119,7 +119,7 @@ export default defineComponent({
 
   props: {
     indicador: { default: {}, type: Object },
-    index: Number
+    index: { default: 0, type: Number }
   },
 
   setup(props, ctx) {
@@ -285,7 +285,8 @@ export default defineComponent({
           filtros: this.indicador.filtros,
           ver_sql: false,
           tendencia: false,
-          dimensionComparacion: this.indicador.configuracion.dimensionComparacion
+          dimensionComparacion: this.indicador.configuracion
+            .dimensionComparacion
         };
         this.indicador.cargando = true;
 

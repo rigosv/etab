@@ -5,9 +5,7 @@
         <b-card-body :title="$t('_tablasDatos_')">
           <b-button
             variant="outline-secondary"
-            @click="
-              exportarExcel('tabla-datos-exportar-todas', '_tablaDatos_')
-            "
+            @click="exportarExcel('tabla-datos-exportar-todas', '_tablaDatos_')"
           >
             <font-awesome-icon icon="file-excel" size="2x" />
             <br />
@@ -15,12 +13,7 @@
           </b-button>
           <b-button
             variant="outline-success"
-            @click="
-              exportarpdf(
-                'tabla-datos-exportar-todas',
-                $store.state.sala.nombre + '-' + $t('_tablaDatos_')
-              )
-            "
+            @click="exportarpdf('tabla-datos-exportar-todas')"
           >
             <font-awesome-icon icon="file-pdf" size="2x" />
             <br />
@@ -70,12 +63,7 @@
           </b-button>
           <b-button
             variant="outline-success"
-            @click="
-              exportarpdf(
-                'ficha-tecnica-exportar-todas',
-                $store.state.sala.nombre + '-' + $t('_fichaTecnica_')
-              )
-            "
+            @click="exportarpdf('ficha-tecnica-exportar-todas')"
           >
             <font-awesome-icon icon="file-pdf" size="2x" />
             <br />
@@ -111,72 +99,62 @@
         <b-card-body :title="$t('_graficos_')">
           <b-button
             variant="outline-success"
-            @click="
-              exportarpdf(
-                'export_graficos',
-                $store.state.sala.nombre + '-' + $t('_sala_')
-              )
-            "
+            @click="exportarpdf('export_graficos')"
           >
             <font-awesome-icon icon="file-pdf" size="2x" />
             <br />
             {{ $t("_pdf_") }}
           </b-button>
           <div style="display: none">
-            <DIV id="export_graficos">
-              <vue-html2pdf
-                :show-layout="true"
-                :float-layout="false"
-                :enable-download="true"
-                :preview-modal="false"
-                :pdf-quality="1"
-                :manual-pagination="true"
-                :html-to-pdf-options="pdfOptions"
-                pdf-content-width="100%"
-                ref="export_graficos"
-              >
-                <section slot="pdf-content">
-                  <h3>{{ $store.state.sala.nombre }}</h3>
-                  <b-card
-                    class="col-12"
-                    header-tag="header"
-                    footer-tag="footer"
-                    style="padding-left: 0px; padding-right: 0px; margin: 5px 0 5px 0; page-break-after: always;"
-                    v-for="(indicador, index_) in $store.state.indicadores"
-                    :key="index_"
+            <vue-html2pdf
+              :show-layout="true"
+              :float-layout="false"
+              :enable-download="true"
+              :preview-modal="false"
+              :pdf-quality="1"
+              :manual-pagination="true"
+              :html-to-pdf-options="pdfOptions"
+              pdf-content-width="100%"
+              ref="export_graficos"
+            >
+              <section slot="pdf-content">
+                <h3>{{ $store.state.sala.nombre }}</h3>
+                <b-card
+                  class="col-12"
+                  header-tag="header"
+                  footer-tag="footer"
+                  style="padding-left: 0px; padding-right: 0px; margin: 5px 0 5px 0; page-break-after: always;"
+                  v-for="(indicador, index_) in $store.state.indicadores"
+                  :key="index_"
+                >
+                  <div
+                    slot="header"
+                    v-if="
+                      ['MAPA', 'GEOLOCATION', 'MAP'].includes(
+                        indicador.configuracion.tipo_grafico.toUpperCase()
+                      )
+                    "
                   >
-                    <div
-                      slot="header"
-                      v-if="
-                        ['MAPA', 'GEOLOCATION', 'MAP'].includes(
-                          indicador.configuracion.tipo_grafico.toUpperCase()
-                        )
-                      "
-                    >
-                      <h4 style="font-size: 18px;">
-                        {{ indicador.nombre.toUpperCase() }}
-                      </h4>
+                    <h4 style="font-size: 18px;">
+                      {{ indicador.nombre.toUpperCase() }}
+                    </h4>
+                  </div>
+
+                  <IndicadorBreadcum :indicador="indicador" :index="index_" />
+
+                  <img :id="'graph-export-' + indicador.index" />
+
+                  <div slot="footer">
+                    <div class="float-left" :title="$t('_fechaUltimaLectura_')">
+                      [{{ indicador.informacion.ultima_lectura }}]
                     </div>
-
-                    <IndicadorBreadcum :indicador="indicador" :index="index_" />
-
-                    <img :id="'graph-export-' + indicador.index" />
-
-                    <div slot="footer">
-                      <div
-                        class="float-left"
-                        :title="$t('_fechaUltimaLectura_')"
-                      >
-                        [{{ indicador.informacion.ultima_lectura }}]
-                      </div>
-                      <div class="float-right">
-                        {{ $t("_meta_") }}: {{ indicador.informacion.meta }}
-                      </div>
+                    <div class="float-right">
+                      {{ $t("_meta_") }}: {{ indicador.informacion.meta }}
                     </div>
-                  </b-card>
-                </section>
-              </vue-html2pdf>
-            </DIV>
+                  </div>
+                </b-card>
+              </section>
+            </vue-html2pdf>
           </div>
         </b-card-body>
       </b-card>
@@ -228,8 +206,8 @@ export default defineComponent({
       });
     },
 
-    exportarpdf(id: string, nombreArchivo: string): void {
-      this.$refs[id].generatePdf();
+    exportarpdf(id: string): void {
+      (this.$refs[id] as Vue & { generatePdf: () => any }).generatePdf();
     },
 
     exportarcsv(): void {

@@ -335,7 +335,9 @@ export default defineComponent({
           x: x,
           y: y,
           type: this.tipoGrafico,
-          text: y.map(v => numeral(v).format("0,0." + "0".repeat(this.dec))),
+          text: y.map((v: any) =>
+            numeral(v).format("0,0." + "0".repeat(this.dec))
+          ),
           textposition: "auto",
           hoverinfo: "label+value",
           hovertemplate: "%{x}<br><b>%{y:,}</b>",

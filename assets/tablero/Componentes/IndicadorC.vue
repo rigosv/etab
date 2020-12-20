@@ -214,6 +214,9 @@ import InfoTablaDatosContenido from "./InfoTablaDatosContenido.vue";
 import useIndicador from "../Compositions/useIndicador";
 import useCargadorDatos from "../Compositions/useCargadorDatos";
 
+interface Window {
+    width:any;
+}
 export default defineComponent({
   components: {
     GraficoBasico,
@@ -227,11 +230,11 @@ export default defineComponent({
 
   props: {
     indicador: { default: {}, type: Object },
-    index: Number
+    index: { default: 0, type: Number }
   },
 
   setup(props, ctx) {
-    return { ...useIndicador(), ...useCargadorDatos(ctx)};
+    return { ...useIndicador(), ...useCargadorDatos(ctx) };
   },
 
   computed: {
@@ -240,7 +243,8 @@ export default defineComponent({
     },
 
     anchopx(): number {
-      return (parseFloat(this.ancho()) * window.width) / 12;
+
+      return (parseFloat(this.ancho()) * (window as any).width) / 12;
     },
 
     alto(): number {
@@ -262,12 +266,12 @@ export default defineComponent({
       } else {
         this.indicador.otros_filtros.elementos = [];
         //Agregar la dimensión actual como un filtro
-        const datos_dimension = this.indicador.informacion.dimensiones[
+        const datosDimension = this.indicador.informacion.dimensiones[
           this.indicador.dimension
         ];
         this.indicador.filtros.push({
           codigo: this.indicador.dimension,
-          etiqueta: datos_dimension.descripcion,
+          etiqueta: datosDimension.descripcion,
           valor: valor
         });
 
@@ -280,7 +284,7 @@ export default defineComponent({
         //Recargar datos del gráfico
         this.cargarDatosIndicador(this.indicador, this.index);
 
-        this.cargarDatosComparacion(this.indicador);
+        //this.cargarDatosComparacion(this.indicador);
       }
     },
 
@@ -303,7 +307,7 @@ export default defineComponent({
       this.indicador.otros_filtros.elementos = [];
     },
 
-    cerrarConfiguracion(index: number): void {
+    cerrarConfiguracion(): void {
       this.indicador.mostrar_configuracion = false;
       //this.indicador.full_screen = false;
     },
@@ -351,18 +355,10 @@ export default defineComponent({
     },
 
     graficoImagen(options: any): void {
-      if (
-        !["MAPA", "GEOLOCATION", "MAP"].includes(
-          this.indicador.configuracion.tipo_grafico.toUpperCase()
-        )
-      ) {
-        return this.$refs.grafico.toImage(options);
-      } else {
-        return domtoimage.toPng(
-          document.querySelector("#grafico-" + this.index),
-          options
-        );
-      }
+      return domtoimage.toPng(
+        document.querySelector("#grafico-" + this.index),
+        options
+      );
     },
 
     descargarGrafico(): void {
@@ -371,14 +367,13 @@ export default defineComponent({
           this.indicador.configuracion.tipo_grafico.toUpperCase()
         )
       ) {
-        const vm = this;
         domtoimage
           .toPng(document.querySelector("#grafico-" + this.index), {
             width: 800,
             height: 600
           })
           .then((dataUrl: string) => {
-            const filename = vm.indicador.nombre;
+            const filename = this.indicador.nombre;
             const link = document.createElement("a");
 
             if (typeof link.download === "string") {
@@ -388,7 +383,7 @@ export default defineComponent({
               link.click();
               document.body.removeChild(link);
             } else {
-              window.open(uri);
+              //window.open(uri);
             }
           })
           .catch(function(error: any) {
@@ -404,7 +399,7 @@ export default defineComponent({
       }
     },
 
-    getConteo(id: string): void {
+    getConteo(id: string): number {
       return this.$store.state.indicadores.filter((x: any) => {
         return x.id == id;
       }).length;

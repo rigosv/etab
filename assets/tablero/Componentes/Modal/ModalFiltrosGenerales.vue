@@ -87,7 +87,7 @@ export default defineComponent({
   data: () => ({
     dimensionGeneral: {},
     filtroGeneralEsCatalogo: false,
-    dimensionesGenerales: [],
+    dimensionesGenerales: Array,
     datosCatalogo: [],
     valorFiltroGeneral: "",
     valorFiltroGeneralCatalogo: {}

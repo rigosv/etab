@@ -44,7 +44,7 @@ export default defineComponent({
       // fácil de convertir a pdf
       this.$store.state.indicadores.map((indicador: any) => {
         const img = document.querySelector("#graph-export-" + indicador.index);
-        this.$refs.sala.$refs["indicador" + indicador.index][0]
+        ((this.$refs.sala as Vue).$refs["indicador" + indicador.index] as Array<any>)[0]
           .graficoImagen({ format: "png", height: 500, width: 685 })
           .then((dataUrl: string) => {
             img?.setAttribute("src", dataUrl);

@@ -88,6 +88,7 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable */
 import { defineComponent } from "@vue/composition-api";
 import ModalConfiguracion from "./Modal/ModalConfiguracion.vue";
 import useCargadorDatos from "../Compositions/useCargadorDatos";

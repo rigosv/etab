@@ -106,15 +106,14 @@ import useCargadorDatos from "../Compositions/useCargadorDatos";
 export default defineComponent({
   props: {
     indicador: { default: {}, type: Object },
-    index: Number
+    index: { default: 0, type: Number }
   },
 
   setup(props, ctx) {
-    const { cargarDatosIndicador, cargarDatosComparacion } = useCargadorDatos(ctx);
+    const { cargarDatosIndicador } = useCargadorDatos(ctx);
 
     return {
-      cargarDatosIndicador,
-      cargarDatosComparacion
+      cargarDatosIndicador
     };
   },
 
@@ -276,7 +275,7 @@ export default defineComponent({
       this.indicador.otros_filtros.elementos = [];
       this.cargarDatosIndicador(this.indicador, this.index);
 
-      this.cargarDatosComparacion(this.indicador);
+      //this.cargarDatosComparacion(this.indicador);
     }
   }
 });

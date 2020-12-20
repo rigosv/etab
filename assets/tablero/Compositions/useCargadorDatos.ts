@@ -117,7 +117,7 @@ export default function(ctx: any) {
       (ind: any) => ind.id == indicador.id
     );
     const ind = ctx.root.$store.state.indicadores.find(
-      i => i.id == indicador.id
+      (i: any) => i.id == indicador.id
     );
     cargarFromServer(indicador, index);
     /*if ( ind && dataInd.length >  0 && ![ 'MAPA', 'GEOLOCATION', 'MAP' ].includes(indicador.configuracion.tipo_grafico.toUpperCase()) && !indicador.tendencia){
