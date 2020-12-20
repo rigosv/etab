@@ -180,7 +180,7 @@ export default defineComponent({
             this.mapaDatosCargados = true;
           }
         })
-        .catch(function(error) {
+        .catch(error => {
           console.log(error);
           this.indicador.error = "Error";
         });
