@@ -214,9 +214,6 @@ import InfoTablaDatosContenido from "./InfoTablaDatosContenido.vue";
 import useIndicador from "../Compositions/useIndicador";
 import useCargadorDatos from "../Compositions/useCargadorDatos";
 
-interface Window {
-  width: any;
-}
 export default defineComponent({
   components: {
     GraficoBasico,
@@ -243,7 +240,11 @@ export default defineComponent({
     },
 
     anchopx(): number {
-      return (parseFloat(this.ancho()) * (window as any).width) / 12;
+      return (
+        (parseFloat(this.indicador.configuracion.width.split("-")[2]) *
+          (window as any).width) /
+        12
+      );
     },
 
     alto(): number {
@@ -312,7 +313,7 @@ export default defineComponent({
     },
 
     fullscreen(): void {
-      this.$refs["fullscreen"].toggle();
+      (this.$refs["fullscreen"] as Vue & { toggle: () => void }).toggle();
     },
 
     fullscreenChange(fullscreen: boolean): void {
@@ -389,7 +390,9 @@ export default defineComponent({
             console.error("oops, something went wrong!", error);
           });
       } else {
-        this.$refs.grafico.downloadImage({
+        (this.$refs.grafico as Vue & {
+          downloadImage: (options: any) => void;
+        }).downloadImage({
           format: "png",
           width: 800,
           height: 600,
