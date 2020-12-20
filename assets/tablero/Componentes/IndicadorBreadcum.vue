@@ -29,7 +29,7 @@ import useCargadorDatos from "../Compositions/useCargadorDatos";
 export default defineComponent({
   props: {
     indicador: { default: {}, type: Object },
-    index: Number
+    index: { default: 0, type: Number }
   },
 
   setup(props, ctx) {

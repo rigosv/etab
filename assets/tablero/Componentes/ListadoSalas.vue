@@ -9,7 +9,7 @@
         class="list-group-item list-group-item-action list_indicador d-flex justify-content-between align-items-center"
         v-for="(item, key) in salas"
         :key="key"
-        :class="{ active: sala_activa == item.id }"
+        :class="{ active: salaActiva == item.id }"
         style="min-height: 54px;"
       >
         <A
@@ -40,9 +40,9 @@
             type="button"
             class="btn btn-danger"
             @click.prevent="confirmarBorrarSala(item)"
-            :disabled="sala_cargando"
+            :disabled="salaCargando"
           >
-            <font-awesome-icon icon="sync" spin v-if="sala_cargando" />
+            <font-awesome-icon icon="sync" spin v-if="salaCargando" />
             {{ $t("_borrar_") }}
           </button>
         </div>
@@ -62,13 +62,13 @@ export default defineComponent({
   },
 
   data: () => ({
-    sala_cargando: false,
-    sala_activa: 0
+    salaCargando: false,
+    salaActiva: 0
   }),
 
   methods: {
     activarSala(sala: any): void {
-      this.sala_activa = sala.id;
+      this.salaActiva = sala.id;
       this.$bvModal.hide("modalSalas");
       this.$emit("activarSala", sala);
     },

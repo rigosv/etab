@@ -215,7 +215,7 @@ import useIndicador from "../Compositions/useIndicador";
 import useCargadorDatos from "../Compositions/useCargadorDatos";
 
 interface Window {
-    width:any;
+  width: any;
 }
 export default defineComponent({
   components: {
@@ -243,7 +243,6 @@ export default defineComponent({
     },
 
     anchopx(): number {
-
       return (parseFloat(this.ancho()) * (window as any).width) / 12;
     },
 

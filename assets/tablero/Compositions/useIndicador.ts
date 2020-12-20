@@ -23,34 +23,48 @@ export default function() {
     }
     // si no tiene tipo de gráfico poner columnas por defecto
     conf.tipo_grafico =
-      !conf.hasOwnProperty("tipo_grafico") ||
+      !Object.prototype.hasOwnProperty.call(conf, "tipo_grafico") ||
       conf.tipo_grafico == "" ||
       conf.tipo_grafico == undefined
         ? "columnas"
         : conf.tipo_grafico;
     conf.filtro_inicial = filtros;
     conf.width =
-      conf.hasOwnProperty("width") && conf.width != ""
+    Object.prototype.hasOwnProperty.call(conf, "width") && conf.width != ""
         ? conf.width
         : "col-sm-4";
-    conf.orden_x = conf.hasOwnProperty("orden_x") ? conf.orden_x : "";
-    conf.orden_y = conf.hasOwnProperty("orden_y") ? conf.orden_y : "";
-    conf.height = conf.hasOwnProperty("height") ? conf.height : 280;
-    conf.mostrarTablaDatos = conf.hasOwnProperty("mostrarTablaDatos")
+    conf.orden_x = Object.prototype.hasOwnProperty.call(conf, "orden_x")
+      ? conf.orden_x
+      : "";
+    conf.orden_y = Object.prototype.hasOwnProperty.call(conf, "orden_y")
+      ? conf.orden_y
+      : "";
+    conf.height = Object.prototype.hasOwnProperty.call(conf, "height")
+      ? conf.height
+      : 280;
+    conf.mostrarTablaDatos = Object.prototype.hasOwnProperty.call(
+      conf,
+      "mostrarTablaDatos"
+    )
       ? conf.mostrarTablaDatos
       : false;
-    conf.agregados = conf.hasOwnProperty("agregados") ? conf.agregados : [];
-    conf.dimensionComparacion = conf.hasOwnProperty("dimensionComparacion")
+    conf.agregados = Object.prototype.hasOwnProperty.call(conf, "agregados")
+      ? conf.agregados
+      : [];
+    conf.dimensionComparacion = Object.prototype.hasOwnProperty.call(
+      conf,
+      "dimensionComparacion"
+    )
       ? conf.dimensionComparacion
       : "";
 
     const col = index % 3;
     const fila = Math.floor(index / 3);
-    conf.layout = conf.hasOwnProperty("layout")
+    conf.layout = Object.prototype.hasOwnProperty.call(conf, "layout")
       ? conf.layout
       : { x: col * 4, y: fila * 14, w: 4, h: 14, i: index };
 
-    const otros_filtros = {
+    const otrosFiltros = {
       desde: indicador.filtro_posicion_desde,
       hasta: indicador.filtro_posicion_hasta,
       elementos:
@@ -59,7 +73,7 @@ export default function() {
           : []
     };
 
-    const datos_indicador = {
+    const datosIndicador = {
       cargando: true,
       tendencia: false,
       tipo_grafico_ant: "",
@@ -84,10 +98,10 @@ export default function() {
       ficha: "",
       full_screen: false,
       configuracion: conf,
-      otros_filtros: otros_filtros,
+      otros_filtros: otrosFiltros,
       cargaCompletaIniciada: false
     };
-    return datos_indicador;
+    return datosIndicador;
   };
 
   return {

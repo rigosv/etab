@@ -73,13 +73,15 @@ import ListadoSalas from "../ListadoSalas.vue";
 import useIndicador from "../../Compositions/useIndicador";
 import useCargadorDatos from "../../Compositions/useCargadorDatos";
 import useCadena from "../../Compositions/useCadena";
+import { Sala } from "../../Interfaces/Sala";
+import { Indicador } from "../../Interfaces/Indicador";
 
 export default defineComponent({
   components: { Buscar, ListadoSalas },
   data: () => ({
-    salas: [],
-    salasPropias: [],
-    salasGrupos: [],
+    salas: [] as Sala[],
+    salasPropias: [] as Sala[],
+    salasGrupos: [] as Sala[],
     filtroSalas: "",
     filtroSalasPropias: "",
     filtroSalasGrupos: "",
@@ -158,21 +160,21 @@ export default defineComponent({
   },
 
   computed: {
-    salasFiltradas() {
+    salasFiltradas(): Sala[] {
       return this.filtrar(this.salas, this.filtroSalas);
     },
 
-    salasPropiasFiltradas() {
+    salasPropiasFiltradas(): Sala[] {
       return this.filtrar(this.salasPropias, this.filtroSalasPropias);
     },
 
-    salasGruposFiltradas() {
-      return this.filtrar(this.salas_grupos, this.filtroSalasGrupos);
+    salasGruposFiltradas(): Sala[] {
+      return this.filtrar(this.salasGrupos, this.filtroSalasGrupos);
     }
   },
 
   methods: {
-    activarSala(sala: any): void {
+    activarSala(sala: Sala): void {
       this.$store.state.sala = sala;
       this.$store.state.salaNombreIni = sala.nombre;
       this.$store.state.salaAcciones = [];
@@ -181,7 +183,7 @@ export default defineComponent({
       this.$store.commit("setIndicadores", []);
 
       const indicadores = sala.indicadores.map(
-        (indicador: any, index: number) => {
+        (indicador: Indicador, index: number) => {
           return this.inicializarIndicador(indicador, index);
         }
       );
@@ -225,10 +227,10 @@ export default defineComponent({
         });
     },
 
-    filtrar(listado: any, filtro: string): any {
-      let listadoFiltrado: any[] = [];
+    filtrar(listado: Sala[], filtro: string): Sala[] {
+      let listadoFiltrado: Sala[] = [];
       if (listado != undefined && listado.length > 0) {
-        listadoFiltrado = listado.filter((sala: any) => {
+        listadoFiltrado = listado.filter((sala: Sala) => {
           const base = this.normalizarDiacriticos(sala.nombre);
           const filtro_ = this.normalizarDiacriticos(filtro);
           return base.includes(filtro_);
@@ -237,15 +239,14 @@ export default defineComponent({
       return listadoFiltrado;
     },
 
-    borrarSala(sala: any): void {
-      const idSalaBorrada = sala.id;
-      this.salas = this.salas.filter(s => {
+    borrarSala(sala: Sala): void {
+      this.salas = this.salas.filter((s: Sala) => {
         return s.id != sala.id;
       });
-      this.salasPropias = this.salasPropias.filter((s:any) => {
+      this.salasPropias = this.salasPropias.filter((s: Sala) => {
         return s.id != sala.id;
       });
-      this.salasGrupos = this.salasGrupos.filter((s:any) => {
+      this.salasGrupos = this.salasGrupos.filter((s: Sala) => {
         return s.id != sala.id;
       });
     }

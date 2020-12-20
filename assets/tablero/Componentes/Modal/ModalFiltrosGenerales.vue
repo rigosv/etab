@@ -33,8 +33,7 @@
         class="form-group"
         v-show="
           !filtroGeneralEsCatalogo &&
-            dimensionGeneral != '' &&
-            dimensionGeneral != '?'
+            dimensionGeneral != undefined
         "
       >
         <label for="valorFiltro1" class="col-sm-2 control-label">{{
@@ -78,6 +77,15 @@ import axios from "axios";
 import vSelect from "vue-select";
 import useCargadorDatos from "../../Compositions/useCargadorDatos";
 
+interface Dimension {
+  codigo: string,
+  descripcion: string
+}
+interface DatoCatalogo {
+  id: number,
+  descripcion: string
+}
+
 export default defineComponent({
   components: { vSelect },
   setup(props, ctx) {
@@ -85,12 +93,12 @@ export default defineComponent({
     return { cargarDatosIndicador };
   },
   data: () => ({
-    dimensionGeneral: {},
+    dimensionGeneral: {} as Dimension,
     filtroGeneralEsCatalogo: false,
-    dimensionesGenerales: Array,
-    datosCatalogo: [],
+    dimensionesGenerales: [] as Array<Dimension>,
+    datosCatalogo: [] as Array<DatoCatalogo>,
     valorFiltroGeneral: "",
-    valorFiltroGeneralCatalogo: {}
+    valorFiltroGeneralCatalogo: {} as DatoCatalogo
   }),
 
   methods: {
@@ -143,7 +151,7 @@ export default defineComponent({
         : this.valorFiltroGeneral.trim();
 
       let index = 0;
-      if (dimension != "" && valor != "") {
+      if ( this.dimensionGeneral.codigo !== undefined && valor != "") {
         for (const ind of this.$store.state.indicadores) {
           nuevosFiltros = [];
           for (const filtro of ind.filtros) {
