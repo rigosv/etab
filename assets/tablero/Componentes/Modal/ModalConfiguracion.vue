@@ -25,7 +25,7 @@ import ConfiguracionIndicador from "../ConfiguracionIndicador.vue";
 export default defineComponent({
   components: { ConfiguracionIndicador },
   props: {
-    indicador: Object,
+    indicador: { default: {}, type: Object },
     index: Number
   }
 });

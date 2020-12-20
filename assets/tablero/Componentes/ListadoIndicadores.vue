@@ -3,19 +3,18 @@
     :label="$t('_clicIndicadorParaAgregarloTablero_')"
     v-if="indicadores.length > 0"
   >
+    <b-input-group class="mt-3">
+      <b-input-group-text slot="prepend">
+        <font-awesome-icon icon="search" />
+      </b-input-group-text>
+      <b-form-input
+        autocomplete="off"
+        :placeholder="$t('_buscar_')"
+        v-model="filtro"
+      >
+      </b-form-input>
+    </b-input-group>
     <div style="max-height: 40vh; min-height: 70px; overflow: auto;">
-      <b-input-group class="mt-3">
-        <b-input-group-text slot="prepend">
-          <font-awesome-icon icon="search" />
-        </b-input-group-text>
-        <b-form-input
-          autocomplete="off"
-          :placeholder="$t('_buscar_')"
-          v-model="filtro"
-        >
-        </b-form-input>
-      </b-input-group>
-
       <b-list-group>
         <b-list-group-item
           v-for="(ind, k) in indicadoresFiltrados"
