@@ -66,7 +66,6 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
-import axios from "axios";
 
 import Buscar from "../Buscar.vue";
 import ListadoSalas from "../ListadoSalas.vue";
@@ -75,6 +74,7 @@ import useCargadorDatos from "../../Compositions/useCargadorDatos";
 import useCadena from "../../Compositions/useCadena";
 import { Sala } from "../../Interfaces/Sala";
 import { Indicador } from "../../Interfaces/Indicador";
+import EventService from "../../services/EventService";
 
 export default defineComponent({
   components: { Buscar, ListadoSalas },
@@ -106,14 +106,12 @@ export default defineComponent({
     //const vm = this;
     this.$snotify.async(this.$t("_cargandoSalas_") as string, () => {
       return new Promise((resolve, reject) => {
-        const url = "/api/v1/tablero/listaSalas";
         const params = {
           id: this.$store.state.idSala,
           token: this.$store.state.token
         };
 
-        return axios
-          .get(url, { params: params })
+        return EventService.getSalas(params)
           .then(response => {
             this.salas = response.data.data;
             this.salasPropias = response.data.salas_propias;
@@ -198,15 +196,14 @@ export default defineComponent({
 
       //Cargar las acciones de la sala
       //const vm = this;
-      axios.get("/api/v1/tablero/salaAccion/" + sala.id).then(response => {
+      EventService.getSalaAcciones(sala.id).then(response => {
         if (response.data.status == 200) {
           this.$store.state.salaAcciones = response.data.data;
         }
       });
 
       //Cargar usuarios de la sala
-      axios
-        .get("/api/v1/tablero/usuariosSala/" + this.$store.state.sala.id)
+      EventService.getSalaUsuarios(sala.id)
         .then(response => {
           this.$store.state.salaUsuarios = response.data.data;
         })
@@ -214,8 +211,7 @@ export default defineComponent({
           this.$snotify.error(this.$t("_errorConexion_") as string, "Error");
         });
       //Cargar los comentarios de la sala
-      axios
-        .get("/api/v1/tablero/comentarioSala/" + this.$store.state.sala.id)
+      EventService.getSalaComentarios(sala.id)
         .then(response => {
           this.$store.state.salaComentarios = response.data.data;
         })
