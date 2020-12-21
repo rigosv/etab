@@ -39,12 +39,12 @@
 import { defineComponent } from "@vue/composition-api";
 import { Plotly } from "vue-plotly";
 import numeral from "numeral";
-import axios from "axios";
 import { LMap, LTileLayer, LGeoJson, LControl } from "vue2-leaflet";
 
 import useGrafico from "../Compositions/useGrafico";
 import useColor from "../Compositions/useColor";
 import useClicEvents from "../Compositions/useClicEvents";
+import EventService from "../services/EventService";
 
 export default defineComponent({
   components: { Plotly, LMap, LTileLayer, LGeoJson, LControl },
@@ -170,10 +170,8 @@ export default defineComponent({
       const nombreMapa = this.indicador.informacion.dimensiones[
         this.indicador.dimension
       ].mapa;
-      const url = "/js/Mapas/" + nombreMapa;
 
-      axios
-        .get(url)
+      EventService.getMapaDatos(nombreMapa)
         .then(response => {
           if (response.status == 200) {
             this.datosMapa = response.data;
@@ -193,7 +191,7 @@ export default defineComponent({
     centerUpdated(center: number): void {
       console.log("Center: " + center);
     }
-  },
+  }
 
   /*watch: {
     fullsreen() {

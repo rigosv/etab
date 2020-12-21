@@ -6,8 +6,8 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
-import axios from "axios";
 import sqlFormatter from "sql-formatter";
+import EventService from "../services/EventService";
 
 export default defineComponent({
   props: {
@@ -21,14 +21,11 @@ export default defineComponent({
       tendencia: false
     };
     if (this.indicador.sql === "") {
-      axios
-        .get(
-          "/api/v1/tablero/datosIndicador/" +
-            this.indicador.id +
-            "/" +
-            this.indicador.dimension,
-          { params: json }
-        )
+      EventService.getDatosIndicador(
+        this.indicador.id,
+        this.indicador.dimension,
+        json
+      )
         .then(response => {
           if (response.status == 200) {
             this.indicador.sql = sqlFormatter.format(response.data.data);

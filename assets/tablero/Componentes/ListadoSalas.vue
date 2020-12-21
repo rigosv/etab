@@ -53,7 +53,7 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
-import axios from "axios";
+import EventService from "../services/EventService";
 
 export default defineComponent({
   props: {
@@ -86,24 +86,22 @@ export default defineComponent({
               text: this.$t("_si_") as string,
               action: (toast: any) => {
                 const json = { id: sala.id };
-                axios
-                  .post("/api/v1/tablero/borrarSala", json)
-                  .then(response => {
-                    if (response.data.status == 200) {
-                      this.$snotify.remove(toast.id);
-                      this.$emit("borrarSala", sala);
-                      this.$snotify.success(
-                        this.$t("_mensajeOkEliminarSala_") as string
-                      );
-                    } else {
-                      this.$snotify.remove(toast.id);
-                      this.$snotify.error(
-                        this.$t("_mensajeErrorEliminarSala_") as string,
-                        this.$t("_error_") as string,
-                        { timeout: 10000 }
-                      );
-                    }
-                  });
+                EventService.borrarSala(json).then(response => {
+                  if (response.data.status == 200) {
+                    this.$snotify.remove(toast.id);
+                    this.$emit("borrarSala", sala);
+                    this.$snotify.success(
+                      this.$t("_mensajeOkEliminarSala_") as string
+                    );
+                  } else {
+                    this.$snotify.remove(toast.id);
+                    this.$snotify.error(
+                      this.$t("_mensajeErrorEliminarSala_") as string,
+                      this.$t("_error_") as string,
+                      { timeout: 10000 }
+                    );
+                  }
+                });
               },
               bold: false
             },

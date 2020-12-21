@@ -92,7 +92,8 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
-import axios from "axios";
+
+import EventService from "../../services/EventService";
 
 export default defineComponent({
   data: () => ({
@@ -106,9 +107,8 @@ export default defineComponent({
       } else {
         const json = JSON.parse(JSON.stringify(this.accion));
 
-        axios
-          .post("/api/v1/tablero/salaAccion/" + this.$store.state.sala.id, json)
-          .then(response => {
+        EventService.guardarSalaAccion(this.$store.state.sala.id, json).then(
+          response => {
             if (response.data.status == 200) {
               this.$store.state.salaAcciones = response.data.data;
               this.accion = {
@@ -123,7 +123,8 @@ export default defineComponent({
                 this.$t("_error_") as string
               );
             }
-          });
+          }
+        );
       }
     }
   }

@@ -66,11 +66,11 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
-import axios from "axios";
 
 import ListadoIndicadoresClasificados from "../ListadoIndicadoresClasificados.vue";
 import ListadoIndicadores from "../ListadoIndicadores.vue";
 import Buscar from "../Buscar.vue";
+import EventService from "../../services/EventService";
 
 export default defineComponent({
   components: { ListadoIndicadoresClasificados, Buscar, ListadoIndicadores },
@@ -85,8 +85,7 @@ export default defineComponent({
     this.$root.$on("bv::modal::show", (bvEvent: any, modalId: any) => {
       if (modalId === "modalIndicadores") {
         //Cargar indicadores favoritos
-        axios
-          .get("/api/v1/tablero/listaIndicadores?tipo=favoritos")
+        EventService.getIndicadoresFavoritos()
           .then(response => {
             this.indicadores_favoritos = response.data.data;
           })
@@ -96,8 +95,7 @@ export default defineComponent({
       }
     });
     //Cargar la clasificación de uso
-    axios
-      .get("/api/v1/tablero/clasificacionUso")
+    EventService.getClasificacionUso()
       .then(response => {
         this.$store.state.clasificacionesUso = response.data.data;
       })
@@ -106,8 +104,7 @@ export default defineComponent({
       });
 
     //Cargar indicadores no clasificados
-    axios
-      .get("/api/v1/tablero/listaIndicadores?tipo=no_clasificados")
+    EventService.getIndicadoresNoClasificados()
       .then(response => {
         this.indicadores_no_clasificados = response.data.data;
       })
@@ -118,11 +115,7 @@ export default defineComponent({
 
   methods: {
     buscarIndicadoresLibre(): void {
-      axios
-        .get(
-          "/api/v1/tablero/listaIndicadores?tipo=busqueda&busqueda=" +
-            this.filtroLibre
-        )
+      EventService.getIndicadoresBusqueda(this.filtroLibre)
         .then(response => {
           if (response.data.status == 200) {
             this.indicadores_libres = response.data.data;

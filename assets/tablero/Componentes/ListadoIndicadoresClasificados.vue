@@ -71,11 +71,11 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
-import axios from "axios";
 import vSelect from "vue-select";
 
 import ListadoIndicadores from "./ListadoIndicadores.vue";
 import useCadena from "../Compositions/useCadena";
+import EventService from "../services/EventService";
 
 export default defineComponent({
   components: { vSelect, ListadoIndicadores },
@@ -121,52 +121,47 @@ export default defineComponent({
 
   methods: {
     getClasificacionesTecnica(clasificacionUso: any): void {
-      const vm = this;
-      this.cargando_tecnica = true;
-      axios
-        .get("/api/v1/tablero/clasificacionTecnica?id=" + clasificacionUso.id)
-        .then(function(response) {
+      //this.cargando_tecnica = true;
+      EventService.getClasificacionTecnica(clasificacionUso.id)
+        .then(response => {
           if (response.data.data.length == 0) {
-            vm.$snotify.warning(vm.$t("_datosNoEncontrados_") as string);
-            vm.$store.state.clasificacionesTecnica = [];
+            this.$snotify.warning(this.$t("_datosNoEncontrados_") as string);
+            this.$store.state.clasificacionesTecnica = [];
           } else {
-            vm.$store.state.clasificacionesTecnica = response.data.data;
+            this.$store.state.clasificacionesTecnica = response.data.data;
           }
         })
-        .catch(function(error) {
-          vm.$snotify.error(
-            vm.$t("_errorConexion_") as string,
-            vm.$t("_error_") as string
+        .catch(() => {
+          this.$snotify.error(
+            this.$t("_errorConexion_") as string,
+            this.$t("_error_") as string
           );
-        })
-        .finally(function() {
-          vm.cargando_tecnica = false;
         });
+      /*.finally(() =>{
+          this.cargando_tecnica = false;
+        });*/
     },
 
     getIndicadores(clasificacionTecnica: any): void {
-      const vm = this;
-      this.cargando_tecnica = true;
-      axios
-        .get(
-          "/api/v1/tablero/listaIndicadores?tipo=clasificados&uso=" +
-            this.$store.state.clasificacionUso.id +
-            "&tecnica=" +
-            clasificacionTecnica.id
-        )
-        .then(function(response) {
+      //const vm = this;
+      //this.cargando_tecnica = true;
+      EventService.getIndicadoresClasificados(
+        this.$store.state.clasificacionUso.id,
+        clasificacionTecnica.id
+      )
+        .then(response => {
           if (response.data.data.length == 0) {
-            vm.$snotify.warning(vm.$t("_datosNoEncontrados_") as string);
+            this.$snotify.warning(this.$t("_datosNoEncontrados_") as string);
           } else {
-            vm.$store.state.indicadoresClasificados = response.data.data;
+            this.$store.state.indicadoresClasificados = response.data.data;
           }
           //vm.$emit("cant-clasificados");
         })
-        .catch(function(error) {
-          vm.$snotify.error(vm.$t("_errorConexion_") as string, "Error");
+        .catch(() => {
+          this.$snotify.error(this.$t("_errorConexion_") as string, "Error");
         })
         .finally(function() {
-          vm.cargando_tecnica = false;
+          //vm.cargando_tecnica = false;
         });
     },
 

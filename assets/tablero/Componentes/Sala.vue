@@ -93,10 +93,10 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
-import axios from "axios";
 import VueGridLayout from "vue-grid-layout";
 
 import IndicadorC from "./IndicadorC.vue";
+import EventService from "../services/EventService";
 
 export default defineComponent({
   components: {
@@ -167,37 +167,35 @@ export default defineComponent({
         indicadores: this.$store.state.indicadores
       };
       this.$store.state.sala_cargando = true;
-      const vm = this;
 
       if (
         tipo == "guardar_como" &&
         this.$store.state.sala.nombre == this.$store.state.salaNombreIni
       ) {
-        vm.$snotify.warning(
-          vm.$t("_guardarSalaErrorNombreDiferente_") as string,
+        this.$snotify.warning(
+          this.$t("_guardarSalaErrorNombreDiferente_") as string,
           "Error"
         );
       } else {
-        axios
-          .post("/api/v1/tablero/guardarSala", json)
-          .then(function(response) {
+        EventService.guardarSala(json)
+          .then(response => {
             if (response.data.status == 200) {
-              vm.$store.state.abrioSala = true;
-              vm.$store.state.sala.id = response.data.data;
-              vm.$store.state.salaNombreIni = vm.$store.state.sala.nombre;
-              vm.$store.state.salasPropias.push(response.data.data);
-              vm.$snotify.success(vm.$t("_salaGuardada_") as string);
+              this.$store.state.abrioSala = true;
+              this.$store.state.sala.id = response.data.data;
+              this.$store.state.salaNombreIni = this.$store.state.sala.nombre;
+              this.$store.state.salasPropias.push(response.data.data);
+              this.$snotify.success(this.$t("_salaGuardada_") as string);
             } else {
-              vm.$snotify.error(
-                vm.$t("_guardarSalaError_") as string,
+              this.$snotify.error(
+                this.$t("_guardarSalaError_") as string,
                 "Error",
                 { timeout: 10000 }
               );
             }
           })
-          .catch(function(error) {
-            vm.$snotify.error(
-              vm.$t("_guardarSalaError_") as string,
+          .catch(error => {
+            this.$snotify.error(
+              this.$t("_guardarSalaError_") as string,
               "Error",
               {
                 timeout: 10000
@@ -205,8 +203,8 @@ export default defineComponent({
             );
             console.log(error);
           })
-          .finally(function() {
-            vm.$store.state.sala_cargando = false;
+          .finally(() => {
+            this.$store.state.sala_cargando = false;
           });
       }
     },

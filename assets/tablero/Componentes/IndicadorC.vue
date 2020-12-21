@@ -202,7 +202,6 @@
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
 import domtoimage from "dom-to-image";
-import axios from "axios";
 
 import GraficoBasico from "../Graficos/GraficoBasico.vue";
 import Mapa from "../Graficos/Mapa.vue";
@@ -213,6 +212,7 @@ import ConfiguracionIndicador from "./ConfiguracionIndicador.vue";
 import InfoTablaDatosContenido from "./InfoTablaDatosContenido.vue";
 import useIndicador from "../Compositions/useIndicador";
 import useCargadorDatos from "../Compositions/useCargadorDatos";
+import EventService from "../services/EventService";
 
 export default defineComponent({
   components: {
@@ -325,11 +325,10 @@ export default defineComponent({
     },
 
     agregarFavorito(): void {
-      axios
-        .post("/api/v1/tablero/indicadorFavorito", {
-          id: this.indicador.id,
-          es_favorito: this.indicador.es_favorito
-        })
+      EventService.getFavoritos({
+        id: this.indicador.id,
+        es_favorito: this.indicador.es_favorito
+      })
         .then(response => {
           if (response.data.status == 200) {
             this.indicador.es_favorito = response.data.data;

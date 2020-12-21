@@ -1,4 +1,3 @@
-import axios from "axios";
 //import alasql from 'alasql';
 
 export default function() {
@@ -30,7 +29,7 @@ export default function() {
         : conf.tipo_grafico;
     conf.filtro_inicial = filtros;
     conf.width =
-    Object.prototype.hasOwnProperty.call(conf, "width") && conf.width != ""
+      Object.prototype.hasOwnProperty.call(conf, "width") && conf.width != ""
         ? conf.width
         : "col-sm-4";
     conf.orden_x = Object.prototype.hasOwnProperty.call(conf, "orden_x")

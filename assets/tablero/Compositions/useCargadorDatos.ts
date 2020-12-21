@@ -1,4 +1,4 @@
-import axios from "axios";
+import EventService from "../services/EventService";
 //import alasql from 'alasql';
 
 export default function(ctx: any) {
@@ -12,14 +12,7 @@ export default function(ctx: any) {
       };
       indicador.cargando = true;
 
-      axios
-        .post(
-          "/api/v1/tablero/datosIndicador/" +
-            indC.id +
-            "/" +
-            indicador.dimension,
-          json
-        )
+      EventService.getDatosIndicador(indC.id, indicador.dimension, json)
         .then(response => {
           if (response.data.status == 200) {
             indC.data = response.data.data;
@@ -44,14 +37,8 @@ export default function(ctx: any) {
     };
 
     indicador.cargando = true;
-    axios
-      .get(
-        "/api/v1/tablero/datosIndicador/" +
-          indicador.id +
-          "/" +
-          indicador.dimension,
-        { params: json }
-      )
+
+    EventService.getDatosIndicador(indicador.id, indicador.dimension, json)
       .then(function(response) {
         if (response.data.status == 200) {
           const data = response.data;
@@ -137,7 +124,7 @@ export default function(ctx: any) {
       //Si el indicador está varias veces, cargarlo solo una
       let vm = this;
       if (!vm.$store.state.indicadoresAllData.find ( ind => ind.id == indicador.id ) ){
-          axios.get( '/rest-service/data/'+indicador.id )
+          EventService.getDatosCompletosIndicador(indicador.id, 0)
               .then ( function(response) {
                   let datos = [];
                   let cargadas = 1;
@@ -150,7 +137,7 @@ export default function(ctx: any) {
                   // Se obtiene en partes de 50,000 por limitación de tamaño en respuesta de peticiones post
                   if ( mps.total_partes != undefined && mps.total_partes > 1) {
                       for(var i = 2; i <= mps.total_partes ; i++) {
-                          axios.get( '/rest-service/data/'+indicador.id+'?parte='+i)
+                          EventService.getDatosCompletosIndicador(indicador.id, i)
                               .then( function(response) {
                                   let mpsx = response.data;
                                   datos = datos.concat(mpsx.datos);

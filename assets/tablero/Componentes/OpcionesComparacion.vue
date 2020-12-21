@@ -109,10 +109,10 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
-import axios from "axios";
 
 import Buscar from "./Buscar.vue";
 import useCargadorDatos from "../Compositions/useCargadorDatos";
+import EventService from "../services/EventService";
 
 export default defineComponent({
   components: { Buscar },
@@ -165,11 +165,7 @@ export default defineComponent({
   methods: {
     buscarIndicadores(): void {
       if (this.filtroIndicadores.length >= 3) {
-        axios
-          .get(
-            "/api/v1/tablero/listaIndicadores?tipo=busqueda&busqueda=" +
-              this.filtroIndicadores
-          )
+        EventService.getIndicadoresBusqueda(this.filtroIndicadores)
           .then(response => {
             if (response.data.status == 200) {
               this.indicadoresFiltrados = response.data.data;
@@ -213,14 +209,11 @@ export default defineComponent({
         };
         this.indicador.cargando = true;
 
-        axios
-          .get(
-            "/api/v1/tablero/datosIndicador/" +
-              indicadorC.id +
-              "/" +
-              this.indicador.dimension,
-            { params: json }
-          )
+        EventService.getDatosIndicador(
+          indicadorC.id,
+          this.indicador.dimension,
+          json
+        )
           .then(response => {
             if (response.data.status == 200) {
               const data = response.data;
@@ -290,14 +283,11 @@ export default defineComponent({
         };
         this.indicador.cargando = true;
 
-        axios
-          .get(
-            "/api/v1/tablero/datosIndicador/" +
-              this.indicador.id +
-              "/" +
-              this.indicador.dimension,
-            { params: json }
-          )
+        EventService.getDatosIndicador(
+          this.indicador.id,
+          this.indicador.dimension,
+          json
+        )
           .then(response => {
             if (response.data.status == 200) {
               this.indicador.data = response.data.data;

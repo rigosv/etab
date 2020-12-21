@@ -118,8 +118,9 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
-import axios from "axios";
 import vSelect from "vue-select";
+
+import EventService from "../../services/EventService";
 
 export default defineComponent({
   components: { vSelect },
@@ -146,12 +147,8 @@ export default defineComponent({
     guardarCompartirSala() {
       const json = JSON.parse(JSON.stringify(this.datos));
 
-      axios
-        .post(
-          "/api/v1/tablero/comentarioSala/" + this.$store.state.sala.id,
-          json
-        )
-        .then(response => {
+      EventService.guardarSalaCompartir(this.$store.state.sala.id, json).then(
+        response => {
           if (response.data.status == 200) {
             this.$bvModal.hide("modalCompartirSala");
             this.$snotify.success(this.$t("_guardarOk_") as string);
@@ -161,7 +158,8 @@ export default defineComponent({
               this.$t("_error_") as string
             );
           }
-        });
+        }
+      );
     }
   }
 });

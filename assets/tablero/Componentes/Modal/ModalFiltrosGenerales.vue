@@ -31,10 +31,7 @@
 
       <div
         class="form-group"
-        v-show="
-          !filtroGeneralEsCatalogo &&
-            dimensionGeneral != undefined
-        "
+        v-show="!filtroGeneralEsCatalogo && dimensionGeneral != undefined"
       >
         <label for="valorFiltro1" class="col-sm-2 control-label">{{
           $t("_valorFiltro_")
@@ -73,17 +70,18 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
-import axios from "axios";
 import vSelect from "vue-select";
+
 import useCargadorDatos from "../../Compositions/useCargadorDatos";
+import EventService from "../../services/EventService";
 
 interface Dimension {
-  codigo: string,
-  descripcion: string
+  codigo: string;
+  descripcion: string;
 }
 interface DatoCatalogo {
-  id: number,
-  descripcion: string
+  id: number;
+  descripcion: string;
 }
 
 export default defineComponent({
@@ -131,13 +129,13 @@ export default defineComponent({
 
       if (this.dimensionGeneral.codigo.split("id_").length > 1) {
         this.filtroGeneralEsCatalogo = true;
-        axios
-          .get("/api/v1/tablero/datosCatalogo/" + this.dimensionGeneral.codigo)
-          .then(response => {
+        EventService.getDatosCatalogo(this.dimensionGeneral.codigo).then(
+          response => {
             if (response.data.status == 200) {
               this.datosCatalogo = response.data.data;
             }
-          });
+          }
+        );
       }
     },
 
@@ -151,7 +149,7 @@ export default defineComponent({
         : this.valorFiltroGeneral.trim();
 
       let index = 0;
-      if ( this.dimensionGeneral.codigo !== undefined && valor != "") {
+      if (this.dimensionGeneral.codigo !== undefined && valor != "") {
         for (const ind of this.$store.state.indicadores) {
           nuevosFiltros = [];
           for (const filtro of ind.filtros) {
