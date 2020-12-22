@@ -61,13 +61,7 @@
           </button>
         </form>
       </b-tab>
-      <b-tab
-        :title="$t('_historialSala_')"
-        v-if="
-          $store.state.salaAcciones != undefined &&
-            $store.state.salaAcciones.length > 0
-        "
-      >
+      <b-tab :title="$t('_historialSala_')" v-if="mostrarHistorial">
         <table class="table table-bordered table-striped">
           <thead>
             <tr class="sonata-ba-view-title" bgcolor="#E1EFFB">
@@ -91,7 +85,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from "@vue/composition-api";
+import { computed, defineComponent, reactive } from "@vue/composition-api";
 
 import EventService from "../../services/EventService";
 
@@ -103,12 +97,18 @@ export default defineComponent({
       observaciones: ""
     });
 
+    const mostrarHistorial = computed(() => {
+      return (
+        root.$store.state.salaAcciones != undefined &&
+        root.$store.state.salaAcciones.length > 0
+      );
+    });
+
     const guardarAccionSala = () => {
       if (accion.acciones.trim() === "") {
         root.$snotify.warning(root.$t("_debeAgregarAcciones_") as string);
       } else {
         //const json = JSON.parse(JSON.stringify(accion));
-
         EventService.guardarSalaAccion(root.$store.state.sala.id, accion).then(
           response => {
             if (response.data.status == 200) {
@@ -128,7 +128,7 @@ export default defineComponent({
       }
     };
 
-    return { accion, guardarAccionSala };
+    return { accion, mostrarHistorial, guardarAccionSala };
   }
 });
 </script>

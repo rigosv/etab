@@ -2,10 +2,7 @@ import axios from "axios";
 
 const apiClient = axios.create({
   baseURL: "",
-  withCredentials: false,
-  headers: {
-    Accept: "application/json"
-  }
+  withCredentials: false
 });
 
 export default {
@@ -80,18 +77,26 @@ export default {
   },
 
   guardarSalaAccion(idSala: number, datos: object) {
-    console.log(datos);
-    return apiClient.post(
+    return axios.post(
       `/api/v1/tablero/salaAccion/${idSala}`,
-      JSON.stringify(datos)
+      this.getFormData(datos)
     );
   },
 
   guardarSalaCompartir(idSala: number, datos: object) {
     return apiClient.post(
       `/api/v1/tablero/comentarioSala/${idSala}`,
-      JSON.stringify(datos)
+      this.getFormData(datos)
     );
+  },
+
+  getFormData(datos: object) {
+    const data = new FormData();
+
+    Object.entries(datos).forEach(([key, value]) => {
+      data.append(key, value);
+    });
+    return data;
   },
 
   getDatosCatalogo(dimension: string) {
