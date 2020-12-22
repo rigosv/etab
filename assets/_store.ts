@@ -1,9 +1,10 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import { Sala } from "./tablero/Interfaces/Sala";
 
 Vue.use(Vuex);
 export interface ModuleState {
-  sala: object;
+  sala: Sala;
   salaAcciones: object[];
   salaUsuarios: object[];
   salaComentarios: object[];
@@ -28,7 +29,7 @@ export interface ModuleState {
 
 export const store = new Vuex.Store({
   state: {
-    sala: { nombre: "" },
+    sala: { nombre: "", id: "", indicadores: [] },
     salaAcciones: [],
     salaUsuarios: [],
     salaComentarios: [],
@@ -56,6 +57,15 @@ export const store = new Vuex.Store({
       state.layout = state.indicadores.map((ind: any) => {
         return ind.configuracion.layout;
       });
+    },
+    setSalaActiva(state, sala: Sala): void {
+      state.sala = sala;
+      state.salaNombreIni = sala.nombre;
+      state.salaAcciones = [];
+      state.abrioSala = true;
+    },
+    setClasificacionUso(state, clasificaciones: object[]): void {
+      state.clasificacionesUso = clasificaciones;
     },
     agregarIndicador(state, indicador: any): void {
       state.indicadores.push(indicador);

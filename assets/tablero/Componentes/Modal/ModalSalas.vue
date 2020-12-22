@@ -9,10 +9,7 @@
               <b-badge variant="primary">{{ salasFiltradas.length }}</b-badge>
             </template>
 
-            <buscar
-              v-model="searchFilter"
-              @input="filtroSalas = searchFilter"
-            ></buscar>
+            <buscar v-model="searchFilter"></buscar>
             <listado-salas
               @activarSala="activarSala"
               :salas="salasFiltradas"
@@ -28,10 +25,7 @@
               }}</b-badge>
             </template>
 
-            <buscar
-              v-model="searchFilterP"
-              @input="filtroSalasPropias = searchFilterP"
-            ></buscar>
+            <buscar v-model="searchFilterP"></buscar>
             <listado-salas
               @activarSala="activarSala"
               :salas="salasPropiasFiltradas"
@@ -49,10 +43,7 @@
               }}</b-badge>
             </template>
 
-            <buscar
-              v-model="searchFilterG"
-              @input="filtroSalasGrupos = searchFilterG"
-            ></buscar>
+            <buscar v-model="searchFilterG"></buscar>
             <listado-salas
               @activarSala="activarSala"
               :salas="salasGruposFiltradas"
@@ -65,7 +56,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/composition-api";
+import {
+  computed,
+  defineComponent,
+  onMounted,
+  ref
+} from "@vue/composition-api";
 
 import Buscar from "../Buscar.vue";
 import ListadoSalas from "../ListadoSalas.vue";
@@ -78,174 +74,170 @@ import EventService from "../../services/EventService";
 
 export default defineComponent({
   components: { Buscar, ListadoSalas },
-  data: () => ({
-    salas: [] as Sala[],
-    salasPropias: [] as Sala[],
-    salasGrupos: [] as Sala[],
-    filtroSalas: "",
-    filtroSalasPropias: "",
-    filtroSalasGrupos: "",
-    searchFilter: "",
-    searchFilterG: "",
-    searchFilterP: ""
-  }),
 
   setup(props, { root }) {
+    const salas = ref<Array<Sala>>([]);
+    const salasPropias = ref<Array<Sala>>([]);
+    const salasGrupos = ref<Array<Sala>>([]);
+    const searchFilter = ref("");
+    const searchFilterG = ref("");
+    const searchFilterP = ref("");
+
     const { normalizarDiacriticos } = useCadena();
     const { inicializarIndicador } = useIndicador();
     const { cargarDatosIndicador } = useCargadorDatos(root);
 
-    return {
-      inicializarIndicador,
-      cargarDatosIndicador,
-      normalizarDiacriticos
-    };
-  },
-
-  mounted() {
-    //const vm = this;
-    this.$snotify.async(this.$t("_cargandoSalas_") as string, () => {
-      return new Promise((resolve, reject) => {
-        const params = {
-          id: this.$store.state.idSala,
-          token: this.$store.state.token
-        };
-
-        return EventService.getSalas(params)
-          .then(response => {
-            this.salas = response.data.data;
-            this.salasPropias = response.data.salas_propias;
-
-            this.$store.state.salasPropias =
-              this.salas.length > 0
-                ? this.salasPropias.map(sala => {
-                    return sala.id;
-                  })
-                : [];
-            this.salasGrupos = response.data.salas_grupos;
-            resolve({
-              title: this.$t("_salas_") as string,
-              body: this.$t("_salasCargadas_") as string,
-              config: {
-                closeOnClick: true,
-                timeout: 3000,
-                showProgressBar: true
-                //position: 'rightTop'
-              }
-            });
-            if (
-              this.$store.state.token != "" &&
-              this.$store.state.idSala != ""
-            ) {
-              //Es una sala pública, cargarla
-              this.activarSala(this.salas[0]);
-            }
-          })
-          .catch(error => {
-            console.log(error);
-            reject({
-              title: this.$t("_error_"),
-              body: this.$t("_errorConexion_"),
-              config: {
-                closeOnClick: true,
-                showProgressBar: true,
-                timeout: 10000
-              }
-            });
-          });
-      });
-    });
-  },
-
-  computed: {
-    salasFiltradas(): Sala[] {
-      return this.filtrar(this.salas, this.filtroSalas);
-    },
-
-    salasPropiasFiltradas(): Sala[] {
-      return this.filtrar(this.salasPropias, this.filtroSalasPropias);
-    },
-
-    salasGruposFiltradas(): Sala[] {
-      return this.filtrar(this.salasGrupos, this.filtroSalasGrupos);
-    }
-  },
-
-  methods: {
-    activarSala(sala: Sala): void {
-      this.$store.state.sala = sala;
-      this.$store.state.salaNombreIni = sala.nombre;
-      this.$store.state.salaAcciones = [];
-      this.$store.state.abrioSala = true;
-
-      this.$store.commit("setIndicadores", []);
+    const activarSala = (sala: Sala): void => {
+      root.$store.commit("setSalaActiva", sala);
 
       const indicadores = sala.indicadores.map(
         (indicador: Indicador, index: number) => {
-          return this.inicializarIndicador(indicador, index);
+          return inicializarIndicador(indicador, index);
         }
       );
+
       // Cargar los datos de los indicadores de la sala
       let index = 0;
       for (const indicador of indicadores) {
-        this.cargarDatosIndicador(indicador, index++);
+        cargarDatosIndicador(indicador, index++);
       }
 
-      this.$store.commit("setIndicadores", indicadores);
-      this.$store.state.indicadoresAllData = [];
+      root.$store.commit("setIndicadores", indicadores);
+      root.$store.state.indicadoresAllData = [];
 
       //Cargar las acciones de la sala
       //const vm = this;
       EventService.getSalaAcciones(sala.id).then(response => {
         if (response.data.status == 200) {
-          this.$store.state.salaAcciones = response.data.data;
+          root.$store.state.salaAcciones = response.data.data;
         }
       });
 
       //Cargar usuarios de la sala
       EventService.getSalaUsuarios(sala.id)
         .then(response => {
-          this.$store.state.salaUsuarios = response.data.data;
+          root.$store.state.salaUsuarios = response.data.data;
         })
         .catch(() => {
-          this.$snotify.error(this.$t("_errorConexion_") as string, "Error");
+          root.$snotify.error(root.$t("_errorConexion_") as string, "Error");
         });
       //Cargar los comentarios de la sala
       EventService.getSalaComentarios(sala.id)
         .then(response => {
-          this.$store.state.salaComentarios = response.data.data;
+          root.$store.state.salaComentarios = response.data.data;
         })
         .catch(() => {
-          this.$snotify.error(
-            this.$t("_errorConexionComentariosSala_") as string,
+          root.$snotify.error(
+            root.$t("_errorConexionComentariosSala_") as string,
             "Error"
           );
         });
-    },
+    };
 
-    filtrar(listado: Sala[], filtro: string): Sala[] {
+    onMounted(() => {
+      root.$snotify.async(root.$t("_cargandoSalas_") as string, () => {
+        return new Promise((resolve, reject) => {
+          const params = {
+            id: root.$store.state.idSala,
+            token: root.$store.state.token
+          };
+
+          return EventService.getSalas(params)
+            .then(response => {
+              salas.value = response.data.data;
+              salasPropias.value = response.data.salas_propias;
+
+              root.$store.state.salasPropias =
+                salas.value.length > 0
+                  ? salasPropias.value.map(sala => {
+                      return sala.id;
+                    })
+                  : [];
+
+              salasGrupos.value = response.data.salas_grupos;
+              resolve({
+                title: root.$t("_salas_") as string,
+                body: root.$t("_salasCargadas_") as string,
+                config: {
+                  closeOnClick: true,
+                  timeout: 3000,
+                  showProgressBar: true
+                  //position: 'rightTop'
+                }
+              });
+              if (
+                root.$store.state.token != "" &&
+                root.$store.state.idSala != ""
+              ) {
+                //una sala pública, cargarla
+                activarSala(salas.value[0]);
+              }
+            })
+            .catch(error => {
+              console.log(error);
+              reject({
+                title: root.$t("_error_"),
+                body: root.$t("_errorConexion_"),
+                config: {
+                  closeOnClick: true,
+                  showProgressBar: true,
+                  timeout: 10000
+                }
+              });
+            });
+        });
+      });
+    });
+
+    const filtrar = (listado: Sala[], filtro: string): Sala[] => {
       let listadoFiltrado: Sala[] = [];
       if (listado != undefined && listado.length > 0) {
         listadoFiltrado = listado.filter((sala: Sala) => {
-          const base = this.normalizarDiacriticos(sala.nombre);
-          const filtro_ = this.normalizarDiacriticos(filtro);
+          const base = normalizarDiacriticos(sala.nombre);
+          const filtro_ = normalizarDiacriticos(filtro);
           return base.includes(filtro_);
         });
       }
       return listadoFiltrado;
-    },
+    };
 
-    borrarSala(sala: Sala): void {
-      this.salas = this.salas.filter((s: Sala) => {
+    const borrarSala = (sala: Sala): void => {
+      salas.value = salas.value.filter((s: Sala) => {
         return s.id != sala.id;
       });
-      this.salasPropias = this.salasPropias.filter((s: Sala) => {
+      salasPropias.value = salasPropias.value.filter((s: Sala) => {
         return s.id != sala.id;
       });
-      this.salasGrupos = this.salasGrupos.filter((s: Sala) => {
+      salasGrupos.value = salasGrupos.value.filter((s: Sala) => {
         return s.id != sala.id;
       });
-    }
+    };
+
+    const salasFiltradas = computed((): Sala[] => {
+      return filtrar(salas.value, searchFilter.value);
+    });
+
+    const salasPropiasFiltradas = computed((): Sala[] => {
+      return filtrar(salasPropias.value, searchFilterP.value);
+    });
+
+    const salasGruposFiltradas = computed((): Sala[] => {
+      return filtrar(salasGrupos.value, searchFilterG.value);
+    });
+
+    return {
+      salas,
+      salasPropias,
+      salasGrupos,
+      searchFilter,
+      searchFilterG,
+      searchFilterP,
+      salasPropiasFiltradas,
+      salasFiltradas,
+      salasGruposFiltradas,
+      borrarSala,
+      activarSala
+    };
   }
 });
 </script>
