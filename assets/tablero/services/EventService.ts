@@ -4,8 +4,7 @@ const apiClient = axios.create({
   baseURL: "",
   withCredentials: false,
   headers: {
-    Accept: "application/json",
-    "Content-Type": "application/json"
+    Accept: "application/json"
   }
 });
 
@@ -81,11 +80,18 @@ export default {
   },
 
   guardarSalaAccion(idSala: number, datos: object) {
-    return apiClient.post(`/api/v1/tablero/salaAccion/${idSala}`, datos);
+    console.log(datos);
+    return apiClient.post(
+      `/api/v1/tablero/salaAccion/${idSala}`,
+      JSON.stringify(datos)
+    );
   },
 
   guardarSalaCompartir(idSala: number, datos: object) {
-    return apiClient.post(`/api/v1/tablero/comentarioSala/${idSala}`, datos);
+    return apiClient.post(
+      `/api/v1/tablero/comentarioSala/${idSala}`,
+      JSON.stringify(datos)
+    );
   },
 
   getDatosCatalogo(dimension: string) {

@@ -91,42 +91,47 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/composition-api";
+import { defineComponent, reactive } from "@vue/composition-api";
 
 import EventService from "../../services/EventService";
 
 export default defineComponent({
-  data: () => ({
-    accion: { acciones: "", responsables: "", observaciones: "" }
-  }),
+  setup(props, ctx) {
+    const accion = reactive({
+      acciones: "",
+      responsables: "",
+      observaciones: ""
+    });
 
-  methods: {
-    guardarAccionSala() {
-      if (this.accion.acciones.trim() === "") {
-        this.$snotify.warning(this.$t("_debeAgregarAcciones_") as string);
-      } else {
-        const json = JSON.parse(JSON.stringify(this.accion));
-
-        EventService.guardarSalaAccion(this.$store.state.sala.id, json).then(
-          response => {
-            if (response.data.status == 200) {
-              this.$store.state.salaAcciones = response.data.data;
-              this.accion = {
-                acciones: "",
-                responsables: "",
-                observaciones: ""
-              };
-              this.$snotify.success(this.$t("_guardarOk_") as string);
-            } else {
-              this.$snotify.error(
-                this.$t("_guardarError_") as string,
-                this.$t("_error_") as string
-              );
-            }
-          }
+    const guardarAccionSala = () => {
+      if (accion.acciones.trim() === "") {
+        ctx.root.$snotify.warning(
+          ctx.root.$t("_debeAgregarAcciones_") as string
         );
+      } else {
+        //const json = JSON.parse(JSON.stringify(accion));
+
+        EventService.guardarSalaAccion(
+          ctx.root.$store.state.sala.id,
+          accion
+        ).then(response => {
+          if (response.data.status == 200) {
+            ctx.root.$store.state.salaAcciones = response.data.data;
+            accion.acciones = "";
+            accion.responsables = "";
+            accion.observaciones = "";
+            ctx.root.$snotify.success(ctx.root.$t("_guardarOk_") as string);
+          } else {
+            ctx.root.$snotify.error(
+              ctx.root.$t("_guardarError_") as string,
+              ctx.root.$t("_error_") as string
+            );
+          }
+        });
       }
-    }
+    };
+
+    return { accion, guardarAccionSala };
   }
 });
 </script>
