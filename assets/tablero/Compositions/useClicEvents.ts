@@ -1,6 +1,6 @@
 import { ref } from "@vue/composition-api";
 
-export default function(indicador: any, ctx: any) {
+export default function(indicador: any, emit: any) {
   const doubleClickTime = ref(0);
   const doubleClickThreshold = ref(500);
   const seleccionActiva = ref(false);
@@ -13,9 +13,9 @@ export default function(indicador: any, ctx: any) {
           indicador.configuracion.tipo_grafico.toUpperCase()
         )
       ) {
-        ctx.emit("click-plot", eventData.points[0].label);
+        emit("click-plot", eventData.points[0].label);
       } else {
-        ctx.emit("click-plot", eventData.points[0].x);
+        emit("click-plot", eventData.points[0].x);
       }
     }
   };
@@ -37,19 +37,19 @@ export default function(indicador: any, ctx: any) {
   const doubleclick = (): void => {
     console.log("doble clic");
     doubleClickTime.value = Date.now();
-    ctx.emit("doubleclick");
+    emit("doubleclick");
   };
 
   const selected = (eventData: any): void => {
     if (eventData != undefined) {
-      ctx.emit("filtar-posicion", eventData.points);
+      emit("filtar-posicion", eventData.points);
     }
   };
 
   // Triggered when you double-click to turn off the lasso or box selection
   const deselect = (eventData: any): void => {
     doubleClickTime.value = Date.now();
-    ctx.emit("quitar-filtros", eventData);
+    emit("quitar-filtros", eventData);
   };
 
   return {

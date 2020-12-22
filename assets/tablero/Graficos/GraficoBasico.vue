@@ -33,12 +33,12 @@ export default defineComponent({
     index: Number
   },
 
-  setup(props, ctx) {
+  setup(props, { root, emit }) {
     return {
-      ...useCargadorDatos(ctx),
+      ...useCargadorDatos(root),
       ...useGrafico(props.indicador),
       ...useColor(),
-      ...useClicEvents(props.indicador, ctx)
+      ...useClicEvents(props.indicador, emit)
     };
   },
 

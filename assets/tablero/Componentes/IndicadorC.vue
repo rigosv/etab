@@ -230,8 +230,8 @@ export default defineComponent({
     index: { default: 0, type: Number }
   },
 
-  setup(props, ctx) {
-    return { ...useIndicador(), ...useCargadorDatos(ctx) };
+  setup(props, { root }) {
+    return { ...useIndicador(), ...useCargadorDatos(root) };
   },
 
   computed: {

@@ -109,8 +109,8 @@ export default defineComponent({
     index: { default: 0, type: Number }
   },
 
-  setup(props, ctx) {
-    const { cargarDatosIndicador } = useCargadorDatos(ctx);
+  setup(props, { root }) {
+    const { cargarDatosIndicador } = useCargadorDatos(root);
 
     return {
       cargarDatosIndicador
@@ -145,7 +145,6 @@ export default defineComponent({
     },
 
     dimensionesFiltradas(): any {
-
       let dimensiones = this.indicador.dimensiones.filter(
         (dimension: string) => {
           //Verificar  que no sea la dimensión actual

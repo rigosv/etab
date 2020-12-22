@@ -45,10 +45,10 @@ export default defineComponent({
     indicadores: { default: [], type: Array }
   },
 
-  setup(props, ctx) {
+  setup(props, { root }) {
     const { normalizarDiacriticos } = useCadena();
     const { inicializarIndicador } = useIndicador();
-    const { cargarDatosIndicador } = useCargadorDatos(ctx);
+    const { cargarDatosIndicador } = useCargadorDatos(root);
 
     return {
       inicializarIndicador,

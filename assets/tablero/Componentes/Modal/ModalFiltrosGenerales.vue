@@ -69,7 +69,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/composition-api";
+import { defineComponent, ref } from "@vue/composition-api";
 import vSelect from "vue-select";
 
 import useCargadorDatos from "../../Compositions/useCargadorDatos";
@@ -86,26 +86,25 @@ interface DatoCatalogo {
 
 export default defineComponent({
   components: { vSelect },
-  setup(props, ctx) {
-    const { cargarDatosIndicador } = useCargadorDatos(ctx);
-    return { cargarDatosIndicador };
-  },
-  data: () => ({
-    dimensionGeneral: {} as Dimension,
-    filtroGeneralEsCatalogo: false,
-    dimensionesGenerales: [] as Array<Dimension>,
-    datosCatalogo: [] as Array<DatoCatalogo>,
-    valorFiltroGeneral: "",
-    valorFiltroGeneralCatalogo: {} as DatoCatalogo
-  }),
+  setup(props, { root }) {
+    const dimensionGeneral = ref<Dimension>({ codigo: "", descripcion: "" });
+    const dimensionesGenerales = ref<Array<Dimension>>([]);
+    const datosCatalogo = ref<Array<DatoCatalogo>>([]);
+    const filtroGeneralEsCatalogo = ref(false);
+    const valorFiltroGeneral = ref("");
+    const valorFiltroGeneralCatalogo = ref<DatoCatalogo>({
+      id: 0,
+      descripcion: ""
+    });
 
-  methods: {
-    iniciarModal(): void {
-      const dimensionesExistentes: any[] = [];
-      const dimensionesAux = [];
+    const { cargarDatosIndicador } = useCargadorDatos(root);
+
+    const iniciarModal = (): void => {
+      const dimensionesExistentes: string[] = [];
+      const dimensionesAux: Dimension[] = [];
 
       // Cargar los datos de los indicadores de la sala
-      for (const indicador of this.$store.state.indicadores) {
+      for (const indicador of root.$store.state.indicadores) {
         const dims = indicador.informacion.dimensiones;
         for (const codigo of Object.keys(dims)) {
           if (!dimensionesExistentes.includes(codigo)) {
@@ -117,38 +116,40 @@ export default defineComponent({
           }
         }
       }
-      this.dimensionesGenerales = dimensionesAux.sort((a: any, b: any) => {
-        return a.descripcion.localeCompare(b.descripcion);
-      });
-    },
+      dimensionesGenerales.value = dimensionesAux.sort(
+        (a: Dimension, b: Dimension) => {
+          return a.descripcion.localeCompare(b.descripcion);
+        }
+      );
+    };
 
-    recuperarValoresDimensionGeneral(): void {
-      this.filtroGeneralEsCatalogo = false;
+    const recuperarValoresDimensionGeneral = (): void => {
+      filtroGeneralEsCatalogo.value = false;
 
-      if (this.dimensionGeneral.codigo.split("id_").length > 1) {
-        this.filtroGeneralEsCatalogo = true;
-        EventService.getDatosCatalogo(this.dimensionGeneral.codigo).then(
+      if (dimensionGeneral.value.codigo.split("id_").length > 1) {
+        filtroGeneralEsCatalogo.value = true;
+        EventService.getDatosCatalogo(dimensionGeneral.value.codigo).then(
           response => {
             if (response.data.status == 200) {
-              this.datosCatalogo = response.data.data;
+              datosCatalogo.value = response.data.data;
             }
           }
         );
       }
-    },
+    };
 
-    aplicarFiltroGeneral(): void {
+    const aplicarFiltroGeneral = (): void => {
       let nuevosFiltros = [];
       let existe = false;
       let etiqueta = "";
-      const dimension = this.dimensionGeneral;
-      const valor = this.filtroGeneralEsCatalogo
-        ? this.valorFiltroGeneralCatalogo.descripcion
-        : this.valorFiltroGeneral.trim();
+      const dimension = dimensionGeneral.value;
+      const valor = filtroGeneralEsCatalogo.value
+        ? valorFiltroGeneralCatalogo.value.descripcion
+        : valorFiltroGeneral.value.trim();
 
       let index = 0;
-      if (this.dimensionGeneral.codigo !== undefined && valor != "") {
-        for (const ind of this.$store.state.indicadores) {
+      if (dimensionGeneral.value.codigo !== undefined && valor != "") {
+        for (const ind of root.$store.state.indicadores) {
           nuevosFiltros = [];
           for (const filtro of ind.filtros) {
             //Ya tenía el filtro, modificar su valor
@@ -174,14 +175,25 @@ export default defineComponent({
           }
 
           ind.filtros = nuevosFiltros;
-          //$scope.agregarIndicadorDimension(ind.dimension, ind.posicion - 1);
           ind.otros_filtros.elementos = [];
-          this.cargarDatosIndicador(ind, index++);
-
-          //vm.cargarDatosComparacion(ind);
+          cargarDatosIndicador(ind, index++);
         }
       }
-    }
-  }
+    };
+
+    return {
+      dimensionGeneral,
+      dimensionesGenerales,
+      datosCatalogo,
+      filtroGeneralEsCatalogo,
+      valorFiltroGeneral,
+      valorFiltroGeneralCatalogo,
+      iniciarModal,
+      recuperarValoresDimensionGeneral,
+      aplicarFiltroGeneral
+    };
+  },
+
+  methods: {}
 });
 </script>

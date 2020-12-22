@@ -1,7 +1,7 @@
 import EventService from "../services/EventService";
 //import alasql from 'alasql';
 
-export default function(ctx: any) {
+export default function(root: any) {
   /*const cargarDatosComparacion = (indicador: any): void => {
     //Verificar si hay indicadores de comparación
     for (const indC of indicador.dataComparar) {
@@ -72,18 +72,18 @@ export default function(ctx: any) {
           indicadorCompleto.cargando = false;
 
           if (
-            !ctx.root.$store.state.indicadoresFichas.find(
+            !root.$store.state.indicadoresFichas.find(
               (f: any) => f.id == indicador.id
             )
           ) {
-            ctx.root.$store.state.indicadoresFichas.push({
+            root.$store.state.indicadoresFichas.push({
               id: indicador.id,
               ficha: data.ficha,
               informacion: data.informacion
             });
           }
 
-          ctx.root.$store.commit("agregarDatosIndicador", {
+          root.$store.commit("agregarDatosIndicador", {
             indicador: indicadorCompleto,
             index: index
           });
@@ -100,12 +100,12 @@ export default function(ctx: any) {
 
   const cargarDatosIndicador = (indicador: any, index: number): void => {
     //Verificar si ya se ha hecho una carga completa de los datos, de ser así, tomar de ahí los datos
-    const dataInd = ctx.root.$store.state.indicadoresAllData.filter(
+    /*const dataInd = root.$store.state.indicadoresAllData.filter(
       (ind: any) => ind.id == indicador.id
     );
-    const ind = ctx.root.$store.state.indicadores.find(
+    const ind = root.$store.state.indicadores.find(
       (i: any) => i.id == indicador.id
-    );
+    );*/
     cargarFromServer(indicador, index);
     /*if ( ind && dataInd.length >  0 && ![ 'MAPA', 'GEOLOCATION', 'MAP' ].includes(indicador.configuracion.tipo_grafico.toUpperCase()) && !indicador.tendencia){
                     this.cargarFromLocal(indicador, dataInd[0].data);
