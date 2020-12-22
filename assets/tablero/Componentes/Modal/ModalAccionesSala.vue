@@ -96,7 +96,7 @@ import { defineComponent, reactive } from "@vue/composition-api";
 import EventService from "../../services/EventService";
 
 export default defineComponent({
-  setup(props, ctx) {
+  setup(props, { root }) {
     const accion = reactive({
       acciones: "",
       responsables: "",
@@ -105,29 +105,26 @@ export default defineComponent({
 
     const guardarAccionSala = () => {
       if (accion.acciones.trim() === "") {
-        ctx.root.$snotify.warning(
-          ctx.root.$t("_debeAgregarAcciones_") as string
-        );
+        root.$snotify.warning(root.$t("_debeAgregarAcciones_") as string);
       } else {
         //const json = JSON.parse(JSON.stringify(accion));
 
-        EventService.guardarSalaAccion(
-          ctx.root.$store.state.sala.id,
-          accion
-        ).then(response => {
-          if (response.data.status == 200) {
-            ctx.root.$store.state.salaAcciones = response.data.data;
-            accion.acciones = "";
-            accion.responsables = "";
-            accion.observaciones = "";
-            ctx.root.$snotify.success(ctx.root.$t("_guardarOk_") as string);
-          } else {
-            ctx.root.$snotify.error(
-              ctx.root.$t("_guardarError_") as string,
-              ctx.root.$t("_error_") as string
-            );
+        EventService.guardarSalaAccion(root.$store.state.sala.id, accion).then(
+          response => {
+            if (response.data.status == 200) {
+              root.$store.state.salaAcciones = response.data.data;
+              accion.acciones = "";
+              accion.responsables = "";
+              accion.observaciones = "";
+              root.$snotify.success(root.$t("_guardarOk_") as string);
+            } else {
+              root.$snotify.error(
+                root.$t("_guardarError_") as string,
+                root.$t("_error_") as string
+              );
+            }
           }
-        });
+        );
       }
     };
 

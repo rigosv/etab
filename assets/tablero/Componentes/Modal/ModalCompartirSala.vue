@@ -125,7 +125,7 @@ import EventService from "../../services/EventService";
 export default defineComponent({
   components: { vSelect },
 
-  setup(props, ctx) {
+  setup(props, { root }) {
     const datos = reactive({
       usuarios_con_cuenta: [],
       usuarios_sin_cuenta: "",
@@ -136,7 +136,7 @@ export default defineComponent({
     });
 
     onMounted(() => {
-      datos.usuarios_con_cuenta = ctx.root.$store.state.salaUsuarios.filter(
+      datos.usuarios_con_cuenta = root.$store.state.salaUsuarios.filter(
         (s: any) => {
           return s.selected == true;
         }
@@ -144,20 +144,19 @@ export default defineComponent({
     });
 
     const guardarCompartirSala = () => {
-      EventService.guardarSalaCompartir(
-        ctx.root.$store.state.sala.id,
-        datos
-      ).then(response => {
-        if (response.data.status == 200) {
-          ctx.root.$bvModal.hide("modalCompartirSala");
-          ctx.root.$snotify.success(ctx.root.$t("_guardarOk_") as string);
-        } else {
-          ctx.root.$snotify.error(
-            ctx.root.$t("_guardarError_") as string,
-            ctx.root.$t("_error_") as string
-          );
+      EventService.guardarSalaCompartir(root.$store.state.sala.id, datos).then(
+        response => {
+          if (response.data.status == 200) {
+            root.$bvModal.hide("modalCompartirSala");
+            root.$snotify.success(root.$t("_guardarOk_") as string);
+          } else {
+            root.$snotify.error(
+              root.$t("_guardarError_") as string,
+              root.$t("_error_") as string
+            );
+          }
         }
-      });
+      );
     };
 
     return { datos, guardarCompartirSala };

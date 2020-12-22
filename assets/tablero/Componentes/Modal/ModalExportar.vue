@@ -179,18 +179,18 @@ export default defineComponent({
     VueHtml2pdf
   },
 
-  setup(props, ctx) {
+  setup(props, { root, emit }) {
     onMounted(() => {
-      ctx.root.$on("bv::modal::shown", (bvEvent: any, modalId: string) => {
+      root.$on("bv::modal::shown", (bvEvent: any, modalId: string) => {
         if (modalId == "modalExportar") {
-          ctx.emit("convertir-graficos-sala");
+          emit("convertir-graficos-sala");
         }
       });
     });
 
     const pdfOptions = computed(() => {
       return {
-        filename: ctx.root.$store.state.sala.nombre,
+        filename: root.$store.state.sala.nombre,
         margin: 0.5,
         image: { type: "jpeg", quality: 0.6 },
         html2canvas: { scale: 1 },
@@ -200,18 +200,18 @@ export default defineComponent({
 
     const exportarExcel = (id: string, nombreArchivo: string): void => {
       TableToExcel.convert(document.getElementById(id), {
-        name: ctx.root.$t(nombreArchivo) + ".xlsx"
+        name: root.$t(nombreArchivo) + ".xlsx"
       });
     };
 
     const exportarpdf = (id: string): void => {
-      (ctx.root.$refs[id] as Vue & { generatePdf: () => any }).generatePdf();
+      (root.$refs[id] as Vue & { generatePdf: () => any }).generatePdf();
     };
 
     const exportarcsv = (): void => {
       let csvContent = "data:text/csv;charset=utf-8,";
 
-      ctx.root.$store.state.indicadores.map((indicador: any) => {
+      root.$store.state.indicadores.map((indicador: any) => {
         const arrData = indicador.data;
         csvContent += [
           Object.keys(arrData[0]).join(","),
@@ -225,7 +225,7 @@ export default defineComponent({
       const data = encodeURI(csvContent);
       const link = document.createElement("a");
       link.setAttribute("href", data);
-      link.setAttribute("download", ctx.root.$t("_tablaDatos_") + ".csv");
+      link.setAttribute("download", root.$t("_tablaDatos_") + ".csv");
       link.click();
     };
 
