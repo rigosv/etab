@@ -117,50 +117,50 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/composition-api";
+import { defineComponent, reactive, onMounted } from "@vue/composition-api";
 import vSelect from "vue-select";
 
 import EventService from "../../services/EventService";
 
 export default defineComponent({
   components: { vSelect },
-  data: () => ({
-    datos: {
+
+  setup(props, ctx) {
+    const datos = reactive({
       usuarios_con_cuenta: [],
       usuarios_sin_cuenta: "",
       comentarios: "",
       correo: 0,
       tiempo_dias: 1,
       es_permanente: false
-    }
-  }),
+    });
 
-  mounted() {
-    this.datos.usuarios_con_cuenta = this.$store.state.salaUsuarios.filter(
-      (s: any) => {
-        return s.selected == true;
-      }
-    );
-  },
-
-  methods: {
-    guardarCompartirSala() {
-      const json = JSON.parse(JSON.stringify(this.datos));
-
-      EventService.guardarSalaCompartir(this.$store.state.sala.id, json).then(
-        response => {
-          if (response.data.status == 200) {
-            this.$bvModal.hide("modalCompartirSala");
-            this.$snotify.success(this.$t("_guardarOk_") as string);
-          } else {
-            this.$snotify.error(
-              this.$t("_guardarError_") as string,
-              this.$t("_error_") as string
-            );
-          }
+    onMounted(() => {
+      datos.usuarios_con_cuenta = ctx.root.$store.state.salaUsuarios.filter(
+        (s: any) => {
+          return s.selected == true;
         }
       );
-    }
+    });
+
+    const guardarCompartirSala = () => {
+      EventService.guardarSalaCompartir(
+        ctx.root.$store.state.sala.id,
+        datos
+      ).then(response => {
+        if (response.data.status == 200) {
+          ctx.root.$bvModal.hide("modalCompartirSala");
+          ctx.root.$snotify.success(ctx.root.$t("_guardarOk_") as string);
+        } else {
+          ctx.root.$snotify.error(
+            ctx.root.$t("_guardarError_") as string,
+            ctx.root.$t("_error_") as string
+          );
+        }
+      });
+    };
+
+    return { datos, guardarCompartirSala };
   }
 });
 </script>

@@ -104,8 +104,6 @@ export default defineComponent({
       const dimensionesExistentes: any[] = [];
       const dimensionesAux = [];
 
-      const sala = this.$store.state.sala;
-
       // Cargar los datos de los indicadores de la sala
       for (const indicador of this.$store.state.indicadores) {
         const dims = indicador.informacion.dimensiones;

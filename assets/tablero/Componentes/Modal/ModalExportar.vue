@@ -163,7 +163,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/composition-api";
+import { computed, defineComponent, onMounted } from "@vue/composition-api";
 import VueHtml2pdf from "vue-html2pdf";
 import TableToExcel from "@linways/table-to-excel";
 
@@ -179,41 +179,39 @@ export default defineComponent({
     VueHtml2pdf
   },
 
-  mounted() {
-    this.$root.$on("bv::modal::shown", (bvEvent: any, modalId: string) => {
-      if (modalId == "modalExportar") {
-        this.$emit("convertir-graficos-sala");
-      }
+  setup(props, ctx) {
+    onMounted(() => {
+      ctx.root.$on("bv::modal::shown", (bvEvent: any, modalId: string) => {
+        if (modalId == "modalExportar") {
+          ctx.emit("convertir-graficos-sala");
+        }
+      });
     });
-  },
 
-  computed: {
-    pdfOptions() {
+    const pdfOptions = computed(() => {
       return {
-        filename: this.$store.state.sala.nombre,
+        filename: ctx.root.$store.state.sala.nombre,
         margin: 0.5,
         image: { type: "jpeg", quality: 0.6 },
         html2canvas: { scale: 1 },
         jsPDF: { unit: "in", format: "letter", orientation: "portrait" }
       };
-    }
-  },
+    });
 
-  methods: {
-    exportarExcel(id: string, nombreArchivo: string): void {
+    const exportarExcel = (id: string, nombreArchivo: string): void => {
       TableToExcel.convert(document.getElementById(id), {
-        name: this.$t(nombreArchivo) + ".xlsx"
+        name: ctx.root.$t(nombreArchivo) + ".xlsx"
       });
-    },
+    };
 
-    exportarpdf(id: string): void {
-      (this.$refs[id] as Vue & { generatePdf: () => any }).generatePdf();
-    },
+    const exportarpdf = (id: string): void => {
+      (ctx.root.$refs[id] as Vue & { generatePdf: () => any }).generatePdf();
+    };
 
-    exportarcsv(): void {
+    const exportarcsv = (): void => {
       let csvContent = "data:text/csv;charset=utf-8,";
 
-      this.$store.state.indicadores.map((indicador: any) => {
+      ctx.root.$store.state.indicadores.map((indicador: any) => {
         const arrData = indicador.data;
         csvContent += [
           Object.keys(arrData[0]).join(","),
@@ -227,9 +225,11 @@ export default defineComponent({
       const data = encodeURI(csvContent);
       const link = document.createElement("a");
       link.setAttribute("href", data);
-      link.setAttribute("download", this.$t("_tablaDatos_") + ".csv");
+      link.setAttribute("download", ctx.root.$t("_tablaDatos_") + ".csv");
       link.click();
-    }
+    };
+
+    return { pdfOptions, exportarExcel, exportarcsv, exportarpdf };
   }
 });
 </script>
