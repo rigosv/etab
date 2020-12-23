@@ -203,7 +203,7 @@
 
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
-import useColor from "../Compositions/useColor";
+import useColor from "../compositions/useColor";
 
 export default defineComponent({
   props: {

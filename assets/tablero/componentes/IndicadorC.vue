@@ -203,15 +203,15 @@
 import { defineComponent } from "@vue/composition-api";
 import domtoimage from "dom-to-image";
 
-import GraficoBasico from "../Graficos/GraficoBasico.vue";
-import Mapa from "../Graficos/Mapa.vue";
+import GraficoBasico from "../graficos/GraficoBasico.vue";
+import Mapa from "../graficos/Mapa.vue";
 import IndicadorBarraOpciones from "./IndicadorBarraOpciones.vue";
 import IndicadorBreadcum from "./IndicadorBreadcum.vue";
 import IndicadorMensajes from "./IndicadorMensajes.vue";
 import ConfiguracionIndicador from "./ConfiguracionIndicador.vue";
 import InfoTablaDatosContenido from "./InfoTablaDatosContenido.vue";
-import useIndicador from "../Compositions/useIndicador";
-import useCargadorDatos from "../Compositions/useCargadorDatos";
+import useIndicador from "../compositions/useIndicador";
+import useCargadorDatos from "../compositions/useCargadorDatos";
 import EventService from "../services/EventService";
 
 export default defineComponent({

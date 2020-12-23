@@ -24,7 +24,7 @@
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
 
-import useCargadorDatos from "../Compositions/useCargadorDatos";
+import useCargadorDatos from "../compositions/useCargadorDatos";
 
 export default defineComponent({
   props: {

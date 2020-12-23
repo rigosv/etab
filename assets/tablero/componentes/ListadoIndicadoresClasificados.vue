@@ -74,7 +74,7 @@ import { defineComponent } from "@vue/composition-api";
 import vSelect from "vue-select";
 
 import ListadoIndicadores from "./ListadoIndicadores.vue";
-import useCadena from "../Compositions/useCadena";
+import useCadena from "../compositions/useCadena";
 import EventService from "../services/EventService";
 
 export default defineComponent({

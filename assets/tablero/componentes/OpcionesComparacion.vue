@@ -111,7 +111,7 @@
 import { defineComponent } from "@vue/composition-api";
 
 import Buscar from "./Buscar.vue";
-import useCargadorDatos from "../Compositions/useCargadorDatos";
+import useCargadorDatos from "../compositions/useCargadorDatos";
 import EventService from "../services/EventService";
 
 export default defineComponent({

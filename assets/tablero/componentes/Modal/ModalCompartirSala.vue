@@ -20,7 +20,7 @@
                 :placeholder="$t('_elijaUsuariosACompartir_')"
                 label="nombre"
                 v-model="datos.usuarios_con_cuenta"
-                :options="$store.state.salaUsuarios"
+                :options="salasUsuario"
               />
             </div>
           </div>
@@ -89,7 +89,7 @@
               <b-list-group>
                 <b-list-group-item
                   class="d-flex align-items-center"
-                  v-for="c in $store.state.salaComentarios"
+                  v-for="c in salaComentarios"
                   :key="c.id"
                 >
                   <b-avatar
@@ -117,7 +117,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, onMounted } from "@vue/composition-api";
+import {
+  defineComponent,
+  reactive,
+  onMounted,
+  computed
+} from "@vue/composition-api";
 import vSelect from "vue-select";
 
 import EventService from "../../services/EventService";
@@ -143,6 +148,14 @@ export default defineComponent({
       );
     });
 
+    const salasUsuario = computed(() => {
+      return root.$store.state.salaUsuarios;
+    });
+
+    const salaComentarios = computed(() => {
+      return root.$store.state.salaComentarios;
+    });
+
     const guardarCompartirSala = () => {
       EventService.guardarSalaCompartir(root.$store.state.sala.id, datos).then(
         response => {
@@ -160,7 +173,7 @@ export default defineComponent({
       );
     };
 
-    return { datos, guardarCompartirSala };
+    return { datos, guardarCompartirSala, salasUsuario, salaComentarios };
   }
 });
 </script>

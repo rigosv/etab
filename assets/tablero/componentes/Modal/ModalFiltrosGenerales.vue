@@ -72,7 +72,7 @@
 import { defineComponent, ref } from "@vue/composition-api";
 import vSelect from "vue-select";
 
-import useCargadorDatos from "../../Compositions/useCargadorDatos";
+import useCargadorDatos from "../../compositions/useCargadorDatos";
 import EventService from "../../services/EventService";
 
 interface Dimension {

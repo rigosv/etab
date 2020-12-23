@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import { Sala } from "./tablero/Interfaces/Sala";
+import { Sala } from "./tablero/interfaces/Sala";
 
 Vue.use(Vuex);
 export interface ModuleState {

@@ -91,7 +91,7 @@
 /* eslint-disable */
 import { defineComponent } from "@vue/composition-api";
 import ModalConfiguracion from "./Modal/ModalConfiguracion.vue";
-import useCargadorDatos from "../Compositions/useCargadorDatos";
+import useCargadorDatos from "../compositions/useCargadorDatos";
 
 export default defineComponent({
   components: { ModalConfiguracion },

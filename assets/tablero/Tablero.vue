@@ -15,8 +15,8 @@
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
 
-import MenuTablero from "./Componentes/MenuTablero.vue";
-import Sala from "./Componentes/Sala.vue";
+import MenuTablero from "./componentes/MenuTablero.vue";
+import Sala from "./componentes/Sala.vue";
 
 export default defineComponent({
   components: {

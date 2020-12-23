@@ -41,9 +41,9 @@ import { Plotly } from "vue-plotly";
 import numeral from "numeral";
 import { LMap, LTileLayer, LGeoJson, LControl } from "vue2-leaflet";
 
-import useGrafico from "../Compositions/useGrafico";
-import useColor from "../Compositions/useColor";
-import useClicEvents from "../Compositions/useClicEvents";
+import useGrafico from "../compositions/useGrafico";
+import useColor from "../compositions/useColor";
+import useClicEvents from "../compositions/useClicEvents";
 import EventService from "../services/EventService";
 
 export default defineComponent({

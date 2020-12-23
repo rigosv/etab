@@ -36,9 +36,9 @@
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
 
-import useIndicador from "../Compositions/useIndicador";
-import useCargadorDatos from "../Compositions/useCargadorDatos";
-import useCadena from "../Compositions/useCadena";
+import useIndicador from "../compositions/useIndicador";
+import useCargadorDatos from "../compositions/useCargadorDatos";
+import useCadena from "../compositions/useCadena";
 
 export default defineComponent({
   props: {

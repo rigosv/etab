@@ -21,10 +21,10 @@ import { defineComponent } from "@vue/composition-api";
 import { Plotly } from "vue-plotly";
 import numeral from "numeral";
 
-import useGrafico from "../Compositions/useGrafico";
-import useColor from "../Compositions/useColor";
-import useClicEvents from "../Compositions/useClicEvents";
-import useCargadorDatos from "../Compositions/useCargadorDatos";
+import useGrafico from "../compositions/useGrafico";
+import useColor from "../compositions/useColor";
+import useClicEvents from "../compositions/useClicEvents";
+import useCargadorDatos from "../compositions/useCargadorDatos";
 
 export default defineComponent({
   components: { Plotly },

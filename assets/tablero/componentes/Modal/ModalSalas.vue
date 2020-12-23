@@ -65,11 +65,11 @@ import {
 
 import Buscar from "../Buscar.vue";
 import ListadoSalas from "../ListadoSalas.vue";
-import useIndicador from "../../Compositions/useIndicador";
-import useCargadorDatos from "../../Compositions/useCargadorDatos";
-import useCadena from "../../Compositions/useCadena";
-import { Sala } from "../../Interfaces/Sala";
-import { Indicador } from "../../Interfaces/Indicador";
+import useIndicador from "../../compositions/useIndicador";
+import useCargadorDatos from "../../compositions/useCargadorDatos";
+import useCadena from "../../compositions/useCadena";
+import { Sala } from "../../interfaces/Sala";
+import { Indicador } from "../../interfaces/Indicador";
 import EventService from "../../services/EventService";
 
 export default defineComponent({
