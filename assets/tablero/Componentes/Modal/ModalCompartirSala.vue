@@ -86,7 +86,7 @@
               class="comments-container"
               style="max-height: 375.2px; min-height: 70px; overflow: auto;"
             >
-              <b-list-group style="max-width: 300px;">
+              <b-list-group>
                 <b-list-group-item
                   class="d-flex align-items-center"
                   v-for="c in $store.state.salaComentarios"
@@ -149,6 +149,7 @@ export default defineComponent({
           if (response.data.status == 200) {
             root.$bvModal.hide("modalCompartirSala");
             root.$snotify.success(root.$t("_guardarOk_") as string);
+            root.$store.state.salaComentarios.unshift(response.data.data);
           } else {
             root.$snotify.error(
               root.$t("_guardarError_") as string,

@@ -359,7 +359,7 @@ class TableroSalaController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $req = $request;
         $usua = $this->getUser();
-        $comentario = new ComentariosSala();
+        $comentarioResp = null;
         $ahora = new \DateTime("now");
         $ret = ""; $msg = "";
 
@@ -367,10 +367,14 @@ class TableroSalaController extends AbstractController
 
         if($req->get('comentarios')!="")
         {
+            $comentario = new ComentariosSala();
             $comentario->setComentario($req->get('comentarios'));
             $comentario->setUsuario($this->getUser());
             $comentario->setFecha($ahora);
             $comentario->setSala($sala);
+            
+            $comentarioResp = ['comentario' => $comentario->getComentario(), 'fecha' => $comentario->getFecha()->format("Y-m-d H:i:s"), 
+                'foto' => '', 'id' => $comentario->getId(), 'nombre' => $comentario->getUsuario()->getUsername()];
             
             $em->persist($comentario);
             $em->flush();
@@ -524,7 +528,7 @@ class TableroSalaController extends AbstractController
         $response = [
             'status' => 200,
             'messages' => "Ok",
-            'data' => [],
+            'data' => $comentarioResp,
             'html' => $ret,
             "correo" => $msg
         ];
