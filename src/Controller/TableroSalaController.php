@@ -116,7 +116,7 @@ class TableroSalaController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $usuario = $this->getUser();
         $resp = array();
-
+        
         $datos = (object) $request->request->all();
         
         $salaAcciones = new SalaAcciones();
@@ -397,7 +397,7 @@ class TableroSalaController extends AbstractController
                         
                     </li>';            
         }
-        if(count($req->get("usuarios_con_cuenta")))
+        if($req->get("usuarios_con_cuenta") != "")
         {
             $dato = array(array
             (
